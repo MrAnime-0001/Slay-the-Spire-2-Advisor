@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "dgSpecHash": "FN9j63C6NYs=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Yutti Chylong\\Downloads\\sts2-advisor\\reader\\Sts2Reader.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.diagnostics.netcore.client\\0.2.410101\\microsoft.diagnostics.netcore.client.0.2.410101.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.diagnostics.runtime\\3.1.512801\\microsoft.diagnostics.runtime.3.1.512801.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.configuration\\2.1.1\\microsoft.extensions.configuration.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\2.1.1\\microsoft.extensions.configuration.abstractions.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.configuration.binder\\2.1.1\\microsoft.extensions.configuration.binder.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.1.1\\microsoft.extensions.dependencyinjection.abstractions.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.logging\\2.1.1\\microsoft.extensions.logging.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\2.1.1\\microsoft.extensions.logging.abstractions.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.options\\2.1.1\\microsoft.extensions.options.2.1.1.nupkg.sha512",
+    "C:\\Users\\Yutti Chylong\\.nuget\\packages\\microsoft.extensions.primitives\\2.1.1\\microsoft.extensions.primitives.2.1.1.nupkg.sha512"
+  ],
+  "logs": []
+}
