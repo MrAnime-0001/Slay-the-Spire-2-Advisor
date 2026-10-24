@@ -144,11 +144,15 @@ def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None, pile=None
     turns = 0
     while not cancel.is_set():
         log(f"turn {turns + 1}: waiting for your turn")
+        # any pick screen wakes it: some open before the turn starts (Entropy's start-of-turn Transform, relics)
         if not wait_until(lambda: my_turn(get_state()) or get_state().get("status") != "combat"
-                          or get_state().get("choose_card"), 60, cancel):
+                          or picking(get_state()), 60, cancel):
             return "cancelled" if cancel.is_set() else "timed out waiting for turn"
-        if get_state().get("choose_card"):
-            error = choose(get_state, cancel, log)
+        s = get_state()
+        if not my_turn(s) and picking(s):
+            error = (choose(get_state, cancel, log) if s.get("choose_card")
+                     else pick_cards(s, get_state, pick_for, cancel, log) if s.get("hand_select")
+                     else pile(get_state, cancel, log))
             if error:
                 return error
             continue

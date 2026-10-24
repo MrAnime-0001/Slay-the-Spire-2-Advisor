@@ -15,6 +15,319 @@ Version history is kept here and in `.planning/*.md`. The code itself is not und
 
 ---
 
+## Potions: Foul Potion, Powdered Demise, Touch of Insanity (2026-10-25)
+- **User report:** the advisor didn't know how to use the 3 held potions. None were modelled.
+- Decomp `OnUse`, then mapped in `solver.potion_actions` (`POTION_EXTRA`, `POTION_AS`):
+  - Foul Potion: 12 damage to ALL in combat. gamedata skips Event-rarity potions.
+  - Powdered Demise: DemisePower, 9 unblockable at each enemy turn end, forever. Modelled as Poison 10
+    (10 + 9 + 8 = 27 = 9 × 3).
+  - Touch of Insanity: a hand card is free for the rest of combat. Counted as energy = the dearest card in hand.
+- Audit: 40 of 64 potions modelled. The rest are listed in `.planning/hidden-info-plan.md` section PO (user: use
+  every potion).
+
+## H2 enemy moves: groundwork (2026-10-25)
+- Decomp facts are in `.planning/hidden-info-plan.md` H2: when moves roll (start of our turn, enemy order), the
+  float32 weighted pick, and the repeat / once / cooldown weights.
+- **Reader:** `monster_ai_rng` (live MonsterAi RNG state). Enemy `history` is now the whole move log (last 40, was
+  3): `enemies.predict`'s once-only check sees every used move.
+- **gamedata:** random branches carry `rtype` / `max` / `cooldown` / `weight` (by AddBranch overload). Both
+  builds were regenerated; nothing else changed.
+  - Fix: `enemies.follow` used a branch's cooldown as its weight for `(state, cooldown, Repeat)` branches.
+- **Replay** (`enemies.replay_moves`, `branch_weight`): each enemy's next 2 moves, walked like the game's
+  `FindNextMoveState`. Random branches draw `MonsterAi.NextFloat(sum)` in float32 with the once / repeat /
+  cooldown weights.
+  - Foresight (`predict(exact=)`) and the lookahead use the exact moves.
+  - The overlay shows "next moves" under the plan as the game draws intents (user ask): one row per enemy with the
+    intent icon + number per turn: attack damage with the enemy's Strength ("16", "6x2"), Block for defend moves,
+    the icon alone for buffs / debuffs (`overlay.next_moves`, `next_move_rows`).
+  - User follow-up: every living enemy gets a row (one the replay can't predict, like a summoner, still shows its
+    current move). The first slot is this turn's intent as shown, then "> next > after". A minion this turn's move
+    summons gets a "(new)" row: empty slot, then "> its first move".
+  - User follow-up: attack numbers apply the enemy's Weak (x0.75, x0.6 with Paper Krane) and our Vulnerable (x1.5)
+    for the turns they still last (amount > turn index), floored like the solver. Tags: green W, red V.
+  - Test 325.
+- **Needs live check:** restart `run.bat`, then compare "next moves" with the next turns' intents.
+- Gaps: a kill this turn shifts the others' rolls; mid-turn summons; lambda weights.
+
+## Hidden info plan + H1 next relics, part 1 (2026-10-25)
+- New plan `.planning/hidden-info-plan.md` (H0-H9): every hidden RNG / queue the advisor can read, in single player
+  and co-op.
+  - Per-player RNG (Rewards, Shops, Transformations, relic bag) is unaffected by co-op.
+  - Shared run RNG (Shuffle, MonsterAi, CombatTargets...) moves with teammates' actions.
+- **H1 part 1:** the reader sends the local player's relic bag (`relic_bag`: front / back 3 per rarity). The map's
+  "ahead:" line shows "next relic: C X / U Y / R Z".
+  - Elites and chests take the front; the rarity is 50% / 33% / 17% from the Rewards RNG unless the source fixes it.
+- **Needs live check:** restart `run.bat`, then compare the next relic with what an elite or chest gives.
+- **Part 2:** the route score now uses the real next relics. The k-th elite / chest on a route is worth the k-th
+  front relic of each rarity × its odds (`pathing.relic_hopes`, `relic_at`), instead of a flat 12. Test 324.
+  - Elite reward order (decomp `RewardsSet`): gold, potion roll, cards, relic. The exact rarity needs H7.
+- Open: `IsAllowed` skips, the chest's relic source, the co-op shared bag.
+
+## Pick-N deck screens list all N (2026-10-25)
+- **User report:** "Choose 4 cards to Remove" listed only 3. The reader read min/max 4 and `deck_pick` returned 4,
+  but the overlay always cut the list to the top 3.
+- Deck grid views now set `show` = the number of picks. The chip says e.g. "Remove 4 cards".
+
+## Exact reshuffle, coloured next hand, Waterfall Giant timing (2026-10-25, v0.107.1 + v0.111.0)
+- **Reshuffle (user: knowing beats guessing):**
+  - The game's `CardPileCmd.Shuffle` uses `StableShuffle`: it sorts by (ModelId.Entry, upgrade level), then runs
+    Fisher-Yates with `RunState.Rng.Shuffle`. The result depends only on which cards are in the discard, not their
+    order.
+  - **Reader:** sends that RNG's live xoshiro state (`shuffle_rng`), each card's `id` and `level`, and `play_pile`
+    (a card still resolving lands in the discard).
+  - **Solver:** `reshuffle` replays the shuffle (Perfect Fit goes on top). `end_discard` builds the end-of-turn
+    discard:
+    - played Powers / Exhaust cards and unplayed Ethereal cards leave;
+    - Retain cards stay in hand, and Runic Pyramid / Ringing Triangle turn 1 / Retain Hand keep the whole hand;
+    - `enemy_discards` adds the statuses the enemies' shown moves put there (gamedata `adds_card` now has `pile`).
+  - Cards a plan puts on top of the draw pile (Headbutt, `Plan.on_top`) lead the next hand.
+- **Overlay:** "next hand" cards are red when from the draw pile, blue when from the reshuffled discard.
+- `tools/hand_check.py` compares predicted vs real next hands in a recording. Today: draw pile 34/34, reshuffle 8/12.
+  The 4 misses were recorded by the previous reader build without the play pile. Restart `run.bat` to rebuild.
+- **Waterfall Giant (user: the advisor died to its eruption):**
+  - Steam Eruption starts at 15/20 and grows 3 with every move. It never resets, so a long fight reaches 60+.
+  - Killing the Giant only starts it: it is stunned for a turn, then explodes for the stored amount.
+  - The solver counted the eruption only when the Giant was killed, so it put off the kill while the eruption
+    grew. A living Giant now carries eruption + 3 too, so finishing it now is never the costlier choice.
+  - Test 321 fails on the old scoring (Defend) and passes now (Strike).
+- Tests 320-323. Replay 1.8.
+
+## One instance only (2026-10-25)
+- **User ask:** running the advisor again replaces the old one, so 2-3 copies can't run at once.
+- `run.bat` now closes every other `run.bat` window first, so an old one can't pause on "Press any key" or relaunch.
+  It then closes the old overlay and reader, as before.
+  - Its own window is kept (PowerShell's parent process), so the auto-update restart loop still works.
+- Tested with a scratch copy: starting a second instance closed the first, and the second kept running.
+
+## Known next hand + plan S7 two-turn lookahead (2026-10-25, v0.107.1 + v0.111.0)
+- **User ask:** know the next hand instead of guessing, show it in the overlay, and let the autopilot use it.
+- **Reader:** sends the draw pile in the game's real order, plus `draw_ordered: true`. The game draws
+  `Cards.FirstOrDefault()` in `CardPileCmd`, the same in both builds. Before, the pile was sorted by name.
+- **Overlay:** the plan view shows "next hand: ..." after the best plan. Cards the plan draws this turn are skipped.
+  When the pile is short, the line adds "+ N from the reshuffle".
+- **Solver** (`draw_hand`, `after_draws`, `next_hand`):
+  - next turn's Block (`next_blocks`) and the lookahead use the exact hand;
+  - a draw this turn (Pommel Strike) is worth the real top card, not the pile's average.
+- **`next_draw`** now covers every hand-draw modifier in the decomp:
+  - relics: Snecko Eye, Fiddle, Pendulum and Pollinous Core (from their counters), Pocketwatch (≤ 3 plays);
+  - powers: Machine Learning, Tools of the Trade, Tyranny, Demesne, Clarity, Mind Rot (−).
+  - Turn-1-only relics (Ring of the Snake, Bag of Preparation...) never touch a next hand.
+- **Two-turn lookahead (S7 / B9), elite and boss fights only:**
+  - the top 3 plans each play out 4 next turns: the next hand, each enemy's next move from its AI table, potions
+    used are gone, and Power cards stay in play;
+  - each next turn is solved one turn deep, and the plans are reordered by score + 0.3 × that.
+  - It uses only the time left of the 1.5 s search.
+  - On 671 recorded elite/boss turns it changed 41 plans (e.g. saves Duplicator). It took 0.26 s on average.
+- Tests 318, 319. Replay 1.8 (recordings carry the old sorted pile, so they still guess).
+- ponytail: the reshuffle's order (the game's shuffle RNG) isn't predicted. Cards put on top this turn (Headbutt)
+  and enemy buff moves aren't carried into the next turn.
+- **Needs live check:** restart `run.bat` so the reader rebuilds. Compare the "next hand" line with the hand you
+  draw.
+
+## Plan 8b-2 (2026-10-25): exact monsters in rolled groups (v0.107.1 + v0.111.0)
+- Groups that roll their members (Ruby Raiders 3 of 5, Bowlbugs, Slimes, Flyconid, Slithering Strangler) now show
+  the exact monsters on the "route:" line, e.g. "Ruby Raiders (Tracker Ruby Raider, Crossbow Ruby Raider, ...)".
+- **How:** the game seeds the roll with run seed + TotalFloor + XxHash64(encounter id) (`EncounterModel`), then
+  draws with MegaRandom (xoshiro256** from Splitmix64). Ported in `pathing.py`: `xxh64`, `MegaRng`, `ROLLS`,
+  `rolled_lineup`.
+- **Reader:** `rooms.seed_hash` (run seed) and `rooms.total_floor` (rooms visited). Route node i is fought on floor
+  total_floor + i + 1.
+- Test 317 (xxh64 test vectors, same seed same lineup, 3 distinct raiders). Replay 1.8.
+- **Needs live check:** restart `run.bat` so the reader rebuilds. On the map, note the lineup shown for a rolled
+  group, enter it, and compare. If it's wrong, the floor offset (+1) or the encounter id spelling is the first
+  suspect.
+
+## Plan 8b (2026-10-25): each enemy's HP in the deck sim
+- **User ask:** use each enemy's HP. Fights with several monsters (`deck.foe_list`, from S4's lineups) are now
+  fought turn by turn (`deck._fight_foes`):
+  - each monster has its own HP and attack cycle, and only living ones attack;
+  - single-target damage goes to the lowest-HP enemy, AoE hits all;
+  - the fight ends when all are dead.
+- A lone monster keeps the pooled math.
+- **Effect:** AoE is valued for what it really does vs groups. In a starter deck, Thunderclap saves ~14 HP/fight
+  vs ~0 for another Strike. Test 316.
+- **Recalibrated `pathing.SIM_BIAS` 2.4 → 1.64** with the new `tools/sim_bias.py`: median sim ÷ recorded fight
+  cost over 259 recorded decks. It was already stale: the old sim gives 1.97 today. Fight costs (and so rest /
+  route risk) now scale with the deck as intended.
+- Test 310 moved from 50 to 55 HP: this deck's elite bad case is now 46, so 50/80 rests.
+- Replay 1.8.
+- ponytail: summons, enemy Block and buffs aren't simulated; the focus rule is lowest HP first.
+
+## Plan 11c (2026-10-25): relics and potions fit this deck
+- **Play-count relics** (`picker.PLAY_COUNT_RELICS`) are worth their tier × (plays this deck makes per turn ÷ the
+  plays they need), clamped to 0.25-1.2. Plays per turn = a hand's share of that kind, capped by energy / average
+  cost (`picker.plays_per_turn`).
+  - Attacks: Kunai, Shuriken, Ornamental Fan, Kusarigama, Nunchaku, Pen Nib.
+  - Skills: Letter Opener.
+  - Powers: Mummified Hand, Lost Wisp, Permafrost.
+  - Examples: Kunai 14.4 in an Attack deck vs 5.9 in a Block deck; Letter Opener 4.0 vs 10.2.
+- **Potions:** Strength / Dexterity / Focus potions scale the same way by Attacks / Block cards / channels.
+  Strength Potion 6.0 vs 1.8.
+- Test 229's swap value 5.0 → 5.3 (Speed Potion's Dexterity is worth less with few Block cards). Test 315. Replay
+  1.8.
+
+## Picks (2026-10-25): build on what you have; duplicates
+- **No build chasing (user):** before the deck commits, a build's "core / fits" bonus scales with how much of that
+  build the deck already holds (`runplan.card_fit`: level / COMMIT_AT). It was a flat half. None of it in the
+  deck → no bonus. Test 313.
+- **Duplicates (user):** a card the deck already holds gets only what the deck sim says the extra copy adds. Tier
+  and build fit no longer lift it, since the copy dilutes and may be the worse (unupgraded) version.
+  - A second copy of a non-stacking Power (Barricade, Corruption: `stack: Single`) is worth 0.
+  - Exception: a committed build's core cards (a 2nd Deadly Poison in a Poison deck). Test 314.
+- Your recent runs repeated star cards (fixed in S2), Barrage ×2 and Hyperbeam ×2. Replay 1.8.
+
+## Plan step 11, S8 (2026-10-25): leftovers
+- **Event options use this deck** (`picker.option_value`):
+  - "Upgrade a card" = this deck's best upgrade gains (top N); "Upgrade a random card" = their mean.
+  - "Remove a card" = the shop's value for this deck's worst card (a Curse is worth more than a Strike). These
+    were flat before. Test 312.
+- **Ancients:** already covered. Each option's relic goes through `relic_value` (tier, drawback clash with the
+  build, card-word count, build fit).
+- **`tools/hp_audit.py`:** 9438 turns, avoidable damage in 85.
+  - On the same first 5998 turns as the last audit: 60 now vs 39 then.
+  - Not from today's changes: rerunning with the old one-of-each lineup gives the same 60.
+  - The new cases are deliberate trades from earlier work: Frantic Escape for the Sandpit race (12), and Inferno,
+    Noxious Fumes and Inflame setup turns (~25).
+  - Predicted HP loss / turn: hallway 2.34, elite 3.55, boss 4.53.
+- **Old plan checkboxes ticked where confirmed done.** These are still open:
+  - out-of-combat autopilot (parked)
+  - v0.107.1 live check
+  - B9 lookahead
+  - live-only checks not seen yet (dilution on a big deck, Terror Eel targeting, route vs map screen)
+- **Follow-up (user philosophy):** relics and potions are deck-aware through build fit; a deck-sim relic value
+  (Kunai by Attacks per turn...) would be the deeper version.
+
+## Plan step 10, S6 (2026-10-25): upgrade credit from later acts' smiths
+- `picker.upgrade_hope` now adds the smiths of the acts after this one to this act's route smiths.
+  - From the user's 126 runs: ~2.6 rest sites per act, 55% smiths → `LATER_SMITHS` 1.4 per act.
+  - ~60% of runs reach the next act → `LATER_ACT_HOPE` 0.5.
+- A partly expected smith counts by its share. It works without a map too.
+- Test 311 on both builds: for the same deck and card, act 1 > act 2 > act 3 (0). Replay 1.8.
+
+## Plan step 9, S5 (2026-10-25): events ahead in decisions; smith over rest
+- **Event offers** (`pathing.event_offers`): what each event can give (remove, upgrade, transform, relic,
+  potion, heal, max HP, curse), read from its option texts. Covers 56 events.
+- **Shop:** a removal event (Wellspring, Zen Weaver, Amalgamator...) on the route before the next shop halves this
+  shop's removal value (`picker.EVENT_REMOVE`).
+- **Shop gold warning:** "! spending N changes the next ? event: TeaMaster -> Wellspring". Some events need gold
+  (Tea Master 150, Fake Merchant 100).
+- **Rest site:** a heal event before the next elite / boss counts as 15% of max HP (`picker.EVENT_HEAL`).
+- **Smith over rest (user):** when a soft rest reason applies (under half HP, elite close), the best upgrade's HP
+  saved over every fight left on the route (deck sim, same deck slot) is compared with the heal. Example: Bludgeon+
+  saves ~65 HP over 6 fights vs a 24 heal, so smith at 50/80. Rest is still forced when the next elite / boss's
+  bad case would leave under 10% of max HP (`picker.DIE_MARGIN`): at 42/80 it rests.
+- Tests 309-310 on both builds. Replay 1.8.
+- ponytail: route search (`pathing.simulate`) still uses the plain rest rule; event offers are keyword matches
+  (a costly or locked option counts like a free one).
+
+## Plan step 8, S4 (2026-10-25): exact fight lineups
+- **Bug:** `tools/gen_gamedata.py` stored each encounter's monsters as a set. Corpse Slugs (3 slugs) counted as one
+  slug's HP and damage; so did Nibbits ×2, Exoskeletons ×4 and Inklets ×3 (22 encounters). Summoned minions
+  (Fogmog's, Living Fog's bombs) counted as if present at the start.
+- **Fix:** gamedata `encounters[e].lineup` = every monster `GenerateMonsters` spawns, repeats kept. Both builds
+  were regenerated; nothing else changed. `deck.lineup` uses it. The 7 rolled groups (Bowlbugs, Flyconid, Ruby
+  Raiders, Slimes, Slithering Strangler) use their expected mix from the decomp, e.g. Ruby Raiders = 3 different
+  of 5. A summoner (Phrog Parasite) counts as a multi-enemy fight.
+- **Overlay "ahead" line:** shows who's in the next elite / fight, e.g. "fight Nibbits (2× Nibbit)",
+  "fight Ruby Raiders (3 rolled)".
+- **Effect:** hallway fights hit harder, so Block is worth a bit more. Test 85 is now relative: the attack gains
+  more in a block-heavy deck than in an attack-heavy one. Test 308 on both builds. Replay 1.8.
+- ponytail: the roll itself is seeded (`Rng(run seed + total floor + XxHash64(encounter id))`, decomp
+  `EncounterModel.GenerateMonstersWithSlots`). Replaying it needs the run seed from the reader, an XxHash64 /
+  MegaRandom port and a live check.
+
+## Plan step 7, S9.2 (2026-10-25): card draw finds key cards
+- **What happened:** the user said draw is undervalued: it finds combos and powers engines. The deck sim drew the
+  extra cards but valued them only by their own numbers.
+- **Fix:** `picker.DRAW_FIND` × cards drawn × the deck's share of key cards (`picker.key_card`: Powers, count
+  cards, star spenders, 0-costs). A thin deck with engines makes draw worth more; a Strike/Defend pile doesn't.
+- **Example:** Pommel Strike's edge over a plain 9-damage Attack is +4.8 in a Strike/Defend pile and +14.6 in a
+  deck with Demon Form / Inflame / Barricade / Body Slam / Perfected Strike.
+- Test 307 on both builds. Replay 1.8.
+
+## Plan step 6, S9.1 (2026-10-25): no off-plan cards from rewards or the shop
+- **Shop:** cards are bought only above the same bar as a reward pick (`picker.skip_bar`). This includes the
+  committed-deck and late-act raises. Before, the shop's bar was only `SKIP_BELOW`, so it bought cards a reward
+  screen would skip.
+- **Build fit:** a star maker no longer gets the plan's "core: Stars" bonus while the deck's stars are covered.
+  That bonus let Glow through.
+- Test 306 on both builds: in the user's star deck, Hidden Cache / Venerate / Glow are a Skip as rewards and none
+  are bought.
+
+## Plan step 5, S2 (2026-10-25): star producers vs spenders
+- **What happened:** the user's deck had 3 Hidden Cache + Glow while Falling Star was the only star spender.
+- **Fix:** `deck.star_supply`: stars made per turn (Divine Right's base + Stars / Star-next-turn cards drawn) vs
+  stars wanted (star costs drawn). Star cards and count cards now go through the deck sim in `picker.rate`. A
+  producer only saves HP while the spenders lack stars, so extra generators score below Skip.
+- **Pick row reasons:** "stars already covered", "short of stars: feeds the spenders", "spends surplus stars",
+  "stars already spent".
+- **Your deck:** Falling Star 30.2 vs Hidden Cache 2.8. In a deck with 3 Falling Stars and no generators, Venerate
+  and Hidden Cache win. Test 305 on both builds. Replay 1.8.
+- **Orbs:** channelers vs Barrage / Compile Driver go through the same sim via `deck.deck_counts` (S1).
+- ponytail: Souls, Shivs and Poison spenders (Soul Storm, Knife Trap, Catalyst) aren't balanced yet; Stardust (X
+  stars) isn't counted as demand.
+
+## Plan step 4, S1 (2026-10-25): count cards (Barrage × orbs, Pull From Below × Ethereal played...)
+- **What happened:** the user saw Pull From Below played for 0 damage. Its hit count is "Ethereal cards played this
+  combat". The game's card var only holds the base (0), not the live count, and the solver couldn't read the
+  `calc:` hits, so it assumed 1 hit.
+- **Audit:** every card whose number is computed at play time (decomp `CalculatedVar`) or loops over a count in
+  `OnPlay`. The table is in `.planning/scaling-cards.md`.
+- **Combat (`solver.solve.counted` / `play`):** each count card's value is base + extra × the count now. The count
+  includes what the plan already did, so the solver channels before Barrage, blocks before Body Slam, plays Attacks
+  before Finisher, and skips a card whose count is 0.
+- **Orb and loop cards by name:** Dualcast / Quadcast (skipped with no orb), Shatter, Darkness, Tesla Coil,
+  Stardust (X stars), Fiend Fire, Storm of Steel and Stoke (the hand goes first), Dismantle, Molten Fist, Hang.
+- **Reader:** new combat counts from the game's history: `ethereal_played`, `times_damaged`, `stars_gained`,
+  `energy_spent`, `osty_attacks`, `drawn_turn`, `drawn_combat`, `discarded_turn`, `plays_combat`,
+  `generated_combat`, `lightning_channeled`. Restart `run.bat` once to rebuild it.
+- **Deck sim / picks (`deck.deck_counts`):** count cards rate by the deck's typical count. Barrage rates by orbs held
+  (bad with no channelers), Perfected Strike = 6 + 2 per Strike (it was 0), Body Slam by the Block cards played before it (rates higher with
+  big Block like Impervious; user note).
+- Tests 302-304 on both builds. Replay 1.8 (limit 2.5).
+- ponytail: the plan's own draws are unknown (Death March, Murder); Gang Up counts 0 solo; Synchronize keeps a flat
+  credit. All are listed in the table.
+
+## Autopilot (2026-10-25): pick screens before the turn starts
+- **What happened:** Entropy (from a Colorless Potion) transforms a card at the start of the turn. Under that
+  screen the phase isn't `Play`, so the autopilot sat on "waiting for your turn" for 60 s and stopped. It only
+  woke for "choose a card" screens.
+- **Fix:** any pick screen (hand pick, choose a card, pile grid) now wakes it, and it handles the screen with the
+  same pickers as during the turn. This covers start-of-turn relics and powers too. Test 300.
+- **Lose-a-card prompts named after their card** (`picker.TOSS_PICKS`, checked in the decomp): Begone, Brand,
+  Burning Pact, Guards, Hidden Daggers (a discard: Sly cards first), Purity, True Grit, Ashwater.
+  - These now pick junk, then the weakest card. Before, an unknown `<CARD>.selectionScreenPrompt` defaulted to
+    "keep the strongest", so it would exhaust or transform the best card. Test 301.
+  - Other unknown prompts still take the strongest card; that's right for Snap, Dual Wield, Nightmare, Hand Trick.
+
+## Plan steps 1-3 (2026-10-25): summoners, elite chains, early shops (`.planning/synergy-scaling-plan.md`)
+- **Summoner fights** (`solver`): The Obscura, Ovicopter and Living Fog re-summon (a move with `summon` in
+  gamedata).
+  - While one lives, a minion's future damage counts 1 forecast turn (`RESUMMON_TURNS`), since a killed one is
+    replaced.
+  - Damage on its minions is weighted `MINION_CHIP` = 0.3: chip damage is wasted, but a kill before it hits still
+    pays in full.
+  - In every minion fight, leaders carry their minions' future threat (they leave with the leader).
+  - Recordings, minion hit first: Obscura 36 → 19 of 46, Ovicopter 25 → 9 of 49; Living Fog 22 → 19, all
+    remaining being Gas Bomb kills before its Explode.
+  - Kin / Queen minions never come back, so those fights are unchanged. Test 297.
+- **Elite chains** (`pathing.simulate`): later elites and the boss are checked against HP minus the worst
+  bad-luck extra (p90 − mean) of any elite since the last heal; a rest that heals clears it.
+  - Example: Elite, Elite, Elite, Monster, Boss at 45/70 HP is deadly, and a rest between elites wins at full HP.
+    Test 298.
+- **Early shops:** a shop is worth nothing below the card-removal price (75, 100 from A6 Inflation;
+  `MerchantCardRemovalEntry`); gold from fights on the way counts. Test 299.
+
+## Overlay (2026-10-25): estimated plan totals marked
+- A plan that drinks a card potion counts the stand-in card in its totals. `Plan.guessed` flags it, and the chips
+  read `DMG ~27` / `BLOCK ~3` / `LETHAL?` so they're not taken as sure.
+- Exact totals without the stand-in would need a second simulation; not worth it, since the plan is redone once
+  the real cards are offered.
+
+## Replay check (2026-10-25)
+- `tools/replay.py` after today's changes: 1011 turns, mean |predicted − actual| HP loss **2.0** (limit 2.5;
+  earlier 2.1 over 916 turns). The run that stalled on a Regent turn now finishes, thanks to the solver time cap.
+
 ## Autopilot + reader (2026-10-25): pile cards found from the grid's scroll position
 - **Reader `card_grid`**, from `NCardGrid`, for any grid screen:
   - `scroll`: `_targetDrag`, 0 at the top, −40 per wheel notch.

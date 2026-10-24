@@ -5,6 +5,7 @@ Run the game in windowed or borderless mode, and keep this window away from the 
 STS2_DEMO=<recordings .jsonl> replays recorded states instead of reading the game (design checks)."""
 import ctypes
 import json
+import math
 import os
 import re
 import subprocess
@@ -18,12 +19,13 @@ import winsound
 
 import autoplay  # first: sets DPI awareness before any window exists
 import icons
-from pathing import DEATH, best_routes, direction, next_events, route_names
+from pathing import DEATH, best_routes, direction, next_events, rolled_lineup, route_names
 from runplan import describe as describe_plan, plan, relic_fit
-from deck import profile
+from deck import lineup, profile
+from enemies import attacks, replay_moves
 from picker import choose_card, deck_pick, event_advice, hand_pick, pick, pile_pick, potion_swap, relic_value, rest_advice, shop_advice
 from relics import COMMUNITY, GAMEDATA, KNOWLEDGE, Relics
-from solver import fight_type, held_energy_reason, next_turn_unblocked, solve, unmodeled_player_powers, unmodeled_powers
+from solver import fight_type, held_energy_reason, next_hand, next_turn_unblocked, solve, unmodeled_player_powers, unmodeled_powers
 
 READER = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                       "..", "reader", "bin", "Release", "net10.0", "Sts2Reader.exe")
@@ -39,6 +41,7 @@ ACCENT = {"ironclad": "#c0392b", "silent": "#5c9c4a", "defect": "#3f88c5", "necr
           "regent": "#e08a2e"}
 CARD = {"Attack": "#b8392f", "Skill": "#4f7fa8", "Power": "#c9a45c", "Status": "#6b6b6b", "Curse": "#5e3a6e",
         "Potion": "#4fa88a"}
+DRAW_RED, DISCARD_BLUE = "#d9604f", "#6fa8dc"  # next hand: from the draw pile / from the reshuffled discard
 WIDTH, PAD, ICON = 360, 12, 18
 VK_F7 = 0x76
 
@@ -254,8 +257,21 @@ def bar(parent, frac, color, w=90, h=7, track=SURFACE, extra=0.0, extra_color=ST
 
 
 def lines(parent, texts, fg=MUTED, font=F_BODY):
+    """str lines; a list of (text, colour) parts is one line in several colours (wraps like a label)."""
     for t in texts:
-        label(row(parent, 0), t, font, fg, anchor="w", justify="left", wraplength=WIDTH - 2 * PAD).pack(fill="x")
+        if isinstance(t, str):
+            label(row(parent, 0), t, font, fg, anchor="w", justify="left", wraplength=WIDTH - 2 * PAD).pack(fill="x")
+            continue
+        f = tkfont.Font(font=font)
+        width = WIDTH - 2 * PAD
+        n = 1 + f.measure("".join(p for p, _ in t)) // width  # ponytail: wrapped line count estimated, not measured
+        box = tk.Text(row(parent, 0), font=font, bg=parent["bg"], bd=0, highlightthickness=0, wrap="word",
+                      height=n, width=1, cursor="arrow", padx=0, pady=0)
+        for i, (p, c) in enumerate(t):
+            box.tag_configure(str(i), foreground=c or fg)
+            box.insert("end", p, str(i))
+        box.configure(state="disabled")
+        box.pack(fill="x")
 
 
 # --- views: each screen becomes a dict, draw() paints it ---
@@ -291,16 +307,84 @@ def character(state):
 
 def outcome_chips(parent, plan):
     r = row(parent, (3, 2))
+    est = "~" if plan.guessed else ""  # includes the card a card potion will offer: an estimate, not a sure thing
     if plan.win:
-        chip(r, "LETHAL", BG, GOOD).pack(side="left", padx=(0, 4))
-    chip(r, f"DMG {num(plan.damage)}").pack(side="left", padx=(0, 4))
-    chip(r, f"BLOCK {num(plan.block)}", STEEL).pack(side="left", padx=(0, 4))
+        chip(r, "LETHAL" + ("?" if est else ""), BG, GOOD).pack(side="left", padx=(0, 4))
+    chip(r, f"DMG {est}{num(plan.damage)}").pack(side="left", padx=(0, 4))
+    chip(r, f"BLOCK {est}{num(plan.block)}", STEEL).pack(side="left", padx=(0, 4))
     loss = round(plan.hp_loss)
     chip(r, f"HP {-loss:+d}" if loss else "HP ±0", BAD if loss > 0 else GOOD).pack(side="left")
 
 
 def outcome_text(plan):
     return ("LETHAL  " if plan.win else "") + f"{num(plan.damage)} dmg · {num(plan.block)} block · {-round(plan.hp_loss):+d} HP"
+
+
+def next_moves(state):
+    """H2 (user: hidden info, drawn like the game's intents): one row per living enemy: this turn's intents (as
+    shown), then each replayed next move (MonsterAi RNG) after a ">". A minion this turn's move summons gets a row
+    with an empty first slot, then its first move. Marks are (intent icon, number): attack damage with Strength
+    ("8", "1x3"), Block for defend moves, the icon alone otherwise."""
+    asc, out = state.get("ascension", 0), []
+    my_vuln = next((p["amount"] for p in state.get("player", {}).get("powers", []) if p["name"] == "VulnerablePower"), 0)
+    weak_left = 0.6 if any(r.get("name") == "PaperKrane" for r in state.get("relics", [])) else 0.75  # solver weak_cut
+
+    def marks(ai, m, powers, shown=None, k=0):
+        """k: which enemy turn (0 = this one): their Weak (x0.75) / our Vulnerable (x1.5) apply while they last."""
+        weak, vuln = powers.get("WeakPower", 0) > k, my_vuln > k
+        mv, got = ai.get("moves", {}).get(m, {}), []
+        for it in shown if shown is not None else mv.get("intents", []):
+            kind = it["kind"].removesuffix("Intent")
+            if kind in ("SingleAttack", "MultiAttack", "DeathBlow"):
+                hits = ([(it["damage"], max(it.get("hits") or 1, 1))] if shown is not None and it.get("damage") is not None
+                        else attacks(mv, asc, powers))
+                mult = (weak_left if weak else 1) * (1.5 if vuln else 1)
+                n = " ".join(f"{max(0, math.floor((d + powers.get('StrengthPower', 0)) * mult))}" + (f"x{h}" if h > 1 else "")
+                             for d, h in hits) + (" W" if weak else "") + (" V" if vuln else "")
+            elif kind == "Defend":
+                n = f"{sum(x['block'] for x in mv.get('effects', []) if isinstance(x.get('block'), (int, float)))}"
+            else:
+                n = ""
+            got.append((icons.intent_icon(it["kind"]), n or ("?" if "Attack" in kind else "")))
+        return list(dict.fromkeys(got)) or [("unknown", "")]
+
+    for e, ms in zip(state["enemies"], replay_moves(state["enemies"], state.get("monster_ai_rng"), 2) or [None] * 99):
+        if e["creature"]["hp"] <= 0:
+            continue
+        ai = GAMEDATA["monsters"].get(e["name"], {})
+        powers = {p["name"]: p["amount"] for p in e["creature"].get("powers", [])}
+        turns = ([marks(ai, e.get("move"), powers, e.get("intents") or [])]
+                 + [marks(ai, m, powers, k=k) for k, m in enumerate(ms or [], 1)])
+        out.append((title("monsters", e["name"]), turns))
+        for x in ai.get("moves", {}).get(e.get("move"), {}).get("effects", []):  # summoned next: empty now > first move
+            mai = GAMEDATA["monsters"].get(x.get("summon"), {})
+            first = mai.get("start") if isinstance(mai.get("start"), str) else None
+            if x.get("summon"):
+                out.append((title("monsters", x["summon"]) + " (new)", [[], marks(mai, first, {}) if first else [("unknown", "")]]))
+    return out
+
+
+def next_move_rows(parent, rows):
+    """next_moves() drawn as the game shows intents: per enemy, icon + number, turn after turn."""
+    if not rows:
+        return
+    label(row(parent, (4, 0)), "next moves", F_SMALL, DIM, anchor="w").pack(fill="x")
+    for name, turns in rows:
+        r = row(parent, 0)
+        label(r, name, F_SMALL, MUTED, width=14, anchor="w").pack(side="left")
+        for k, marks in enumerate(turns):
+            if k:
+                label(r, ">", F_SMALL, DIM).pack(side="left", padx=4)
+            if not marks:  # not on the field yet (summoned this turn)
+                label(r, "·", F_SMALL, DIM, width=2).pack(side="left")
+            for ic, n in marks:
+                icon(r, "intent", ic, MUTED, 16).pack(side="left")
+                tags = [t for t in n.split(" ") if t in ("W", "V")]
+                n = " ".join(t for t in n.split(" ") if t not in ("W", "V"))
+                if n:
+                    label(r, n, F_CAPS, TEXT).pack(side="left", padx=(1, 1 if tags else 4))
+                for t in tags:  # W: their Weak cuts it (green) · V: our Vulnerable raises it (red)
+                    label(r, t, F_SMALL, GOOD if t == "W" else BAD).pack(side="left", padx=(0, 3))
 
 
 def step_rows(parent, steps):
@@ -455,9 +539,25 @@ def ahead_line(state):
         c = COMMUNITY.get("encounters", {}).get(e) or {}
         return foe(e) + (f" (~{c['dmg']:.0f} HP, {c['death']:.0%} deaths)" if c.get("dmg") else "")
     parts = ["boss " + " then ".join(boss(b) for b in (r.get("boss"), r.get("second_boss")) if b)] if r.get("boss") else []
-    parts += [f"{k} {foe(r[f'next_{k}'])}" for k in ("elite", "fight") if r.get(f"next_{k}")]
+
+    def crew(e):  # S4: who's in it, "2× Nibbit"; rolled picks (Ruby Raiders: 3 of 5) show as "3 rolled"
+        ls = lineup(e)
+        n = {}
+        for m, w in ls:
+            n[m] = n.get(m, 0) + (w == 1)
+        rolled = round(sum(w for _, w in ls if w < 1))
+        txt = ", ".join([f"{k}× {foe(m)}" if k > 1 else foe(m) for m, k in n.items() if k]
+                        + ([f"{rolled} rolled"] if rolled else []))
+        return f" ({txt})" if len(ls) > 1 else ""
+    parts += [f"{k} {foe(r[f'next_{k}'])}{crew(r[f'next_{k}'])}" for k in ("elite", "fight") if r.get(f"next_{k}")]
     if (ev := next_events(state, 1)):
         parts.append("? event " + title("events", ev[0]))
+    # H1 (user: hidden info): the next relic of each rarity from our own relic bag (elites / chests take the front;
+    # the rarity is rolled 50% Common / 33% Uncommon / 17% Rare unless the source fixes it)
+    bag = state.get("relic_bag") or {}
+    nxt = [f"{k[0]} {title('relics', bag[k]['front'][0])}" for k in ("Common", "Uncommon", "Rare") if (bag.get(k) or {}).get("front")]
+    if nxt:
+        parts.append("next relic: " + " / ".join(nxt))
     return "ahead: " + " · ".join(parts) if parts else ""
 
 
@@ -467,13 +567,17 @@ def named(state, route):
 
 
 def route_line(state, route):
-    """B10: the best route's rooms by name, "?" rooms as what they roll into (seed reader)."""
+    """B10: the best route's rooms by name, "?" rooms as what they roll into (seed reader). 8b: rolled groups
+    (Ruby Raiders: 3 of 5) show the exact monsters from the run seed and the floor they're fought on."""
     if not route.rolled:
         return ""
     foe = lambda e: re.sub(r"(?<=[a-z])(?=[A-Z])", " ", re.sub(r"(Boss|Elite|Normal|Weak)$", "", e))
+    r = state.get("rooms") or {}
     parts = []
-    for (t, name), orig in zip(route_names(state, route), route.types):
+    for i, ((t, name), orig) in enumerate(zip(route_names(state, route), route.types)):
         label_ = (title("events", name) if t == "Event" else foe(name)) if name else title("", t)
+        if name and r.get("total_floor") is not None and (ms := rolled_lineup(name, r.get("seed_hash"), r["total_floor"] + i + 1)):
+            label_ += " (" + ", ".join(foe(m) for m in ms) + ")"
         parts.append(("?→" if orig == "Unknown" else "") + label_)
     return "route: " + " › ".join(parts[:8])
 
@@ -496,7 +600,8 @@ def view_of(state, line):
                 "title": "pick", "ranks": [("card", n, None, lab) for n, _, lab in rated]}
     if state["status"] != "combat" and (g := state.get("card_grid")) and (g.get("prompt") or "Select" in (g.get("screen") or "")):
         verb, picks, ranked = deck_pick(state)  # event/rest/shop deck grid: which card to upgrade/remove/...
-        return {"stats": run_stats(state, f"{verb} a card"), "title": verb,
+        return {"stats": run_stats(state, f"{verb} a card" if len(picks) < 2 else f"{verb} {len(picks)} cards"),
+                "title": verb, "show": len(picks),  # user: "choose 4 to remove" lists all 4, not the top 3
                 "ranks": [("card", n, None, "") for n in picks],
                 "more": ["next: " + ", ".join(title("cards", n) for n in ranked if n not in picks)[:200]]}
     if state["status"] != "combat" and state.get("treasure"):  # chest: one relic per player, you vote for one
@@ -558,7 +663,14 @@ def view_of(state, line):
     else:
         plans = solve(state)
         why = held_energy_reason(state, plans[0])
-        v.update(title="plan", steps=steps_view(state, plans[0]), outcome=plans[0], body=[why] if why else [],
+        nh = next_hand(state, plans[0])  # user: the real next hand (reader's draw order) after this plan
+        # user: red = still in the draw pile, blue = comes back from the discard (the exact reshuffle)
+        hand = nh and [("next hand: ", None)] + [
+            (title("cards", c["name"]) + ("+" if c.get("upgraded") else "") + (", " if i < len(nh[0]) - 1 else ""),
+             DRAW_RED if i < nh[2] else DISCARD_BLUE) for i, c in enumerate(nh[0])] + (
+            [(f" + {nh[1]} from the reshuffle", None)] if nh[1] else [])
+        v.update(title="plan", steps=steps_view(state, plans[0]), outcome=plans[0], body=[x for x in (why, hand) if x],
+                 next_moves=next_moves(state),
                  alts=[f"{', '.join(title('potions' if s[5] == 'potion' else 'cards', s[3]['name']) for s in pl.steps) or 'End turn'}  ·  {outcome_text(pl)}"
                        for pl in plans[1:]])
     return v
@@ -581,10 +693,12 @@ def draw(v, state):
     if "steps" in v:
         step_rows(primary, v["steps"])
         outcome_chips(primary, v["outcome"])
+        next_move_rows(primary, v.get("next_moves"))
     ranks = v.get("ranks", [])
-    rank_rows(primary, ranks[:3] if not expanded else ranks)
+    shown = max(3, v.get("show", 0))  # a pick-N screen shows all N
+    rank_rows(primary, ranks[:shown] if not expanded else ranks)
     lines(primary, v.get("body", []))
-    hidden = len(ranks) > 3 and not expanded
+    hidden = len(ranks) > shown and not expanded
     if expanded:
         if v.get("alts"):
             section(secondary, "alternatives")

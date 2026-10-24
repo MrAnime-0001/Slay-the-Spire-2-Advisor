@@ -101,6 +101,7 @@ object Snapshot(ClrRuntime rt)
                      seed = Safe("seed", () => Str(F(run, "Rng"), "StringSeed")), // run id: same run across advisor restarts
                      map = Safe("map", () => Map(run)), shop = Safe("shop", () => Shop(run)),
                      rooms = Safe("rooms", () => Rooms(run)),
+                     relic_bag = Safe("relic_bag", () => RelicBag(player)), // H1: next relics per rarity (own bag: co-op safe)
                      act_name = Safe("act_name", () => Items(F(run, "Acts")).ElementAtOrDefault(I(run, "_currentActIndex")) is { IsNull: false } a ? Name(a) : null),
                      map_open = Safe<bool?>("map_open", () => MapOpen(rt)), choose_card = choose,
                      @event = Safe("event", () => Event(runMgr, run)), ui = Safe("ui", () => Ui(rt, run)),
@@ -124,12 +125,19 @@ object Snapshot(ClrRuntime rt)
         max_energy = I(player, "MaxEnergy"),
         player = Creature(me),
         hand = Items(Pile(pcs, "Hand")).Select(Card).ToArray(),
-        // Sorted: the pile's real order is hidden from players (draws take Cards.First()); the advisor only uses
-        // what a player knows, the draw pile's contents.
-        draw = Items(Pile(pcs, "DrawPile")).OrderBy(Name).Select(Card).ToArray(),
+        // In the game's real order: draws take Cards.First() (CardPileCmd, both builds). The user chose knowing the
+        // next hand over guessing it (2026-10-25); draw_ordered tells the advisor (older readers sent it sorted).
+        draw = Items(Pile(pcs, "DrawPile")).Select(Card).ToArray(),
+        draw_ordered = true,
+        // The reshuffle: StableShuffle(RunState.Rng.Shuffle) sorts by (Id.Entry, upgrade level), then Fisher-Yates.
+        // The advisor replays it from this RNG's live xoshiro state (s0..s3) to know the cards after a reshuffle.
+        shuffle_rng = Safe("shuffle_rng", () => RngState(F(run, "Rng"), 1)), // RunRngType.Shuffle = 1 (both builds)
+        // H2: enemies roll their next moves from this at our next turn start (CombatManager.StartTurn, enemy order)
+        monster_ai_rng = Safe("monster_ai_rng", () => RngState(F(run, "Rng"), 8)), // RunRngType.MonsterAi = 8
         discard = Items(Pile(pcs, "DiscardPile")).Select(Card).ToArray(),
         exhaust = Items(Pile(pcs, "ExhaustPile")).Select(Card).ToArray(),
         playing = Safe<int?>("playing", () => Items(Pile(pcs, "PlayPile")).Count()), // > 0 while a played card still resolves
+        play_pile = Safe("play_pile", () => Items(Pile(pcs, "PlayPile")).Select(Card).ToArray()), // ...and which: it lands in the discard (reshuffle)
         deck,
         potions = Potions(player),
         potion_slots = Items(F(player, "_potionSlots")).Count(),
@@ -163,6 +171,35 @@ object Snapshot(ClrRuntime rt)
         attacks_played = Safe<int?>("attacks_played", () => ThisRound(cm, cs) // Juggling: copies the 3rd Attack
             .Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry") && F(e, "Actor").Address == me.Address
                         && I(F(F(e, "CardPlay"), "Card"), "Type") == 1)),
+        // Scaling cards' counts (decomp CalculatedVar; the card's own var holds only its base): Pull From Below,
+        // Tear Asunder (whole combat), Radiate, Helix Drill, Rattle (this turn)
+        ethereal_played = Safe<int?>("ethereal_played", () => Items(F(F(cm, "History"), "_entries"))
+            .Count(e => e.Type!.Name!.EndsWith("CardPlayFinishedEntry") && F(e, "Actor").Address == me.Address && B(e, "WasEthereal"))),
+        times_damaged = Safe<int?>("times_damaged", () => Items(F(F(cm, "History"), "_entries"))
+            .Count(e => e.Type!.Name!.EndsWith("DamageReceivedEntry") && F(e, "Actor").Address == me.Address
+                        && I(F(e, "Result"), "UnblockedDamage") > 0)),
+        stars_gained = Safe<int?>("stars_gained", () => ThisRound(cm, cs)
+            .Where(e => e.Type!.Name!.EndsWith("StarsModifiedEntry") && F(e, "Actor").Address == me.Address)
+            .Sum(e => Math.Max(0, I(e, "Amount")))),
+        energy_spent = Safe<int?>("energy_spent", () => ThisRound(cm, cs)
+            .Where(e => e.Type!.Name!.EndsWith("EnergySpentEntry") && F(e, "Actor").Address == me.Address).Sum(e => I(e, "Amount"))),
+        osty_attacks = Safe<int?>("osty_attacks", () => ThisRound(cm, cs).Count(e => e.Type!.Name!.EndsWith("CreatureAttackedEntry")
+            && Items(F(pcs, "_pets")).Any(p => p.Address == F(e, "Actor").Address))),
+        // Death March (drawn this turn, not the turn's hand draw), Murder (drawn this combat), Memento Mori (discarded
+        // this turn), Gold Axe (cards played this combat, every player), Supermassive (cards we made), Voltaic
+        drawn_turn = Safe<int?>("drawn_turn", () => ThisRound(cm, cs).Count(e => e.Type!.Name!.EndsWith("CardDrawnEntry")
+            && F(e, "Actor").Address == me.Address && !B(e, "FromHandDraw"))),
+        drawn_combat = Safe<int?>("drawn_combat", () => Items(F(F(cm, "History"), "_entries"))
+            .Count(e => e.Type!.Name!.EndsWith("CardDrawnEntry") && F(e, "Actor").Address == me.Address)),
+        discarded_turn = Safe<int?>("discarded_turn", () => ThisRound(cm, cs)
+            .Count(e => e.Type!.Name!.EndsWith("CardDiscardedEntry") && F(e, "Actor").Address == me.Address)),
+        plays_combat = Safe<int?>("plays_combat", () => Items(F(F(cm, "History"), "_entries"))
+            .Count(e => e.Type!.Name!.EndsWith("CardPlayFinishedEntry"))),
+        generated_combat = Safe<int?>("generated_combat", () => Items(F(F(cm, "History"), "_entries"))
+            .Count(e => e.Type!.Name!.EndsWith("CardGeneratedEntry") && F(e, "Creator").Address == player.Address)),
+        lightning_channeled = Safe<int?>("lightning_channeled", () => Items(F(F(cm, "History"), "_entries"))
+            .Count(e => e.Type!.Name!.EndsWith("OrbChanneledEntry") && F(e, "Actor").Address == me.Address
+                        && F(e, "Orb").Type?.Name?.EndsWith("LightningOrb") == true)),
         card_grid = Safe("card_grid", () => CardGrid(rt)), // pile pick screen (Headbutt: discard -> top of draw...)
         stars = Safe<int?>("stars", () => I(pcs, "_stars")), // Regent's second resource
         orbs = Safe("orbs", () => Items(F(F(pcs, "OrbQueue"), "_orbs")).Select(o => new { name = Name(o), // Dark grows its evoke, Glass shrinks
@@ -260,6 +297,42 @@ object[] Relics(ClrObject player) => Items(F(player, "_relics")).Select(r => (ob
             ? (f.Read<bool>(r.Address, false) ? 1 : 0) : f.Read<int>(r.Address, false)),
 }).ToArray();
 
+// H1: the local player's relic bag (RelicGrabBag._deques, shuffled once per run): per rarity its first and last
+// RELIC_PEEK relics. Rewards take from the front (RelicFactory.PullNextRelicFromFront), shops from the back.
+object? RelicBag(ClrObject player)
+{
+    string[] RelicRarities = { "None", "Starter", "Common", "Uncommon", "Rare", "Shop", "Event", "Ancient" };
+    const int RELIC_PEEK = 3;
+    var dict = F(F(player, "RelicGrabBag"), "_deques");
+    var entries = dict.ReadObjectField("_entries");
+    int n = dict.ReadField<int>("_count");
+    var outBag = new Dictionary<string, object>();
+    for (int i = 0; !entries.IsNull && i < n; i++)
+    {
+        var e = entries.AsArray().GetStructValue(i);
+        var names = Items(e.ReadObjectField("value")).Select(Name).ToArray();
+        outBag[RelicRarities.ElementAtOrDefault(e.ReadField<int>("key")) ?? "?"] =
+            new { front = names.Take(RELIC_PEEK).ToArray(), back = names.Reverse().Take(RELIC_PEEK).ToArray(), left = names.Length };
+    }
+    return outBag;
+}
+
+// One of RunRngSet._rngs (Dictionary<RunRngType, Rng>): its MegaRandom state as 4 ulongs (strings: JSON-safe).
+string[]? RngState(ClrObject rngSet, int type)
+{
+    var dict = F(rngSet, "_rngs");
+    var entries = dict.ReadObjectField("_entries");
+    int n = dict.ReadField<int>("_count");
+    for (int i = 0; !entries.IsNull && i < n; i++)
+    {
+        var e = entries.AsArray().GetStructValue(i);
+        if (e.ReadField<int>("key") != type) continue;
+        var mr = F(e.ReadObjectField("value"), "_random");
+        return new[] { "_s0", "_s1", "_s2", "_s3" }.Select(f => Field(mr, f).Read<ulong>(mr.Address, false).ToString()).ToArray();
+    }
+    return null;
+}
+
 object? Map(ClrObject run)
 {
     // Breadth-first walk of the act map from its start node through each MapPoint's Children set.
@@ -326,6 +399,10 @@ object? Rooms(ClrObject run)
         // events already seen this run (RunState._visitedEventIds, ModelId.Entry like ROOM_FULL_OF_CHEESE): skipped
         events_seen = HashItems(F(run, "_visitedEventIds")).Select(m => m.ReadStringField("<Entry>k__BackingField")).ToArray(),
         unknown = Safe("unknown", () => UnknownOdds(run)),
+        // S4 seeded lineups: EncounterModel.GenerateMonstersWithSlots seeds Rng(Seed + TotalFloor + XxHash64(id)).
+        // Seed as a string (a ulong loses bits as a JSON number); TotalFloor = rooms in RunState._mapPointHistory.
+        seed_hash = Safe("seed_hash", () => Field(F(run, "Rng"), "Seed").Read<ulong>(F(run, "Rng").Address, false).ToString()),
+        total_floor = Safe<int?>("total_floor", () => Items(F(run, "_mapPointHistory")).Sum(a => Items(a).Count())),
     };
 }
 
@@ -776,8 +853,9 @@ object Enemy(ClrObject c)
 
 string[] MoveHistory(ClrObject monster)
 {
-    // MonsterMoveStateMachine.StateLog: states performed so far (moves and branch points), last 3.
-    try { return Items(F(F(monster, "MoveStateMachine"), "StateLog")).Select(s => Str(s, "StateId") ?? "?").TakeLast(3).ToArray(); }
+    // MonsterMoveStateMachine.StateLog: the initial state + every move rolled so far. Whole log (capped): the
+    // move roll's UseOnlyOnce / repeat / cooldown weights read it (RandomBranchState.GetStateWeight).
+    try { return Items(F(F(monster, "MoveStateMachine"), "StateLog")).Select(s => Str(s, "StateId") ?? "?").TakeLast(40).ToArray(); }
     catch { return []; }
 }
 
@@ -854,6 +932,8 @@ object Card(ClrObject c)
     {
         name = Name(c),
         upgraded = I(c, "_currentUpgradeLevel") > 0,
+        id = F(c, "Id") is { IsNull: false } mid ? F(mid, "Entry").AsString() : null, // shuffle sort key (ModelId.Entry)
+        level = I(c, "_currentUpgradeLevel"),
         type = CardTypes.ElementAtOrDefault(I(c, "Type")) ?? "?",
         target = TargetTypes.ElementAtOrDefault(I(c, "TargetType")) ?? "?",
         rarity = Rarities.ElementAtOrDefault(I(c, "Rarity")) ?? "?",

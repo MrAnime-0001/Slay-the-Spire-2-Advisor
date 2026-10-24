@@ -2,6 +2,7 @@
 what each room gives. Elites pay a relic and a rare card but cost HP; camps heal or upgrade; shops are
 worth what your gold buys."""
 import re
+from functools import lru_cache
 import statistics
 import struct
 from collections import namedtuple
@@ -36,10 +37,15 @@ Route = namedtuple("Route", "coords types score hp gold rolled", defaults=(None,
 # Ascension (code-facts.md): A3 Poverty = fight gold x0.75, A7 Scarcity = rare odds halved (elite rare card worth
 # half), A10 DoubleBoss = two bosses at the end of act 3 (boss cost x2).
 POVERTY, SCARCITY, DOUBLE_BOSS = 3, 7, 10
-# v19 Phase D: fight costs scale with this deck. deck.hp_lost (deck sim) runs ~2.4x the recorded fight cost (median
-# over 104 recorded decks, 2026-10-22) but tracks deck strength, so it's used relative to that, clamped.
+INFLATION = 6
+# A shop is worth a visit only with gold for its cheapest useful buy: a card removal (MerchantCardRemovalEntry:
+# 75, 100 from A6 Inflation). Below that (an early shop on floor 2-3) it's a wasted floor (user rule).
+SHOP_MIN_GOLD = (75, 100)
+# v19 Phase D: fight costs scale with this deck. deck.hp_lost (deck sim) runs ~1.64x the recorded fight cost (median
+# over 259 recorded decks, 2026-10-25, after the per-enemy sim; `python tools/sim_bias.py`) but tracks deck strength,
+# so it's used relative to that, clamped.
 # Each usable potion (max 2) takes POTION_ELITE_HP off the next Elite/Boss's bad case (spent there).
-SIM_BIAS, DECK_CLAMP = 2.4, (0.6, 1.5)
+SIM_BIAS, DECK_CLAMP = 1.64, (0.6, 1.5)
 POTION_ELITE_HP, POTIONS_COUNTED = 8, 2
 # ponytail: one bias for every act (Overgrowth runs ~2.6x, Underdocks ~1.1-1.8x); per-act bias if routes look off.
 # ponytail: your history mixes ascensions (A0-A8) and characters; enemies only get stronger at A8/A9.
@@ -126,6 +132,110 @@ class UnknownRolls:
         return rolled
 
 
+def xxh64(data, seed=0):
+    """XxHash64 (System.IO.Hashing), for StringHelper.GetDeterministicHashCode (UTF-8 bytes, seed 0)."""
+    P1, P2, P3, P4, P5 = (11400714785074694791, 14029467366897019727, 1609587929392839161, 9650029242287828579,
+                          2870177450012600261)
+    rot = lambda x, r: ((x << r) | (x >> (64 - r))) & M64
+    rnd = lambda acc, v: (rot((acc + v * P2) & M64, 31) * P1) & M64
+    n, i = len(data), 0
+    if n >= 32:
+        v = [(seed + P1 + P2) & M64, (seed + P2) & M64, seed, (seed - P1) & M64]
+        while i + 32 <= n:
+            v = [rnd(v[j], int.from_bytes(data[i + 8 * j:i + 8 * j + 8], "little")) for j in range(4)]
+            i += 32
+        h = (rot(v[0], 1) + rot(v[1], 7) + rot(v[2], 12) + rot(v[3], 18)) & M64
+        for x in v:
+            h = ((h ^ rnd(0, x)) * P1 + P4) & M64
+    else:
+        h = (seed + P5) & M64
+    h = (h + n) & M64
+    while i + 8 <= n:
+        h = (rot(h ^ rnd(0, int.from_bytes(data[i:i + 8], "little")), 27) * P1 + P4) & M64
+        i += 8
+    if i + 4 <= n:
+        h = (rot(h ^ (int.from_bytes(data[i:i + 4], "little") * P1 & M64), 23) * P2 + P3) & M64
+        i += 4
+    while i < n:
+        h = (rot(h ^ (data[i] * P5 & M64), 11) * P1) & M64
+        i += 1
+    h = ((h ^ (h >> 33)) * P2) & M64
+    h = ((h ^ (h >> 29)) * P3) & M64
+    return h ^ (h >> 32)
+
+
+class MegaRng:
+    """MegaRandom (xoshiro256**, Splitmix64 seeding) with Rng's NextInt / NextBool / NextItem."""
+
+    def __init__(self, seed):
+        self.s = []
+        for _ in range(4):
+            seed = (seed + 11400714819323198485) & M64
+            z = ((seed ^ (seed >> 30)) * 13787848793156543929) & M64
+            z = ((z ^ (z >> 27)) * 10723151780598845931) & M64
+            self.s.append(z ^ (z >> 31))
+    _double = UnknownRolls._double
+
+    @classmethod
+    def at(cls, state):
+        """A MegaRandom already in use: its live xoshiro state (the reader's 4 ulongs)."""
+        r = cls.__new__(cls)
+        r.s = [int(x) & M64 for x in state]
+        return r
+
+    def next_int(self, n):  # MegaRandom.Next(n) = (int)(NextDouble() * n)
+        return int(self._double() * n)
+
+    def next_bool(self):
+        return self.next_int(2) == 0
+
+    def next_item(self, items):
+        return items[self.next_int(len(items))] if items else None
+
+
+# S4 rolled lineups, replayed from decomp GenerateMonsters (same Rng calls, same order).
+_LEAF_TWIG_M, _LEAF_TWIG_S = ["LeafSlimeM", "TwigSlimeM"], ["LeafSlimeS", "TwigSlimeS"]
+
+
+def _pick_distinct(rng, pool, n):
+    got = []
+    for _ in range(n):
+        got.append(rng.next_item([m for m in pool if m not in got]))
+    return got
+
+
+def _strangler(rng):
+    kind = rng.next_int(3)  # SecondaryEnemyType: SnappingJaxfruit, MediumSlime, SmallSlimes
+    extra = (["SnappingJaxfruit"] if kind == 0 else [rng.next_item(_LEAF_TWIG_M)] if kind == 1
+             else [rng.next_item(_LEAF_TWIG_S), rng.next_item(_LEAF_TWIG_S)])
+    return extra + ["SlitheringStrangler"]
+
+
+def _slimes_weak(rng):
+    small = list(_LEAF_TWIG_S)
+    a = rng.next_item(small)
+    small.remove(a)
+    b = rng.next_item(small)
+    return [a, rng.next_item(_LEAF_TWIG_M), b]
+
+
+ROLLS = {"BowlbugsNormal": lambda r: ["BowlbugRock"] + _pick_distinct(r, ["BowlbugEgg", "BowlbugSilk", "BowlbugNectar"], 2),
+         "BowlbugsWeak": lambda r: ["BowlbugRock", r.next_item(["BowlbugEgg", "BowlbugNectar"])],
+         "FlyconidNormal": lambda r: [r.next_item(_LEAF_TWIG_M), "Flyconid"],
+         "RubyRaidersNormal": lambda r: _pick_distinct(r, ["AxeRubyRaider", "AssassinRubyRaider", "BruteRubyRaider",
+                                                           "CrossbowRubyRaider", "TrackerRubyRaider"], 3),
+         "SlimesWeak": _slimes_weak, "SlitheringStranglerNormal": _strangler}
+
+
+def rolled_lineup(name, seed_hash, floor):
+    """The exact monsters a rolled encounter spawns on total floor `floor` (EncounterModel.GenerateMonstersWithSlots:
+    Rng(run seed + TotalFloor + XxHash64(ModelId.Entry))), or None. Needs a live check (DEVLOG S4 8b-2)."""
+    if name not in ROLLS or seed_hash is None or floor is None:
+        return None
+    entry = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", name).upper()
+    return ROLLS[name](MegaRng((int(seed_hash) + floor + xxh64(entry.encode("utf-8"))) & M64))
+
+
 def resolve_unknowns(types, rolls, nexts=None, prev=None):
     """types along a path with each "Unknown" replaced by what it rolls (a copy of `rolls` is used). nexts[i]: the
     types of node i's children (all shops -> no shop roll); prev: the room we're in now (a shop -> no shop roll)."""
@@ -204,6 +314,32 @@ def next_events(state, n):
     return out
 
 
+# S5: what each event can give, read from its option texts (gamedata.text, the game's loc files).
+# ponytail: by keyword; a costly or locked option counts like a free one.
+EVENT_OFFERS = {"remove": r"\bRemove\b", "upgrade": r"\bUpgrade", "transform": r"\bTransform", "relic": r"\b[Rr]elic",
+                "potion": r"\b[Pp]otion", "heal": r"\bHeal", "max_hp": r"Max HP", "curse": r"\bCurse"}
+
+
+@lru_cache(maxsize=None)
+def event_offers(name):
+    """{"remove", "upgrade", ...} the event "name" (class name, FakeMerchant) offers among its options."""
+    key = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", name).upper()
+    txt = " ".join(v for k, v in GAMEDATA.get("text", {}).items()
+                   if k.startswith(f"events:{key}.pages.") and ".options." in k and k.endswith(".description"))
+    return frozenset(k for k, rx in EVENT_OFFERS.items() if re.search(rx, txt))
+
+
+def events_before(state, route, stop):
+    """Events on the route before the first room of a type in `stop` (the next Shop, the next Elite/Boss)."""
+    out = []
+    for t, name in route_names(state, route):
+        if t in stop:
+            break
+        if t == "Event" and name:
+            out.append(name)
+    return out
+
+
 def route_names(state, route):
     """[(room type, encounter / event name or None)] along a route: fights, elites and events are taken from the act's
     pre-rolled queues in order (a "?" that rolls a fight takes the next hallway fight too)."""
@@ -246,7 +382,30 @@ def fight_costs(state):
         k = rooms.get("elites_visited", 0)
         out["Elites"] = [enc_cost(e, ch) or out["Elite"] for e in order[k % len(order):] + order[:k % len(order)]]
     f = deck_factor(state, out)
-    return {k: [(m * f, p * f) for m, p in v] if k == "Elites" else (v[0] * f, v[1] * f) for k, v in out.items()}
+    out = {k: [(m * f, p * f) for m, p in v] if k == "Elites" else (v[0] * f, v[1] * f) for k, v in out.items()}
+    if (hopes := relic_hopes(state)):
+        out["Relics"] = hopes
+    return out
+
+
+RELIC_ODDS = {"Common": 0.5, "Uncommon": 0.33, "Rare": 0.17}  # RelicFactory.RollRarity: < 0.5 / < 0.83 / else
+
+
+def relic_hopes(state):
+    """H1 (user: hidden info): what the next relics from our own bag (reader `relic_bag`) are worth, on the route
+    scale: the k-th elite / chest takes the k-th front relic of the rarity it rolls. Empty without the bag.
+    ponytail: rarity is the odds (exact needs the Rewards RNG, plan H7); a pull of one rarity doesn't shift the
+    others' positions here."""
+    bag = state.get("relic_bag") or {}
+    if not bag:
+        return []
+    from picker import relic_value  # lazy: picker imports pathing
+    n = max((len((bag.get(r) or {}).get("front") or []) for r in RELIC_ODDS), default=0)
+    out = []
+    for k in range(n):
+        got = [(p, (bag.get(r) or {}).get("front") or []) for r, p in RELIC_ODDS.items()]
+        out.append(sum(p * (relic_value(f[k], state) if k < len(f) else RELIC) for p, f in got))
+    return out
 
 
 def deck_factor(state, costs):
@@ -279,8 +438,17 @@ def reward_value(kind, act, asc):
     return CARD_REWARD + RARE_PREMIUM * rare + UPGRADED_ODDS[min(act, 2)] * half * UPGRADE / 2
 
 
+def relic_at(costs, k):
+    """The k-th relic this route takes: its bag value (relic_hopes) when known, else the average RELIC."""
+    hopes = costs.get("Relics") or []
+    return hopes[k] if k < len(hopes) else RELIC
+
+
 def simulate(types, hp, max_hp, gold, costs, asc=0, pots=0, act=0):
-    score, elites = 0, 0
+    score, elites, relics = 0, 0, 0
+    # Elite chains: one elite since the last heal may have gone badly (p90 instead of mean), so later elites and the
+    # boss are checked against HP minus that extra; a rest that heals clears it (user: no elite runs without rest).
+    bad = 0
     gold_mult = 0.75 if asc >= POVERTY else 1
     for i, t in enumerate(types):
         saved = POTION_ELITE_HP * min(pots, POTIONS_COUNTED) if t in ("Elite", "Boss") else 0
@@ -289,13 +457,15 @@ def simulate(types, hp, max_hp, gold, costs, asc=0, pots=0, act=0):
         if t == "Elite" and costs.get("Elites"):  # this route's n-th elite is the game's n-th in line
             cost, elites = costs["Elites"][elites % len(costs["Elites"])], elites + 1
         if t in FIGHTS:
-            score -= RISK * max(0, cost[1] - saved - hp)
+            score -= RISK * max(0, cost[1] - saved - (hp - (bad if t in ("Elite", "Boss") else 0)))
         if t == "Boss":
             break
         if t in ("Monster", "Elite"):
             hp -= max(0, cost[0] - saved / 2)
+            bad = max(bad, cost[1] - cost[0]) if t == "Elite" else bad
             gold += FIGHT_GOLD[t] * gold_mult
-            score += reward_value(t, act, asc) + (RELIC if t == "Elite" else 0)
+            score += reward_value(t, act, asc) + (relic_at(costs, relics) if t == "Elite" else 0)
+            relics += t == "Elite"
         elif t == "Unknown":
             hp -= EVENT_RISK * costs["Monster"][0]
             gold += FIGHT_GOLD[t] * gold_mult
@@ -303,16 +473,18 @@ def simulate(types, hp, max_hp, gold, costs, asc=0, pots=0, act=0):
         elif t == "Event":  # a "?" known to roll an event (UnknownRolls)
             score += EVENT
         elif t == "Treasure":
-            score += RELIC
+            score += relic_at(costs, relics)
+            relics += 1
         elif t == "Ancient":
             score += ANCIENT
         elif t == "Shop":
-            spent = min(gold, SHOP_CAP)
+            spent = min(gold, SHOP_CAP) if gold >= SHOP_MIN_GOLD[asc >= INFLATION] else 0
             score += SHOP_PER_100 * spent / 100
             gold -= spent
         elif t == "RestSite":
             if should_rest(hp, max_hp, types[i + 1:], costs):
                 hp = min(max_hp, hp + int(HEAL_FRACTION * max_hp))
+                bad = 0
             else:
                 score += UPGRADE
         if hp <= 0:

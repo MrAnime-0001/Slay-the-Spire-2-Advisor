@@ -86,7 +86,8 @@ def follow(ai, state, prev, used, slot, depth=0):
         if branch["kind"] == "random":
             if (b["repeat"] == "CannotRepeat" and b["to"] == prev) or (b["repeat"] == "UseOnlyOnce" and b["to"] in used):
                 continue
-            weight = next((x for x in b["args"] if isinstance(x, (int, float))), 1)
+            w = b.get("weight")  # gamedata branch_weight (H2): not the cooldown that can come first in args
+            weight = w if isinstance(w, (int, float)) else next((x for x in b["args"] if isinstance(x, (int, float))), 1)
         else:  # conditional: only slot checks are knowable from outside
             cond = " ".join(str(x) for x in b["args"])
             m = re.search(r'SlotName == "(\w+)"', cond)
@@ -109,9 +110,81 @@ TEMP_STRENGTH_DOWN = {"CrushUnderPower", "DarkShacklesPower", "DyingStarPower", 
 TEMP_STRENGTH_UP = {"CoordinatePower", "FeedingFrenzyPower", "FlexPotionPower", "ReptileTrinketPower", "SetupStrikePower"}
 
 
-def predict(enemy, asc=0, turns=2):
+def branch_weight(b, log):
+    """RandomBranchState.GetStateWeight: a branch's weight given the monster's move log (oldest first), or None when
+    the weight is a lambda / property the gamedata can't evaluate."""
+    w = b.get("weight", 1)
+    if not isinstance(w, (int, float)):
+        return None
+    rt, to = b.get("rtype") or b.get("repeat") or "CanRepeatForever", b["to"]
+    if rt == "UseOnlyOnce":
+        num = 0.0 if to in log else 1.0
+    elif rt == "CanRepeatForever":
+        num = 1.0
+    else:
+        n = 1 if rt == "CannotRepeat" else (b.get("max") or 1)
+        num = 1.0 if len(log) < n else 0.0
+        k = 0
+        while len(log) >= n and k < n and len(log) - k > 0:
+            if log[len(log) - 1 - k] != to:
+                num = 1.0
+                break
+            k += 1
+    if b.get("cooldown") and to in log[-b["cooldown"]:]:
+        return 0.0
+    return num * w
+
+
+def replay_moves(enemies, rng_state, turns=2):
+    """H2 (user: hidden info): the exact next `turns` moves of each enemy, replaying the game's rolls: at each of our
+    turn starts every living enemy, in list order, walks its move graph from its current move (FindNextMoveState);
+    a random branch draws MonsterAi.NextFloat(sum of weights) in float32 and subtracts weights in order.
+    [list of move ids, or None when unknown (lambda weight, conditional branch, no AI table)] per enemy; [] without
+    the RNG state. ponytail: summons / Fabricator / Flutter using MonsterAi mid-turn aren't replayed."""
+    if not rng_state:
+        return []
+    from pathing import MegaRng, f32  # lazy: pathing imports deck -> enemies
+    rng = MegaRng.at(rng_state)
+    out = [[] if MONSTERS.get(e.get("name")) and e.get("move") and e["creature"]["hp"] > 0 else None for e in enemies]
+    logs = [list(e.get("history") or []) for e in enemies]
+    cur = [e.get("move") for e in enemies]
+    for _ in range(turns):
+        for i, e in enumerate(enemies):
+            if out[i] is None:
+                continue
+            ai, state = MONSTERS[e["name"]], cur[i]
+            for _ in range(8):
+                state = ai["next"].get(state)
+                if state is None or state in ai["moves"]:
+                    break
+                br = ai["branches"].get(state)
+                if not br or br["kind"] != "random":
+                    state = None
+                    break
+                ws = [branch_weight(b, logs[i]) for b in br["to"]]
+                if any(w is None for w in ws):
+                    state = None
+                    break
+                total = f32(sum(ws))  # Enumerable.Sum(float) adds in double, one cast at the end
+                num = f32(rng._double() * total)
+                for b, w in zip(br["to"], ws):
+                    num = f32(num - w)
+                    if num <= 0:
+                        state = b["to"]
+                        break
+            if state not in ai["moves"]:
+                out[i] = None
+                continue
+            out[i].append(state)
+            logs[i].append(state)
+            cur[i] = state
+    return out
+
+
+def predict(enemy, asc=0, turns=2, exact=None):
     """Expected damage to you on each of the next `turns` enemy turns AFTER the one shown now:
-    [{"dmg": float, "moves": {ID: p}}]. Empty when the AI table or current move is unknown."""
+    [{"dmg": float, "moves": {ID: p}}]. Empty when the AI table or current move is unknown. exact: the replayed
+    move ids (replay_moves), used instead of the odds for the turns they cover."""
     ai, move = MONSTERS.get(enemy.get("name")), enemy.get("move")
     if not ai or move not in ai["moves"]:
         return []
@@ -133,7 +206,9 @@ def predict(enemy, asc=0, turns=2):
             territorial += ritual
             strength += ritual
         nxt = {}
-        for mv, p in dist.items():
+        if exact and k < len(exact):
+            nxt = {exact[k]: 1.0}
+        for mv, p in dist.items() if not nxt else ():
             for to, q in follow(ai, mv, mv, used, enemy.get("slot")).items():
                 nxt[to] = nxt.get(to, 0) + p * q
         dmg = sum(p * sum(max(0, d + strength + vigor) * h for d, h in attacks(ai["moves"][mv], asc, powers))

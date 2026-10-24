@@ -8,7 +8,7 @@ import re
 from dataclasses import dataclass, replace as dc_replace
 
 from archetypes import card_text, expand_power
-from enemies import ally_strength, predict, summon_dmg
+from enemies import MONSTERS, ally_strength, attacks, follow, predict, replay_moves, summon_dmg
 from relics import (GAMEDATA, NO_PLAYS, Plays, Relics, after_play, block_mult, dmg_add, dmg_mult,
                     end_turn, relic_draws, x_bonus)
 
@@ -78,7 +78,10 @@ def behind(f, facing):
 
 
 CRAB_RAGE_STR, CRAB_RAGE_BLOCK = 6, 99  # Crusher/Rocket: the survivor gains these when its partner dies (at once)
-UNKILLABLE = 10 ** 8  # a dead Waterfall Giant waiting to erupt sits at 999999999 HP: damage to it is wasted
+UNKILLABLE = 10 ** 8
+ERUPT_STEP = 3  # Waterfall Giant: every move after Pressurize adds 3 Steam Eruption (WaterfallGiant.cs, both builds)
+RESUMMON_TURNS = 1  # forecast turns a summoner's minion still counts: a killed one is replaced soon after
+MINION_CHIP = 0.3  # damage weight on a summoner's minion (kills still count in full)  # a dead Waterfall Giant waiting to erupt sits at 999999999 HP: damage to it is wasted
 # Thieves: a stolen card (Swipe, Thieving Hopper) or gold (Heist, Fat Gremlin) comes back only if the thief dies
 # before it escapes; Gremlin Merc's Thievery steals more gold each attack. Valued like pathing: a card reward
 # (4) / HP (0.3) ~ 13 HP; 6 per 100 gold -> 0.2 HP a gold.
@@ -171,6 +174,11 @@ class Plan:
     win: bool
     score: float
     energy_left: int = 0
+    guessed: bool = False  # totals include a card potion's stand-in card (the real cards are offered later)
+    end: tuple = ()  # each enemy's slots after the enemy turn (HP [0], Vulnerable [2], Weak [3], Poison [10]): lookahead
+    drawn: int = 0  # cards the plan draws this turn (they leave the top of the draw pile)
+    plays: int = 0  # cards played (Pocketwatch)
+    on_top: tuple = ()  # cards the plan puts on top of the draw pile (Headbutt, pick screens): the next hand's first
 
 
 def amount(powers, name):
@@ -241,7 +249,8 @@ def star_cost(card):
 
 def creates(card):
     """(card dict, count) this card puts into your hand when played, or None."""
-    made = GAMEDATA.get("cards", {}).get(card["name"], {}).get("creates")
+    made = GAMEDATA.get("cards", {}).get(card["name"], {}).get("creates") or (
+        ["Shiv", None] if card["name"] == "StormOfSteel" else None)  # a Shiv per card discarded (solve.play)
     if not made or card["type"] == "Potion":
         return None
     d = GAMEDATA["cards"].get(made[0])
@@ -265,6 +274,14 @@ def gd_card(name, upgraded=False, free=False):
 # with amounts named by DynamicVars key, read from the live card (upgrades, buffs, beta changes all follow).
 ENEMY_DEBUFFS = {"VulnerablePower", "WeakPower", "PoisonPower", "DoomPower"}
 DEBUFF_SLOT = {"VulnerablePower": 2, "WeakPower": 3, "PoisonPower": 10, "DoomPower": 11}  # enemy row slots
+# Count cards' output when it isn't hits (Repeat) or Block: Doom (No Escape), channels (Voltaic), draws (Compile Driver)
+COUNT_KEY = {"NoEscape": "DoomPower", "Voltaic": "Channels", "CompileDriver": "Cards"}
+# Count cards the solver plays by name (solve.counted / play): modeled even without effect vars, so no flat credit
+COUNTED = {"Dualcast", "Quadcast", "Shatter", "Darkness", "TeslaCoil", "Voltaic", "StormOfSteel", "FiendFire", "Stardust",
+           "Hang", "MoltenFist", "KnifeTrap", "Sacrifice"}
+NEEDS_ORBS = {"Dualcast", "Quadcast", "Synchronize"}  # do nothing without an orb: never worth a play then
+HAND_TOSS = {"FiendFire": "exhaust", "Stoke": "exhaust", "StormOfSteel": "discard"}  # the whole hand goes first
+OSTY_ATTACKS = {n for n, d in GAMEDATA.get("cards", {}).items() if any(o.get("by") == "osty" for o in d.get("ops") or [])}
 OP_VARS = {"block": "Block", "energy": "Energy", "stars": "Stars", "summon": "Summon",
            "heal": "Heal", "hp_loss": "HpLoss", "orb_slots": "SlotsGained"}
 OP_PASS = {"channel", "create", "draw"}  # handled from other gamedata fields (channel list, creates, draws)
@@ -284,7 +301,7 @@ def from_ops(card):
         if isinstance(a, (int, float)):
             return a
         neg = isinstance(a, str) and a.startswith("-")
-        k = a[1:] if neg else a
+        k = (a[1:] if neg else a).removeprefix("calc:")  # Barrage's hits: solve.counted() recounts them
         if k not in live:
             raise LookupError(a)
         used.add(k)
@@ -395,26 +412,152 @@ def by_name(cards):
     return sorted(cards, key=lambda c: (c["name"], c["upgraded"]))
 
 
-def next_draw(state):
-    """Cards drawn next turn: HAND + Pael's Blood + Ring of the Drake (first N turns).
-    ponytail: Pocketwatch (<= 3 cards played) and Pollinous Core (every 4th turn) aren't counted."""
+DRAW_POWERS = {"DrawCardsNextTurnPower": 1, "MachineLearningPower": 1, "ToolsOfTheTradePower": 1, "TyrannyPower": 1,
+               "DemesnePower": 1, "MindRotPower": -1}  # x Amount (ModifyHandDraw); Clarity is a flat +1
+
+
+def next_draw(state, played=0):
+    """Cards drawn next turn (every ModifyHandDraw in the decomp, both builds): HAND + Pael's Blood, Snecko Eye,
+    Fiddle; Ring of the Drake (first N turns); Pendulum (every Nth turn) and Pollinous Core (its Nth turn) from their
+    counters; Pocketwatch if at most CardThreshold cards are played this turn (played: the plan's plays);
+    Predator / Machine Learning / Tools of the Trade / Tyranny / Demesne / Clarity, minus Mind Rot.
+    Turn-1-only relics (Ring of the Snake, Bag of Preparation...) never touch a next hand."""
     R = Relics(state.get("relics", []), GAMEDATA["relics"])
-    n = HAND + (R.var("PaelsBlood", "Cards") if "PaelsBlood" in R else 0)
-    if "RingOfTheDrake" in R and (state.get("turn") or 0) + 1 <= R.var("RingOfTheDrake", "Turns"):
+    n = HAND + sum(R.var(r, "Cards") for r in ("PaelsBlood", "SneckoEye", "Fiddle") if r in R)
+    nxt = (state.get("turn") or 0) + 1
+    if "RingOfTheDrake" in R and nxt <= R.var("RingOfTheDrake", "Turns"):
         n += R.var("RingOfTheDrake", "Cards")
-    n += amount(state.get("player", {}).get("powers", []), "DrawCardsNextTurnPower")  # Predator, Glow...
-    return int(n)
+    if "Pendulum" in R and (R.count("Pendulum", "_turnsSeen") + 1) % int(R.var("Pendulum", "Turns") or 1) == 0:
+        n += R.var("Pendulum", "Cards")
+    if "PollinousCore" in R and R.count("PollinousCore", "_turnsSeen") + 1 >= R.var("PollinousCore", "Turns"):
+        n += R.var("PollinousCore", "Cards")
+    if "Pocketwatch" in R and R.count("Pocketwatch", "_cardsPlayedThisTurn") + played <= R.var("Pocketwatch", "CardThreshold"):
+        n += R.var("Pocketwatch", "Cards")
+    powers = state.get("player", {}).get("powers", [])
+    n += sum(k * amount(powers, p) for p, k in DRAW_POWERS.items()) + (amount(powers, "ClarityPower") > 0)
+    return max(0, int(n))
+
+
+def draw_hand(state, k, rng):
+    """(next hand, draw pile left, discard left) for a k-card draw. The reader's draw pile is in the game's real
+    order (draw_ordered; the user chose knowing over guessing, 2026-10-25): the top k cards, exactly. Without it
+    (older readers, recordings): k random ones, sorted by name first so the order never matters. Fewer than k
+    left: all of them, then the reshuffled discard + this hand: exactly (reshuffle) with the reader's shuffle RNG,
+    else random ones."""
+    ordered = state.get("draw_ordered")
+    draw, pool = (list(state["draw"]) if ordered else by_name(state["draw"])), by_name(state.get("discard", []) + state["hand"])
+    if len(draw) >= k:
+        if ordered:
+            return draw[:k], draw[k:], pool
+        got = set(rng.sample(range(len(draw)), k))  # by index: identical cards can be the same dict
+        return [draw[i] for i in got], [c for i, c in enumerate(draw) if i not in got], pool
+    if ordered and (new := reshuffle(state, pool)) is not None:
+        n = k - len(draw)
+        return draw + new[:n], new[n:], []
+    got = set(rng.sample(range(len(pool)), min(k - len(draw), len(pool))))
+    return draw + [pool[i] for i in got], [c for i, c in enumerate(pool) if i not in got], []
+
+
+def reshuffle(state, cards):
+    """The draw pile the game makes from `cards` when it reshuffles (CardPileCmd.Shuffle, both builds): StableShuffle
+    sorts by (ModelId.Entry, upgrade level) then Fisher-Yates with RunState.Rng.Shuffle (the reader's live state);
+    a Perfect Fit card goes on top. None without the RNG state or card ids (older readers)."""
+    if not state.get("shuffle_rng") or any(c.get("id") is None for c in cards):
+        return None
+    from pathing import MegaRng  # lazy: pathing imports deck / runplan
+    rng, out = MegaRng.at(state["shuffle_rng"]), sorted(cards, key=lambda c: (c["id"], c.get("level", 0)))
+    for i in range(len(out) - 1, 0, -1):
+        j = rng.next_int(i + 1)
+        out[i], out[j] = out[j], out[i]
+    return sorted(out, key=lambda c: (c.get("enchantment") or {}).get("name") != "PerfectFit")  # stable: top only
+
+
+def keeps_hand(state):
+    """The hand isn't discarded at turn end (ShouldFlush false): Runic Pyramid, Ringing Triangle on turn 1, Retain
+    Hand. ponytail: Well-Laid Plans (keeps only the cards picked) isn't modelled."""
+    names = {r["name"] for r in state.get("relics", [])}
+    return ("RunicPyramid" in names or ("RingingTriangle" in names and (state.get("turn") or 0) <= 1)
+            or amount(state.get("player", {}).get("powers", []), "RetainHandPower") > 0)
+
+
+def end_discard(state, plan):
+    """The discard pile at the end of this turn after `plan`: the discard now + this hand's cards except played
+    Powers / Exhaust cards and unplayed Ethereal (exhausted) or Retain (stay in hand) ones, plus a card still
+    resolving (play_pile).
+    ponytail: cards the plan makes (Shivs) and Retain from relics (Runic Pyramid) aren't tracked."""
+    played = collections.Counter(st[3]["name"] for st in plan.steps if st[5] == "card")
+    keep = keeps_hand(state)
+    out = list(state.get("discard", []))
+    for c in state.get("play_pile") or []:  # a card still resolving (reader's play_pile) lands like a played one
+        if c["type"] != "Power" and "Exhaust" not in keywords(c):
+            out.append(c)
+    for c in state["hand"]:
+        kw = keywords(c)
+        if played[c["name"]] > 0:
+            played[c["name"]] -= 1
+            if c["type"] != "Power" and "Exhaust" not in kw:
+                out.append(c)
+        elif "Ethereal" not in kw and "Retain" not in kw and not keep:
+            out.append(c)
+    return out
+
+
+def card_id(name):
+    """ModelId.Entry of a card class (StrikeIronclad -> STRIKE_IRONCLAD), for cards the reader didn't send."""
+    return re.sub(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", "_", name).upper()
+
+
+def enemy_discards(state, plan):
+    """Status cards the enemies' shown moves put in our discard this enemy turn (Sticky Shot: 2 Slimed), so the
+    reshuffle has them; enemies the plan kills don't act. ponytail: a stunned enemy still counts."""
+    out = []
+    for i, f in enumerate(state.get("enemies", [])):
+        if plan.end and i < len(plan.end) and plan.end[i][0] <= 0:
+            continue
+        mv = GAMEDATA["monsters"].get(f["name"], {}).get("moves", {}).get(f.get("move"), {})
+        for e in mv.get("effects", []):
+            if (e.get("adds_card") in GAMEDATA["cards"] and e.get("pile") == "Discard"
+                    and isinstance(e.get("count", 1), (int, float))):
+                out += [{**gd_card(e["adds_card"]), "id": card_id(e["adds_card"]), "level": 0}] * int(e.get("count", 1))
+    return out
+
+
+def after_draws(state, plan):
+    """The piles once the plan's own draws are done: with the real order, its top `plan.drawn` cards leave the draw
+    pile (into hand, then the discard), the hand goes to the discard (end_discard), and cards the plan puts on top
+    (plan.on_top) lead the draw pile.
+    ponytail: unordered piles keep them; a draw past the pile's end isn't reshuffled here; several cards put on top
+    keep the plan's order (the game's last-placed-first isn't modelled)."""
+    d = min(plan.drawn, len(state.get("draw") or []))
+    if not state.get("draw_ordered"):
+        return state
+    disc = end_discard(state, plan) + state["draw"][:d] + enemy_discards(state, plan)
+    for c in plan.on_top:  # user: a card moved on top (Headbutt...) is drawn first next turn, not reshuffled
+        i = next((i for i, x in enumerate(disc) if x["name"] == c["name"] and x.get("upgraded") == c.get("upgraded")), None)
+        if i is not None:
+            disc.pop(i)
+    return {**state, "draw": list(plan.on_top) + state["draw"][d:], "discard": disc, "hand": []}
+
+
+def next_hand(state, plan):
+    """Overlay: (the next hand's known cards, how many more come from the reshuffle, how many of the known ones come
+    from the draw pile; the rest are the reshuffled discard) after `plan`, or None without the real pile order."""
+    if not (state.get("status") == "combat" and state.get("draw_ordered") and "draw" in state):
+        return None
+    k, st = next_draw(state, plan.plays), after_draws(state, plan)
+    draw, n = st["draw"], min(k, len(st["draw"]))
+    if len(draw) < k and (new := reshuffle(st, st["discard"])) is not None:
+        draw = draw + new  # short pile: the rest from the exact reshuffle
+    return draw[:k], max(0, k - len(draw)), n
 
 
 def next_blocks(state, dex):
     """Block each of EXPOSURE_SAMPLES likely next hands can make with next turn's energy (greedy, Block per
-    energy). Fewer than HAND cards left to draw: the rest come from the reshuffled discard + this hand.
-    Seeded and sorted by name, so the draw pile's (hidden) order never matters."""
-    draw, pool = by_name(state["draw"]), by_name(state.get("discard", []) + state["hand"])
+    energy); see draw_hand. Seeded, so the same state gives the same answer."""
     rng, out, k = random.Random(0), [], next_draw(state)
     energy = (state.get("max_energy") or 3) + amount(state.get("player", {}).get("powers", []), "EnergyNextTurnPower")
     for _ in range(EXPOSURE_SAMPLES):
-        hand = rng.sample(draw, k) if len(draw) >= k else draw + rng.sample(pool, min(k - len(draw), len(pool)))
+        hand = draw_hand(state, k, rng)[0]
         e = b = 0
         for c in sorted(hand, key=lambda c: -c["vars"].get("Block", 0) / max(c["cost"], 0.5)):
             if c["vars"].get("Block") and c["type"] in ("Attack", "Skill") and 0 <= c["cost"] <= energy - e:
@@ -555,14 +698,29 @@ def unmodeled_player_powers(state):
                    if p["name"] not in PLAYER_POWERS})
 
 
+# Potions whose effect maps onto a modelled one (decomp OnUse; user: the advisor didn't use these):
+# Foul Potion in combat = 12 damage to ALL (gamedata skips Event potions); Powdered Demise = 9 unblockable each enemy
+# turn end forever (DemisePower), modelled as Poison 10 (10+9+8 = 27 = 9x3 over 3 turns); Touch of Insanity = a
+# hand card costs 0 for the rest of combat, counted as this turn's energy for the dearest card in hand.
+# ponytail: Demise past 3 turns and Catalyst-style Poison doubling skew it; Insanity's later turns aren't counted.
+POTION_EXTRA = {"FoulPotion": {"target": "AllEnemies", "vars": {"Damage": 12}}}
+POTION_AS = {"PowderedDemise": lambda v, state: {"PoisonPower": v.get("Demise", 9) + 1},
+             "TouchOfInsanity": lambda v, state: {"Energy": max((c["cost"] for c in state.get("hand", [])
+                                                                 if c["type"] in ("Attack", "Skill", "Power")), default=0)}}
+
+
 def potion_actions(state):
     """Held potions whose effects the solver can model, shaped like cards (type "Potion", cost 0)."""
     out = []
     for p in state.get("potions", []):
-        d = GAMEDATA["potions"].get(p["name"])
+        d = GAMEDATA["potions"].get(p["name"]) or POTION_EXTRA.get(p["name"])
         if not d:
             continue
-        v = {k: int(n) for k, n in d["vars"].items()}
+        v = {k: int(n) for k, n in (d.get("vars") or {}).items()}
+        if p["name"] in POTION_AS:
+            v = POTION_AS[p["name"]](v, state)
+            if not any(v.values()):
+                continue
         pm = "draw" in state and any(pile_moves({"name": p["name"], "type": "Potion", "vars": v}))
         rest = set(v) - PILE_VARS if pm else set(v)
         made = potion_cards(p["name"], state)
@@ -572,7 +730,7 @@ def potion_actions(state):
             continue
         if d["target"] != "Self" and "StrengthPower" in v:
             continue  # enemy Strength loss isn't modeled
-        out.append({"name": p["name"], "type": "Potion", "target": d["target"], "cost": 0,
+        out.append({"name": p["name"], "type": "Potion", "target": "Self" if p["name"] == "TouchOfInsanity" else d["target"], "cost": 0,
                     "x_cost": False, "upgraded": False, "vars": v, "slot": p["slot"], "makes": made})
     return out
 
@@ -672,11 +830,90 @@ def hit(e, n):
 # the strong lines early). Results on capped turns depend on machine speed. A beam search is the upgrade if capped
 # turns show worse plans.
 SOLVE_SECONDS = 1.5
+# S7 B9 (user): two-turn lookahead in elite / boss fights. The top LOOK_PLANS plans each play out LOOK_SAMPLES next
+# turns (hand from the draw pile, each enemy's next move from its AI table, potions used are gone) solved one turn
+# deep; the plans are reordered by score + LOOK_WEIGHT x the mean next-turn score. Same samples for every plan
+# (common random numbers). Uses only the time the search left of `seconds`.
+# ponytail: cards drawn / made this turn, enemy buff moves, our temporary powers and Block kept (Barricade) aren't
+# carried over; Power cards' own powers are. LOOK_WEIGHT is below FUTURE_DISCOUNT since the foresight already
+# counts part of it; tune from hp_audit.
+LOOK_PLANS, LOOK_SAMPLES, LOOK_WEIGHT, LOOK_MIN_SECONDS = 3, 4, 0.3, 0.02
 
 
-def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
+def next_turn_state(state, plan, rng, exact=()):
+    """The state at the start of next turn after `plan` (a sampled draw and enemy moves), for the lookahead.
+    exact: replay_moves' result (H2): an enemy's known next move replaces the sampled one."""
+    me, asc = state["player"], state.get("ascension", 0)
+    played = [st[3] for st in plan.steps if st[5] == "card"]
+    used = {st[3].get("slot") for st in plan.steps if st[5] == "potion"}
+    powers = {p["name"]: dict(p) for p in me["powers"]}
+    for c in played:  # Power cards stay in play: Inflame's Strength, Noxious Fumes, Barricade...
+        if c["type"] != "Power":
+            continue
+        for o in GAMEDATA.get("cards", {}).get(c["name"], {}).get("ops") or []:
+            if o.get("op") == "power" and o.get("tgt") == "self":
+                n = c["vars"].get(o["amt"], 0) if isinstance(o["amt"], str) else o["amt"]
+                powers.setdefault(o["power"], {"name": o["power"], "amount": 0})["amount"] += n
+    k = next_draw(state, plan.plays)
+    hand, draw, discard = draw_hand(after_draws(state, plan), k, rng)
+    enemies = []
+    for f, e in zip(state["enemies"], plan.end or [()] * len(state["enemies"])):
+        cr = dict(f["creature"])
+        if e:
+            ticked = {"VulnerablePower": max(0, e[2] - 1), "WeakPower": max(0, e[3] - 1), "PoisonPower": max(0, e[10] - 1)}
+            cr["hp"], cr["block"] = e[0], 0
+            cr["powers"] = [{**p, "amount": ticked[p["name"]]} if p["name"] in ticked else p
+                            for p in cr.get("powers", []) if ticked.get(p["name"], 1)]
+            cr["powers"] += [{"name": n, "amount": v} for n, v in ticked.items()
+                             if v and all(p["name"] != n for p in cr["powers"])]
+        g = {**f, "creature": cr}
+        ai = MONSTERS.get(f["name"])
+        if ai and f.get("move") in ai["moves"]:
+            nxt = follow(ai, f["move"], f["move"], set(f.get("history", [])) | {f["move"]}, f.get("slot"))
+            known = exact[len(enemies)] if len(enemies) < len(exact) and exact[len(enemies)] else None
+            if known or nxt:
+                mv = known[0] if known else rng.choices(list(nxt), weights=list(nxt.values()))[0]
+                g.update(move=mv, history=list(f.get("history", [])) + [f["move"]],
+                         intents=[{"kind": "SingleAttackIntent", "damage": d, "hits": h}
+                                  for d, h in attacks(ai["moves"][mv], asc)])
+        enemies.append(g)
+    return {**state, "hand": hand, "draw": draw, "discard": discard, "enemies": enemies,
+            "potions": [p for p in state.get("potions", []) if p.get("slot") not in used],
+            "energy": (state.get("max_energy") or 3) + amount(me["powers"], "EnergyNextTurnPower"),
+            "turn": (state.get("turn") or 0) + 1, "my_cards_played": 0, "cards_played": 0, "skills_played": 0,
+            "bound_played": 0, "drawn_turn": k, "discarded_turn": 0, "exhausted_this_turn": 0,
+            "player": {**me, "hp": min(me["max_hp"], me["hp"] - plan.hp_loss), "block": 0,
+                       "powers": [p for p in powers.values()
+                                  if p["name"] not in ("EnergyNextTurnPower", "DrawCardsNextTurnPower")]}}
+
+
+def look_ahead(state, plans, deadline):
+    """Reorder the top LOOK_PLANS plans by score + LOOK_WEIGHT x mean next-turn best score (see LOOK_PLANS)."""
+    top = plans[:LOOK_PLANS]
+    if len(top) < 2 or any(p.win for p in top):
+        return plans
+    each = (deadline - time.monotonic()) / (len(top) * LOOK_SAMPLES)
+    if each < LOOK_MIN_SECONDS:
+        return plans
+    means, exact = [], replay_moves(state["enemies"], state.get("monster_ai_rng"), 1)
+    for p in top:
+        if state["player"]["hp"] - p.hp_loss <= 0:
+            means.append(None)
+            continue
+        vals = []
+        for k in range(LOOK_SAMPLES):
+            nxt = solve(next_turn_state(state, p, random.Random(k), exact), top=1, seconds=each, ahead=False)
+            vals.append(nxt[0].score if nxt else 0)
+        means.append(sum(vals) / len(vals))
+    floor = min((m for m in means if m is not None), default=0)
+    adj = {id(p): p.score + LOOK_WEIGHT * (floor if m is None else m) for p, m in zip(top, means)}
+    return sorted(top, key=lambda p: -adj[id(p)]) + plans[LOOK_PLANS:]
+
+
+def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS, ahead=True):
     """Best plans for this turn. kept: cards already chosen to go on top of the draw pile (pick screens).
-    seconds: search time cap (pick screens split theirs over the candidates)."""
+    seconds: search time cap (pick screens split theirs over the candidates). ahead: the two-turn lookahead (elite /
+    boss fights, full-time solves only)."""
     if state.get("status") != "combat":
         return []
     me = state["player"]
@@ -846,6 +1083,11 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
     # Minions (Gas Bomb, Illusions...) die when the last non-minion enemy dies (CreatureCmd.Kill).
     minion = [pw(f, "MinionPower") > 0 for f in foes]
     leaders = not all(minion)
+    # A living summoner (a move that summons: Ovicopter's eggs, The Obscura's Parafright, Living Fog's Gas Bomb)
+    # replaces killed minions, so a minion's future damage counts RESUMMON_TURNS forecast turns at most.
+    summons = lambda f: any(e.get("summon") for mv in GAMEDATA["monsters"].get(f["name"], {}).get("moves", {}).values()
+                            for e in mv.get("effects", []))
+    respawn = [m and any(not mm and summons(g) for g, mm in zip(foes, minion)) for m in minion]
     shrink = 0.7 if amount(me["powers"], "ShrinkPower") else 1
     # Debuffs on us that leave with the enemy that applied them (their AfterDeath removes them): Constrict
     # (Slithering Strangler), Shrink (Shrinker Beetle), Hex's Ethereal (Spectral Knight). A kill this turn ends them.
@@ -876,6 +1118,7 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
     # Attacks already played this turn (reader, from combat history); older readers only know none were played.
     atk_before = state.get("attacks_played", None if before else 0)
     soulbound = amount(me["powers"], "SoulboundPower")  # each Soul we create adds X Souls to the draw pile
+    hang = [pw(f, "HangPower") for f in foes]  # Hang: x its damage on this enemy
     strangle = [pw(f, "StranglePower") for f in foes]  # this turn: HP loss / Doom per card we play
     oblivion = [pw(f, "OblivionPower") for f in foes]
     music = "MusicBox" in R and not R.count("MusicBox", "_wasUsedThisTurn")
@@ -1052,7 +1295,9 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
     def exhausts(c):
         return "Exhaust" in keywords(c) or (c["type"] == "Skill" and "CorruptionPower" in mine)
     exhausted_before = exhausted_this_turn(state)
-    forecast = [predict(f, state.get("ascension", 0), FUTURE_TURNS) for f in foes]
+    exact = replay_moves(foes, state.get("monster_ai_rng"), FUTURE_TURNS)  # H2: the real next moves when known
+    forecast = [predict(f, state.get("ascension", 0), FUTURE_TURNS, exact[i] if i < len(exact) else None)
+                for i, f in enumerate(foes)]
     for j, fc in enumerate(forecast):  # a summon adds its hits to every later turn: killing the summoner first
         for k, t in enumerate(fc):     # stops them (summons are its minions or come from it)
             extra = summon_dmg(foes[j]["name"], t["moves"], state.get("ascension", 0))
@@ -1069,10 +1314,13 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
     # Threat looks further ahead than the HP math (up to the fight's expected length): an enemy that scales
     # (Ritual, Enlarge, Territorial...) keeps hitting harder, so its damage now is worth more.
     t_turns = min(THREAT_TURNS_MAX, max(FUTURE_TURNS, math.ceil(turns_left)))
-    scaled = [sum(t["dmg"] * THREAT_DISCOUNT ** k for k, t in enumerate(fc))
-              for fc in (predict(f, state.get("ascension", 0), t_turns) for f in foes)]
-    threat = [n + fu + lo + GOLD_LOOT_HP * pw(f, "ThieveryPower")
-              for n, fu, lo, f in zip(incoming_each(start[2]), scaled, loot, foes)]
+    scaled = [sum(t["dmg"] * THREAT_DISCOUNT ** k for k, t in enumerate(fc[:RESUMMON_TURNS] if r else fc))
+              for fc, r in zip((predict(f, state.get("ascension", 0), t_turns) for f in foes), respawn)]
+    # Minions leave with the last leader: the leaders carry their minions' future threat (Smith's rule then favours
+    # the kill that ends them all; a summoner's minions are a treadmill, see respawn).
+    carried = sum(sc for sc, m in zip(scaled, minion) if m) / max(1, sum(not m for m in minion))
+    threat = [n + fu + lo + GOLD_LOOT_HP * pw(f, "ThieveryPower") + (0 if m else carried)
+              for n, fu, lo, f, m in zip(incoming_each(start[2]), scaled, loot, foes, minion)]
     # Focus fire (Smith's rule): damage counts by threat per HP left, so the scaler / nearly dead enemy is
     # finished first instead of chipping everyone. Damage into Block (Skittish) still counts 0.
     ratio = [t / max(f["creature"]["hp"] + f["creature"]["block"], 1) for t, f in zip(threat, foes)]
@@ -1084,6 +1332,9 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
               # Escape Artist at 1 = its escape move comes: damage only counts if it dies now
               * (HATCH_NOW if any(0 < pw(f, p) <= 1 for p in ("HatchPower", "BattlewornDummyTimeLimitPower",
                                                                 "EscapeArtistPower")) else 1) for w, f in zip(weight, foes)]
+    # A summoner's minion is replaced when killed: chip damage on it is mostly wasted, the summoner's HP is what
+    # ends the fight. A kill before it acts still pays through W_KILL and the hits it no longer lands.
+    weight = [w * (MINION_CHIP if r else 1) for w, r in zip(weight, respawn)]
     # Potions get cheaper when THIS turn's hits would leave us low. A big hit predicted for next turn
     # is a reason to keep the potion for that turn, not to spend it now.
     pot_cost = potion_cost(state, me["hp"] + me["block"] - incoming(start[2])) * hp_weight(state)
@@ -1178,13 +1429,86 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             energy += ORB_EVOKE["Plasma"]
         return block, energy
 
+    # Count cards (decomp CalculatedVar / OnPlay): value = CalculationBase + extra x a count in combat. The card's own
+    # var holds only the base (Barrage: 0 hits), so count it here: the reader's combat counts plus what this plan
+    # changed (orbs channeled, Attacks played, Block gained, cards discarded...). A count of 0 hits deals no damage.
+    # ponytail: draws inside the plan are unknown (Death March / Murder use the reader's count); Gang Up counts only
+    # teammates' hits (0 solo); Rattle / Tear Asunder don't add this plan's own Osty hits / damage taken.
+    all_cards = [c for k in ("hand", "draw", "discard", "exhaust") for c in state.get(k) or []]
+    hand_skills = sum(c["type"] == "Skill" for c in state["hand"])
+    n_statuses = sum(c["type"] == "Status" for k in ("hand", "draw", "discard") for c in state.get(k) or [])
+    osty_max = next((p["creature"].get("max_hp", 0) for p in (state.get("pets") or []) if p["name"] == "Osty"), 0)
+    debuffs0 = [{p["name"] for p in f.get("powers", []) if GAMEDATA.get("powers", {}).get(p["name"], {}).get("type") == "Debuff"}
+                for f in foes]
+    shiv = gd_card("Shiv")["vars"].get("Damage", 4)
+
+    def in_hand(st):  # cards in hand now (the played card already left)
+        return sum(k for (c, _), k in zip(groups, st[1]) if c["type"] != "Potion") + len(dead) - st[6].tossed
+
+    def counted(card, v, st, tgt=None, hand_n=0):
+        energy, counts, en, block, strength, dex, plays, pots, hp, osty, orbs, stars, buffs = st
+        t = en[tgt] if tgt is not None else None
+        n = {"Barrage": lambda: len(orbs),
+             "Finisher": lambda: (atk_before or 0) + plays.attacks,
+             "LunarBlast": lambda: skills_before + plays.skills,
+             "PullFromBelow": lambda: (state.get("ethereal_played") or 0) + bget(buffs, "EtherealPlayed"),
+             "Radiate": lambda: (state.get("stars_gained") or 0) + max(0, stars - state.get("stars", 0)),
+             "Flechettes": lambda: max(0, hand_skills - plays.skills),
+             "FlakCannon": lambda: n_statuses,
+             "TearAsunder": lambda: 1 + (state.get("times_damaged") or 0),
+             "Rattle": lambda: 1 + (state.get("osty_attacks") or 0),
+             "HelixDrill": lambda: (state.get("energy_spent") or 0) + max(0, state["energy"] - energy),
+             "BodySlam": lambda: block, "DemonicShield": lambda: block,
+             "AshenStrike": lambda: len(state.get("exhaust") or []) + plays.exhausted,
+             "MindBlast": lambda: len(state.get("draw") or []),
+             "PerfectedStrike": lambda: sum("Strike" in c["name"] for c in all_cards),
+             "CrescentSpear": lambda: sum(star_cost(c) > 0 for c in all_cards),
+             "SoulStorm": lambda: sum(c["name"] == "Soul" for c in state.get("exhaust") or []),
+             "Stack": lambda: len(state.get("discard") or []) + bget(buffs, "Discarded"),
+             "ExpectAFight": lambda: max(0, strength),
+             "Mirage": lambda: sum(e[10] for e in en if e[0] > 0),
+             "Bully": lambda: t[2] if t else 0, "TimesUp": lambda: t[11] if t else 0,
+             "Dismantle": lambda: 2 if t and t[2] > 0 else 1,
+             "NoEscape": lambda: t[11] // max(v.get("DoomThreshold", 10), 1) if t else 0,
+             "Rend": lambda: len(debuffs0[tgt] | {k for k, i in DEBUFF_SLOT.items() if t[i] > 0}) if t else 0,
+             "DeathMarch": lambda: state.get("drawn_turn") or 0,
+             "Murder": lambda: state.get("drawn_combat") or 0,
+             "MementoMori": lambda: (state.get("discarded_turn") or 0) + bget(buffs, "Discarded"),
+             "GoldAxe": lambda: (state.get("plays_combat") or 0) + plays.cards,
+             "Supermassive": lambda: (state.get("generated_combat") or 0) + bget(buffs, "Generated"),
+             "PreciseCut": lambda: -in_hand(st),
+             "Protector": lambda: osty_max if osty > 0 else 0, "Unleash": lambda: osty,
+             "Squeeze": lambda: sum(c["name"] in OSTY_ATTACKS for c in all_cards) - 1,
+             "Sacrifice": lambda: 3 * osty_max if osty > 0 else 0,
+             "Voltaic": lambda: (state.get("lightning_channeled") or 0) + bget(buffs, "Lightning"),
+             "KnifeTrap": lambda: sum(c["name"] == "Shiv" for c in state.get("exhaust") or []) + bget(buffs, "Shiv"),
+             "CompileDriver": lambda: len({o for o, _ in orbs}),
+             "Stardust": lambda: stars, "FiendFire": lambda: hand_n}.get(card["name"])
+        if n is None:
+            return v
+        base, n = v.get("CalculationBase", 0), n()
+        if "ExtraDamage" in v:  # CalculatedDamage (Osty's own for Unleash / Protector / Squeeze)
+            return {**v, ("OstyDamage" if "OstyDamage" in v else "Damage"): base + v["ExtraDamage"] * n}
+        x = max(0, base + v.get("CalculationExtra", 1) * n)
+        key = COUNT_KEY.get(card["name"], "Repeat" if "Damage" in v or "OstyDamage" in v else "Block")
+        if card["name"] == "KnifeTrap":  # plays every exhausted Shiv. ponytail: as one Skill (no Strength)
+            v, key = {**v, "Damage": shiv}, "Repeat"
+        if key == "Repeat":
+            v = {k: y for k, y in v.items() if k != "Repeat"} | ({"Repeat": x} if x else {})
+            return v if x else {k: y for k, y in v.items() if k not in ("Damage", "OstyDamage")}  # 0 hits: no damage
+        return {**v, key: x}
+
     def play(card, tgt, st, g=None):
+        hand_n = 0
+        if card["name"] in HAND_TOSS and card["type"] != "Potion":  # Fiend Fire / Stoke / Storm of Steel: hand first
+            hand_n = in_hand(st)
+            st = toss(st, HAND_TOSS[card["name"]], HAND_MAX, "pick")
         energy, counts, en, block, strength, dex, plays, pots, hp, osty, orbs, stars, buffs = st
         potion = card["type"] == "Potion"
         attack = card["type"] == "Attack"
         cost = energy if card["x_cost"] else cost_of(card, plays)
         times = energy + x_bonus(R) if card["x_cost"] else 1
-        v = {} if junk(card) else card["vars"]
+        v = {} if junk(card) else counted(card, card["vars"], st, tgt, hand_n)
         if card["name"] == "SovereignBlade" and mine.get("ParryPower"):  # Parry: the Blade gains Block = Parry amount
             v = {**v, "Block": mine["ParryPower"]}
         # Strangle / Oblivion already on an enemy act on this card (not on the card that applies them)
@@ -1230,6 +1554,7 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
                 vm = 1 + vuln_bonus * (2 if debil[i] else 1) if en[i][2] > 0 and attack else 1
                 am = ((tracking if tracking and en[i][3] > 0 else 1) * (2 if bget(buffs, "DoubleDamagePower") else 1)
                       * (3 if bget(buffs, "GigantificationPower") else 1)
+                      * (max(1, hang[i] + bget(buffs, f"Hang{i}")) if card["name"] == "Hang" else 1)
                       * (1 + lethality if not plays.attacks and not before else 1)) if attack else 1
                 per = min(math.floor(base * vm * am * slow * mult), hard_cap[i])
                 n_hits = max(v.get("Repeat", 1) if card["name"] != "Spite" or hp < me["hp"] else 1, 1) * times
@@ -1252,6 +1577,10 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
                             en[i][9] -= 1
                         else:
                             en[i][10] += bget(buffs, "EnvenomPower")
+        if card["name"] == "Hang" and tgt is not None:  # Hang: 2 Hang, then doubles it (x damage of later Hangs)
+            buffs = badd(buffs, f"Hang{tgt}", max(2, hang[tgt] + bget(buffs, f"Hang{tgt}")))
+        if card["name"] == "MoltenFist" and tgt is not None and en[tgt][0] > 0:  # doubles the target's Vulnerable
+            en[tgt][2] *= 2
         if attack and "Damage" in v and bget(buffs, "GigantificationPower"):  # used up by this Attack
             buffs = badd(buffs, "GigantificationPower", -1)
         if "OstyDamage" in v and osty > 0:  # Osty attacks: no player Strength/Weak
@@ -1261,12 +1590,34 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
         if "Summon" in v:  # raises Osty's HP, or revives it
             osty += v["Summon"]
         stars += v.get("Stars", 0) - (0 if potion else star_cost(card))
-        for name in [] if potion else channels(card):
+        if card["name"] == "Stardust":  # X stars: spends them all (one hit each, counted above)
+            stars = 0
+        for name in [] if potion else channels(card) * int(v.get("Channels", 1)):
+            buffs = badd(buffs, "Lightning", name == "Lightning")  # Voltaic counts them
             if slots and len(orbs) >= slots:
                 block, energy = evoke(orbs[0], en, block, energy)
                 orbs = orbs[1:]
             if slots:
                 orbs = orbs + ((name, {"Dark": 6, "Glass": 4}.get(name)),)
+        # Orb cards (decomp OnPlay): Dualcast / Quadcast evoke the first orb 2 / 4 times, Shatter evokes each orb twice
+        # (nothing without orbs); Darkness: each Dark orb's passive (+6+Focus to its evoke, twice upgraded); Tesla Coil:
+        # each Lightning's passive at the target (twice upgraded).
+        if card["name"] in ("Dualcast", "Quadcast") and orbs and not potion:
+            for _ in range(int(v.get("Repeat", 2))):
+                block, energy = evoke(orbs[0], en, block, energy)
+            orbs = orbs[1:]
+        elif card["name"] == "Shatter":
+            for o in orbs:
+                for _ in range(2):
+                    block, energy = evoke(o, en, block, energy)
+            orbs = ()
+        elif card["name"] == "Darkness":
+            grow = (ORB_PASSIVE["Dark"] + focus) * (2 if card["upgraded"] else 1)
+            orbs = tuple((o, (x or 6) + grow if o == "Dark" else x) for o, x in orbs)
+        elif card["name"] == "TeslaCoil" and tgt is not None:
+            for o, _ in orbs:
+                for _ in range((2 if card["upgraded"] else 1) if o == "Lightning" else 0):
+                    hit(en[tgt], ORB_PASSIVE["Lightning"] + focus)
         if "Block" in v:
             extra = fasten if card["name"].startswith("Defend") else 0
             gained = v["Block"] if potion else max(0, math.floor((v["Block"] + extra + dex) * (0.75 if frail else 1))) * times
@@ -1322,7 +1673,10 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             counts = counts[:g] + (counts[g] + 1,) + counts[g + 1:]
         for mg, n in makes.get(g, ()):  # made/fetched cards land in hand, playable later this turn (max 10 in hand)
             room = HAND_MAX - len(dead) + plays.tossed - sum(k for (c, _), k in zip(groups, counts) if c["type"] != "Potion")
-            counts = counts[:mg] + (counts[mg] + max(0, min(n * times, room)),) + counts[mg + 1:]
+            n = hand_n if card["name"] == "StormOfSteel" else n  # a Shiv per card discarded
+            made_n = max(0, min(n * times, room))
+            counts = counts[:mg] + (counts[mg] + made_n,) + counts[mg + 1:]
+            buffs = badd(buffs, "Generated", made_n)  # Supermassive counts them
         if potion:
             pots += 1
         else:
@@ -1332,6 +1686,10 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             plays = plays._replace(attacks=plays.attacks + (t == "Attack"), skills=plays.skills + (t == "Skill"),
                                    powers=plays.powers + (t == "Power"), cards=plays.cards + 1,
                                    block=plays.block + ("Block" in v), exhausted=plays.exhausted + exhausting)
+            if "Ethereal" in keywords(card):  # Pull From Below: hits once per Ethereal card played this combat
+                buffs = badd(buffs, "EtherealPlayed", 1)
+            if card["name"] == "Shiv":  # Shivs exhaust: Knife Trap plays them again
+                buffs = badd(buffs, "Shiv", 1)
             # Powers we already had when this card was played: Rage (Attack), Afterimage (any card), Feel No Pain
             gain(bget(buffs, "RagePower") if attack else 0)
             gain(bget(buffs, "AfterimagePower"))
@@ -1415,6 +1773,8 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             if exhaust:
                 lost += loss(c)
                 out += 1
+            else:  # Memento Mori / Stack count discards
+                buffs = badd(buffs, "Discarded", 1)
         block += bget(buffs, "FeelNoPainPower") * out  # ponytail: Juggernaut isn't triggered by this Block
         plays = plays._replace(tossed=tossed, gone=tuple(gone), lost=lost, exhausted=plays.exhausted + out)
         st = (energy, counts, en, block, strength, dex, plays, pots, hp, osty, orbs, stars, buffs)
@@ -1564,7 +1924,12 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             souls = sum(k * n for g, (c, k, m) in enumerate(used) for mg, n in makes.get(g, ())
                         if groups[mg][0]["name"] == "Soul")
             retained += souls * soulbound * RETAIN_KEEP * worth_next(gd_card("Soul"), vuln)
-        retained += drawn * sum(w for cost, w in pool if 0 <= cost <= energy) / len(pool) if drawn and pool else 0
+        if drawn and pool and state.get("draw_ordered") and state.get("draw"):
+            top = pool[:drawn]  # the real top cards (draw_hand); past the pile's end: its mean
+            retained += (sum(w for cost, w in top if 0 <= cost <= energy) + max(0, drawn - len(top))
+                         * sum(w for cost, w in pool if 0 <= cost <= energy) / len(pool))
+        else:
+            retained += drawn * sum(w for cost, w in pool if 0 <= cost <= energy) / len(pool) if drawn and pool else 0
         blocked_all = block >= attacks
         killed = [a[0] > 0 and b[0] == 0 for a, b in zip(start_en, en)]
         # Enemy Weak ticks down at the end of each enemy turn: Weak w after this plan still cuts forecast turn k
@@ -1572,12 +1937,16 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
         cut = [[1 - weak_cut * (2 if debil[i] else 1) * (e[3] > k + 1) for k in range(len(fc))]
                for i, (e, fc) in enumerate(zip(en, forecast))]
         nxt = [n * (c[0] if c else 1) for n, c in zip(next_turn, cut)]
-        fut = [sum(t["dmg"] * FUTURE_DISCOUNT ** k * c[k] for k, t in enumerate(fc)) for fc, c in zip(forecast, cut)]
+        fut = [sum(t["dmg"] * FUTURE_DISCOUNT ** k * c[k] for k, t in enumerate(fc[:RESUMMON_TURNS] if r else fc))
+               for fc, c, r in zip(forecast, cut, respawn)]
         hit_next = (sum(n * (BACK_ATTACK if behind(f, facing) else 1)
                         for n, a, ob, f in zip(nxt, alive, off_balance, foes) if a and not (ob and blocked_all))
                     + sum(x for x, k in zip(erupt, killed) if k))
         future_left = (sum(fu for fu, a in zip(fut, alive) if a) + sum(x for x, k in zip(erupt, killed) if k)
                        - hit_next + exposure(hit_next, carried))
+        # User: the eruption can't be dodged (the fight only ends when it explodes) and grows ERUPT_STEP a turn while
+        # the Giant lives, so a living one carries it too, plus a step: killing it now is never the costlier choice.
+        future_left += sum(x + ERUPT_STEP for x, a, e0 in zip(erupt, alive, start_en) if a and x and e0[0] < UNKILLABLE)
         future_left -= sum(n for n, a, ob in zip(nxt, alive, off_balance) if a and ob and blocked_all)
         future_left += (sucked + WAKE_COST * woken) * (not win)
         pool_e = sum(max(c, 1) for c, w in pool if c >= 0)
@@ -1605,7 +1974,8 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
                  - ETHEREAL_LOSS * ethereal - exhaust_cost - plays.lost + retained + (0 if win else lasting(steps))
                  + sum(ORB_HELD.get(n, 0) + (value_per_damage * FUTURE_WEIGHT * ((v or 6) + ORB_PASSIVE["Dark"] + focus)
                                              if n == "Dark" else 0) for n, v in orbs))
-        return Plan(list(steps), damage, block - start[3], net_loss, kills, win, score, energy)
+        return Plan(list(steps), damage, block - start[3], net_loss, kills, win, score, energy, end=tuple(map(tuple, en)),
+                    drawn=int(drawn), plays=plays.cards, on_top=tuple(on_top))
 
     def allowed(card, plays, steps, buffs, auto=False):
         """Play limits: Sloth cap, Smog (decompiled SmoggyPower: after our first Skill every Skill gets Smog, and a Smog
@@ -1641,6 +2011,8 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             card = groups[g][0]
             if counts[g] == 0 or (cost_of(card, st[6]) > energy and not card["x_cost"]) or (card["x_cost"] and energy == 0):
                 continue
+            if card["name"] in NEEDS_ORBS and not st[10]:  # Dualcast with no orb: does nothing
+                continue
             if card["type"] != "Potion" and star_cost(card) > st[11]:
                 continue
             if card["type"] != "Potion" and not allowed(card, st[6], steps, st[12]):
@@ -1652,7 +2024,7 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
             potion = card["type"] == "Potion"
             pm = any(moves[g]) or bool(no_draw and set(card["vars"]) & PILE_VARS)  # No Draw: known to do nothing
             vs = (set(card["vars"]) - PILE_VARS if pm else set(card["vars"])) - card_buffs(card)[1]
-            modeled = potion or junk(card) or card.get("ops") or bool(engine_powers(card)) or ((bool(vs & MODELED) or bool(channels(card)) or pm or bool(card_buffs(card)[0]))
+            modeled = potion or junk(card) or card.get("ops") or card["name"] in COUNTED or bool(engine_powers(card)) or ((bool(vs & MODELED) or bool(channels(card)) or pm or bool(card_buffs(card)[0]))
                                                and vs <= MODELED
                                                and not deferred(card))
             label = ("POTION " if potion else "") + card["name"] + ("+" if card["upgraded"] else "")
@@ -1684,7 +2056,10 @@ def solve(state, top=3, kept=(), seconds=SOLVE_SECONDS):
     # Equal scores: spend the energy (a harmless extra Defend beats ending the turn early; not once the fight is
     # won), then the shorter plan.
     plans.sort(key=lambda p: (-round(p.score, 6), 0 if p.win else p.energy_left, len(p.steps)))
+    if ahead and not kept and seconds >= SOLVE_SECONDS and "draw" in state and fight_type(state) in ("Elite", "Boss"):
+        plans = look_ahead(state, plans, deadline)
     # a card potion's stand-in plays stay in the score but leave the steps: the real cards are only known once
     # offered, and the plan is redone then
     real = lambda st: not (isinstance(st[3], dict) and st[3].get("stand_in"))
-    return [dc_replace(p, steps=[st for st in p.steps if real(st)]) for p in plans[:top]]
+    return [dc_replace(p, steps=[st for st in p.steps if real(st)], guessed=any(not real(st) for st in p.steps))
+            for p in plans[:top]]

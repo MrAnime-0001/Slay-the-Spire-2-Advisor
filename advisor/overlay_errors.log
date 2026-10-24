@@ -164,3 +164,73 @@ TypeError: 'NoneType' object is not iterable
                                                                    ^^^^^^^^^^^^^^^^^^^^^
 TypeError: 'NoneType' object is not iterable
 
+09:51:00 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 683, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 725, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 574, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 940, in solve
+    tuple((o["name"].removesuffix("Orb"), o.get("value")) for o in state.get("orbs", [])),
+                                                                   ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+09:53:10 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 683, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 725, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 574, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 940, in solve
+    tuple((o["name"].removesuffix("Orb"), o.get("value")) for o in state.get("orbs", [])),
+                                                                   ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+10:55:36 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 755, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 797, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 640, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 1021, in solve
+    tuple((o["name"].removesuffix("Orb"), o.get("value")) for o in state.get("orbs", [])),
+                                                                   ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+11:03:57 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 779, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 821, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 664, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 1021, in solve
+    tuple((o["name"].removesuffix("Orb"), o.get("value")) for o in state.get("orbs", [])),
+                                                                   ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+11:14:16 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 779, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 821, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 664, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 1021, in solve
+    tuple((o["name"].removesuffix("Orb"), o.get("value")) for o in state.get("orbs", [])),
+                                                                   ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+

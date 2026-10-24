@@ -6,11 +6,11 @@ import re
 from itertools import combinations
 
 from pathing import (CARD_REWARD, GOLD_LEFT, HEAL_FRACTION, HP_VALUE, RELIC, SHOP_PER_100, UPGRADE, best_routes,
-                     fight_costs, should_rest)
+                     events_before, event_offers, fight_costs, next_events, should_rest)
 from enemies import predict
 from relics import COMMUNITY, GAMEDATA, KNOWLEDGE, Relics, dmg_add
 from archetypes import ARCHETYPES, commitment, expand_power, snake, synergy
-from deck import encounter, hp_lost, known_boss, known_foes, slot_cost
+from deck import COUNT_CARDS, STAR_VARS, card_key, encounter, hp_lost, known_boss, known_foes, slot_cost, star_supply
 from runplan import WIKI, card_fit, character, plan, relic_fit
 from solver import (ENGINES, ORB_PASSIVE, channels, creates, deck_dpt, engine_powers, from_ops, gd_card,
                     SOLVE_SECONDS, keywords, solve, toss_key)
@@ -195,6 +195,17 @@ def engine_value(card, deck):
     return per, known
 
 
+# S9.2: per card drawn, score x the deck's share of key cards: Powers (engines start sooner), count cards and star
+# spenders (S1/S2 payoffs), 0-costs (free to chain: small decks with draw loop). The deck sim draws the extra cards
+# but values them by their own numbers only, so it misses what finding an engine early is worth.
+DRAW_FIND = 12
+
+
+def key_card(c):
+    return (c["type"] == "Power" or c["name"] in COUNT_CARDS or c.get("cost") == 0
+            or GAMEDATA["cards"].get(c["name"], {}).get("star_cost", 0) > 0)
+
+
 def rate(card, deck, relics=(), state=None, raw=False):
     """(score, modeled, HP saved per fight or None). With `state` (act, ascension, energy), cards the deck sim understands are scored by
     the HP they save in this act's boss/elite fights (deck.py: damage vs block balance, draw odds, dilution);
@@ -220,7 +231,9 @@ def rate(card, deck, relics=(), state=None, raw=False):
         value -= (1 - EXHAUST_STATS) * once
     if "Retain" in kw:
         value *= RETAIN_STATS
-    modeled = set(v) <= set(VAR_VALUE) | {"Repeat"} and bool(v)
+    # the deck sim also scores count cards (deck.deck_counts) and stars (supply vs the spenders' demand, S2)
+    calc = {"CalculationBase", "CalculationExtra", "ExtraDamage"} if card["name"] in COUNT_CARDS else set()
+    modeled = set(v) <= set(VAR_VALUE) | {"Repeat", *STAR_VARS} | calc and bool(v)
     engine, known = engine_value(card, deck)
     if known:  # its every-turn output replaces the printed numbers it was read from
         value = (value if card["type"] != "Power" else 0) + engine * power_turns(state)
@@ -243,9 +256,13 @@ def rate(card, deck, relics=(), state=None, raw=False):
         score -= DECK_SIZE_PENALTY * max(0, len(deck) - DECK_SIZE_FREE)
     elif card["type"] != "Power":  # Powers leave the piles once played; anything else is drawn every cycle
         score -= HP_SAVED_SCALE * slot_cost(deck, state)
+    if v.get("Cards") and card["type"] != "Power":  # S9.2 (user): draw finds the deck's key cards sooner
+        score += DRAW_FIND * v["Cards"] * sum(map(key_card, deck)) / max(len(deck), 1)
     fit = None
     if state is not None:  # run plan (runplan.py): build fit, gaps, wiki synergies, off-build penalty
-        fit = card_fit(card, plan({**state, "deck": list(deck), "relics": list(relics)}), deck)[0]
+        rp = plan({**state, "deck": list(deck), "relics": list(relics)})
+        fit, fit_why = card_fit(card, rp, deck)
+        core = rp["committed"] and "core:" in fit_why  # a committed build's core card: more copies feed it
         score += combo(card, deck, relics)
     else:
         score += SYNERGY_VALUE * synergy(card, deck, relics) + combo(card, deck, relics)
@@ -258,8 +275,17 @@ def rate(card, deck, relics=(), state=None, raw=False):
     score += learned("cards", card["name"], state)
     if simmed and saved < DILUTION_TOL:
         score = min(score, sim)  # the deck fights worse with it: the tier list can't overrule the draw odds
+    if fit and any(v.get(s) for s in STAR_VARS) and not card.get("star_cost"):  # S2: a star maker fits only
+        made, wanted = star_supply(tuple(card_key(c) for c in deck))         # while the spenders lack stars
+        fit = min(fit, 0) if made >= wanted else fit
     if fit is not None:  # after the tier blend: the plan's off-build penalty isn't diluted by a card's tier
         score += fit
+    if any(c["name"] == card["name"] for c in deck) and not (state is not None and core):
+        # user: another copy mostly dilutes (and may be the worse one); a committed build's core cards are the exception
+        if card["type"] == "Power" and GAMEDATA["powers"].get(card["name"] + "Power", {}).get("stack") == "Single":
+            score = min(score, 0)  # Barricade, Corruption: a second copy does nothing
+        elif simmed:
+            score = min(score, sim)  # only what the deck sim shows the copy adds; tier and build fit don't lift it
     if "Forge" in v:
         score -= FORGE_OVER * max(0, sum("Forge" in c["vars"] for c in deck) + 1 - FORGE_SHARE * (len(deck) + 1))
     return round(score, 1), modeled, None if saved is None else round(saved, 1)
@@ -276,17 +302,27 @@ def pick(cards, deck, relics=(), state=None):
     """(best name or "Skip", [(name, score, modeled, HP saved, reason)])."""
     p = plan({**state, "deck": list(deck), "relics": list(relics)}) if state is not None else None
     rated = [(c["name"], *rate(c, deck, relics, state), card_fit(c, p, deck)[1] if p else "") for c in cards]
+    made, wanted = star_supply(tuple(card_key(c) for c in deck))  # S2: say why a star card fits or not
+    stars = {c["name"]: "stars already covered" if made >= wanted else "short of stars: feeds the spenders"
+             for c in cards if any(c["vars"].get(s) for s in STAR_VARS)}
+    stars.update({c["name"]: "spends surplus stars" if made > wanted else "stars already spent"
+                  for c in cards if GAMEDATA["cards"].get(c["name"], {}).get("star_cost", 0) > 0})
+    rated = [(*r[:-1], "; ".join(x for x in (r[-1], stars.get(r[0], "")) if x)) for r in rated]
     hope = upgrade_hope(cards, deck, relics, state) if state is not None else {}
     rated = [(r[0], r[1] + hope[r[0]], *r[2:-1], "; ".join(x for x in (r[-1], f"smith ahead +{hope[r[0]]:.0f}") if x))
              if r[0] in hope else r for r in rated]
     best = max(rated, key=lambda r: r[1], default=None)
+    return (best[0] if best and best[1] >= skip_bar(deck, state, p) else "Skip"), rated
+
+
+def skip_bar(deck, state, p):
+    """Score a card needs to be taken (reward) or bought (shop, S9.1): off-plan cards stay out of the deck."""
     # A7 Scarcity halves rare odds: good cards come less often, so the bar to take one drops a little
     bar = SKIP_BELOW - (SCARCITY_SKIP if (state or {}).get("ascension", 0) >= 7 else 0)
     bar += COMMIT_SKIP * p["level"] if p and p["committed"] else 0
     # Act 3 with a working deck (committed, or already big): another card mostly dilutes it (the won A3 run skipped
     # 4 of 6 late rewards the advisor wanted to take)
-    bar += LATE_SKIP if p and p["act"] >= 2 and (p["committed"] or len(deck) >= LATE_DECK) else 0
-    return (best[0] if best and best[1] >= bar else "Skip"), rated
+    return bar + (LATE_SKIP if p and p["act"] >= 2 and (p["committed"] or len(deck) >= LATE_DECK) else 0)
 
 
 # B11: a reward card counts what its upgrade adds when a smith this act would pick it. Smiths ahead = rest sites on
@@ -294,16 +330,20 @@ def pick(cards, deck, relics=(), state=None):
 # smiths would make anyway (the n-th best in the deck now), damped by UPGRADE_HOPE (routes and HP change).
 # ponytail: later acts' smiths, Armaments-style in-combat upgrades and Whetstone-like relics aren't counted.
 UPGRADE_HOPE = 0.6
+# S6: smiths in the acts after this one. From the user's 126 runs (.run history): ~2.6 rest sites per act, 55% smiths
+# -> LATER_SMITHS 1.4; ~60% of runs reach the next act and routes/HP change -> LATER_ACT_HOPE 0.5.
+LATER_SMITHS, LATER_ACT_HOPE, ACTS = 1.4, 0.5, 3
 
 
 def upgrade_hope(cards, deck, relics, state):
-    """{offered card name: score bonus for being upgraded at a smith ahead this act}."""
+    """{offered card name: score bonus for being upgraded at a smith ahead (this act's route + later acts, S6)}."""
     route = (best_routes(state, top=1) or [None])[0] if state.get("map") else None
-    if route is None:
-        return {}
-    p = state["player"]
-    smiths = (route.rolled or route.types).count("RestSite") - bool(should_rest(p["hp"], p["max_hp"], route.types,
-                                                                              fight_costs(state)))
+    p = state.get("player") or {}
+    now = 0 if route is None else (route.rolled or route.types).count("RestSite") - bool(
+        should_rest(p["hp"], p["max_hp"], route.types, fight_costs(state)))
+    later = LATER_ACT_HOPE * LATER_SMITHS * max(0, ACTS - 1 - state.get("act", 0))
+    expected = max(0, now) + later
+    smiths = math.ceil(expected)  # the bar: the n-th best upgrade; a partly expected smith counts by its share
     offered = [c for c in cards if not c["upgraded"] and c["name"] in UPGRADES]
     if smiths <= 0 or not offered:
         return {}
@@ -314,7 +354,7 @@ def upgrade_hope(cards, deck, relics, state):
     for c in offered:
         g = upgrade_gain(c, list(deck) + [c], UPGRADES, relics, state)
         if g > bar:
-            out[c["name"]] = round(UPGRADE_HOPE * (g - bar), 1)
+            out[c["name"]] = round(UPGRADE_HOPE * (g - bar) * min(1, expected / smiths), 1)
     return out
 
 
@@ -377,15 +417,47 @@ def rest_advice(state, upgrades=UPGRADES):
     others = [o for o in opts if o not in ("Heal", "Smith")]
     tail = [f"also available: {', '.join(others)} (not rated)"] if others else []
     ahead = (best_routes(state, top=1) or [None])[0]  # rooms on the best route after this camp
-    reason = should_rest(p["hp"], p["max_hp"], ahead.types if ahead else [], fight_costs(state))
+    # S5: a heal event before the next elite / boss counts as part of a heal (ponytail: EVENT_HEAL of max HP)
+    healed = ahead and any("heal" in event_offers(e) for e in events_before(state, ahead, ("Elite", "Boss")))
+    reason = should_rest(min(p["max_hp"], p["hp"] + (EVENT_HEAL * p["max_hp"] if healed else 0)), p["max_hp"],
+                         ahead.types if ahead else [], fight_costs(state))
+    note = ""
+    if reason and "Smith" in opts and gains and state.get("act_name") and ahead:
+        # User: an upgrade can save more HP over the fights left than the heal gives (it kills faster / blocks more).
+        # Rest stays forced when the next elite / boss's bad case would leave under DIE_MARGIN of max HP.
+        types = ahead.types
+        near = next((t for t in types if t in ("Elite", "Boss")), None)
+        safe = not near or p["hp"] - fight_costs(state)[near][1] > DIE_MARGIN * p["max_hp"]
+        def hp_saved(name):  # HP the upgrade saves per fight; same slot keeps the sim's draws (deck.KEYS)
+            i = next(i for i, c in enumerate(deck) if c["name"] == name and not c["upgraded"])
+            up = list(deck)
+            up[i] = upgraded(deck[i], upgrades[name])
+            return hp_lost(deck, state) - hp_lost(up, state)
+        name, per = max(((n, hp_saved(n)) for n, _ in gains[:3]), key=lambda x: x[1])
+        saved = per * sum(t in ("Monster", "Elite", "Boss") for t in types)  # every fight left on the route
+        if safe and saved > heal:
+            gains = [g for g in gains if g[0] == name] + [g for g in gains if g[0] != name]
+            reason, note = None, f"  (saves ~{saved:.0f} HP over the fights ahead > heal {heal})"
     if "Smith" in opts and gains and not reason:
         tag = lambda n: "  (basic: little gain)" if GAMEDATA["cards"].get(n, {}).get("rarity") == "Basic" else ""
-        return f"Smith -> upgrade {gains[0][0]}", [f"{n:<16} +{g}{tag(n)}" for n, g in gains[:3]] + tail
+        return f"Smith -> upgrade {gains[0][0]}", [f"{n:<16} +{g}{tag(n)}" for n, g in gains[:3]] + [note.strip()] * bool(note) + tail
     return f"Rest  (heal +{heal})", [f"HP {p['hp']}/{p['max_hp']}" + (f"  ({reason})" if reason else "")] + tail
 
 
 # --- in-combat hand picks (Armaments, True Grit, discard effects...) ---
+EVENT_HEAL = 0.15
+DIE_MARGIN = 0.1  # smith over rest only if the next elite / boss's bad case leaves more than this share of max HP
 BAD_PICKS = {"TO_EXHAUST", "TO_DISCARD", "TO_REMOVE", "TO_TRANSFORM"}
+# Cards / potions whose own pick prompt (<ID>.selectionScreenPrompt) loses the picked card (decomp: CardCmd.Exhaust /
+# Discard / Transform on the selection): pick junk, then the weakest, never the best. Value: True = a discard (Sly
+# cards first: discarded = played free).
+TOSS_PICKS = {"Begone": False, "Brand": False, "BurningPact": False, "Guards": False, "HiddenDaggers": True,
+              "Purity": False, "TrueGrit": False, "Ashwater": False}
+
+
+def pick_source(prompt):
+    """The card/potion class behind "<ID>.selectionScreenPrompt" (BURNING_PACT -> BurningPact), else None."""
+    return "".join(w.capitalize() for w in prompt.split(".")[0].split("_")) if prompt and "." in prompt else None
 
 
 # The game hides hand cards its pick filter rejects and numbers only the shown ones (NPlayerHand.ActiveHolders), so
@@ -417,11 +489,11 @@ def hand_pick(state, upgrades=UPGRADES):
         order = sorted(range(len(pool)), key=lambda i: -on_top_score(state, pool[:i] + pool[i + 1:], pool[i],
                                                                         PICK_SECONDS / len(pool)))
         n = sel["max"]
-    elif sel["prompt"] in BAD_PICKS:
+    elif sel["prompt"] in BAD_PICKS or pick_source(sel["prompt"]) in TOSS_PICKS:
         # same order the solver plans with (solver.toss_key): junk, then Sly (discarded = played free), then weakest
-        sly = lambda c: sel["prompt"] == "TO_DISCARD" and "Sly" in keywords(c)
-        order = sorted(range(len(pool)), key=lambda i: toss_key(pool[i], sel["prompt"] == "TO_DISCARD",
-                                                                lambda c: rate(c, deck, relics)[0]))
+        discard = sel["prompt"] == "TO_DISCARD" or TOSS_PICKS.get(pick_source(sel["prompt"])) is True
+        sly = lambda c: discard and "Sly" in keywords(c)
+        order = sorted(range(len(pool)), key=lambda i: toss_key(pool[i], discard, lambda c: rate(c, deck, relics)[0]))
         n = max(sel["min"], min(sel["max"], sum(junk(c) or sly(c) for c in pool)))  # optional picks: junk + Sly
     else:
         order = sorted(range(len(pool)), key=lambda i: -rate(pool[i], deck, relics)[0])
@@ -510,6 +582,7 @@ POTION_FIT = 2  # bonus for a potion that feeds the deck's committed build
 POTION_TIER_VALUE = {"Good Always": (6, 6), "Good Early": (5, 3), "Good Late": (3, 5), "Niche": (2, 2),
                      "Mediocre": (1, 1)}
 REMOVE_VALUE = {"Curse": 14, "Status": 10, "Basic": 7}  # by what gets removed; anything else 3
+EVENT_REMOVE = 0.5  # S5: share of a shop removal's value an event removal ahead replaces (it may cost or compete)
 REMOVE_COMMIT = 3  # x commitment: a Basic removed from a committed deck draws the build more often
 # Value of a gold not spent: what pathing says a later shop on the route buys with it (SHOP_PER_100), else
 # what leftover gold is worth at the boss (GOLD_LEFT), so the map and shop advice price gold the same way.
@@ -528,6 +601,11 @@ def potion_value(name, state):
     built = commitment(state.get("deck", []), state.get("relics", []))
     fit = max((v for b, v in built.items() if text and re.search(ARCHETYPES[b.split(":")[0]][b.split(":")[1]][0], text)),
               default=0)
+    # 11c: a Strength / Dexterity / Focus potion is worth its tier only if this deck plays enough Attacks / Block
+    # cards / channels a turn to use it
+    use = next((k for v, k in POTION_USE.items() if v in GAMEDATA["potions"].get(name, {}).get("vars", {})), None)
+    if use and state.get("deck"):
+        value *= max(PLAY_FLOOR, min(PLAY_CAP, plays_per_turn(state, use) / POTION_USE_FULL))
     return value + POTION_FIT * fit + foe_fit(name, state)
 
 
@@ -535,6 +613,7 @@ def potion_value(name, state):
 # area (hits all enemies) helps vs groups; defense helps vs fights that hit harder than the act's usual; scaling
 # (lasting buffs, poison) helps vs fights with more HP (longer). The next elites + the boss (reader queues) are
 # compared with the act's elite/boss pool, so the tier value stays the average case.
+POTION_USE, POTION_USE_FULL = {"StrengthPower": "Attack", "DexterityPower": "Block", "FocusPower": "Channel"}, 1.5
 POTION_KINDS = {"defense": {"Block", "BufferPower", "DexterityPower", "IntangiblePower", "PlatingPower", "RegenPower",
                             "HealPercent", "WeakPower", "DamageDecrease"},
                 "scaling": {"StrengthPower", "FocusPower", "RitualPower", "PoisonPower", "DoomPower"}}
@@ -640,6 +719,26 @@ def eternal(card):
 # Relics that only help cards named "Strike"/"Defend" (game text): full value with WORD_CARDS_FULL such cards.
 CARD_WORD_RELICS = {"StrikeDummy": "Strike", "FakeStrikeDummy": "Strike", "NutritiousSoup": "Strike", "PaelsClaw": "Defend"}
 WORD_CARDS_FULL = 4
+# 11c (user: every gain builds on this deck): relics that trigger on plays of one kind (relics.after_play) are worth
+# their tier only if this deck makes that many such plays a turn (per-combat counters spread over FIGHT_TURNS / 2).
+PLAY_COUNT_RELICS = {"Kunai": ("Attack", 3), "Shuriken": ("Attack", 3), "OrnamentalFan": ("Attack", 3),
+                     "Kusarigama": ("Attack", 3), "Nunchaku": ("Attack", 2.5), "PenNib": ("Attack", 2.5),
+                     "LetterOpener": ("Skill", 3), "MummifiedHand": ("Power", 0.5), "LostWisp": ("Power", 0.5),
+                     "Permafrost": ("Power", 0.3)}
+PLAY_FLOOR, PLAY_CAP = 0.25, 1.2
+
+
+def plays_per_turn(state, kind):
+    """Cards of `kind` (Attack / Skill / Power) this deck plays in a typical turn: its share of a hand, capped by the
+    energy (average cost). ponytail: draw and 0-cost chains not counted."""
+    deck = state.get("deck") or []
+    costs = [max(c["cost"], 0) for c in deck if c["type"] in ("Attack", "Skill", "Power")]
+    plays = min(HAND_SIZE, state.get("max_energy", 3) / max(sum(costs) / max(len(costs), 1), 0.5))
+    match = {"Block": lambda c: c["vars"].get("Block", 0) > 0, "Channel": lambda c: bool(channels(c))}.get(
+        kind, lambda c: c["type"] == kind)
+    return plays * sum(map(match, deck)) / max(len(deck), 1)
+
+
 CLASH = 2  # a fully committed build that the drawback wrecks pays the penalty 3x (Velvet Choker + Shivs: skip)
 RELIC_DRAWBACK = {
     "VelvetChoker": (4, {"Silent:Shiv", "Silent:Sly", "Defect:Claw", "Necrobinder:Souls"}),
@@ -666,6 +765,9 @@ def relic_value(name, state=None):
         word = CARD_WORD_RELICS[name]
         have = sum(word in c["name"] for c in state.get("deck", []))
         value *= min(1, have / WORD_CARDS_FULL)
+    if name in PLAY_COUNT_RELICS and state and state.get("deck"):  # 11c: Kunai in a deck that rarely attacks
+        kind, need = PLAY_COUNT_RELICS[name]
+        value *= max(PLAY_FLOOR, min(PLAY_CAP, plays_per_turn(state, kind) / need))
     if state:
         value += relic_fit(name, plan(state), state.get("deck", []))[0] + learned("relics", name, state)
     return value
@@ -686,8 +788,9 @@ def _shop(state):
     route = (best_routes(state, top=1) or [None])[0]
     keep = GOLD_KEEP_SHOP_AHEAD if route and "Shop" in route.types else GOLD_KEEP
     items, keys = [], []  # (label, price, value, is_potion); keys[i] = autopilot target ("card", name)...
+    bar = skip_bar(deck, state, plan(state))  # S9.1: bought only if it'd be taken as a reward
     for e in shop["cards"]:
-        value = max(0, rate(e["card"], deck, relics, state)[0] - SKIP_BELOW)
+        value = max(0, rate(e["card"], deck, relics, state)[0] - bar)
         items.append((e["card"]["name"] + (" (sale)" if e["sale"] else ""), e["price"], value, False))
         keys.append(("card", e["card"]["name"]))
     for r in shop["relics"]:
@@ -706,7 +809,10 @@ def _shop(state):
         tier = worst["type"] if worst["type"] in ("Curse", "Status") else worst.get("rarity")
         p = plan(state)
         bonus = REMOVE_COMMIT * p["level"] if p["committed"] and tier == "Basic" else 0
-        items.append((f"Remove {worst['name']}", shop["removal"], REMOVE_VALUE.get(tier, 3) + bonus, False))
+        # S5: an event before the next shop that can remove a card (Wellspring, Zen Weaver...) makes this one less needed
+        later = route and any("remove" in event_offers(e) for e in events_before(state, route, ("Shop",)))
+        items.append((f"Remove {worst['name']}", shop["removal"],
+                      (REMOVE_VALUE.get(tier, 3) + bonus) * (1 - EVENT_REMOVE if later else 1), False))
         keys.append(("remove", worst["name"]))
     slots = state.get("potion_slots", 3) - len(state.get("potions", []))
     worth = sorted((i for i, it in enumerate(items) if it[2] > keep * it[1]),
@@ -724,6 +830,10 @@ def _shop(state):
     if not best:
         return f"Leave - save gold ({gold})", lines, []
     spent = sum(items[i][1] for i in best)
+    # S5: gold decides some events (Fake Merchant 100+, Tea Master 150+): say when this basket changes the next one
+    now, after = next_events(state, 1), next_events({**state, "gold": gold - spent}, 1)
+    if now and after and now != after:
+        lines.append(f"! spending {spent} changes the next ? event: {now[0]} -> {after[0]}")
     return f"Buy: {' + '.join(items[i][0] for i in best)}  [{spent}/{gold}]", lines, [keys[i] for i in best]
 
 
@@ -787,6 +897,20 @@ def option_value(state, option, text):
     p = state["player"]
     n = lambda s: WORDS.get(s.lower(), None) if not s.isdigit() else int(s)
     score, hp, hit = 0.0, p["hp"], False
+    deck, relics = state.get("deck") or [], state.get("relics", [])
+    memo = {}
+
+    def gains():  # S8.1: this deck's upgrade gains, best first (computed only if an option upgrades)
+        if "g" not in memo:
+            memo["g"] = sorted((upgrade_gain(c, deck, UPGRADES, relics, state) for c in
+                                {c["name"]: c for c in deck if not c["upgraded"] and c["name"] in UPGRADES}.values()),
+                               reverse=True)
+        return memo["g"]
+
+    def removal(k):  # S8.1: what removing this deck's worst card is worth (shop rule), else the flat Basic value
+        worst = removal_target(deck, relics, state) if deck else None
+        tier = worst and (worst["type"] if worst["type"] in ("Curse", "Status") else worst.get("rarity"))
+        return REMOVE_VALUE.get(tier, 3) * k if worst else REMOVE_VALUE["Basic"] * k
     rules = [
         (r"Lose (\d+) Max HP", lambda k: -MAX_HP_VALUE * k - HP_VALUE * k),
         (r"Gain (\d+) Max HP", lambda k: MAX_HP_VALUE * k),
@@ -797,9 +921,9 @@ def option_value(state, option, text):
         (r"Gain (a|\d+) card rewards?", lambda k: CARD_REWARD * k),
         (r"Obtain (a|\d+) random (?:\w+ )?Relics?", lambda k: RELIC * k),
         (r"Obtain (a|\d+) (?:random )?(?:[\w-]+ )?(?:[Cc]ards?|Power)\b|Choose (\d+) of \d+ random", lambda k: CARD_REWARD * k),
-        (r"Upgrade (a|\d+) random cards?", lambda k: 0.7 * UPGRADE * k),
+        (r"Upgrade (a|\d+) random cards?", lambda k: k * sum(gains()) / len(gains()) if deck and gains() else 0.7 * UPGRADE * k),
         (r"Downgrade (a|\d+) random cards?", lambda k: -0.7 * UPGRADE * k),
-        (r"Upgrade (a|\d+) cards?\b", lambda k: UPGRADE * k),
+        (r"Upgrade (a|\d+) cards?\b", lambda k: sum(gains()[:k]) if deck and gains() else UPGRADE * k),
         # Tea Master (P5, rough): upgraded starting hand once, Strength for N fights, Dazed in the next fight
         (r"Upgrade your starting (hand)", lambda k: UPGRADE / 2),
         (r"next (\d+) combats, gain \d+ Strength", lambda k: 1.2 * k),
@@ -815,7 +939,7 @@ def option_value(state, option, text):
         (r"Powers cost (\d+) \w+ less", lambda k: 2 * k),
         (r"Gain (\d+) energy", lambda k: 3 * k),  # Energized ("At the end of combat, Upgrade a random card": above)
         (r"Create a custom (card) to add to your Deck", lambda k: CARD_REWARD),
-        (r"Remove (a|\d+) (?:cards?|Strikes|Defends)", lambda k: REMOVE_VALUE["Basic"] * k),
+        (r"Remove (a|\d+) (?:cards?|Strikes|Defends)", removal),
         (r"Transform (a|\d+) cards?|(a) card to Transform", lambda k: TRANSFORM * k),
         (r"Procure (a|\d+) (?:random )?(?:\w+ )?Potions?", lambda k: POTION_PICK * k),
         (r"Enchant (an?|\d+) |Choose (an?) \w+ to Enchant", lambda k: ENCHANT),

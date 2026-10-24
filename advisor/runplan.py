@@ -87,7 +87,9 @@ def card_fit(card, p, deck):
     target = p["target"]
     build = target.split(":")[1] if target else None
     weight = builds_of(card["name"]).get(target, 0) if target else 0
-    scale = 1.0 if p["committed"] else 0.5  # open phase: lean, don't lock in
+    # open phase: only as much as the deck already holds of the build (user: build on what you have, don't chase
+    # pieces that may never come); full once committed
+    scale = 1.0 if p["committed"] else min(1.0, p["level"] / COMMIT_AT)
     if weight == CORE_WEIGHT:
         delta += CORE_FIT * scale
         why.append(f"core: {build}")

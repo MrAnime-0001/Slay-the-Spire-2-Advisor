@@ -540,7 +540,14 @@ def parse_acts(src_dir):
 def parse_encounters(src_dir, acts):
     """{EncounterClass: {class: Monster|Elite|Boss, monsters, acts}} (RoomType is overridden in code)."""
     rx = re.compile(r'RoomType RoomType => RoomType\.(\w+)')
+
+    def lineup(source):  # S4: every monster GenerateMonsters spawns, repeats kept (Corpse Slugs x3); None if rolled
+        gen = re.search(r'GenerateMonsters\(\)\s*\{', source)
+        body = enclosed(source, gen.end() - 1) if gen else ""
+        found = re.findall(r'Monster<(\w+)>', body)
+        return found if found and not re.search(r'Rng\.Next(Item|Bool)', body) else None
     return {name: {"class": m[1], "monsters": sorted(set(re.findall(r'Monster<(\w+)>', source))),
+                   "lineup": lineup(source),
                    "acts": [a for a, info in acts.items() if name in info["encounters"]]}
             for name, source in classes(src_dir, "MegaCrit.Sts2.Core.Models.Encounters")
             if (m := rx.search(source))}
@@ -626,9 +633,24 @@ def effects(body, props, levels):
     out += [{"summon": m[1]} for m in re.finditer(r'CreatureCmd\.Add<(\w+)>', body)]
     for m in re.finditer(r'CardPileCmd\.(\w+)<(\w+)>\(', body):
         a = split_args(enclosed(body, m.end() - 1))  # AddToCombatAndPreview<Dazed>(targets, pile, count, ...)
+        pile = re.search(r"PileType\.(\w+)", a[1]) if len(a) > 1 else None  # Discard / Draw / Hand (reshuffle)
         out.append({"adds_card": m[2], **({"count": number(a[2], props, levels)}
-                                          if m[1].startswith("AddToCombat") and len(a) >= 3 else {})})
+                                          if m[1].startswith("AddToCombat") and len(a) >= 3 else {}),
+                    **({"pile": pile[1]} if pile else {})})
     return out
+
+
+def branch_weight(rest, props, levels):
+    """H2: a RandomBranchState.AddBranch call's (repeat type, max times, cooldown, weight) by overload, from the
+    arguments after the state: (int[, w]) = max repeats; (Repeat[, w]); (int, Repeat[, w]) = cooldown first.
+    weight: a number, or the source text when it's a lambda / property (the replay then falls back to odds)."""
+    i = next((k for k, r in enumerate(rest) if r.startswith("MoveRepeatType.")), None)
+    num = lambda r: number(r, props, levels)
+    if i is None:
+        return {"rtype": "CanRepeatXTimes", "max": num(rest[0]), "cooldown": 0,
+                "weight": num(rest[1]) if len(rest) > 1 else 1}
+    return {"rtype": rest[i].split(".")[1], "max": 0, "cooldown": num(rest[0]) if i == 1 else 0,
+            "weight": num(rest[i + 1]) if len(rest) > i + 1 else 1}
 
 
 def parse_monsters(src_dir):
@@ -674,10 +696,12 @@ def parse_monsters(src_dir):
             a = split_args(enclosed(body, mm.end() - 1))
             if var.get(mm[1]) in branches and a:
                 rest = a[1:]
-                branches[var[mm[1]]]["to"].append(
-                    {"to": var.get(a[0], a[0]),
-                     "repeat": next((r.split(".")[1] for r in rest if r.startswith("MoveRepeatType.")), None),
-                     "args": [number(r, props, levels) for r in rest if not r.startswith("MoveRepeatType.")]})
+                entry = {"to": var.get(a[0], a[0]),
+                         "repeat": next((r.split(".")[1] for r in rest if r.startswith("MoveRepeatType.")), None),
+                         "args": [number(r, props, levels) for r in rest if not r.startswith("MoveRepeatType.")]}
+                if branches[var[mm[1]]]["kind"] == "random":
+                    entry.update(branch_weight(rest, props, levels))
+                branches[var[mm[1]]]["to"].append(entry)
         init = re.search(r'new MonsterMoveStateMachine\(\w+, (.*)\);', body, re.S)
         start = init[1].strip() if init else ""
         if alias := re.search(re.escape(start) + r' = ([^;]+);', body) if start not in var else None:

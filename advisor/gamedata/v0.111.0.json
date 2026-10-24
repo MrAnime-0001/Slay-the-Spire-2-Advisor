@@ -13408,6 +13408,9 @@
     "Glory"
    ],
    "class": "Boss",
+   "lineup": [
+    "Aeonglass"
+   ],
    "monsters": [
     "Aeonglass"
    ]
@@ -13417,6 +13420,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "Axebot"
+   ],
    "monsters": [
     "Axebot"
    ]
@@ -13424,6 +13430,9 @@
   "BattlewornDummyEventV1Encounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "BattleFriendV1"
+   ],
    "monsters": [
     "BattleFriendV1"
    ]
@@ -13431,6 +13440,9 @@
   "BattlewornDummyEventV2Encounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "BattleFriendV2"
+   ],
    "monsters": [
     "BattleFriendV2"
    ]
@@ -13438,6 +13450,9 @@
   "BattlewornDummyEventV3Encounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "BattleFriendV3"
+   ],
    "monsters": [
     "BattleFriendV3"
    ]
@@ -13447,6 +13462,7 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "BowlbugEgg",
     "BowlbugNectar",
@@ -13459,6 +13475,7 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "BowlbugEgg",
     "BowlbugNectar",
@@ -13470,6 +13487,9 @@
     "Overgrowth"
    ],
    "class": "Elite",
+   "lineup": [
+    "BygoneEffigy"
+   ],
    "monsters": [
     "BygoneEffigy"
    ]
@@ -13479,6 +13499,9 @@
     "Overgrowth"
    ],
    "class": "Elite",
+   "lineup": [
+    "Byrdonis"
+   ],
    "monsters": [
     "Byrdonis"
    ]
@@ -13488,6 +13511,9 @@
     "Overgrowth"
    ],
    "class": "Boss",
+   "lineup": [
+    "CeremonialBeast"
+   ],
    "monsters": [
     "CeremonialBeast"
    ]
@@ -13497,6 +13523,10 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "Chomper",
+    "Chomper"
+   ],
    "monsters": [
     "Chomper"
    ]
@@ -13506,6 +13536,11 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "PunchConstruct",
+    "CubexConstruct",
+    "CubexConstruct"
+   ],
    "monsters": [
     "CubexConstruct",
     "PunchConstruct"
@@ -13516,6 +13551,11 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "CorpseSlug",
+    "CorpseSlug",
+    "CorpseSlug"
+   ],
    "monsters": [
     "CorpseSlug"
    ]
@@ -13525,6 +13565,10 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "CorpseSlug",
+    "CorpseSlug"
+   ],
    "monsters": [
     "CorpseSlug"
    ]
@@ -13534,6 +13578,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "CubexConstruct"
+   ],
    "monsters": [
     "CubexConstruct"
    ]
@@ -13543,6 +13590,10 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "CalcifiedCultist",
+    "DampCultist"
+   ],
    "monsters": [
     "CalcifiedCultist",
     "DampCultist"
@@ -13553,6 +13604,11 @@
     "Hive"
    ],
    "class": "Elite",
+   "lineup": [
+    "DecimillipedeSegmentFront",
+    "DecimillipedeSegmentMiddle",
+    "DecimillipedeSegmentBack"
+   ],
    "monsters": [
     "DecimillipedeSegmentBack",
     "DecimillipedeSegmentFront",
@@ -13562,6 +13618,9 @@
   "DenseVegetationEventEncounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "Wriggler"
+   ],
    "monsters": [
     "Wriggler"
    ]
@@ -13569,6 +13628,7 @@
   "DeprecatedEncounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": null,
    "monsters": []
   },
   "DevotedSculptorWeak": {
@@ -13576,6 +13636,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "DevotedSculptor"
+   ],
    "monsters": [
     "DevotedSculptor"
    ]
@@ -13585,6 +13648,9 @@
     "Hive"
    ],
    "class": "Elite",
+   "lineup": [
+    "Entomancer"
+   ],
    "monsters": [
     "Entomancer"
    ]
@@ -13594,6 +13660,12 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "Exoskeleton",
+    "Exoskeleton",
+    "Exoskeleton",
+    "Exoskeleton"
+   ],
    "monsters": [
     "Exoskeleton"
    ]
@@ -13603,6 +13675,11 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "Exoskeleton",
+    "Exoskeleton",
+    "Exoskeleton"
+   ],
    "monsters": [
     "Exoskeleton"
    ]
@@ -13612,6 +13689,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "Fabricator"
+   ],
    "monsters": [
     "Fabricator"
    ]
@@ -13619,6 +13699,9 @@
   "FakeMerchantEventEncounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "FakeMerchantMonster"
+   ],
    "monsters": [
     "FakeMerchantMonster"
    ]
@@ -13628,6 +13711,7 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "Flyconid",
     "LeafSlimeM",
@@ -13639,6 +13723,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "Fogmog"
+   ],
    "monsters": [
     "EyeWithTeeth",
     "Fogmog"
@@ -13649,6 +13736,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "FossilStalker"
+   ],
    "monsters": [
     "FossilStalker"
    ]
@@ -13658,6 +13748,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "FrogKnight"
+   ],
    "monsters": [
     "FrogKnight"
    ]
@@ -13667,6 +13760,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "FuzzyWurmCrawler"
+   ],
    "monsters": [
     "FuzzyWurmCrawler"
    ]
@@ -13676,6 +13772,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "GlobeHead"
+   ],
    "monsters": [
     "GlobeHead"
    ]
@@ -13685,6 +13784,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "GremlinMerc"
+   ],
    "monsters": [
     "FatGremlin",
     "GremlinMerc",
@@ -13696,6 +13798,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "HauntedShip"
+   ],
    "monsters": [
     "HauntedShip"
    ]
@@ -13705,6 +13810,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "HunterKiller"
+   ],
    "monsters": [
     "HunterKiller"
    ]
@@ -13714,6 +13822,9 @@
     "Hive"
    ],
    "class": "Elite",
+   "lineup": [
+    "InfestedPrism"
+   ],
    "monsters": [
     "InfestedPrism"
    ]
@@ -13723,6 +13834,11 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "Inklet",
+    "Inklet",
+    "Inklet"
+   ],
    "monsters": [
     "Inklet"
    ]
@@ -13732,6 +13848,10 @@
     "Hive"
    ],
    "class": "Boss",
+   "lineup": [
+    "Crusher",
+    "Rocket"
+   ],
    "monsters": [
     "Crusher",
     "Rocket"
@@ -13742,6 +13862,11 @@
     "Glory"
    ],
    "class": "Elite",
+   "lineup": [
+    "FlailKnight",
+    "SpectralKnight",
+    "MagiKnight"
+   ],
    "monsters": [
     "FlailKnight",
     "MagiKnight",
@@ -13753,6 +13878,9 @@
     "Hive"
    ],
    "class": "Boss",
+   "lineup": [
+    "KnowledgeDemon"
+   ],
    "monsters": [
     "KnowledgeDemon"
    ]
@@ -13762,6 +13890,9 @@
     "Underdocks"
    ],
    "class": "Boss",
+   "lineup": [
+    "LagavulinMatriarch"
+   ],
    "monsters": [
     "LagavulinMatriarch"
    ]
@@ -13771,6 +13902,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "LivingFog"
+   ],
    "monsters": [
     "GasBomb",
     "LivingFog"
@@ -13781,6 +13915,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "LouseProgenitor"
+   ],
    "monsters": [
     "LouseProgenitor"
    ]
@@ -13790,6 +13927,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "Mawler"
+   ],
    "monsters": [
     "Mawler"
    ]
@@ -13799,6 +13939,9 @@
     "Glory"
    ],
    "class": "Elite",
+   "lineup": [
+    "MechaKnight"
+   ],
    "monsters": [
     "MechaKnight"
    ]
@@ -13806,6 +13949,9 @@
   "MysteriousKnightEventEncounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "MysteriousKnight"
+   ],
    "monsters": [
     "MysteriousKnight"
    ]
@@ -13815,6 +13961,10 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "Myte",
+    "Myte"
+   ],
    "monsters": [
     "Myte"
    ]
@@ -13824,6 +13974,10 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "Nibbit",
+    "Nibbit"
+   ],
    "monsters": [
     "Nibbit"
    ]
@@ -13833,6 +13987,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "Nibbit"
+   ],
    "monsters": [
     "Nibbit"
    ]
@@ -13842,6 +13999,10 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "ShrinkerBeetle",
+    "FuzzyWurmCrawler"
+   ],
    "monsters": [
     "FuzzyWurmCrawler",
     "ShrinkerBeetle"
@@ -13852,6 +14013,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "Ovicopter"
+   ],
    "monsters": [
     "Ovicopter",
     "ToughEgg"
@@ -13862,6 +14026,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "OwlMagistrate"
+   ],
    "monsters": [
     "OwlMagistrate"
    ]
@@ -13871,6 +14038,12 @@
     "Underdocks"
    ],
    "class": "Elite",
+   "lineup": [
+    "PhantasmalGardener",
+    "PhantasmalGardener",
+    "PhantasmalGardener",
+    "PhantasmalGardener"
+   ],
    "monsters": [
     "PhantasmalGardener"
    ]
@@ -13880,6 +14053,9 @@
     "Overgrowth"
    ],
    "class": "Elite",
+   "lineup": [
+    "PhrogParasite"
+   ],
    "monsters": [
     "PhrogParasite",
     "Wriggler"
@@ -13890,6 +14066,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "PunchConstruct"
+   ],
    "monsters": [
     "PunchConstruct"
    ]
@@ -13897,6 +14076,10 @@
   "PunchOffEventEncounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "PunchConstruct",
+    "PunchConstruct"
+   ],
    "monsters": [
     "PunchConstruct"
    ]
@@ -13906,6 +14089,10 @@
     "Glory"
    ],
    "class": "Boss",
+   "lineup": [
+    "TorchHeadAmalgam",
+    "Queen"
+   ],
    "monsters": [
     "Queen",
     "TorchHeadAmalgam"
@@ -13916,6 +14103,7 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "AssassinRubyRaider",
     "AxeRubyRaider",
@@ -13929,6 +14117,12 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "ScrollOfBiting",
+    "ScrollOfBiting",
+    "ScrollOfBiting",
+    "ScrollOfBiting"
+   ],
    "monsters": [
     "ScrollOfBiting"
    ]
@@ -13938,6 +14132,11 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "ScrollOfBiting",
+    "ScrollOfBiting",
+    "ScrollOfBiting"
+   ],
    "monsters": [
     "ScrollOfBiting"
    ]
@@ -13947,6 +14146,10 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "CalcifiedCultist",
+    "Seapunk"
+   ],
    "monsters": [
     "CalcifiedCultist",
     "Seapunk"
@@ -13957,6 +14160,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "Seapunk"
+   ],
    "monsters": [
     "Seapunk"
    ]
@@ -13966,6 +14172,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "SewerClam"
+   ],
    "monsters": [
     "SewerClam"
    ]
@@ -13975,6 +14184,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "ShrinkerBeetle"
+   ],
    "monsters": [
     "ShrinkerBeetle"
    ]
@@ -13984,6 +14196,9 @@
     "Underdocks"
    ],
    "class": "Elite",
+   "lineup": [
+    "SkulkingColony"
+   ],
    "monsters": [
     "SkulkingColony"
    ]
@@ -13993,6 +14208,9 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "SlimedBerserker"
+   ],
    "monsters": [
     "SlimedBerserker"
    ]
@@ -14002,6 +14220,7 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "LeafSlimeM",
     "LeafSlimeS",
@@ -14014,6 +14233,7 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "LeafSlimeM",
     "LeafSlimeS",
@@ -14026,6 +14246,7 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": null,
    "monsters": [
     "LeafSlimeM",
     "LeafSlimeS",
@@ -14040,6 +14261,9 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "SludgeSpinner"
+   ],
    "monsters": [
     "SludgeSpinner"
    ]
@@ -14049,6 +14273,11 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "BowlbugRock",
+    "BowlbugSilk",
+    "SlumberingBeetle"
+   ],
    "monsters": [
     "BowlbugRock",
     "BowlbugSilk",
@@ -14060,6 +14289,10 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "SnappingJaxfruit",
+    "Flyconid"
+   ],
    "monsters": [
     "Flyconid",
     "SnappingJaxfruit"
@@ -14070,6 +14303,9 @@
     "Underdocks"
    ],
    "class": "Boss",
+   "lineup": [
+    "SoulFysh"
+   ],
    "monsters": [
     "SoulFysh"
    ]
@@ -14079,6 +14315,9 @@
     "Glory"
    ],
    "class": "Elite",
+   "lineup": [
+    "SoulNexus"
+   ],
    "monsters": [
     "SoulNexus"
    ]
@@ -14088,6 +14327,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "SpinyToad"
+   ],
    "monsters": [
     "SpinyToad"
    ]
@@ -14097,6 +14339,9 @@
     "Underdocks"
    ],
    "class": "Elite",
+   "lineup": [
+    "TerrorEel"
+   ],
    "monsters": [
     "TerrorEel"
    ]
@@ -14106,6 +14351,9 @@
     "Glory"
    ],
    "class": "Boss",
+   "lineup": [
+    "TestSubject"
+   ],
    "monsters": [
     "TestSubject"
    ]
@@ -14113,6 +14361,9 @@
   "TheArchitectEventEncounter": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "Architect"
+   ],
    "monsters": [
     "Architect"
    ]
@@ -14122,6 +14373,9 @@
     "Hive"
    ],
    "class": "Boss",
+   "lineup": [
+    "TheInsatiable"
+   ],
    "monsters": [
     "TheInsatiable"
    ]
@@ -14131,6 +14385,11 @@
     "Overgrowth"
    ],
    "class": "Boss",
+   "lineup": [
+    "KinFollower",
+    "KinFollower",
+    "KinPriest"
+   ],
    "monsters": [
     "KinFollower",
     "KinPriest"
@@ -14141,6 +14400,10 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "TheLost",
+    "TheForgotten"
+   ],
    "monsters": [
     "TheForgotten",
     "TheLost"
@@ -14151,6 +14414,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "TheObscura"
+   ],
    "monsters": [
     "Parafright",
     "TheObscura"
@@ -14161,6 +14427,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "ThievingHopper"
+   ],
    "monsters": [
     "ThievingHopper"
    ]
@@ -14170,6 +14439,10 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "Toadpole",
+    "Toadpole"
+   ],
    "monsters": [
     "Toadpole"
    ]
@@ -14177,6 +14450,10 @@
   "TunnelerNormal": {
    "acts": [],
    "class": "Monster",
+   "lineup": [
+    "Chomper",
+    "Tunneler"
+   ],
    "monsters": [
     "Chomper",
     "Tunneler"
@@ -14187,6 +14464,9 @@
     "Hive"
    ],
    "class": "Monster",
+   "lineup": [
+    "Tunneler"
+   ],
    "monsters": [
     "Tunneler"
    ]
@@ -14196,6 +14476,10 @@
     "Glory"
    ],
    "class": "Monster",
+   "lineup": [
+    "LivingShield",
+    "TurretOperator"
+   ],
    "monsters": [
     "LivingShield",
     "TurretOperator"
@@ -14206,6 +14490,11 @@
     "Underdocks"
    ],
    "class": "Monster",
+   "lineup": [
+    "TwoTailedRat",
+    "TwoTailedRat",
+    "TwoTailedRat"
+   ],
    "monsters": [
     "TwoTailedRat"
    ]
@@ -14215,6 +14504,9 @@
     "Overgrowth"
    ],
    "class": "Boss",
+   "lineup": [
+    "Vantom"
+   ],
    "monsters": [
     "Vantom"
    ]
@@ -14224,6 +14516,9 @@
     "Overgrowth"
    ],
    "class": "Monster",
+   "lineup": [
+    "VineShambler"
+   ],
    "monsters": [
     "VineShambler"
    ]
@@ -14233,6 +14528,9 @@
     "Underdocks"
    ],
    "class": "Boss",
+   "lineup": [
+    "WaterfallGiant"
+   ],
    "monsters": [
     "WaterfallGiant"
    ]
@@ -14306,7 +14604,8 @@
         "asc": 2,
         "at": 9,
         "base": 1
-       }
+       },
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -15368,7 +15667,8 @@
      "effects": [
       {
        "adds_card": "Dazed",
-       "count": 3
+       "count": 3,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -15847,18 +16147,30 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "WRITHE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "WRITHE_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "BULK_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "BULK_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "CONSTRICT_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "CONSTRICT_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -16184,15 +16496,23 @@
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SKITTER_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SKITTER_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "MANDIBLES_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "MANDIBLES_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -16282,7 +16602,8 @@
      "effects": [
       {
        "adds_card": "Dazed",
-       "count": 3
+       "count": 3,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -16316,15 +16637,23 @@
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CanRepeatForever",
-       "to": "FABRICATE_MOVE"
+       "rtype": "CanRepeatForever",
+       "to": "FABRICATE_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CanRepeatForever",
-       "to": "FABRICATING_STRIKE_MOVE"
+       "rtype": "CanRepeatForever",
+       "to": "FABRICATING_STRIKE_MOVE",
+       "weight": 1
       }
      ]
     },
@@ -16420,18 +16749,30 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SWIPE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SWIPE_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SPEW_COINS_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SPEW_COINS_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "THROW_RELIC_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "THROW_RELIC_MOVE",
+       "weight": 1
       }
      ]
     },
@@ -16440,25 +16781,41 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SWIPE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SWIPE_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SPEW_COINS_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SPEW_COINS_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "THROW_RELIC_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "THROW_RELIC_MOVE",
+       "weight": 1
       },
       {
        "args": [
         3
        ],
+       "cooldown": 3,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "ENRAGE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "ENRAGE_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -16601,22 +16958,34 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "WAR_CHANT"
+       "rtype": "CannotRepeat",
+       "to": "WAR_CHANT",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "FLAIL_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "FLAIL_MOVE",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "RAM_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "RAM_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -16698,13 +17067,21 @@
        "args": [
         2
        ],
+       "cooldown": 2,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "FRAIL_SPORES_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "FRAIL_SPORES_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SMASH_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SMASH_MOVE",
+       "weight": 1
       }
      ]
     },
@@ -16715,20 +17092,32 @@
        "args": [
         3
        ],
+       "cooldown": 3,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "VULNERABLE_SPORES_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "VULNERABLE_SPORES_MOVE",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 2,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "FRAIL_SPORES_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "FRAIL_SPORES_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SMASH_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SMASH_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -16819,15 +17208,23 @@
        "args": [
         0.4
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SWIPE_RANDOM_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SWIPE_RANDOM_MOVE",
+       "weight": 0.4
       },
       {
        "args": [
         0.6
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "HEADBUTT_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "HEADBUTT_MOVE",
+       "weight": 0.6
       }
      ]
     }
@@ -16942,22 +17339,34 @@
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "LATCH_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "LATCH_MOVE",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "TACKLE_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "TACKLE_MOVE",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "LASH_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "LASH_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -17537,7 +17946,8 @@
       },
       {
        "adds_card": "Dazed",
-       "count": 5
+       "count": 5,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -17600,15 +18010,23 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "BITE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "BITE_MOVE",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "PUNCTURE_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "PUNCTURE_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -17824,15 +18242,23 @@
         2,
         1
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "JAB_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "JAB_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "WHIRLWIND_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "WHIRLWIND_MOVE",
+       "weight": 1
       }
      ]
     },
@@ -17843,15 +18269,23 @@
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "PIERCING_GAZE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "PIERCING_GAZE_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "WHIRLWIND_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "WHIRLWIND_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -18423,7 +18857,8 @@
      "effects": [
       {
        "adds_card": "Slimed",
-       "count": 2
+       "count": 2,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -18450,13 +18885,21 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "TACKLE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "TACKLE_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "GOOP_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "GOOP_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -18478,7 +18921,8 @@
      "effects": [
       {
        "adds_card": "Slimed",
-       "count": 1
+       "count": 1,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -18907,22 +19351,34 @@
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "RIP_AND_TEAR_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "RIP_AND_TEAR_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "UseOnlyOnce",
-       "to": "ROAR_MOVE"
+       "rtype": "UseOnlyOnce",
+       "to": "ROAR_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "CLAW_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "CLAW_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -19029,7 +19485,8 @@
      "effects": [
       {
        "adds_card": "Burn",
-       "count": 4
+       "count": 4,
+       "pile": "Hand"
       }
      ],
      "intents": [
@@ -19213,7 +19670,8 @@
      "effects": [
       {
        "adds_card": "Toxic",
-       "count": 2
+       "count": 2,
+       "pile": "Hand"
       }
      ],
      "intents": [
@@ -19832,13 +20290,21 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "INFECT_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "INFECT_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "LASH_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "LASH_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -19860,7 +20326,8 @@
      "effects": [
       {
        "adds_card": "Infection",
-       "count": 3
+       "count": 3,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -20285,15 +20752,23 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "CHOMP"
+       "rtype": "CannotRepeat",
+       "to": "CHOMP",
+       "weight": 1
       },
       {
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "CHEW"
+       "rtype": "CanRepeatXTimes",
+       "to": "CHEW",
+       "weight": 1
       }
      ]
     }
@@ -20788,7 +21263,8 @@
      "effects": [
       {
        "adds_card": "Slimed",
-       "count": 10
+       "count": 10,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -20817,13 +21293,21 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CanRepeatForever",
-       "to": "THWACK"
+       "rtype": "CanRepeatForever",
+       "to": "THWACK",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CanRepeatForever",
-       "to": "LASH"
+       "rtype": "CanRepeatForever",
+       "to": "LASH",
+       "weight": 1
       }
      ]
     }
@@ -20910,18 +21394,30 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "OIL_SPRAY_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "OIL_SPRAY_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SLAM_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SLAM_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "RAGE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "RAGE_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -21321,22 +21817,34 @@
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SOUL_BURN_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SOUL_BURN_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "MAELSTROM_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "MAELSTROM_MOVE",
+       "weight": 1
       },
       {
        "args": [
         1
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "DRAIN_LIFE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "DRAIN_LIFE_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -21439,13 +21947,21 @@
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "SOUL_SLASH"
+       "rtype": "CanRepeatXTimes",
+       "to": "SOUL_SLASH",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SOUL_FLAME"
+       "rtype": "CannotRepeat",
+       "to": "SOUL_FLAME",
+       "weight": 1
       }
      ]
     }
@@ -21841,7 +22357,8 @@
         "asc": 5,
         "at": 9,
         "base": 3
-       }
+       },
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -22446,18 +22963,30 @@
      "to": [
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "PIERCING_GAZE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "PIERCING_GAZE_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SAIL_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SAIL_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "HARDENING_STRIKE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "HARDENING_STRIKE_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -23145,13 +23674,21 @@
        "args": [
         2
        ],
+       "cooldown": 0,
+       "max": 2,
        "repeat": null,
-       "to": "POKEY_POUNCE_MOVE"
+       "rtype": "CanRepeatXTimes",
+       "to": "POKEY_POUNCE_MOVE",
+       "weight": 1
       },
       {
        "args": [],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "STICKY_SHOT_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "STICKY_SHOT_MOVE",
+       "weight": 1
       }
      ]
     }
@@ -23188,7 +23725,8 @@
      "effects": [
       {
        "adds_card": "Slimed",
-       "count": 1
+       "count": 1,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -23254,30 +23792,46 @@
        "args": [
         "(!CanSummon()) ? 1f : (1f / 12f)"
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SCRATCH_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SCRATCH_MOVE",
+       "weight": "(!CanSummon()) ? 1f : (1f / 12f)"
       },
       {
        "args": [
         "(!CanSummon()) ? 1f : (1f / 12f)"
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "DISEASE_BITE_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "DISEASE_BITE_MOVE",
+       "weight": "(!CanSummon()) ? 1f : (1f / 12f)"
       },
       {
        "args": [
         3,
         "(!CanSummon()) ? 1f : (1f / 12f)"
        ],
+       "cooldown": 3,
+       "max": 0,
        "repeat": "CannotRepeat",
-       "to": "SCREECH_MOVE"
+       "rtype": "CannotRepeat",
+       "to": "SCREECH_MOVE",
+       "weight": "(!CanSummon()) ? 1f : (1f / 12f)"
       },
       {
        "args": [
         "(!CanSummon()) ? 0f : 0.75f"
        ],
+       "cooldown": 0,
+       "max": 0,
        "repeat": "UseOnlyOnce",
-       "to": "CALL_FOR_BACKUP_MOVE"
+       "rtype": "UseOnlyOnce",
+       "to": "CALL_FOR_BACKUP_MOVE",
+       "weight": "(!CanSummon()) ? 0f : 0.75f"
       }
      ]
     }
@@ -23387,7 +23941,8 @@
      "effects": [
       {
        "adds_card": "Wound",
-       "count": 3
+       "count": 3,
+       "pile": "Discard"
       }
      ],
      "intents": [
@@ -23832,7 +24387,8 @@
       },
       {
        "adds_card": "Infection",
-       "count": 1
+       "count": 1,
+       "pile": "Discard"
       }
      ],
      "intents": [

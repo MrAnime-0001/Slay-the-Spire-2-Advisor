@@ -609,7 +609,11 @@ HIT = card("Hit", 1, "Attack", "AnyEnemy", Damage=12)
 ATK = [STRIKE] * 9 + [DEFEND]
 BLK = [STRIKE] * 2 + [DEFEND] * 8
 assert pick([card("Hit", 1, "Attack", "AnyEnemy", Damage=9), card("Wall", 1, "Skill", "Self", Block=9)], ATK, (), {**ACT1, "deck": ATK})[0] == "Wall"
-assert pick([card("Hit", 1, "Attack", "AnyEnemy", Damage=9), card("Wall", 1, "Skill", "Self", Block=9)], BLK, (), {**ACT1, "deck": BLK})[0] == "Hit"
+# S4 (2026-10-25): hallway fights count every monster now (3 Corpse Slugs, not 1), so Block is worth more everywhere;
+# the check is relative: the attack gains much more against the Wall in the block-heavy deck
+_hw = lambda d: (lambda r: r["Hit"] - r["Wall"])({x[0]: x[1] for x in pick(
+    [card("Hit", 1, "Attack", "AnyEnemy", Damage=9), card("Wall", 1, "Skill", "Self", Block=9)], d, (), {**ACT1, "deck": d})[1]})
+assert _hw(BLK) > _hw(ATK) + 3, (_hw(BLK), _hw(ATK))
 # 86. A plain extra Strike in a starter deck dilutes it: skip.
 STARTER10 = [STRIKE] * 5 + [DEFEND] * 4 + [BASH]
 assert pick([STRIKE], STARTER10, (), {**ACT1, "deck": STARTER10})[0] == "Skip"
@@ -1549,7 +1553,8 @@ print("all W7 relic checks passed")
 # --- P1 (W7b): potion swaps when every slot is full ---
 from picker import potion_swap
 # 229. Full slots: a Good Always potion replaces a Mediocre one; not the other way; a free slot needs no swap.
-assert potion_swap(shop(0, slots=2, held=("SpeedPotion", "BloodPotion")), "BeetleJuice") == ("SpeedPotion", 5.0)
+_sw = potion_swap(shop(0, slots=2, held=("SpeedPotion", "BloodPotion")), "BeetleJuice")  # 11c: Speed scales by Block cards
+assert _sw[0] == "SpeedPotion" and _sw[1] >= 5.0, _sw
 assert potion_swap(shop(0, slots=2, held=("BloodPotion", "BeetleJuice")), "SpeedPotion") is None
 assert potion_swap(shop(0, slots=3, held=("SpeedPotion",)), "BeetleJuice") is None
 # 230. Shop with full slots: the better potion is bought as a swap, labelled with what to drop.
@@ -2114,3 +2119,333 @@ _ap.wheel, _ap.time.sleep = _saved_wheel, _saved_sleep
 assert _wheels == [-13] and round(_pts[0][0] * 1920) == 1495 and round(_pts[0][1] * 1080) == 664, (_wheels, _pts)
 assert _ap.grid_point({0}, lambda: {"card_grid": {"cards": []}}, None) == []  # old reader: sweep only
 print("all grid scroll checks passed")
+# 297. Summoner fights (Ovicopter, The Obscura, Living Fog): a killed minion is replaced, so damage that doesn't kill
+# it goes to the summoner instead; a minion that dies before it hits is still worth killing.
+_lead = {**boss(100, [], now=6), "name": "TheObscura", "combat_id": 1}
+_min = {**boss(47, [("MinionPower", 1)], now=6), "name": "Parafright", "combat_id": 2}
+_hit12 = card("Hit12", 1, "Attack", "AnyEnemy", Damage=12)
+assert solve(fight([_hit12], [_min, _lead]))[0].steps[0][4] == 1  # 12 can't kill the 47-HP minion: hit the summoner
+_weak = {**boss(10, [("MinionPower", 1)], now=12), "name": "Parafright", "combat_id": 2}
+assert solve(fight([_hit12], [_weak, _lead]))[0].steps[0][4] == 2  # 12 kills it before its 12 hit lands: kill it
+print("all summoner checks passed")
+# 298. Elite chains (user rule): with no rest between, a bad first elite leaves too little for the next; the route
+# with a rest between elites wins, and at low HP the no-rest chain is deadly.
+from pathing import simulate
+_c = {"Monster": (8, 12), "Elite": (15, 30), "Boss": (30, 45)}
+_chain, _rested = ["Elite", "Elite", "Elite", "Monster", "Boss"], ["Elite", "Elite", "RestSite", "Elite", "Boss"]
+assert simulate(_rested, 70, 70, 100, _c).score > simulate(_chain, 70, 70, 100, _c).score
+assert simulate(_chain, 45, 70, 100, _c).score == -1000
+# 299. Early shops (user rule): under the removal price (75; 100 from A6) a shop is worth nothing; with gold it is.
+assert simulate(["Shop", "Boss"], 70, 70, 60, _c).score < simulate(["Monster", "Boss"], 70, 70, 60, _c).score
+assert simulate(["Shop", "Boss"], 70, 70, 250, _c).score > simulate(["Shop", "Boss"], 70, 70, 60, _c).score
+# A6: 90 gold is under the 100 removal price, so the shop adds nothing; the extra 30 gold is just carried
+assert abs(simulate(["Shop", "Boss"], 70, 70, 90, _c, asc=6).score - simulate(["Shop", "Boss"], 70, 70, 60, _c, asc=6).score - 0.02 * 30) < 1e-6
+print("all route risk checks passed")
+# 300. A pick screen before the turn starts (Entropy's start-of-turn Transform: phase isn't Play under it) wakes the
+# autopilot, which picks instead of timing out after 60 s.
+_picked = []
+_pre = {"status": "combat", "phase": "Enemy", "hand": [],
+        "hand_select": {"mode": "select", "prompt": "TO_TRANSFORM", "min": 1, "max": 1, "selected": 0}}
+_cur = {"s": _pre}
+_saved_pc = _ap.pick_cards
+_ap.pick_cards = lambda s, gs, pf, c, lg: (_picked.append(s["hand_select"]["prompt"]), _cur.update(s={"status": "game_over"}))[1]
+_r = _ap.autopilot(lambda: _cur["s"], None, None, _th.Event(), lambda m: None)
+_ap.pick_cards = _saved_pc
+assert _picked == ["TO_TRANSFORM"] and "died" in _r, (_picked, _r)
+print("all pre-turn pick checks passed")
+# 301. Card-specific lose-a-card prompts (True Grit / Burning Pact exhaust, Hidden Daggers discard, Begone transform):
+# pick the weakest (a Strike), never the best card in hand.
+from solver import gd_card as _gdc
+for _pr in ("TRUE_GRIT.selectionScreenPrompt", "BURNING_PACT.selectionScreenPrompt", "BEGONE.selectionScreenPrompt",
+            "HIDDEN_DAGGERS.selectionScreenPrompt"):
+    _h = {"hand": [_gdc("DemonForm"), _gdc("StrikeIronclad"), _gdc("Bash")], "deck": [], "relics": [],
+          "hand_select": {"mode": "select", "prompt": _pr, "min": 1, "max": 1, "selected": 0}}
+    assert hand_pick(_h)[1] == ["StrikeIronclad"], (_pr, hand_pick(_h))
+print("all toss prompt checks passed")
+# 302. Count cards (decomp CalculatedVar / OnPlay): the reader's var is only the base (Barrage 0 hits), so the solver
+# counts: Pull From Below with no Ethereal played deals 0 (user saw it played for 0); Barrage hits per orb, so Zap goes
+# first; Body Slam after Defend; Finisher after an Attack; Dualcast needs an orb; Fiend Fire hits per other card.
+def _live(name, **kw):
+    c = real_card(name)
+    return {**c, "vars": {**c["vars"], **kw}}
+_pfb = _live("PullFromBelow", CalculatedHits=0)
+_b = boss(60, [])
+assert solve(fight([_pfb], [_b]))[0].damage == 0
+assert solve({**fight([_pfb], [_b]), "ethereal_played": 3})[0].damage == 15
+_bar = _live("Barrage", CalculatedHits=0)
+_p = solve({**fight([real_card("Zap"), _bar], [_b], energy=2), "orbs": [{"name": "LightningOrb"}], "orb_slots": 3})[0]
+assert [s[0] for s in _p.steps] == ["Zap", "Barrage"] and _p.damage >= 10, _p
+_bs = _live("BodySlam", CalculatedDamage=0)
+_p = solve(fight([real_card("DefendIronclad"), _bs], [_b], energy=2))[0]
+assert [s[0] for s in _p.steps] == ["DefendIronclad", "BodySlam"] and _p.damage == 5, _p
+_fin = _live("Finisher", CalculatedHits=0)
+_p = solve({**fight([real_card("StrikeIronclad"), _fin], [_b], energy=2), "attacks_played": 1})[0]
+assert _p.damage == 6 + 6 * 2, _p  # one Attack before the plan + the Strike in it
+assert not solve(fight([real_card("Dualcast")], [_b]))[0].steps
+_ff = real_card("FiendFire")
+assert solve(fight([_ff, real_card("Dazed"), real_card("Dazed")], [_b], energy=2))[0].damage == 14  # burns junk
+assert solve({**fight([_live("Stardust")], [_b]), "stars": 0})[0].damage == 0
+assert solve({**fight([_live("Stardust")], [_b]), "stars": 3})[0].damage == 15
+print("all count card checks passed")
+# 303. Deck sim / picks: count cards by the deck's typical count (printed var = base only). Barrage hurts a deck that
+# never channels and helps one with Zaps; Perfected Strike = 6 + 2 per Strike, not 0.
+from deck import hp_lost as _hpl
+_dd = [real_card("StrikeDefect")] * 4 + [real_card("DefendDefect")] * 4
+assert _hpl(_dd + [real_card("Barrage")], {}) > _hpl(_dd, {})
+_dz = _dd + [real_card("Zap")] * 4
+assert _hpl(_dz + [real_card("Barrage")], {}) < _hpl(_dz, {}) - 5
+_ic = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4
+assert _hpl(_ic + [real_card("PerfectedStrike")], {}) < _hpl(_ic + [real_card("StrikeIronclad")], {}) - 10
+print("all deck count checks passed")
+# 304. Body Slam (user): worth the Block played before it, so it rates higher in a deck with big Block cards.
+_bsd = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4
+_big = _bsd + [real_card("Impervious")] * 2
+_gain = lambda d: _hpl(d, {}) - _hpl(d + [real_card("BodySlam")], {})
+assert _gain(_big) > _gain(_bsd), (_gain(_big), _gain(_bsd))
+print("all body slam checks passed")
+# 305. S2 stars: producers pay off only while spenders want more (user deck: 3 Hidden Cache + Glow, one Falling Star).
+from picker import pick as _pick
+_rb = [real_card("StrikeRegent")] * 4 + [real_card("DefendRegent")] * 4
+_st = {"act_name": "Hive", "ascension": 0, "max_energy": 3, "character": "Regent"}
+_ud = _rb + [real_card(n) for n in ("CrushUnder", "Glow", "HiddenCache", "HiddenCache", "HiddenCache", "SolarStrike",
+                                      "Venerate", "FallingStar")]
+_r = {r[0]: r for r in _pick([real_card("HiddenCache"), real_card("FallingStar")], _ud, (), _st)[1]}
+assert _r["FallingStar"][1] > _r["HiddenCache"][1] and "stars already covered" in _r["HiddenCache"][-1], _r
+_r = {r[0]: r for r in _pick([real_card("Venerate"), real_card("FallingStar")], _rb + [real_card("FallingStar")] * 3, (), _st)[1]}
+assert _r["Venerate"][1] > _r["FallingStar"][1], _r  # no generators: the generator wins
+print("all star supply checks passed")
+from picker import _shop
+# 306. S9.1 (user): the shop buys a card only if it would be taken as a reward (same bar: commitment, late act).
+# Off-plan star generators in a deck whose stars are covered: Skip as rewards, and none bought.
+_off = [real_card(n) for n in ("HiddenCache", "Venerate", "Glow")]
+assert _pick(_off, _ud, (), _st)[0] == "Skip"
+_sh = {**shop(300, cards=[(c, 50) for c in _off], deck=_ud), **_st}
+assert not any(k[0] == "card" for k in _shop(_sh)[2]), _shop(_sh)[0]
+print("all off-plan buy checks passed")
+# 307. S9.2 (user): card draw finds key cards (Powers, count cards, star spenders, 0-costs). Pommel Strike's edge over
+# a plain 9-damage Attack is bigger in a deck with engines than in a Strike/Defend pile.
+from picker import rate as _rate
+_ist = {**_st, "character": "Ironclad"}
+_sd = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4 + [real_card("Bash")]
+_eng = _sd + [real_card(n) for n in ("DemonForm", "Inflame", "Barricade", "BodySlam", "PerfectedStrike")]
+_van = {**real_card("StrikeIronclad"), "name": "Vanilla9", "vars": {"Damage": 9}}
+_edge = lambda d: _rate(real_card("PommelStrike"), d, (), _ist)[0] - _rate(_van, d, (), _ist)[0]
+assert _edge(_eng) > _edge(_sd) + 5, (_edge(_eng), _edge(_sd))
+print("all draw value checks passed")
+# 308. S4: a fight's lineup keeps repeats (Corpse Slugs x3, Nibbits x2) and leaves summons out (Fogmog's minions);
+# rolled groups use their expected mix (Ruby Raiders: 3 of 5).
+from deck import encounter as _enc, lineup as _lu
+assert [m for m, _ in _lu("CorpseSlugsNormal")] == ["CorpseSlug"] * 3
+assert [m for m, _ in _lu("FogmogNormal")] == ["Fogmog"]
+assert abs(sum(w for _, w in _lu("RubyRaidersNormal")) - 3) < 1e-9
+assert _enc("CorpseSlugsNormal", 0)[0] > 2.5 * _enc("CorpseSlugsWeak", 0)[0] / 2  # 3 slugs vs 2
+print("all lineup checks passed")
+# 309. S5: events ahead change choices. A removal event (Zen Weaver) before the next shop halves this shop's removal
+# value; with no such event it keeps it. Spending gold that changes the next "?" event (Tea Master needs 150) warns.
+import picker as _pk
+from types import SimpleNamespace as _NS
+_route = _NS(types=["Event", "Shop", "Boss"], rolled=None)
+_saved_br = _pk.best_routes
+_pk.best_routes = lambda s, top=1: [_route]
+def _rm(events, gold=120):
+    s = {**shop(gold, removal=75), "act": 1, "rooms": {"events": events, "events_visited": 0}}
+    return next(it for it in _pk._shop(s)[1] if "Remove" in it)
+_with, _without = _rm(["ZenWeaver"]), _rm(["Symbiote"])
+_val = lambda line: float(line.rsplit("value", 1)[1])
+assert _val(_with) < _val(_without), (_with, _without)
+_s = {**shop(160, cards=[(GOOD, 60)]), "act": 0, "rooms": {"events": ["TeaMaster", "Wellspring"], "events_visited": 0}}
+_h, _lines, _ = _pk._shop(_s)
+assert _h.startswith("Buy"), _h
+assert any("changes the next ? event" in l for l in _lines), _lines
+_pk.best_routes = _saved_br
+print("all event-ahead checks passed")
+# Heal vs rest: a heal event (Abyssal Baths) before the next elite lets a 48/80 camp smith; a non-heal event rests.
+_pk.best_routes = lambda s, top=1: [_NS(types=["Event", "Elite", "Boss"], rolled=None)]
+_camp = lambda ev: {**camp(48, DECK), "act": 1, "rooms": {"events": [ev], "events_visited": 0}}
+assert _pk.rest_advice(_camp("AbyssalBaths"), UPS)[0].startswith("Smith")
+assert _pk.rest_advice(_camp("ZenWeaver"), UPS)[0].startswith("Rest")
+_pk.best_routes = _saved_br
+print("all heal-event checks passed")
+# 310. Smith over rest (user): an upgrade that saves more HP over the fights ahead than the heal gives wins, unless the
+# next elite's bad case could leave us nearly dead (then rest).
+_pk.best_routes = lambda s, top=1: [_NS(types=["Monster", "Monster", "Elite", "Monster", "RestSite", "Monster", "Boss"],
+                                        rolled=None)]
+_rdeck = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4 + [real_card(n) for n in ("Bash", "Bludgeon", "Inflame")]
+_rcamp = lambda hp: {**camp(hp, _rdeck), "act_name": "Overgrowth", "act": 0, "ascension": 0, "max_energy": 3}
+assert _pk.rest_advice(_rcamp(55))[0] == "Smith -> upgrade Bludgeon", _pk.rest_advice(_rcamp(55))  # soft reason (elite near), safe
+assert _pk.rest_advice(_rcamp(42))[0].startswith("Rest")
+_pk.best_routes = _saved_br
+print("all smith-over-rest checks passed")
+# 311. S6: later acts' smiths count for a reward card's upgrade (from 126 runs: ~1.4 smiths per act, half hope).
+# Same deck and card: more acts left -> a bigger bonus; the last act with no route smith -> none.
+from picker import upgrade_hope as _uh
+_ud6 = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4 + [real_card("Bash")]
+_h6 = lambda act: _uh([real_card("Bludgeon")], _ud6, (), {"player": {"hp": 70, "max_hp": 80}, "act": act,
+                                                           "act_name": "Overgrowth", "ascension": 0, "max_energy": 3}).get("Bludgeon", 0)
+assert _h6(0) > _h6(1) > _h6(2) == 0, (_h6(0), _h6(1), _h6(2))
+print("all later-smith checks passed")
+# 312. S8.1: event options use this deck: "Upgrade a card" is worth this deck's best upgrade (Bludgeon's beats only
+# Strikes / Defends); "Remove a card" is worth more with a Curse to remove.
+from picker import option_value as _ov
+_ev = lambda deck, text: _ov({"player": {"hp": 70, "max_hp": 80}, "deck": deck, "act_name": "Overgrowth", "act": 0,
+                              "ascension": 0, "max_energy": 3}, {"relic": None}, text)[0]
+_sdk = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4
+assert _ev(_sdk + [real_card("Bludgeon")], "Upgrade a card.") > _ev(_sdk, "Upgrade a card.")
+assert _ev(_sdk + [{**card("Regret", -1, "Curse", "None"), "rarity": "Curse"}], "Remove a card.") > _ev(_sdk, "Remove a card.")
+print("all event option checks passed")
+# 313. Build on what you have (user): before the deck commits, a build's "core" bonus scales with how much of it the
+# deck already holds; none of it in the deck -> no bonus for chasing it.
+from runplan import card_fit as _cf
+_p0 = {"target": "Regent:Stars", "level": 0.0, "committed": False, "gaps": {}, "act": 0}
+_p2 = {**_p0, "level": 0.2}
+assert _cf(real_card("FallingStar"), _p0, [])[0] < _cf(real_card("FallingStar"), _p2, [])[0]
+print("all build-chase checks passed")
+# 314. Duplicates (user): a copy the deck already holds gets only what the deck sim says it adds (an upgraded copy in
+# the deck makes the plain one worse); a second non-stacking Power (Barricade) is worth nothing.
+_dst = {"act_name": "Overgrowth", "act": 1, "ascension": 0, "max_energy": 3, "character": "Ironclad"}
+_dbase = [real_card("StrikeIronclad")] * 4 + [real_card("DefendIronclad")] * 4 + [real_card("Bash")]
+_bar = real_card("Barricade")
+assert _rate(_bar, _dbase + [_bar], (), _dst)[0] <= 0 < _rate(_bar, _dbase, (), _dst)[0] or _rate(_bar, _dbase, (), _dst)[0] <= 0
+_hb = real_card("Hyperbeam") if "Hyperbeam" in GD["cards"] else real_card("Bludgeon")
+assert _rate(_hb, _dbase + [_hb], (), _dst)[0] <= _rate(_hb, _dbase, (), _dst)[0]
+print("all duplicate checks passed")
+# 315. 11c (user: every gain builds on this deck): play-count relics and Strength / Dexterity potions are worth more in
+# a deck that makes those plays (Kunai and Strength Potion in an Attack deck; Letter Opener in a Skill deck).
+from picker import relic_value as _rv, potion_value as _pv
+_atk = [real_card("StrikeIronclad")] * 7 + [real_card("DefendIronclad")] * 2 + [real_card("PommelStrike")] * 2
+_blk = [real_card("StrikeIronclad")] * 2 + [real_card("DefendIronclad")] * 7 + [real_card("ShrugItOff")] * 2
+_ds = lambda d: {"deck": d, "relics": [], "act": 0, "max_energy": 3, "character": "Ironclad"}
+assert _rv("Kunai", _ds(_atk)) > _rv("Kunai", _ds(_blk))
+assert _rv("LetterOpener", _ds(_blk)) > _rv("LetterOpener", _ds(_atk))
+assert _pv("StrengthPotion", _ds(_atk)) > _pv("StrengthPotion", _ds(_blk))
+print("all deck-fit relic/potion checks passed")
+# 316. 8b (user): each enemy's own HP in the deck sim. Several enemies are fought turn by turn and a dead one stops
+# hitting, so AoE (Thunderclap) saves much more HP vs groups than another Strike; a lone boss keeps the pooled math.
+from deck import foe_list as _fl
+assert len(_fl("CorpseSlugsNormal", 0)) == 3
+_sd8 = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4 + [real_card("Bash")]
+_ov = {"act_name": "Overgrowth"}
+assert _hpl(_sd8, _ov) - _hpl(_sd8 + [real_card("Thunderclap")], _ov) > _hpl(_sd8, _ov) - _hpl(_sd8 + [real_card("StrikeIronclad")], _ov) + 5
+print("all per-enemy sim checks passed")
+# 317. 8b-2: rolled groups (Ruby Raiders: 3 of 5) come from the run seed + floor + XxHash64 of the encounter id, so
+# the same seed and floor always give the same distinct monsters; fixed groups and unknown seeds give None.
+from pathing import rolled_lineup as _rl, xxh64 as _xx
+assert _xx(b"") == 0xEF46DB3751D8E999 and _xx(b"abc") == 0x44BC2CF5AD770999
+_rr = _rl("RubyRaidersNormal", "123456789", 7)
+assert _rr == _rl("RubyRaidersNormal", "123456789", 7) and len(_rr) == 3 and len(set(_rr)) == 3
+assert all(m in GD["monsters"] for m in _rr)
+assert any(_rl("RubyRaidersNormal", "123456789", f) != _rr for f in range(8, 14))
+assert _rl("CorpseSlugsNormal", "123456789", 7) is None and _rl("RubyRaidersNormal", None, 7) is None
+print("all seeded roll checks passed")
+# 318. S7 B9: the lookahead's next turn. Inflame stays in play (+2 Strength), the potion drunk is gone, the enemy
+# keeps the HP the plan left (Vulnerable ticks 2 -> 1) and shows its next move (Thrash -> Crash). Hand: 5 from the
+# draw pile; a short draw pile gives all its cards plus the rest from the reshuffled discard.
+from solver import Plan as _P, next_turn_state as _nts
+_inf = real_card("Inflame")
+_s18 = {**piled([_inf, STRIKE], [DEFEND] * 10, eel), "potions": [{"name": "FirePotion", "slot": 0}, {"name": "X", "slot": 1}]}
+_end = ((100, 0, 2, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0),)
+_pl = _P([("Inflame", None, True, _inf, None, "card"), ("POTION FirePotion", None, True, {"slot": 0}, None, "potion")],
+         40, 0, 5, 0, False, 0.0, end=_end)
+_n = _nts(_s18, _pl, random.Random(0))
+assert _n["player"]["hp"] == 45 and {"name": "StrengthPower", "amount": 2} in _n["player"]["powers"]
+assert [p["slot"] for p in _n["potions"]] == [1] and _n["enemies"][0]["move"] == "CRASH_MOVE"
+assert _n["enemies"][0]["creature"]["hp"] == 100 and {"name": "VulnerablePower", "amount": 1} in _n["enemies"][0]["creature"]["powers"]
+assert len(_n["hand"]) == 5 and len(_n["draw"]) == 5 and _n["energy"] == 3
+_n = _nts({**_s18, "draw": [DEFEND] * 2, "discard": [STRIKE] * 6}, _pl, random.Random(0))
+assert [c["name"] for c in _n["hand"]].count("Defend") == 2 + 0 and len(_n["hand"]) == 5 and _n["discard"] == []
+# the full solve in an elite fight still returns its plans, inside the time cap
+import time as _t
+_a = _t.monotonic()
+assert solve({**piled([STRIKE, DEFEND, BASH], [STRIKE, DEFEND] * 5, eel, energy=3), "encounter": "ByrdonisElite"})
+assert _t.monotonic() - _a < 2.0
+print("all lookahead checks passed")
+# 319. User: the reader sends the draw pile in the game's real order (draw_ordered; draws take the first card), so the
+# next hand is known exactly: the top 5 after the cards this plan draws. Draw-count changes from the decomp
+# (Machine Learning +1, Mind Rot -1, Pocketwatch at <= 3 plays, Pendulum every 3rd turn). A short pile: all of it
+# plus some from the reshuffle. This turn's draw (Pommel Strike) is worth the real top card, not the pile's mean.
+from solver import next_draw as _nd, next_hand as _nh
+_ord = [real_card("Bash")] + [DEFEND] * 3 + [STRIKE] * 6
+_s19 = {**piled([STRIKE], _ord, eel), "draw_ordered": True}
+_h, _more, _ = _nh(_s19, _P([], 0, 0, 0, 0, False, 0.0))
+assert [c["name"] for c in _h] == ["Bash", "Defend", "Defend", "Defend", "Strike"] and _more == 0
+_h, _, _ = _nh(_s19, _P([], 0, 0, 0, 0, False, 0.0, drawn=1))
+assert [c["name"] for c in _h] == ["Defend"] * 3 + ["Strike"] * 2
+assert _nh({**_s19, "draw": _ord[:3]}, _P([], 0, 0, 0, 0, False, 0.0))[1] == 2 and _nh(piled([STRIKE], _ord, eel), _P([], 0, 0, 0, 0, False, 0.0)) is None
+_pw = lambda *ps: {**_s19, "player": {**_s19["player"], "powers": [{"name": n, "amount": a} for n, a in ps]}}
+assert _nd(_pw(("MachineLearningPower", 1))) == 6 and _nd(_pw(("MindRotPower", 2))) == 3
+_rl = lambda name, **c: {**_s19, "relics": [{"name": name, "counters": c}]}
+assert _nd(_rl("Pocketwatch", _cardsPlayedThisTurn=1), 2) == 8 and _nd(_rl("Pocketwatch", _cardsPlayedThisTurn=1), 3) == 5
+assert _nd(_rl("Pendulum", _turnsSeen=2)) == 6 and _nd(_rl("Pendulum", _turnsSeen=1)) == 5
+_pom = real_card("PommelStrike")
+_good = solve({**piled([_pom], [real_card("Bash")] + [STRIKE] * 5, {**eel, "move": None}), "draw_ordered": True})[0].score
+_bad = solve({**piled([_pom], [real_card("Dazed")] + [STRIKE] * 5, {**eel, "move": None}), "draw_ordered": True})[0].score
+assert _good > _bad, (_good, _bad)
+print("all known-draw checks passed")
+# 320. The reshuffle, exactly (user: knowing beats guessing): the game's StableShuffle sorts the discard by (id,
+# upgrade level) and Fisher-Yates it with the run's Shuffle RNG (the reader's live state), so the discard's order
+# doesn't matter, the same state gives the same pile, a Perfect Fit card goes on top, and a short draw pile's next
+# hand is complete. The end-of-turn discard drops played Powers / Exhaust cards and unplayed Ethereal ones.
+from solver import reshuffle as _rs, end_discard as _ed
+_ids = lambda cs: [{**c, "id": c["name"].upper(), "level": int(c["upgraded"])} for c in cs]
+_disc = _ids([STRIKE] * 3 + [DEFEND] * 3 + [real_card("Bash")])
+from pathing import MegaRng as _MR
+_st = lambda seed: [str(x) for x in _MR(seed).s]  # a real-looking live state (full 64-bit words)
+_rng = _st(1)
+_a = _rs({"shuffle_rng": _rng}, _disc)
+_nm = lambda cs: [c["name"] for c in cs]
+assert len(_a) == 7 and _nm(_a) == _nm(_rs({"shuffle_rng": _rng}, list(reversed(_disc))))
+assert any(_nm(_rs({"shuffle_rng": _st(x)}, _disc)) != _nm(_a) for x in range(2, 6))
+assert _rs({"shuffle_rng": _rng}, [{**c, "id": None} for c in _disc]) is None and _rs({}, _disc) is None
+_pf = _disc[:-1] + [{**_disc[-1], "enchantment": {"name": "PerfectFit", "amount": 1}}]
+assert _rs({"shuffle_rng": _rng}, _pf)[0]["name"] == "Bash"
+_s20 = {**piled(_ids([STRIKE]), _ids([DEFEND] * 2), eel, discard=_disc), "draw_ordered": True, "shuffle_rng": _rng}
+_h, _more, _fd = _nh(_s20, _P([], 0, 0, 0, 0, False, 0.0))
+assert _fd == 2 and _more == 0 and len(_h) == 5 and [c["name"] for c in _h[:2]] == ["Defend", "Defend"]
+_nox = {**real_card("Inflame"), "id": "INFLAME", "level": 0}
+_eth = {**real_card("Dazed"), "id": "DAZED", "level": 0}
+_end = _ed({"hand": [_nox, _eth, STRIKE], "discard": []}, _P([("Inflame", None, True, _nox, None, "card")], 0, 0, 0, 0, False, 0.0))
+assert [c["name"] for c in _end] == ["Strike"], _end
+print("all reshuffle checks passed")
+# 321. Waterfall Giant (user: the advisor died to its eruption). The eruption can't be dodged and grows 3 a turn while
+# it lives, so finishing it now (eruption 45) beats a Defend that leaves it alive at 6 HP.
+_wg = {**boss(6, [("SteamEruptionPower", 45)], now=10), "name": "WaterfallGiant", "move": "RAM_MOVE", "combat_id": 1}
+assert solve(fight([STRIKE, DEFEND], [_wg], energy=1, hp=70))[0].steps[0][0] == "Strike"
+print("all eruption timing checks passed")
+# 322. User: a card a play moves on top of the draw pile (Headbutt: one from the discard) is the next hand's first
+# card and leaves the discard.
+_hb = real_card("Headbutt")
+_s22 = {**piled([_hb], [STRIKE] * 6, {**eel, "move": None}, discard=[real_card("Bash")]), "draw_ordered": True}
+_p22 = next(p for p in solve(_s22, top=10) if p.steps and p.steps[0][0] == "Headbutt")
+_h, _, _ = _nh(_s22, _p22)
+assert [c["name"] for c in _p22.on_top] == ["Bash"] and _h[0]["name"] == "Bash" and len(_h) == 5, (_p22.on_top, _h)
+print("all on-top checks passed")
+# 323. A status an enemy's shown move puts in our discard (Leaf Slime's Sticky Shot: 2 Slimed) is in the reshuffle;
+# killing that enemy first stops it. Card ids from names match the game's (StrikeIronclad -> STRIKE_IRONCLAD).
+from solver import enemy_discards as _edc, card_id as _cid
+assert _cid("StrikeIronclad") == "STRIKE_IRONCLAD" and _cid("Slimed") == "SLIMED"
+_slime = {"name": "LeafSlimeM", "move": "STICKY_SHOT", "creature": {"hp": 30, "powers": []}}
+assert [c["name"] for c in _edc({"enemies": [_slime]}, _P([], 0, 0, 0, 0, False, 0.0))] == ["Slimed", "Slimed"]
+assert _edc({"enemies": [_slime]}, _P([], 0, 0, 0, 0, False, 0.0, end=((0,) * 15,))) == []
+print("all enemy-discard checks passed")
+# 324. H1 (user: hidden info): the next elite / chest relic comes from our own relic bag (front of each rarity,
+# rarity 50/33/17%), so a bag holding strong relics makes the next elite worth more than one holding weak ones;
+# no bag -> the average RELIC.
+from pathing import relic_hopes as _rh, relic_at as _ra, RELIC as _RELIC
+_bag = lambda n: {r: {"front": [n], "back": [], "left": 9} for r in ("Common", "Uncommon", "Rare")}
+_good, _bad = _rh({"relic_bag": _bag("SturdyClamp")}), _rh({"relic_bag": _bag("JuzuBracelet")})
+assert len(_good) == 1 and _good[0] > _RELIC > _bad[0], (_good, _bad)
+assert _ra({"Relics": _good}, 0) == _good[0] and _ra({"Relics": _good}, 1) == _RELIC and _rh({}) == []
+print("all relic bag checks passed")
+# 325. H2 (user: hidden info): enemy moves replayed from the MonsterAi RNG. Mawler after Claw (Claw can't repeat,
+# Roar used): Rip and Tear for sure, then the RNG picks; the same state gives the same moves, the weight rules
+# hold (never Claw twice in a row, Roar never again), and no RNG state -> no replay (odds as before).
+from enemies import replay_moves as _rm, branch_weight as _bw
+_maw = {"name": "Mawler", "move": "CLAW_MOVE", "history": ["ROAR_MOVE", "CLAW_MOVE"], "creature": {"hp": 50, "powers": []}}
+_r = _rm([_maw], _st(7), 4)
+assert _r[0][0] == "RIP_AND_TEAR_MOVE" and _r == _rm([_maw], _st(7), 4) and "ROAR_MOVE" not in _r[0], _r
+assert all(a != b or a != "CLAW_MOVE" for a, b in zip(_r[0], _r[0][1:])) and _rm([_maw], None) == []
+assert _bw({"to": "X", "rtype": "UseOnlyOnce", "weight": 1}, ["X"]) == 0 and _bw({"to": "X", "rtype": "CannotRepeat", "weight": 2}, ["Y"]) == 2
+assert _bw({"to": "X", "rtype": "CannotRepeat", "cooldown": 2, "weight": 1}, ["X", "Y"]) == 0 and _bw({"to": "X", "weight": "L"}, []) is None
+_fc = predict({**_maw, "intents": []}, 0, 2, exact=["RIP_AND_TEAR_MOVE", "CLAW_MOVE"])
+assert [list(t["moves"]) for t in _fc] == [["RIP_AND_TEAR_MOVE"], ["CLAW_MOVE"]]
+print("all enemy move replay checks passed")
