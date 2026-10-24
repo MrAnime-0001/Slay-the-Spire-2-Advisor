@@ -28,6 +28,7 @@ DateTime uiScanned = DateTime.MinValue, uiChanged = DateTime.MinValue;
 string uiScreen = "";
 string gameVersion = "?"; // release_info.json next to the game exe
 List<string> warnings = []; // sections that failed this frame (renamed field in another game build)
+ulong myCreature = 0; // our Creature: Possess powers keep what they stole per player
 int mySlot = 0; // our index in RunState._players: shop inventories, rest sites and events are per player slot
 var pathFields = new Dictionary<string, ClrInstanceField>(); // "path#step" -> field, once resolved (see Resolve)
 
@@ -79,6 +80,7 @@ object Snapshot(ClrRuntime rt)
     if (player.IsNull) player = players.First();
     mySlot = Math.Max(0, players.FindIndex(p => p.Address == player.Address));
     var me = F(player, "Creature");
+    myCreature = me.Address;
     if (I(me, "_currentHp") <= 0) // RunState.IsGameOver
         return new { status = "game_over", game_version = gameVersion, player = Creature(me), ui = Safe("ui", () => Ui(rt, run)), warnings = warnings.ToArray() };
     var deck = Items(F(F(player, "Deck"), "_cards")).Select(Card).ToArray();
@@ -94,6 +96,7 @@ object Snapshot(ClrRuntime rt)
                      potions = Potions(player), relics = Relics(player),
                      potion_slots = Items(F(player, "_potionSlots")).Count(), gold = I(player, "_gold"),
                      act = I(run, "_currentActIndex"), ascension = I(run, "AscensionLevel"),
+                     seed = Safe("seed", () => Str(F(run, "Rng"), "StringSeed")), // run id: same run across advisor restarts
                      map = Safe("map", () => Map(run)), shop = Safe("shop", () => Shop(run)),
                      act_name = Safe("act_name", () => Items(F(run, "Acts")).ElementAtOrDefault(I(run, "_currentActIndex")) is { IsNull: false } a ? Name(a) : null),
                      map_open = Safe<bool?>("map_open", () => MapOpen(rt)), choose_card = choose,
@@ -136,7 +139,23 @@ object Snapshot(ClrRuntime rt)
         holding = Safe("holding", () => Holding(rt)), // a card is picked up / being aimed (Esc puts it back)
         choose_card = choose, // "choose a card" screen: Knowledge Demon curse, Attack/Skill potions...
         ascension = I(run, "AscensionLevel"), // enemy numbers switch at A8 (HP) / A9 (damage)
+        seed = Safe("seed", () => Str(F(run, "Rng"), "StringSeed")), // run id (recordings, run history)
         cards_played = CardsPlayed(cm, cs), // this turn, for Sloth / Ringing / Slow
+        // Read from the game's combat history, so an advisor restart mid-turn still knows them.
+        my_cards_played = Safe<int?>("my_cards_played", () => ThisRound(cm, cs) // multiplayer: yours only (Velvet Choker, Scarf)
+            .Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry") && F(e, "Actor").Address == me.Address)),
+        exhausted_this_turn = Safe<int?>("exhausted_this_turn", () => ThisRound(cm, cs)
+            .Count(e => e.Type!.Name!.EndsWith("CardExhaustedEntry") && F(e, "Actor").Address == me.Address)),
+        // Chains of Binding: one Bound card per turn (dupes don't count; Sly auto-plays do, the game checks them too)
+        bound_played = Safe<bool?>("bound_played", () => ThisRound(cm, cs).Any(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry")
+            && F(e, "Actor").Address == me.Address && F(F(e, "CardPlay"), "Card") is var pc
+            && F(pc, "Affliction") is { IsNull: false } aff && Name(aff) == "Bound" && !B(pc, "_isDupe"))),
+        skills_played = Safe<int?>("skills_played", () => ThisRound(cm, cs) // Smoggy: one Skill per turn
+            .Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry") && F(e, "Actor").Address == me.Address
+                        && I(F(F(e, "CardPlay"), "Card"), "Type") == 2)),
+        attacks_played = Safe<int?>("attacks_played", () => ThisRound(cm, cs) // Juggling: copies the 3rd Attack
+            .Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry") && F(e, "Actor").Address == me.Address
+                        && I(F(F(e, "CardPlay"), "Card"), "Type") == 1)),
         card_grid = Safe("card_grid", () => CardGrid(rt)), // pile pick screen (Headbutt: discard -> top of draw...)
         stars = Safe<int?>("stars", () => I(pcs, "_stars")), // Regent's second resource
         orbs = Safe("orbs", () => Items(F(F(pcs, "OrbQueue"), "_orbs")).Select(o => new { name = Name(o), // Dark grows its evoke, Glass shrinks
@@ -371,13 +390,15 @@ object? Event(ClrObject runMgr, ClrObject run)
 int? CardsPlayed(ClrObject cm, ClrObject cs)
 {
     // CombatManager.History._entries: newest last; count CardPlayStartedEntry of the current round.
-    try
-    {
-        int round = I(cs, "RoundNumber");
-        return Items(F(F(cm, "History"), "_entries")).Reverse().TakeWhile(e => I(e, "RoundNumber") == round)
-            .Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry"));
-    }
+    try { return ThisRound(cm, cs).Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry")); }
     catch { return null; }
+}
+
+// CombatManager.History._entries of the current round, newest first.
+IEnumerable<ClrObject> ThisRound(ClrObject cm, ClrObject cs)
+{
+    int round = I(cs, "RoundNumber");
+    return Items(F(F(cm, "History"), "_entries")).Reverse().TakeWhile(e => I(e, "RoundNumber") == round);
 }
 
 object? ChooseCard(ClrRuntime rt)
@@ -609,8 +630,50 @@ object Creature(ClrObject c) => new
     block = I(c, "_block"),
     powers = Items(F(c, "_powers")).Select(p => new { name = Name(p), amount = I(p, "_amount"),
                                                        played = TryField(p, "_cardsPlayedThisTurn")?.Read<int>(p.Address, false), // Sloth
-                                                       facing = TryField(p, "_facing")?.Read<int>(p.Address, false) }).ToArray(), // Surrounded: 0 Right, 1 Left
+                                                       facing = TryField(p, "_facing")?.Read<int>(p.Address, false), // Surrounded: 0 Right, 1 Left
+                                                       data = PowerData(p) }).ToArray(),
 };
+
+// A power's private per-turn state, so a replan mid-turn sees it: PowerModel._internalData's bool/int/decimal fields
+// (Hardened Shell damageReceivedThisTurn, Skittish hasGainedBlockThisTurn...) and Withering Presence's CardsLeft var.
+Dictionary<string, object>? PowerData(ClrObject p)
+{
+    try
+    {
+        var o = new Dictionary<string, object>();
+        var d = TryField(p, "_internalData")?.ReadObject(p.Address, false) ?? default;
+        foreach (var f in d.IsNull || d.Type is null ? [] : d.Type.Fields)
+        {
+            if (f.ElementType == ClrElementType.Boolean) o[f.Name!] = f.Read<bool>(d.Address, false);
+            else if (f.ElementType == ClrElementType.Int32) o[f.Name!] = f.Read<int>(d.Address, false);
+            else if (f.Type?.Name == "System.Decimal") o[f.Name!] = (double)f.Read<decimal>(d.Address, false);
+            else if (f.Type?.Name?.StartsWith("System.Collections.Generic.Dictionary") == true)
+            {   // Possess Strength / Speed: stolenStrength / stolenDexterity per player creature -> ours
+                var dict = f.ReadObject(d.Address, false);
+                var entries = dict.IsNull ? default : dict.ReadObjectField("_entries");
+                for (int i = 0, n = dict.IsNull ? 0 : dict.ReadField<int>("_count"); !entries.IsNull && i < n; i++)
+                {
+                    var e = entries.AsArray().GetStructValue(i);
+                    if (e.ReadObjectField("key").Address == myCreature) o[f.Name!] = (double)e.ReadField<decimal>("value");
+                }
+            }
+        }
+        if (Name(p) == "WitheringPresencePower")
+        {
+            var dict = F(F(p, "_dynamicVars"), "_vars");
+            var entries = dict.ReadObjectField("_entries");
+            for (int i = 0, n = dict.ReadField<int>("_count"); !entries.IsNull && i < n; i++)
+            {
+                var e = entries.AsArray().GetStructValue(i);
+                var v = e.ReadObjectField("value");
+                if (!v.IsNull && e.ReadObjectField("key").AsString() == "CardsLeft")
+                    o["CardsLeft"] = (int)Field(v, "_baseValue").Read<decimal>(v.Address, false);
+            }
+        }
+        return o.Count > 0 ? o : null;
+    }
+    catch { return null; }
+}
 
 object Enemy(ClrObject c)
 {

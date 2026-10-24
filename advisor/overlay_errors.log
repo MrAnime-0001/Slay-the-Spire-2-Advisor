@@ -80,3 +80,87 @@ TypeError: 'NoneType' object is not iterable
                   ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 StopIteration
 
+22:40:34 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 598, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 640, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 500, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 697, in solve
+    tuple((o["name"].removesuffix("Orb"), o.get("value")) for o in state.get("orbs", [])),
+                                                                   ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+23:20:17 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 598, in tick
+    try:
+    
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 640, in render
+    state = json.loads(line)
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 500, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 697, in solve
+    state["energy"],
+    
+TypeError: 'NoneType' object is not iterable
+
+23:27:50 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 599, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 641, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 500, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 710, in solve
+    me["hp"],
+    
+TypeError: 'NoneType' object is not iterable
+
+00:14:04 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 599, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 641, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 500, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 712, in solve
+    next((p["creature"]["hp"] for p in state.get("pets", []) if p["name"] == "Osty"), 0),
+                                                                   ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+00:18:16 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 599, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 641, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 500, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 712, in solve
+    next((p["creature"]["hp"] for p in state.get("pets", []) if p["name"] == "Osty"), 0),
+                                                                   ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+00:20:51 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 599, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 641, in render
+    draw(view_of(state, line), state)
+         ~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 500, in view_of
+    plans = solve(state)
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\solver.py", line 712, in solve
+    next((p["creature"]["hp"] for p in state.get("pets", []) if p["name"] == "Osty"), 0),
+                                                                   ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+

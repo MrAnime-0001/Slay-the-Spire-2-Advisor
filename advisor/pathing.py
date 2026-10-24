@@ -4,6 +4,7 @@ worth what your gold buys."""
 import statistics
 from collections import namedtuple
 
+from deck import hp_lost
 from relics import GAMEDATA, KNOWLEDGE
 
 # Tuning knobs. Values are in "card reward = 4" points.
@@ -11,7 +12,11 @@ from relics import GAMEDATA, KNOWLEDGE
 # as (mean, 90th percentile). FIGHT_DMG is the fallback when the act or its fights aren't in your history.
 FIGHT_DMG = {"Monster": (8, 12, 16), "Elite": (22, 30, 38), "Boss": (35, 45, 55)}  # expected HP lost, per act
 FIGHT_GOLD = {"Monster": 15, "Elite": 30, "Unknown": 10}
-CARD_REWARD, RARE_CARD, RELIC, EVENT, ANCIENT, UPGRADE = 4, 6, 12, 5, 10, 6
+CARD_REWARD, RELIC, EVENT, ANCIENT, UPGRADE = 4, 12, 5, 10, 6
+# Card rewards (wiki Mechanics "Cards"): each of the 3 cards is rare 3% (normal fight) / 10% (elite), halved at
+# A7+; reward cards come upgraded 0% / 25% / 50% in acts 1 / 2 / 3, halved at A7+. A rare in the reward is worth
+# RARE_PREMIUM more; an upgraded pick about half an upgrade.
+RARE_ODDS, UPGRADED_ODDS, RARE_PREMIUM = {"Monster": 0.03, "Elite": 0.10}, (0, 0.25, 0.5), 8
 EVENT_RISK = 0.3        # share of ? rooms that turn out to be fights
 SHOP_PER_100, SHOP_CAP = 6, 300  # value per 100 gold spent, most a shop visit spends
 GOLD_LEFT = 0.02        # leftover gold at the boss still buys things next act
@@ -27,6 +32,12 @@ Route = namedtuple("Route", "coords types score hp gold")
 # Ascension (code-facts.md): A3 Poverty = fight gold x0.75, A7 Scarcity = rare odds halved (elite rare card worth
 # half), A10 DoubleBoss = two bosses at the end of act 3 (boss cost x2).
 POVERTY, SCARCITY, DOUBLE_BOSS = 3, 7, 10
+# v19 Phase D: fight costs scale with this deck. deck.hp_lost (deck sim) runs ~2.4x the recorded fight cost (median
+# over 104 recorded decks, 2026-10-22) but tracks deck strength, so it's used relative to that, clamped.
+# Each usable potion (max 2) takes POTION_ELITE_HP off the next Elite/Boss's bad case (spent there).
+SIM_BIAS, DECK_CLAMP = 2.4, (0.6, 1.5)
+POTION_ELITE_HP, POTIONS_COUNTED = 8, 2
+# ponytail: one bias for every act (Overgrowth runs ~2.6x, Underdocks ~1.1-1.8x); per-act bias if routes look off.
 # ponytail: your history mixes ascensions (A0-A8) and characters; enemies only get stronger at A8/A9.
 # No relic heal modifiers, no second boss.
 
@@ -43,7 +54,16 @@ def fight_costs(state):
             out[cls] = (statistics.mean(d["mean"] for d in seen), statistics.mean(d["p90"] for d in seen))
     if act == 2 and state.get("ascension", 0) >= DOUBLE_BOSS:
         out["Boss"] = tuple(2 * x for x in out["Boss"])
-    return out
+    f = deck_factor(state, out)
+    return {k: (m * f, p90 * f) for k, (m, p90) in out.items()}
+
+
+def deck_factor(state, costs):
+    """This deck's fight cost vs your recorded average (1 = typical; < 1 = stronger deck)."""
+    if not state.get("deck") or not state.get("act_name"):  # the deck sim needs the act's enemy pool
+        return 1
+    ref = (costs["Elite"][0] + costs["Boss"][0]) / 2
+    return min(DECK_CLAMP[1], max(DECK_CLAMP[0], hp_lost(state["deck"], state) / (SIM_BIAS * ref)))
 
 
 def should_rest(hp, max_hp, ahead, costs=None):
@@ -59,19 +79,27 @@ def should_rest(hp, max_hp, ahead, costs=None):
     return None
 
 
-def simulate(types, hp, max_hp, gold, costs, asc=0):
+def reward_value(kind, act, asc):
+    """A card reward after a Monster / Elite fight, on the route scale."""
+    half = 0.5 if asc >= SCARCITY else 1
+    rare = 1 - (1 - RARE_ODDS[kind] * half) ** 3
+    return CARD_REWARD + RARE_PREMIUM * rare + UPGRADED_ODDS[min(act, 2)] * half * UPGRADE / 2
+
+
+def simulate(types, hp, max_hp, gold, costs, asc=0, pots=0, act=0):
     score = 0
     gold_mult = 0.75 if asc >= POVERTY else 1
-    rare = RARE_CARD * (0.5 if asc >= SCARCITY else 1)
     for i, t in enumerate(types):
+        saved = POTION_ELITE_HP * min(pots, POTIONS_COUNTED) if t in ("Elite", "Boss") else 0
+        pots = 0 if saved else pots  # drunk at that fight
         if t in FIGHTS:
-            score -= RISK * max(0, costs[t][1] - hp)
+            score -= RISK * max(0, costs[t][1] - saved - hp)
         if t == "Boss":
             break
         if t in ("Monster", "Elite"):
-            hp -= costs[t][0]
+            hp -= max(0, costs[t][0] - saved / 2)
             gold += FIGHT_GOLD[t] * gold_mult
-            score += CARD_REWARD if t == "Monster" else RELIC + rare
+            score += reward_value(t, act, asc) + (RELIC if t == "Elite" else 0)
         elif t == "Unknown":
             hp -= EVENT_RISK * costs["Monster"][0]
             gold += FIGHT_GOLD[t] * gold_mult
@@ -103,7 +131,8 @@ def best_routes(state, top=3):
     cur = tuple(m["current"]) if m["current"] else None
     firsts = [tuple(c) for c in nodes[cur]["next"]] if cur in nodes else [tuple(m["start"])]
     p = state["player"]
-    args = (p["hp"], p["max_hp"], state.get("gold", 0), fight_costs(state), state.get("ascension", 0))
+    args = (p["hp"], p["max_hp"], state.get("gold", 0), fight_costs(state), state.get("ascension", 0),
+            len(state.get("potions", [])), state.get("act", 0))
     best, left = {}, [0]
 
     def walk(path):

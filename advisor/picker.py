@@ -1,5 +1,7 @@
 """Card-reward, rest-site and shop advice: rate cards from their numbers, what the deck lacks, and relics."""
+import json
 import math
+import os
 import re
 from itertools import combinations
 
@@ -9,7 +11,10 @@ from enemies import predict
 from relics import GAMEDATA, KNOWLEDGE, Relics, dmg_add
 from archetypes import ARCHETYPES, commitment, expand_power, snake, synergy
 from deck import hp_lost, slot_cost
-from solver import creates, deck_dpt, keywords, solve, toss_key
+from runplan import WIKI, card_fit, character, plan, relic_fit
+from solver import (ENGINES, ORB_PASSIVE, channels, creates, deck_dpt, engine_powers, from_ops, gd_card,
+                    keywords, solve, toss_key)
+from archetypes import card_text
 
 
 def pile_fetch(prompt):
@@ -84,10 +89,83 @@ def is_aoe(card):
     return card["type"] == "Attack" and card["target"] in ("AllEnemies", "RandomEnemy")
 
 
-def rate(card, deck, relics=(), state=None):
+# Engine cards (R1, from a won A3 Defect run): a Power's worth is what it adds EVERY turn of the fight, not the
+# numbers printed on it. engine_value reads the card's own text/ops: per-turn channels (Spinner, Lightning Rod),
+# Focus (x orbs held), orb slots, extra draws (Machine Learning), evoke / per-play triggers (Thunder), and the
+# solver's ENGINES table (Noxious Fumes...). Damage-equivalent per turn; x POWER_TURNS turns of benefit.
+# L1: what finished runs taught (tools/learn.py -> learned.json): per character, the win-rate lift of decks that
+# ended with a card / relic, already shrunk toward 0. A nudge: x LEARN_WEIGHT, capped at LEARN_CAP, and never above
+# the deck sim's dilution check. STS2_NO_LEARN=1 turns it off (tests).
+LEARN_WEIGHT, LEARN_CAP = 20, 3
+try:
+    LEARNED = {} if os.environ.get("STS2_NO_LEARN") else json.load(
+        open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "learned.json"), encoding="utf-8"))
+except (OSError, ValueError):
+    LEARNED = {}
+
+
+def learned(kind, name, state):
+    """Score nudge from past runs for this character, or 0."""
+    ch = LEARNED.get("chars", {}).get(character(state) or "", {}) if state else {}
+    lift = ch.get(kind, {}).get(name, {}).get("lift", 0)
+    return max(-LEARN_CAP, min(LEARN_CAP, LEARN_WEIGHT * lift))
+
+
+POWER_TURNS = 4  # an average fight runs ~5 turns; a Power played early works for the rest
+ORB_SLOTS = 3
+
+
+def orb_deck(deck):
+    """How many cards channel orbs (0: Focus and slots are worth little)."""
+    return sum(1 for c in deck if channels(c) or "Channel" in card_text(c["name"]))
+
+
+def avg_card(deck):
+    """A drawn card's rough output (Damage x hits + 0.9 Block) over the deck."""
+    out = [c["vars"].get("Damage", 0) * max(c["vars"].get("Repeat", 1), 1) + 0.9 * c["vars"].get("Block", 0)
+           for c in deck if c["type"] in ("Attack", "Skill")]
+    return sum(out) / max(len(deck), 1)
+
+
+def engine_value(card, deck):
+    """(damage-equivalent output per turn, recognised) of a card's lasting per-turn effects."""
+    v, text = card["vars"], card_text(card["name"])
+    orbs = orb_deck(deck) >= 3
+    slots = ORB_SLOTS + sum(c["vars"].get("Repeat", 0) for c in deck if c["name"] in ("Capacitor", "Modded"))
+    focus = 0  # ponytail: Focus already in the deck isn't added to each orb's value
+    per, known = 0.0, False
+    for power, n in engine_powers(from_ops(card)):
+        kind, unit, ramp = ENGINES[power]
+        per += n * unit * (1.5 if kind == "all" else 0.9 if kind == "block" else 1) * ((POWER_TURNS + 1) / 2 if ramp else 1)
+        known = True
+    m = re.search(r"(?:start of your turn|start of the next[^,]*), Channel (\d+|\{[^}]*\}) (\w+)", text)
+    if m:
+        orb = m.group(2)
+        n = 1 if not m.group(1).isdigit() else int(m.group(1))
+        turns = v.get(card["name"] + "Power", POWER_TURNS) if "next" in m.group(0) else POWER_TURNS
+        # one more orb a turn: its passive from then on (into full slots it pushes out an orb you already had)
+        per += n * (ORB_PASSIVE.get(orb, 2) + focus) * min(turns, POWER_TURNS) / POWER_TURNS
+        known = True
+    if "FocusPower" in v and "lose" not in text.lower():
+        per += v["FocusPower"] * (slots if orbs else 1)  # every orb's passive +1, every turn
+        known = True
+    if card["name"] in ("Capacitor", "Modded") or "Orb Slot" in text:
+        per += v.get("Repeat", 1) * 0.5 * (ORB_PASSIVE["Lightning"] + focus) * orbs
+        known = True
+    if not known and re.search(r"start of your turn, draw", text) and "Cards" in v:  # (ENGINES may have it)
+        per += v["Cards"] * avg_card(deck)
+        known = True
+    m = re.search(r"Whenever you Evoke (\w+), deal \{(\w+)", text)
+    if m:
+        per += 0.7 * v.get(m.group(2), 0) * orbs  # ~0.7 evokes of that orb a turn in an orb deck
+        known = True
+    return per, known
+
+
+def rate(card, deck, relics=(), state=None, raw=False):
     """(score, modeled, HP saved per fight or None). With `state` (act, ascension, energy), cards the deck sim understands are scored by
     the HP they save in this act's boss/elite fights (deck.py: damage vs block balance, draw odds, dilution);
-    everything gets the build-synergy bonus (archetypes.py) and the community tier blend."""
+    everything gets the build-synergy bonus (archetypes.py) and the community tier blend (raw: no tier blend)."""
     R = Relics(relics, GAMEDATA["relics"])
     card = expand_power(card)  # Uppercut's generic "Power" var -> Weak + Vulnerable
     v = dict(card["vars"])
@@ -110,6 +188,10 @@ def rate(card, deck, relics=(), state=None):
     if "Retain" in kw:
         value *= RETAIN_STATS
     modeled = set(v) <= set(VAR_VALUE) | {"Repeat"} and bool(v)
+    engine, known = engine_value(card, deck)
+    if known:  # its every-turn output replaces the printed numbers it was read from
+        value = (value if card["type"] != "Power" else 0) + engine * POWER_TURNS
+        modeled = True
     if not modeled:
         value += UNKNOWN_VALUE
     score = value / max(3 if card["x_cost"] else card["cost"], 1)
@@ -128,23 +210,41 @@ def rate(card, deck, relics=(), state=None):
         score -= DECK_SIZE_PENALTY * max(0, len(deck) - DECK_SIZE_FREE)
     elif card["type"] != "Power":  # Powers leave the piles once played; anything else is drawn every cycle
         score -= HP_SAVED_SCALE * slot_cost(deck, state)
-    score += SYNERGY_VALUE * synergy(card, deck, relics) + combo(card, deck, relics)
+    fit = None
+    if state is not None:  # run plan (runplan.py): build fit, gaps, wiki synergies, off-build penalty
+        fit = card_fit(card, plan({**state, "deck": list(deck), "relics": list(relics)}), deck)[0]
+        score += combo(card, deck, relics)
+    else:
+        score += SYNERGY_VALUE * synergy(card, deck, relics) + combo(card, deck, relics)
     sim = score
-    tier = tier_value(card["name"])
+    tier = None if raw else tier_value(card["name"])
     if tier is not None:
         blend = TIER_BLEND_SIM if simmed else TIER_BLEND
         score = (1 - blend) * score + blend * tier
         modeled = True  # the tier covers what the numbers miss
+    score += learned("cards", card["name"], state)
     if simmed and saved < DILUTION_TOL:
         score = min(score, sim)  # the deck fights worse with it: the tier list can't overrule the draw odds
+    if fit is not None:  # after the tier blend: the plan's off-build penalty isn't diluted by a card's tier
+        score += fit
     return round(score, 1), modeled, None if saved is None else round(saved, 1)
 
 
+LATE_SKIP, LATE_DECK = 3, 25
+COMMIT_SKIP = 2  # a committed deck needs a better card to take one (more Skips): + COMMIT_SKIP x commitment
+
+
 def pick(cards, deck, relics=(), state=None):
-    rated = [(c["name"], *rate(c, deck, relics, state)) for c in cards]
+    """(best name or "Skip", [(name, score, modeled, HP saved, reason)])."""
+    p = plan({**state, "deck": list(deck), "relics": list(relics)}) if state is not None else None
+    rated = [(c["name"], *rate(c, deck, relics, state), card_fit(c, p, deck)[1] if p else "") for c in cards]
     best = max(rated, key=lambda r: r[1], default=None)
     # A7 Scarcity halves rare odds: good cards come less often, so the bar to take one drops a little
     bar = SKIP_BELOW - (SCARCITY_SKIP if (state or {}).get("ascension", 0) >= 7 else 0)
+    bar += COMMIT_SKIP * p["level"] if p and p["committed"] else 0
+    # Act 3 with a working deck (committed, or already big): another card mostly dilutes it (the won A3 run skipped
+    # 4 of 6 late rewards the advisor wanted to take)
+    bar += LATE_SKIP if p and p["act"] >= 2 and (p["committed"] or len(deck) >= LATE_DECK) else 0
     return (best[0] if best and best[1] >= bar else "Skip"), rated
 
 
@@ -161,13 +261,29 @@ def upgraded(card, up):
     return {**card, "vars": v, "cost": max(0, card["cost"] + up.get("cost", 0)), "upgraded": True}
 
 
+# Upgrade value (v19 Phase A): the score change without the tier blend (a tiered card's gain was damped, a basic's
+# wasn't), plus what the deck sim can't see: bigger Vulnerable/Weak/Strength/Poison amounts (it treats them as on/off)
+# and bigger engine Powers (Noxious Fumes 2 -> 3). Basics count BASIC_UP: they're the first cards you remove.
+FLAG_VARS = ("VulnerablePower", "WeakPower", "StrengthPower", "DexterityPower", "PoisonPower")
+POWER_UP_VALUE, COST_UP_VALUE, BASIC_UP = 4, 2, 0.3
+
+
 def upgrade_gain(card, deck, upgrades=UPGRADES, relics=(), state=None):
     up = upgrades[card["name"]]
     rest = list(deck)
     if state is not None and card in rest:
         rest.remove(card)  # compare deck+card vs deck+upgraded card
-    gain = rate(upgraded(card, up), rest, relics, state)[0] - rate(card, rest, relics, state)[0]
+    better = upgraded(card, up)
+    gain = rate(better, rest, relics, state, raw=True)[0] - rate(card, rest, relics, state, raw=True)[0]
     gain += sum(KEYWORD_VALUE.get(k, 1) for k in up.get("keywords", []))
+    delta = up.get("vars", {})
+    if state is not None and card["type"] in ("Attack", "Skill"):  # simmed: amounts beyond on/off
+        gain += sum(VAR_VALUE[k] * delta[k] for k in FLAG_VARS if k in delta)
+    if card["type"] == "Power" and not engine_value(card, rest)[1]:  # known engines: rate() already has the change
+        gain += POWER_UP_VALUE * sum(1 for k, d in delta.items() if d > 0 and k not in VAR_VALUE)
+    gain += COST_UP_VALUE * max(0, -up.get("cost", 0))
+    if (card.get("rarity") or GAMEDATA["cards"].get(card["name"], {}).get("rarity")) == "Basic":
+        gain *= BASIC_UP
     return round(gain, 1)
 
 
@@ -193,7 +309,8 @@ def rest_advice(state, upgrades=UPGRADES):
     ahead = (best_routes(state, top=1) or [None])[0]  # rooms on the best route after this camp
     reason = should_rest(p["hp"], p["max_hp"], ahead.types if ahead else [], fight_costs(state))
     if "Smith" in opts and gains and not reason:
-        return f"Smith -> upgrade {gains[0][0]}", [f"{n:<16} +{g}" for n, g in gains[:3]] + tail
+        tag = lambda n: "  (basic: little gain)" if GAMEDATA["cards"].get(n, {}).get("rarity") == "Basic" else ""
+        return f"Smith -> upgrade {gains[0][0]}", [f"{n:<16} +{g}{tag(n)}" for n, g in gains[:3]] + tail
     return f"Rest  (heal +{heal})", [f"HP {p['hp']}/{p['max_hp']}" + (f"  ({reason})" if reason else "")] + tail
 
 
@@ -211,7 +328,7 @@ def hand_pick(state, upgrades=UPGRADES):
     pool = [c for c in hand if not upgrade or (not c["upgraded"] and c["name"] in upgrades)]
     junk = lambda c: c["type"] in ("Curse", "Status")
     if upgrade:
-        order = sorted(range(len(pool)), key=lambda i: -upgrade_gain(pool[i], deck, upgrades, relics))
+        order = sorted(range(len(pool)), key=lambda i: -upgrade_gain(pool[i], deck, upgrades, relics, state))
         n = sel["max"]
     elif (f := pile_fetch(sel["prompt"])) and f["to"] == "Draw":
         # hand -> top of draw (Thinking Ahead, Glimmer, Photon Cut): keep the card worth more next turn than now
@@ -296,6 +413,9 @@ def choose_card(state):
     else:
         scored = [(c["name"], rate(c, state.get("deck", []), state.get("relics", []), state)[0]) for c in cards]
     scored.sort(key=lambda r: -r[1])
+    if state.get("status") == "combat":  # plan scores: only the difference to the best pick means anything
+        return scored[0][0], [(n, s, "best plan" if s == scored[0][1] else f"{s - scored[0][1]:+.1f} vs best")
+                              for n, s in scored]
     return scored[0][0], [(n, s, f"score {s}") for n, s in scored]
 
 
@@ -308,6 +428,7 @@ POTION_FIT = 2  # bonus for a potion that feeds the deck's committed build
 POTION_TIER_VALUE = {"Good Always": (6, 6), "Good Early": (5, 3), "Good Late": (3, 5), "Niche": (2, 2),
                      "Mediocre": (1, 1)}
 REMOVE_VALUE = {"Curse": 14, "Status": 10, "Basic": 7}  # by what gets removed; anything else 3
+REMOVE_COMMIT = 3  # x commitment: a Basic removed from a committed deck draws the build more often
 # Value of a gold not spent: what pathing says a later shop on the route buys with it (SHOP_PER_100), else
 # what leftover gold is worth at the boss (GOLD_LEFT), so the map and shop advice price gold the same way.
 GOLD_KEEP, GOLD_KEEP_SHOP_AHEAD = GOLD_LEFT, SHOP_PER_100 / 100
@@ -328,10 +449,38 @@ def potion_value(name, state):
     return value + POTION_FIT * fit
 
 
+SWAP_MARGIN = 1.5  # a new potion replaces the worst held one only when worth this much more
+
+
+def potion_swap(state, name):
+    """(held potion to drop, value gained) when every slot is full and `name` beats the worst held by SWAP_MARGIN."""
+    held = [p["name"] for p in state.get("potions", [])]
+    if not held or len(held) < state.get("potion_slots", 3):
+        return None
+    worst = min(held, key=lambda n: potion_value(n, state))
+    gain = potion_value(name, state) - potion_value(worst, state)
+    return (worst, round(gain, 1)) if gain >= SWAP_MARGIN else None
+
+
+# What a curse costs a run, on the event scale (CURSE = a plain dead draw), from each card's game code: turn-end
+# HP (Bad Luck 13 unblockable, Regret = hand size, Decay 2), a play cap (Normality 3), forced energy (Enthralled
+# 2, played first), a debuff on us (Doubt Weak, Shame Frail), clogging (Innate Writhe/Folly, Retain Poor Sleep).
+# Guilty removes itself after 5 combats (counted half used); Spore Mind can be played away for 1 energy.
+CURSE_COST = {"BadLuck": 16, "Normality": 14, "Regret": 12, "Enthralled": 10, "Decay": 9, "Doubt": 9, "Shame": 9,
+              "Writhe": 9, "Folly": 9, "PoorSleep": 9, "Debt": 9, "SporeMind": 5, "Guilty": 4}
+
+
+def curse_cost(name):
+    return CURSE_COST.get(name, -CURSE)
+
+
 def removal_order(deck, relics=(), state=None):
-    """Removable cards, worst first: Curse/Status, then the weakest Basic card (Strike/Defend), then the weakest."""
+    """Removable cards, worst first: Curse/Status (the costliest curse first, Guilty last: it leaves by itself),
+    then the weakest Basic card (Strike/Defend), then the weakest."""
     def badness(c):
         tier = 0 if c["type"] in ("Curse", "Status") else 1 if c.get("rarity") == "Basic" else 2
+        if tier == 0:
+            return tier, -curse_cost(c["name"])
         rest = list(deck)
         rest.remove(c)
         return tier, rate(c, rest, relics, state)[0]  # what the deck loses without it
@@ -401,6 +550,8 @@ def relic_value(name, state=None):
         word = CARD_WORD_RELICS[name]
         have = sum(word in c["name"] for c in state.get("deck", []))
         value *= min(1, have / WORD_CARDS_FULL)
+    if state:
+        value += relic_fit(name, plan(state), state.get("deck", []))[0] + learned("relics", name, state)
     return value
 
 
@@ -426,13 +577,20 @@ def _shop(state):
     for r in shop["relics"]:
         items.append((r["name"], r["price"], relic_value(r["name"], state), False))
         keys.append(("relic", r["name"]))
+    swaps = {p["name"]: sw for p in shop["potions"] if (sw := potion_swap(state, p["name"]))}
+    best_swap = max(swaps, key=lambda n: swaps[n][1], default=None)  # slots full: one swap per visit
     for p in shop["potions"]:
-        items.append((p["name"], p["price"], potion_value(p["name"], state), True))
+        if p["name"] == best_swap:  # worth only what it adds over the potion it replaces; needs no free slot
+            items.append((f"{p['name']} (drop {swaps[best_swap][0]})", p["price"], swaps[best_swap][1], False))
+        else:
+            items.append((p["name"], p["price"], potion_value(p["name"], state), True))
         keys.append(("potion", p["name"]))
     worst = removal_target(deck, relics, state)
     if shop.get("removal") is not None and worst:
         tier = worst["type"] if worst["type"] in ("Curse", "Status") else worst.get("rarity")
-        items.append((f"Remove {worst['name']}", shop["removal"], REMOVE_VALUE.get(tier, 3), False))
+        p = plan(state)
+        bonus = REMOVE_COMMIT * p["level"] if p["committed"] and tier == "Basic" else 0
+        items.append((f"Remove {worst['name']}", shop["removal"], REMOVE_VALUE.get(tier, 3) + bonus, False))
         keys.append(("remove", worst["name"]))
     slots = state.get("potion_slots", 3) - len(state.get("potions", []))
     worth = sorted((i for i, it in enumerate(items) if it[2] > keep * it[1]),
@@ -477,6 +635,35 @@ def option_text(state, option):
     return re.sub(r"\{(\w+)(?::((?:[^{}]|\{\})*))?\}", fill, text)
 
 
+# English title -> class, for names in event text and vars ("Sword of Stone" -> SwordOfStone)
+TITLES = {k: {t.lower(): c for c in GAMEDATA[k] if (t := GAMEDATA.get("text", {}).get(f"{k}:{snake(c).upper()}.title"))}
+          for k in ("cards", "relics", "potions")}
+
+
+def named(kind, s):
+    """Game class for a name (class or English title, wiki "(relic)" tags dropped), else None."""
+    s = re.sub(r"\s*\((?:relic|curse|card|potion)\)", "", str(s), flags=re.I).strip(" .")
+    key = re.sub(r"\W", "", s)
+    return key if key in GAMEDATA[kind] else TITLES[kind].get(s.lower())
+
+
+def card_value(name, state):
+    """A named card gained at an event, on the event scale: what the run plan says it adds over a skip
+    (same as the shop), so an off-build card can be worth less than nothing."""
+    if GAMEDATA["cards"][name]["type"] == "Curse":
+        return -curse_cost(name)
+    return rate(gd_card(name), state.get("deck", []), state.get("relics", []), state)[0] - SKIP_BELOW
+
+
+def trial_value(state):
+    """Trial: the next page is one of three verdict pages; you take the better verdict on it. Mean of those."""
+    t = GAMEDATA.get("text", {})
+    pages = [[v for k, v in t.items() if k.startswith(f"events:TRIAL.pages.{pg}.options.") and k.endswith(".description")]
+             for pg in ("MERCHANT", "NOBLE", "NONDESCRIPT")]
+    best = [max(option_value(state, {"relic": None}, x)[0] for x in opts) for opts in pages if opts]
+    return sum(best) / len(best) if best else 0
+
+
 def option_value(state, option, text):
     """(score, parsed anything?) for one event option."""
     if option.get("relic"):
@@ -490,15 +677,32 @@ def option_value(state, option, text):
         (r"(?:Lose|Take) (\d+) (?:HP|damage)", "hp"),
         (r"Heal (\d+) HP", "heal"),
         (r"(?:Pay|Lose) (\d+) Gold", lambda k: -EVENT_GOLD * k),
-        (r"Gain (\d+) Gold", lambda k: EVENT_GOLD * k),
+        (r"(?:Gain|Obtain) (\d+) Gold", lambda k: EVENT_GOLD * k),
+        (r"Gain (a|\d+) card rewards?", lambda k: CARD_REWARD * k),
         (r"Obtain (a|\d+) random (?:\w+ )?Relics?", lambda k: RELIC * k),
-        (r"Obtain (a|\d+) (?:random )?(?:[\w-]+ )?(?:cards?|Power)\b|Choose (\d+) of \d+ random", lambda k: CARD_REWARD * k),
+        (r"Obtain (a|\d+) (?:random )?(?:[\w-]+ )?(?:[Cc]ards?|Power)\b|Choose (\d+) of \d+ random", lambda k: CARD_REWARD * k),
         (r"Upgrade (a|\d+) random cards?", lambda k: 0.7 * UPGRADE * k),
-        (r"Upgrade (a) card", lambda k: UPGRADE * k),
+        (r"Downgrade (a|\d+) random cards?", lambda k: -0.7 * UPGRADE * k),
+        (r"Upgrade (a|\d+) cards?\b", lambda k: UPGRADE * k),
+        # Tea Master (P5, rough): upgraded starting hand once, Strength for N fights, Dazed in the next fight
+        (r"Upgrade your starting (hand)", lambda k: UPGRADE / 2),
+        (r"next (\d+) combats, gain \d+ Strength", lambda k: 1.2 * k),
+        (r"shuffle (\d+) Dazed", lambda k: -k),
+        (r"Face lethal (repercussions)", lambda k: -1000),  # Trial's Double Down
+        # Tinker Time riders on the custom card (rough, per play of that card)
+        (r"Hits (\d+) additional times", lambda k: 3 * k),
+        (r"Draw (\d+) cards\.", lambda k: 1.5 * k),
+        (r"the enemy loses (\d+) HP", lambda k: k),
+        (r"Gain (\d+) Strength\. Gain \d+ Dexterity", lambda k: 4 * k),
+        (r"Apply (\d+) Weak\. Apply \d+ Vulnerable", lambda k: 3 * k),
+        (r"Add a random card into your (Hand)", lambda k: 3),
+        (r"Powers cost (\d+) \w+ less", lambda k: 2 * k),
+        (r"Gain (\d+) energy", lambda k: 3 * k),  # Energized ("At the end of combat, Upgrade a random card": above)
+        (r"Create a custom (card) to add to your Deck", lambda k: CARD_REWARD),
         (r"Remove (a|\d+) (?:cards?|Strikes|Defends)", lambda k: REMOVE_VALUE["Basic"] * k),
         (r"Transform (a|\d+) cards?|(a) card to Transform", lambda k: TRANSFORM * k),
         (r"Procure (a|\d+) (?:random )?(?:\w+ )?Potions?", lambda k: POTION_PICK * k),
-        (r"Enchant (an?) |Choose (an?) \w+ to Enchant", lambda k: ENCHANT),
+        (r"Enchant (an?|\d+) |Choose (an?) \w+ to Enchant", lambda k: ENCHANT),
         (r"Fight", lambda k: FIGHT),
     ]
     for pat, f in rules:
@@ -514,18 +718,46 @@ def option_value(state, option, text):
                 score += f(k)
     if "Heal to full HP" in text:
         hit, score = True, score + HP_VALUE * (p["max_hp"] - hp)
+    m = re.match(r"Make an? (Attack|Skill|Power)\.$", text)  # Tinker Time: the type the run plan lacks most
+    if m:
+        gaps = plan(state)["gaps"]
+        need = {"Attack": gaps.get("aoe", 0), "Skill": gaps.get("block", 0), "Power": gaps.get("scaling", 0)}
+        hit, score = True, score + CARD_REWARD * (1 + need[m[1]])
+    for m in re.finditer(r"Trade ([\w' ]+?) for ([\w' ]+?)\.", text):  # Relic Trader: one of yours for a new one
+        if (old := named("relics", m[1])) and (new := named("relics", m[2])):
+            hit, score = True, score + relic_value(new, state) - relic_value(old, state)
+    if re.search(r"Serve as today's Decider|not allowed to Reject", text):  # Trial: a random verdict page next
+        hit, score = True, score + trial_value(state)
+    for m in re.finditer(r"Gain an? ([A-Z][\w' ]+)\.", text):  # Crystal Sphere's Debt (a curse)
+        if card := named("cards", m[1]):
+            hit, score = True, score + card_value(card, state)
     for m in re.finditer(r"Add ([\w' ]+?) to your Deck", text):
-        hit = True
-        card = GAMEDATA["cards"].get(m[1].replace(" ", "").replace("'", ""), {})
-        score += CURSE if card.get("type") == "Curse" or m[1] in ("Regret", "Doubt") else CARD_REWARD
-    m = re.search(r"Obtain (?:the )?([A-Z][\w' ]+)\.", text)
-    if m and "random" not in m[1]:
-        name = m[1].replace(" ", "").replace("'", "")
-        if name in GAMEDATA["relics"]:
-            hit, score = True, score + relic_value(name)
+        hit, card = True, named("cards", m[1])
+        score += card_value(card, state) if card else CARD_REWARD
+    for m in re.finditer(r"card to Transform into ([\w' ]+)", text):  # Wood Carvings: a Basic becomes this card
+        if card := named("cards", m[1]):
+            hit, score = True, score + REMOVE_VALUE["Basic"] + card_value(card, state)
+    for m in re.finditer(r"(Obtain|Receive|Procure) (?:the )?([A-Z][\w' ]+)\.", text):
+        if "random" in m[2]:
+            continue
+        if relic := named("relics", m[2]):
+            hit, score = True, score + relic_value(relic, state)
+        elif potion := named("potions", m[2]):
+            hit, score = True, score + potion_value(potion, state)
+        elif card := named("cards", m[2]):  # Spoils Map, Bad Luck
+            hit, score = True, score + card_value(card, state)
     if hp <= 0:
         score = -1000
     return round(score, 1), hit
+
+
+def wiki_option(option, label):
+    """The wiki's text for this option (advisor/wiki.json events, matched by the option's English title), else None.
+    ponytail: Trial-style "DECIDE: Guilty" sub-options only match by their own label; a page-aware lookup if needed."""
+    event = (option.get("desc") or "").split(":")[-1].split(".")[0]
+    return next((re.sub(r"\s*\((?:relic|curse|card|potion)\)", "", t, flags=re.I)
+                 for lab, t in WIKI.get("events", {}).get(event, {}).get("options", [])
+                 if label and lab.lower() == str(label).lower()), None)
 
 
 def event_choice(state):
@@ -536,18 +768,21 @@ def event_choice(state):
 def event_advice(state, raw=False):
     """(headline, detail lines) for an event: every option's text and score."""
     ev = state["event"]
+    title = lambda r: GAMEDATA.get("text", {}).get((r[3]["desc"] or "").replace(".description", ".title")) \
+        or r[3]["relic"] or r[3]["key"]
     rated = []
     for o in ev["options"]:
         text = option_text(state, o) or (o["relic"] or o["key"] or "?")
         score, ok = option_value(state, o, text)
+        if not ok and not o["locked"]:  # the wiki's outcome text (Trial verdicts, Tea of Discourtesy...)
+            text = wiki_option(o, title((0, 0, "", o))) or text
+            score, ok = option_value(state, o, text)
         if o["locked"]:
             score = -math.inf
         rated.append((score, ok, text, o))
     best = max((r for r in rated if not r[3]["locked"]), key=lambda r: r[0], default=None)
     if raw:
         return best[3] if best else None
-    title = lambda r: GAMEDATA.get("text", {}).get((r[3]["desc"] or "").replace(".description", ".title")) \
-        or r[3]["relic"] or r[3]["key"]
     lines = [f"{'LOCKED ' if r[3]['locked'] else ''}{title(r)}: {r[2][:70]}  "
              f"[{'?' if not r[1] else f'{r[0]:+.0f}'}]" for r in rated]
     first = next((o["desc"] for o in ev["options"] if o["desc"]), "")

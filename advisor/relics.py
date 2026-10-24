@@ -42,7 +42,12 @@ IN_TURN_HOOKS = {"ModifyDamageAdditive", "ModifyDamageMultiplicative", "ModifyBl
 MODELED = {"StrikeDummy", "FakeStrikeDummy", "MiniatureCannon", "PenNib", "Vambrace", "ChemicalX",
            "Kunai", "Shuriken", "OrnamentalFan", "Kusarigama", "Nunchaku", "DaughterOfTheWind",
            "LetterOpener", "TuningFork", "LostWisp", "Permafrost", "IvoryTile", "IntimidatingHelmet",
-           "Orichalcum", "FakeOrichalcum", "PaelsTears", "CloakClasp", "RippleBasin", "ScreamingFlagon", "StoneCalendar"}
+           "Orichalcum", "FakeOrichalcum", "PaelsTears", "CloakClasp", "RippleBasin", "ScreamingFlagon", "StoneCalendar",
+           # P2 (2026-10-22, decompiled v0.107.1): hooks here and in solver.solve (cost, cap, draws, enemy damage)
+           "HelicalDart", "RainbowRing", "MummifiedHand", "MysticLighter", "VitruvianMinion", "PaelsLegion",
+           "BrilliantScarf", "VelvetChoker", "DiamondDiadem", "Pocketwatch", "ArtOfWar", "GamePiece", "IronClub",
+           "UndyingSigil", "MusicBox", "UnsettlingLamp", "PaelsEye",
+           "RazorTooth"}  # upgrades the played card for the combat: nothing more this turn (ponytail: replays)
 
 
 class Relics:
@@ -75,6 +80,8 @@ def dmg_add(card, R):
         add += sum(R.var(n, "ExtraDamage") for n in ("StrikeDummy", "FakeStrikeDummy") if n in R)
     if "MiniatureCannon" in R and card["upgraded"]:
         add += R.var("MiniatureCannon", "ExtraDamage")
+    if "MysticLighter" in R and card.get("enchantment"):  # Enchanted Attacks
+        add += R.var("MysticLighter", "Damage")
     return add
 
 
@@ -82,14 +89,23 @@ def dmg_mult(card, R, before):
     """before = Plays before this card. Pen Nib doubles every 10th attack."""
     if "PenNib" in R and card["type"] == "Attack" and (R.count("PenNib", "_attacksPlayed") + before.attacks) % 10 == 9:
         return 2
-    return 1
+    return minion(card, R)
 
 
-def block_mult(R, before):
-    """Vambrace doubles the first block gained from a card each combat."""
+def minion(card, R):
+    """Vitruvian Minion: cards with "Minion" in the name deal double damage and gain double Block."""
+    return 2 if "VitruvianMinion" in R and "Minion" in card["name"] else 1
+
+
+def block_mult(R, before, card=None):
+    """Vambrace doubles the first block gained from a card each combat; Pael's Legion the first card Block while
+    awake (cooldown 0, then it sleeps)."""
+    m = minion(card, R) if card else 1
     if "Vambrace" in R and not R.count("Vambrace", "_blockGainedThisCombat") and before.block == 0:
-        return 2
-    return 1
+        m *= 2
+    if "PaelsLegion" in R and not R.count("PaelsLegion", "_cooldown") and before.block == 0:
+        m *= 2
+    return m
 
 
 def x_bonus(R):
@@ -122,7 +138,18 @@ def after_play(card, spent, R, p):
             add("dmg_all", R.var("LetterOpener", "Damage"))
         if "TuningFork" in R and R.count("TuningFork", "_skillsPlayed") + p.skills == int(R.var("TuningFork", "Cards")):
             add("block", R.var("TuningFork", "Block"))
-    elif t == "Power":
+    if card["name"] == "Shiv" and "HelicalDart" in R:  # ponytail: CardTag.Shiv approximated by name
+        add("dex", R.var("HelicalDart", "DexterityPower"))
+    if "RainbowRing" in R and not R.count("RainbowRing", "_activationCountThisTurn"):
+        seen = [R.count("RainbowRing", f"_{k}PlayedThisTurn") + n
+                for k, n in (("attacks", p.attacks), ("skills", p.skills), ("powers", p.powers))]
+        mine = {"Attack": 0, "Skill": 1, "Power": 2}.get(t)
+        if all(seen) and mine is not None and seen[mine] == 1:  # this card completes Attack + Skill + Power
+            add("str", R.var("RainbowRing", "StrengthPower"))
+            add("dex", R.var("RainbowRing", "DexterityPower"))
+    if t == "Power":
+        if "MummifiedHand" in R:  # a random costed card in hand becomes free: ponytail: worth ~1 energy
+            add("energy", 1)
         if "LostWisp" in R:
             add("dmg_all", R.var("LostWisp", "Damage"))
         if "Permafrost" in R and not R.count("Permafrost", "_activatedThisCombat") and p.powers == 1:
@@ -132,6 +159,17 @@ def after_play(card, spent, R, p):
     if "IntimidatingHelmet" in R and spent >= R.var("IntimidatingHelmet", "Energy"):
         add("block", R.var("IntimidatingHelmet", "Block"))
     return fx
+
+
+def relic_draws(R, p, before):
+    """(cards drawn this turn, cards drawn next turn) by relics, for plays p after `before` earlier cards:
+    Game Piece (per Power), Iron Club (every Nth card this combat), Pocketwatch (<= threshold cards: next turn)."""
+    now = p.powers * R.var("GamePiece", "Cards") if "GamePiece" in R else 0
+    if "IronClub" in R:
+        n, done = int(R.var("IronClub", "Cards")) or 1, R.count("IronClub", "_cardsPlayed")
+        now += (done + p.cards) // n - done // n
+    nxt = R.var("Pocketwatch", "Cards") if "Pocketwatch" in R and before + p.cards <= R.var("Pocketwatch", "CardThreshold") else 0
+    return now, nxt
 
 
 def end_turn(R, block, hand_left, turn, p):

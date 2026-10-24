@@ -20,6 +20,17 @@ from relics import GAME_DIR
 CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon_cache")
 WIKI = "https://slaythespire.wiki.gg"  # the only host fetched from
 MAX_BYTES, TIMEOUT = 512 * 1024, 5
+# Monster intents (the reader's kind, e.g. SingleAttackIntent) -> pack icon (images/packed/intents/<name>/ frames,
+# or intent_<name>.png for death_blow / hidden)
+INTENTS = {"SingleAttack": "attack", "MultiAttack": "attack", "Buff": "buff", "Debuff": "debuff",
+           "CardDebuff": "card_debuff", "Defend": "defend", "Escape": "escape", "Heal": "heal", "Sleep": "sleep",
+           "Status": "status", "Stun": "stun", "Summon": "summon", "DeathBlow": "death_blow", "Hidden": "hidden"}
+
+
+def intent_icon(kind):
+    return INTENTS.get((kind or "").removesuffix("Intent"), "unknown")
+
+
 CHARACTERS = ("ironclad", "silent", "defect", "necrobinder", "regent")
 BCN = {17: (1, 0.5), 18: (2, 1), 19: (3, 1), 22: (7, 1)}  # Godot image format -> (Pillow bcn type, bytes per pixel)
 # Fixed UI icons: name -> pack path
@@ -109,8 +120,10 @@ def pack_paths(kind, name):
                 f"images/atlases/relic_atlas.sprites/{s}_*"]
     if kind == "potion":
         return [f"images/atlases/potion_atlas.sprites/{s}.tres", f"images/potions/{s}.png"]
+    if kind == "power":  # beta-only powers (Underworld) sit outside the atlas
+        return [pack_path(kind, name), f"images/powers/{s}.png", f"images/powers/beta/{s}.png"]
     if kind == "intent":  # attack, buff, debuff, defend, ...: the first animation frame
-        return [f"images/packed/intents/{name}/*"]
+        return [f"images/packed/intents/{name}/*", f"images/packed/intents/intent_{name}.png"]
     return [p] if (p := pack_path(kind, name)) else []
 
 
@@ -217,11 +230,12 @@ if __name__ == "__main__":  # coverage self-check (pack only, no downloads)
     from relics import GAMEDATA
     for kind, names in (("relic", GAMEDATA["relics"]), ("potion", GAMEDATA["potions"]),
                         ("power", GAMEDATA.get("powers", {}))):
-        miss = [n for n in names if get(kind, n, online=False) is None]
+        miss = [n for n in names if get(kind, n, online=False) is None and not n.startswith("Deprecated")
+                and n != "VakuuCardSelector"]  # placeholder classes, not real items
         print(f"{kind}: {len(names) - len(miss)}/{len(names)} from the pack; missing: {', '.join(miss[:12])}"
               + (" ..." if len(miss) > 12 else ""))
     fixed = [(k, n) for k, ns in (("ui", UI), ("energy", CHARACTERS), ("character", CHARACTERS), ("room", ROOMS),
-                                  ("intent", ("attack", "buff", "debuff", "defend")),
+                                  ("intent", sorted(set(INTENTS.values()) | {"unknown"})),
                                   ("orb", ("Lightning", "Frost", "Dark", "Plasma", "Glass"))) for n in ns]
     bad = [f"{k}/{n}" for k, n in fixed if get(k, n, online=False) is None]
     print(f"ui/energy/character/room/intent/orb: {len(fixed) - len(bad)}/{len(fixed)}; missing: {', '.join(bad)}")

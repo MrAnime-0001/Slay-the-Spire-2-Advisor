@@ -8,6 +8,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import threading
 import time
 import tkinter as tk
@@ -18,11 +19,11 @@ import winsound
 import autoplay  # first: sets DPI awareness before any window exists
 import icons
 from pathing import DEATH, best_routes, direction
-from archetypes import describe as describe_build
+from runplan import describe as describe_plan, plan, relic_fit
 from deck import profile
-from picker import choose_card, deck_pick, event_advice, hand_pick, pick, pile_pick, relic_value, rest_advice, shop_advice
+from picker import choose_card, deck_pick, event_advice, hand_pick, pick, pile_pick, potion_swap, relic_value, rest_advice, shop_advice
 from relics import GAMEDATA, KNOWLEDGE, Relics
-from solver import fight_type, next_turn_unblocked, solve, unmodeled_player_powers, unmodeled_powers
+from solver import fight_type, held_energy_reason, next_turn_unblocked, solve, unmodeled_player_powers, unmodeled_powers
 
 READER = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                       "..", "reader", "bin", "Release", "net10.0", "Sts2Reader.exe")
@@ -30,7 +31,7 @@ latest = {"line": None, "err": ""}
 ROOM = {"Monster": "M", "Elite": "E", "Unknown": "?", "Shop": "$", "Treasure": "T", "RestSite": "R", "Ancient": "A"}
 
 # --- look: toned to the game (warm dark panel, parchment text, bronze/gold trim), drawn with system fonts only.
-# It is a third-party tool: the header always says "unofficial"; game icons come from your own install (icons.py).
+# It is a third-party tool: the header always says "by Yutti" (its maker); game icons come from your own install (icons.py).
 BG, SURFACE, TRIM, TRIM_HI = "#16110d", "#211a14", "#8a6a3a", "#c9a45c"
 TEXT, MUTED, DIM = "#efe3c8", "#a8977a", "#6b5d4a"
 GOOD, WARN, BAD, HP_RED, HP_TRACK, STEEL = "#7fae5a", "#d9a441", "#b8392f", "#c0392b", "#3a1512", "#7da3c4"
@@ -80,7 +81,8 @@ else:
 root = tk.Tk()
 root.overrideredirect(True)
 root.attributes("-topmost", True, "-alpha", 0.96)
-root.geometry(os.environ.get("STS2_POS", "+40+40"))
+POS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "overlay_pos.txt")  # where you dragged it
+root.geometry(os.environ.get("STS2_POS") or (open(POS_FILE).read().strip() if os.path.exists(POS_FILE) else "+40+40"))
 root.configure(bg=TRIM)  # 1 px bronze frame around the panel
 _fams = set(tkfont.families())
 SERIF = next((f for f in ("Constantia", "Georgia") if f in _fams), "Segoe UI")
@@ -99,7 +101,7 @@ err = tk.Label(panel, font=F_SMALL, fg=BAD, bg=BG, anchor="w", justify="left", w
 footer = tk.Label(panel, font=F_SMALL, fg=DIM, bg=BG, anchor="w", text="drag to move · Ctrl+right-click to quit")
 bottom = tk.Frame(panel, bg=BG, height=8)
 tk.Label(header, text="Advisor", font=F_TITLE, fg=TRIM_HI, bg=BG).pack(side="left")
-tk.Label(header, text="unofficial", font=F_SMALL, fg=DIM, bg=BG).pack(side="left", padx=(6, 0), pady=(3, 0))
+tk.Label(header, text="by Yutti", font=F_SMALL, fg=DIM, bg=BG).pack(side="left", padx=(6, 0), pady=(3, 0))
 more = tk.Label(header, font=F_SMALL, fg=MUTED, bg=BG)
 more.pack(side="right")
 pill = tk.Label(header, font=(SANS, 8, "bold"), padx=6)
@@ -161,7 +163,7 @@ def start_drag(e):
 
 root.bind_all("<ButtonPress-1>", start_drag)
 root.bind_all("<B1-Motion>", lambda e: root.geometry(f"+{e.x_root - root._dx}+{e.y_root - root._dy}"))
-root.bind_all("<Control-Button-3>", lambda e: (proc.kill(), root.destroy()))
+root.bind_all("<Control-Button-3>", lambda e: close())
 
 
 # --- names and icons ---
@@ -251,7 +253,7 @@ def steps_view(state, plan):
         foe = by_id.get(cid) if cid is not None else None
         intent = ((foe or {}).get("intents") or [{}])[0].get("kind") or ""
         out.append({"n": i, "name": name, "card": c, "kind": kind, "target": tgt, "ok": ok,
-                    "intent": next((k for k in ("attack", "debuff", "buff", "defend") if k in intent.lower()), None)})
+                    "intent": icons.intent_icon(intent) if intent else None})
     return out
 
 
@@ -350,7 +352,7 @@ def combat_stats(state):
             if state.get("stars"):
                 icon(r, "ui", "star", WARN, 14, "★").pack(side="left")
                 label(r, f"{state['stars']}", F_SMALL, TEXT).pack(side="left", padx=(2, 10))
-            for o in state.get("orbs") or []:  # channeled orbs, oldest first (evoked first)
+            for o in reversed(state.get("orbs") or []):  # oldest (evoked first) on the right, like the game
                 icon(r, "orb", o["name"], STEEL, 16, o["name"][:1]).pack(side="left", padx=(0, 2))
             if pets:
                 label(r, "  ·  ".join(pets), F_SMALL, MUTED).pack(side="right")
@@ -392,7 +394,27 @@ def kit(state):
             out.append("your powers not modeled: " + ", ".join(mine))
     if tip := boss_tip(state):
         extra.append(f"boss tip: {tip}")
+    extra += [f"counter: {t}" for t in wiki_tips(state)]
     return out, extra
+
+
+try:  # tools/import_wiki.py output (local community text); optional
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "wiki.json"), encoding="utf-8") as _f:
+        WIKI = json.load(_f)
+except (OSError, ValueError):
+    WIKI = {}
+
+
+def wiki_tips(state, n=1, width=150):
+    """Elite/boss fights: the wiki's first "Useful Cards" note for each enemy type alive (markup stripped)."""
+    if state.get("status") != "combat" or fight_type(state) == "Monster":
+        return []
+    out = []
+    for name in dict.fromkeys(e["name"] for e in state.get("enemies", []) if e["creature"]["hp"] > 0):
+        for t in WIKI.get("monsters", {}).get(name, {}).get("useful", [])[:n]:
+            t = re.sub(r"\*\*|\[[^]]*intent\]\s*", "", t)
+            out.append(t if len(t) <= width else t[:width - 1].rsplit(" ", 1)[0] + "…")
+    return out
 
 
 def boss_tip(state):
@@ -402,9 +424,8 @@ def boss_tip(state):
 
 
 def deck_lines(state):
-    """What the deck does per turn vs the act boss, and which build it is (for picks and the shop)."""
-    build = describe_build(state.get("deck", []), state.get("relics", []))
-    return [profile(state)] + ([f"build: {build}"] if build else [])
+    """What the deck does per turn vs the act boss, and the run plan (target build, commitment, gaps)."""
+    return [profile(state), describe_plan(plan(state))]
 
 
 def advice_view(state, chip_text, head, body):
@@ -426,13 +447,14 @@ def view_of(state, line):
     if state["status"] != "combat" and state.get("treasure"):  # chest: one relic per player, you vote for one
         ranked = sorted(state["treasure"], key=lambda r: -relic_value(r, state))
         return {"stats": run_stats(state, "treasure"), "title": "take",
-                "ranks": [("relic", r, relic_value(r, state), "") for r in ranked]}
+                "ranks": [("relic", r, relic_value(r, state), relic_fit(r, plan(state), state.get("deck", []))[1])
+                          for r in ranked]}
     if state.get("card_reward"):
         best, rated = pick(state["card_reward"], state["deck"], state.get("relics", []), state)
         rated = sorted(rated, key=lambda r: -r[1])
         ranks = [("card" if name in GAMEDATA.get("cards", {}) else None, name, score,
-                  ("" if ok else "? ") + ("" if saved is None else f"{saved:+.1f} HP" + (" · dilutes" if saved < 0 else "")))
-                 for name, score, ok, saved in rated]
+                  ("" if ok else "? ") + (why or ("" if saved is None else f"{saved:+.1f} HP" + (" · dilutes" if saved < 0 else ""))))
+                 for name, score, ok, saved, why in rated]
         return {"stats": run_stats(state, "card reward"), "title": "pick", "ranks": ranks, "more": deck_lines(state),
                 "head": "Skip: none is worth a deck slot" if best == "Skip" else None}
     if (state.get("rest_site") or {}).get("chosen") is False:
@@ -444,6 +466,11 @@ def view_of(state, line):
         v = advice_view(state, "shop", head, body)
         v["more"] += deck_lines(state)
         return v
+    pots = [t.split(":", 2)[2] for t in (state.get("ui") or {}).get("targets", []) if t.startswith("reward:potion:")]
+    if state["status"] != "combat" and (swaps := [(p, sw) for p in pots if (sw := potion_swap(state, p))]):
+        p, (drop, gain) = max(swaps, key=lambda x: x[1][1])  # rewards with full slots: discard first, then claim
+        return advice_view(state, "rewards", f"Swap: drop {title('potions', drop)} for {title('potions', p)}",
+                           [f"worth +{gain:.1f} more than {title('potions', drop)}"])
     if state["status"] == "out_of_combat" and (routes := best_routes(state)):
         best = routes[0]
         return {"stats": run_stats(state, f"map · act {state['act'] + 1}"), "title": "next",
@@ -473,7 +500,8 @@ def view_of(state, line):
                  body=[f"{sel['min']}-{sel['max']} cards"])
     else:
         plans = solve(state)
-        v.update(title="plan", steps=steps_view(state, plans[0]), outcome=plans[0],
+        why = held_energy_reason(state, plans[0])
+        v.update(title="plan", steps=steps_view(state, plans[0]), outcome=plans[0], body=[why] if why else [],
                  alts=[f"{', '.join(title('potions' if s[5] == 'potion' else 'cards', s[3]['name']) for s in pl.steps) or 'End turn'}  ·  {outcome_text(pl)}"
                        for pl in plans[1:]])
     return v
@@ -556,13 +584,21 @@ def record(state, line):
     global recorded
     if isinstance(proc, Demo):
         return  # a replay isn't a new fight
-    key = (state.get("encounter"), state["turn"], state["energy"], state["player"]["hp"],
-           tuple(c["name"] for c in state["hand"]), tuple(e["creature"]["hp"] for e in state["enemies"]))
-    if key == recorded:
+    key = lambda st: (st.get("seed"), st.get("encounter"), st["turn"], st["energy"], st["player"]["hp"],
+                      tuple(c["name"] for c in st["hand"]), tuple(e["creature"]["hp"] for e in st["enemies"]))
+    path = os.path.join(RECORDINGS, time.strftime("%Y-%m-%d") + ".jsonl")
+    if recorded is None and os.path.exists(path):  # after an advisor restart: don't record the same state twice
+        try:
+            with open(path, "rb") as f:
+                f.seek(max(0, os.path.getsize(path) - 200000))
+                recorded = key(json.loads(f.read().decode("utf-8", "ignore").strip().splitlines()[-1]))
+        except (ValueError, IndexError, KeyError, OSError):
+            pass
+    if key(state) == recorded:
         return
-    recorded = key
+    recorded = key(state)
     os.makedirs(RECORDINGS, exist_ok=True)
-    with open(os.path.join(RECORDINGS, time.strftime("%Y-%m-%d") + ".jsonl"), "a", encoding="utf-8") as f:
+    with open(path, "a", encoding="utf-8") as f:
         f.write(line + "\n")
 
 
@@ -619,5 +655,70 @@ def render():
             layout({})
 
 
+def refresh_learned():
+    """L1: re-learn from finished runs when the game wrote a newer run file than learned.json (background)."""
+    import picker
+    here = os.path.dirname(os.path.abspath(__file__))
+    out, tool = os.path.join(here, "learned.json"), os.path.join(here, "..", "tools", "learn.py")
+    try:
+        runs = history_runs()
+        if runs and (not os.path.exists(out) or max(map(os.path.getmtime, runs)) > os.path.getmtime(out)):
+            subprocess.run([sys.executable, "-I", tool], capture_output=True, timeout=120,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            with open(out, encoding="utf-8") as f:
+                picker.LEARNED = json.load(f)
+    except Exception:
+        traceback.print_exc()  # learning is optional: the advisor works without it
+
+
+def history_runs():
+    import glob
+    return glob.glob(os.path.join(os.environ.get("APPDATA", ""), "SlayTheSpire2", "steam", "*", "profile*", "saves",
+                                  "history", "*.run"))
+
+
+def close(restart=False):
+    with open(POS_FILE, "w") as f:
+        f.write("+%d+%d" % (root.winfo_x(), root.winfo_y()))
+    watch["restart"] = restart
+    proc.kill()
+    root.destroy()
+
+
+# Auto-update: when the advisor's source changes (edits made while you play), restart on the new code once the files
+# have been quiet for UPDATE_QUIET seconds, they compile, and autopilot isn't running. run.bat rebuilds the reader and
+# relaunches on exit code RESTART_CODE.
+RESTART_CODE, UPDATE_QUIET = 3, 15
+
+
+def sources():
+    import glob
+    here = os.path.dirname(os.path.abspath(__file__))
+    files = glob.glob(os.path.join(here, "*.py")) + glob.glob(os.path.join(here, "..", "reader", "*.cs*"))
+    return {f: os.path.getmtime(f) for f in files if not os.path.basename(f).startswith("test_")}
+
+
+def check_update():
+    now = sources()
+    if now != watch["seen"]:
+        watch["seen"], watch["changed"] = now, time.time()
+    busy = worker["thread"] and worker["thread"].is_alive()
+    if watch["changed"] and time.time() - watch["changed"] >= UPDATE_QUIET and not busy:
+        import py_compile
+        try:
+            for f in now:
+                if f.endswith(".py"):
+                    py_compile.compile(f, doraise=True)
+            return close(restart=True)
+        except py_compile.PyCompileError as e:
+            shown_err["text"] = "update not loaded (doesn't compile): " + str(e.msg).strip().splitlines()[-1]
+            watch["changed"] = 0  # wait for the next edit
+    root.after(2000, check_update)
+
+
+watch = {"seen": sources(), "changed": 0, "restart": False}
+threading.Thread(target=refresh_learned, daemon=True).start()
 tick()
+root.after(2000, check_update)
 root.mainloop()
+sys.exit(RESTART_CODE if watch["restart"] else 0)

@@ -41,9 +41,34 @@ def attacks(move, asc, powers=None):
     return out
 
 
+TEAM = "CombatState.GetTeammatesOf(Creature)"  # The Obscura's Sail: its whole side, itself included
+
+
 def self_power(move, asc, power="StrengthPower"):
     return sum(num(e["amt"], asc) or 0 for e in move["effects"]
-               if e.get("power") == power and e.get("on") == "self")
+               if e.get("power") == power and e.get("on") in ("self", TEAM))
+
+
+def summon_dmg(name, moves, asc):
+    """Expected damage per turn of what a forecast turn's moves {ID: p} summon (Fogmog's Eye With Teeth, Living
+    Fog's Gas Bomb, Ovicopter's eggs...): the summon's mean attack over its moves. ponytail: no Strength, no cycle."""
+    ai, out = MONSTERS.get(name), 0
+    for mv, p in moves.items():
+        for e in (ai["moves"][mv]["effects"] if ai and mv in ai["moves"] else ()):
+            sm = MONSTERS.get(e.get("summon"))
+            if sm:
+                per = [sum(d * h for d, h in attacks(m, asc)) for m in sm["moves"].values()]
+                out += p * sum(per) / max(len(per), 1)
+    return out
+
+
+def ally_strength(name, moves, asc):
+    """Expected Strength a forecast turn's moves {ID: p} give the enemy's teammates (not itself).
+    ponytail: the Queen's BURN_BRIGHT_FOR_ME amount (a runtime var) isn't known, counted 0."""
+    ai = MONSTERS.get(name)
+    return sum(p * sum(num(e["amt"], asc) or 0 for e in ai["moves"][mv]["effects"]
+                       if e.get("power") == "StrengthPower" and e.get("on") == TEAM)
+               for mv, p in moves.items() if ai and mv in ai["moves"])
 
 
 def follow(ai, state, prev, used, slot, depth=0):
@@ -77,6 +102,13 @@ def follow(ai, state, prev, used, slot, depth=0):
     return out
 
 
+# TemporaryStrengthPower subclasses (both builds): they end at the end of the owner's turn, so the moves after the
+# shown one hit with the Strength back. Down = Strength lost (Enfeebling Touch...), up = gained.
+TEMP_STRENGTH_DOWN = {"CrushUnderPower", "DarkShacklesPower", "DyingStarPower", "EnfeeblingTouchPower", "ManglePower",
+                      "MonarchsGazeStrengthDownPower", "PiercingWailPower", "ShacklingPotionPower"}
+TEMP_STRENGTH_UP = {"CoordinatePower", "FeedingFrenzyPower", "FlexPotionPower", "ReptileTrinketPower", "SetupStrikePower"}
+
+
 def predict(enemy, asc=0, turns=2):
     """Expected damage to you on each of the next `turns` enemy turns AFTER the one shown now:
     [{"dmg": float, "moves": {ID: p}}]. Empty when the AI table or current move is unknown."""
@@ -86,8 +118,11 @@ def predict(enemy, asc=0, turns=2):
     powers = {p["name"]: p["amount"] for p in enemy["creature"].get("powers", [])}
     shown = ai["moves"][move]
     # Byrdonis Territorial, Cultist Ritual: +Strength at the end of each of its turns
-    territorial = powers.get("TerritorialPower", 0) + powers.get("RitualPower", 0)
+    # Zapbot's High Voltage (game text: end of its turn, the wiki says start) works the same way
+    territorial = powers.get("TerritorialPower", 0) + powers.get("RitualPower", 0) + powers.get("HighVoltagePower", 0)
     strength = powers.get("StrengthPower", 0) + self_power(shown, asc) + territorial
+    strength += sum(n for p, n in powers.items() if p in TEMP_STRENGTH_DOWN)
+    strength -= sum(n for p, n in powers.items() if p in TEMP_STRENGTH_UP)
     # Vigor boosts the next attack's hits; the shown move uses up existing Vigor if it attacks.
     vigor = (0 if attacks(shown, asc) else powers.get("VigorPower", 0)) + self_power(shown, asc, "VigorPower")
     used = set(enemy.get("history", [])) | {move}
@@ -101,13 +136,16 @@ def predict(enemy, asc=0, turns=2):
         for mv, p in dist.items():
             for to, q in follow(ai, mv, mv, used, enemy.get("slot")).items():
                 nxt[to] = nxt.get(to, 0) + p * q
-        dmg = sum(p * sum((d + strength + vigor) * h for d, h in attacks(ai["moves"][mv], asc, powers))
+        dmg = sum(p * sum(max(0, d + strength + vigor) * h for d, h in attacks(ai["moves"][mv], asc, powers))
+                  for mv, p in nxt.items())
+        # its biggest single hit (Buffer stops one HP loss, not the whole turn)
+        big = sum(p * max((max(0, d + strength + vigor) for d, _ in attacks(ai["moves"][mv], asc, powers)), default=0)
                   for mv, p in nxt.items())
         if any(attacks(ai["moves"][mv], asc) for mv in nxt):
             vigor = 0  # ponytail: Vigor dropped once any likely move attacks
         strength += sum(p * self_power(ai["moves"][mv], asc) for mv, p in nxt.items()) + territorial
         vigor += sum(p * self_power(ai["moves"][mv], asc, "VigorPower") for mv, p in nxt.items())
         used |= set(nxt)
-        out.append({"dmg": round(dmg, 1), "moves": {k: round(v, 2) for k, v in nxt.items()}})
+        out.append({"dmg": round(dmg, 1), "hit": round(big, 1), "moves": {k: round(v, 2) for k, v in nxt.items()}})
         dist = nxt
     return out

@@ -176,7 +176,7 @@ def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None, pile=None
                 continue
             if not steps:
                 time.sleep(0.3)  # a pick prompt can open just after the last card resolves
-                if any(get_state().get(k) for k in ("hand_select", "choose_card", "card_grid")):
+                if picking(get_state()):
                     continue
                 spare = affordable(get_state())
                 if spare and not rechecked:  # energy left and a card we could play: replan once from a settled state
@@ -197,8 +197,12 @@ def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None, pile=None
         s = get_state()
         log("ending turn")
         tap(SCAN_E)
-        if not wait_until(lambda: not my_turn(get_state()) or get_state().get("turn") != s["turn"], 5, cancel):
+        if not wait_until(lambda: not my_turn(get_state()) or get_state().get("turn") != s["turn"]
+                          or picking(get_state()), 5, cancel):
             return "end turn didn't register"
+        if picking(get_state()) and my_turn(get_state()):  # a potion's pick screen opened late (Colorless Potion's
+            log("a pick screen opened: handling it, then ending the turn")  # Choose a Card): E did nothing
+            continue
         turns += 1
     return "cancelled"
 
@@ -369,6 +373,8 @@ def play_step(step, s, get_state, cancel, log):
                 if c["name"] == card["name"] and c["upgraded"] == card["upgraded"]), None)
     if idx is None or idx > 9:
         return f"{label} not in hand"
+    if picking(get_state()):  # opened since s was read: the loop handles it, then replans
+        return None
     before = ([c["name"] for c in s["hand"]], s["energy"])
     log(f"playing {label}" + (f" -> {target_name} (combat_id={combat_id})" if target_name else ""))
 
@@ -387,7 +393,7 @@ def play_step(step, s, get_state, cancel, log):
             time.sleep(0.35)  # let the play animation settle before picking up the next card
             return None
         drop(get_state)
-        if cancel.is_set() or get_state().get("status") != "combat":
+        if cancel.is_set() or get_state().get("status") != "combat" or picking(get_state()):
             return None
         time.sleep(0.5)
         if changed(get_state(), before):  # it went through late
@@ -447,11 +453,17 @@ def target_gone(st, combat_id):
     return st.get("status") != "combat" or combat_id not in [e.get("combat_id") for e in st.get("enemies", [])]
 
 
+def picking(st):
+    """A pick screen is up (Colorless Potion's Choose a Card can open after the potion already left the bar):
+    card keys and enemy hovers do nothing under it, so a play/aim in progress stops and the loop handles it."""
+    return any(st.get(k) for k in ("hand_select", "choose_card", "card_grid"))
+
+
 def drop(get_state):
-    """Esc puts a held card back, but with nothing held (or outside our turn) it opens the pause menu instead.
-    Readers that report `holding` press it only when a card is held; older ones fall back to "during our turn"."""
-    s = get_state()
-    if s.get("holding") or (s.get("holding") is None and my_turn(s)):
+    """Esc puts a held card back, but with nothing held (or outside our turn) it opens the pause menu instead, so
+    it's pressed only when the reader confirms a held card. Unknown (None: hand node not found) = no Esc; the next
+    card key picks up that card instead (a failed unplayable card is never held, and Esc then paused the game)."""
+    if get_state().get("holding"):
         tap(SCAN_ESC)
 
 
@@ -459,7 +471,7 @@ def missed(get_state, cancel, combat_id, name):
     """After a failed aim: target died / fight ended / cancelled -> None (the loop re-plans or stops
     cleanly); otherwise a real targeting failure."""
     drop(get_state)
-    if cancel.is_set() or target_gone(get_state(), combat_id):
+    if cancel.is_set() or target_gone(get_state(), combat_id) or picking(get_state()):
         return None
     return f"couldn't find {name} on screen"
 
@@ -490,9 +502,9 @@ def aim(combat_id, at, get_state, cancel, game=None):
             return still_on()
         return False
 
-    tries = ([positions.pop(combat_id)] if combat_id in positions else []) + SWEEP
+    tries = ([positions[combat_id]] if combat_id in positions else []) + SWEEP  # kept if a pick screen interrupts
     found = seek(tries, move, on_it, get_state, cancel, f"enemy combat_id={combat_id}", game,
-                 gone=lambda st: target_gone(st, combat_id))
+                 gone=lambda st: target_gone(st, combat_id) or picking(st))
     if found is not None:
         positions[combat_id] = cur[0]  # only confirmed points are remembered
     return found is not None

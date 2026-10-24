@@ -2521,3 +2521,1142 @@ potions = [{'slot': 0, 'name': 'SpeedPotion'}, {'slot': 1, 'name': 'BlockPotion'
 00:59:44 ending turn
 00:59:45 turn 8: waiting for your turn
 00:59:47 stopped: you died (turn 7)
+21:31:58 turn 1: waiting for your turn
+21:31:59 playing StrikeIronclad -> Toadpole #1 (combat_id=1)
+21:32:01   aimed at combat_id=1 at (0.6, 0.6)
+21:32:01 playing DefendIronclad
+21:32:02 playing DefendIronclad
+21:32:03 ending turn
+21:32:03 turn 2: waiting for your turn
+21:32:07 playing Bash -> Toadpole #1 (combat_id=1)
+21:32:07   aimed at combat_id=1 at (0.6, 0.6)
+21:32:08 playing StrikeIronclad -> Toadpole #1 (combat_id=1)
+21:32:09   aimed at combat_id=1 at (0.6, 0.6)
+21:32:09 ending turn
+21:32:10 turn 3: waiting for your turn
+21:32:13 playing DefendIronclad
+21:32:14 playing StrikeIronclad -> Toadpole (combat_id=2)
+21:32:16   aimed at combat_id=2 at (0.8, 0.6)
+21:32:17 playing StrikeIronclad -> Toadpole (combat_id=2)
+21:32:17   aimed at combat_id=2 at (0.8, 0.6)
+21:32:18 drinking ColorlessPotion
+21:32:22 ending turn
+21:32:27 stopped: end turn didn't register
+21:35:15 turn 1: waiting for your turn
+21:35:15 choosing EternalArmor
+21:35:17 turn 1: waiting for your turn
+21:35:18 playing EternalArmor
+21:35:19 ending turn
+21:35:19 turn 2: waiting for your turn
+21:35:23 playing Bash -> Toadpole (combat_id=2)
+21:35:25   aimed at combat_id=2 at (0.8, 0.6)
+21:35:26 playing StrikeIronclad -> Toadpole (combat_id=2)
+21:35:26   aimed at combat_id=2 at (0.8, 0.6)
+21:35:27 stopped: combat over after 2 turns
+21:35:39 turn 1: waiting for your turn
+21:35:39 playing Uppercut -> Seapunk (combat_id=1)
+21:35:41   aimed at combat_id=1 at (0.7, 0.6)
+21:35:42 playing DefendIronclad
+21:35:43 ending turn
+21:35:43 turn 2: waiting for your turn
+21:35:47 playing StrikeIronclad -> Seapunk (combat_id=1)
+21:35:47   aimed at combat_id=1 at (0.7, 0.6)
+21:35:48 playing DefendIronclad
+21:35:49 playing DefendIronclad
+21:35:50 ending turn
+21:35:50 turn 3: waiting for your turn
+21:35:54 playing Bash -> Seapunk (combat_id=1)
+21:35:54   aimed at combat_id=1 at (0.7, 0.6)
+21:35:55 playing StrikeIronclad -> Seapunk (combat_id=1)
+21:35:56   aimed at combat_id=1 at (0.7, 0.6)
+21:35:56 ending turn
+21:35:56 turn 4: waiting for your turn
+21:36:00 playing Uppercut -> Seapunk (combat_id=1)
+21:36:00   aimed at combat_id=1 at (0.7, 0.6)
+21:36:02 stopped: combat over after 4 turns
+21:36:11 turn 1: waiting for your turn
+21:36:12 playing DefendIronclad
+21:36:13 playing StrikeIronclad -> CorpseSlug #1 (combat_id=1)
+21:36:15   aimed at combat_id=1 at (0.65, 0.6)
+21:36:15 playing DefendIronclad
+21:36:16 ending turn
+21:36:16 turn 2: waiting for your turn
+21:36:20 playing Uppercut -> CorpseSlug #1 (combat_id=1)
+21:36:21   aimed at combat_id=1 at (0.65, 0.6)
+21:36:21 playing StrikeIronclad -> CorpseSlug #1 (combat_id=1)
+21:36:22   aimed at combat_id=1 at (0.65, 0.6)
+21:36:23 playing BattleTrance
+21:36:24 ending turn
+21:36:25 turn 3: waiting for your turn
+21:36:28 playing Uppercut -> CorpseSlug (combat_id=2)
+21:36:30   aimed at combat_id=2 at (0.8, 0.6)
+21:36:31 playing StrikeIronclad -> CorpseSlug (combat_id=2)
+21:36:31   aimed at combat_id=2 at (0.8, 0.6)
+21:36:32 ending turn
+21:36:32 turn 4: waiting for your turn
+21:36:37 playing Bash -> CorpseSlug (combat_id=2)
+21:36:38   aimed at combat_id=2 at (0.8, 0.6)
+21:36:39 stopped: combat over after 4 turns
+21:36:50 turn 1: waiting for your turn
+21:36:51 playing Uppercut -> LivingFog (combat_id=1)
+21:36:53   aimed at combat_id=1 at (0.7, 0.6)
+21:36:53 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:36:54   aimed at combat_id=1 at (0.7, 0.6)
+21:36:54 ending turn
+21:36:55 turn 2: waiting for your turn
+21:36:59 playing Spite -> LivingFog (combat_id=1)
+21:36:59   aimed at combat_id=1 at (0.7, 0.6)
+21:37:00 playing DefendIronclad
+21:37:00 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:37:01   aimed at combat_id=1 at (0.7, 0.6)
+21:37:01 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:37:02   aimed at combat_id=1 at (0.7, 0.6)
+21:37:03 ending turn
+21:37:03 turn 3: waiting for your turn
+21:37:07 playing BattleTrance
+21:37:08 playing DefendIronclad
+21:37:11 DefendIronclad didn't play, retrying
+21:37:14 DefendIronclad didn't play, retrying
+21:37:14 stopped: DefendIronclad didn't play
+21:40:19 turn 1: waiting for your turn
+21:40:20 playing Bash -> GasBomb (combat_id=2)
+21:40:23   aimed at combat_id=2 at (0.55, 0.5)
+21:40:24 playing Spite -> LivingFog (combat_id=1)
+21:40:26   aimed at combat_id=1 at (0.7, 0.6)
+21:40:26 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:40:27   aimed at combat_id=1 at (0.7, 0.6)
+21:40:27 ending turn
+21:40:27 turn 2: waiting for your turn
+21:40:31 playing Uppercut -> LivingFog (combat_id=1)
+21:40:31   aimed at combat_id=1 at (0.7, 0.6)
+21:40:32 playing DefendIronclad
+21:40:33 ending turn
+21:40:33 turn 3: waiting for your turn
+21:40:38 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:40:39   aimed at combat_id=1 at (0.7, 0.6)
+21:40:39 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:40:40   aimed at combat_id=1 at (0.7, 0.6)
+21:40:40 playing StrikeIronclad -> LivingFog (combat_id=1)
+21:40:41   aimed at combat_id=1 at (0.7, 0.6)
+21:40:42 stopped: combat over after 3 turns
+21:40:53 turn 1: waiting for your turn
+21:40:54 playing Uppercut -> TwoTailedRat #2 (combat_id=2)
+21:40:56   aimed at combat_id=2 at (0.8, 0.6)
+21:40:56 playing StrikeIronclad -> TwoTailedRat #2 (combat_id=2)
+21:40:57   aimed at combat_id=2 at (0.8, 0.6)
+21:40:58 ending turn
+21:40:58 turn 2: waiting for your turn
+21:41:02 playing BattleTrance
+21:41:03 playing StrikeIronclad -> TwoTailedRat #1 (combat_id=1)
+21:41:05   aimed at combat_id=1 at (0.7, 0.6)
+21:41:05 playing StrikeIronclad -> TwoTailedRat #1 (combat_id=1)
+21:41:06   aimed at combat_id=1 at (0.7, 0.6)
+21:41:06 playing StrikeIronclad -> TwoTailedRat #1 (combat_id=1)
+21:41:07   aimed at combat_id=1 at (0.7, 0.6)
+21:41:08 ending turn
+21:41:08 turn 3: waiting for your turn
+21:41:12 playing Uppercut -> TwoTailedRat (combat_id=3)
+21:41:15   aimed at combat_id=3 at (0.9, 0.6)
+21:41:16 playing SwordBoomerang
+21:41:17 stopped: combat over after 3 turns
+21:41:35 turn 1: waiting for your turn
+21:41:36 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:41:38   aimed at combat_id=1 at (0.6, 0.6)
+21:41:38 playing DefendIronclad
+21:41:39 playing Inferno
+21:41:40 playing Spite -> TerrorEel (combat_id=1)
+21:41:41   aimed at combat_id=1 at (0.6, 0.6)
+21:41:41 ending turn
+21:41:41 turn 2: waiting for your turn
+21:41:45 playing Uppercut -> TerrorEel (combat_id=1)
+21:41:46   aimed at combat_id=1 at (0.6, 0.6)
+21:41:46 playing BattleTrance
+21:41:47 playing SwordBoomerang
+21:41:48 ending turn
+21:41:49 turn 3: waiting for your turn
+21:41:54 playing Uppercut -> TerrorEel (combat_id=1)
+21:41:55   aimed at combat_id=1 at (0.6, 0.6)
+21:41:56 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:41:56   aimed at combat_id=1 at (0.6, 0.6)
+21:41:57 playing Spite -> TerrorEel (combat_id=1)
+21:41:57   aimed at combat_id=1 at (0.6, 0.6)
+21:41:58 ending turn
+21:41:59 turn 4: waiting for your turn
+21:42:02 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:42:03   aimed at combat_id=1 at (0.6, 0.6)
+21:42:03 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:42:04   aimed at combat_id=1 at (0.6, 0.6)
+21:42:04 playing BattleTrance
+21:42:05 playing SwordBoomerang
+21:42:06 ending turn
+21:42:06 turn 5: waiting for your turn
+21:42:12 playing Bash -> TerrorEel (combat_id=1)
+21:42:12   aimed at combat_id=1 at (0.6, 0.6)
+21:42:13 playing Spite -> TerrorEel (combat_id=1)
+21:42:13   aimed at combat_id=1 at (0.6, 0.6)
+21:42:14 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:42:14   aimed at combat_id=1 at (0.6, 0.6)
+21:42:15 stopped: combat over after 5 turns
+21:45:42 turn 1: waiting for your turn
+21:45:43 playing StrikeIronclad -> SkulkingColony (combat_id=1)
+21:45:44   aimed at combat_id=1 at (0.7, 0.6)
+21:45:45 playing Inferno
+21:45:46 playing DefendIronclad
+21:45:47 ending turn
+21:45:47 turn 2: waiting for your turn
+21:45:51 playing Uppercut -> SkulkingColony (combat_id=1)
+21:45:51   aimed at combat_id=1 at (0.7, 0.6)
+21:45:52 playing Spite -> SkulkingColony (combat_id=1)
+21:45:53   aimed at combat_id=1 at (0.7, 0.6)
+21:45:53 playing BattleTrance
+21:45:54 playing DefendIronclad
+21:45:55 ending turn
+21:45:55 turn 3: waiting for your turn
+21:46:01 playing Taunt+ -> SkulkingColony (combat_id=1)
+21:46:01   aimed at combat_id=1 at (0.7, 0.6)
+21:46:02 playing StrikeIronclad -> SkulkingColony (combat_id=1)
+21:46:02   aimed at combat_id=1 at (0.7, 0.6)
+21:46:03 playing SwordBoomerang
+21:46:04 playing Spite -> SkulkingColony (combat_id=1)
+21:46:04   aimed at combat_id=1 at (0.7, 0.6)
+21:46:05 ending turn
+21:46:05 turn 4: waiting for your turn
+21:46:09 playing StrikeIronclad -> SkulkingColony (combat_id=1)
+21:46:10   aimed at combat_id=1 at (0.7, 0.6)
+21:46:10 playing StrikeIronclad -> SkulkingColony (combat_id=1)
+21:46:11   aimed at combat_id=1 at (0.7, 0.6)
+21:46:11 stopped: combat over after 4 turns
+21:46:34 turn 1: waiting for your turn
+21:46:38 playing Uppercut -> PhantasmalGardener #1 (combat_id=1)
+21:46:39   aimed at combat_id=1 at (0.5, 0.6)
+21:46:40 playing Inferno
+21:46:42 ending turn
+21:46:42 turn 2: waiting for your turn
+21:46:49 playing Taunt+ -> PhantasmalGardener #1 (combat_id=2)
+21:46:51   aimed at combat_id=2 at (0.6, 0.6)
+21:46:51 playing BattleTrance
+21:46:54 playing DefendIronclad
+21:46:56 playing DefendIronclad
+21:46:57 playing Spite -> PhantasmalGardener #3 (combat_id=4)
+21:47:00   aimed at combat_id=4 at (0.9, 0.6)
+21:47:01 ending turn
+21:47:01 turn 3: waiting for your turn
+21:47:08 playing Bash -> PhantasmalGardener #1 (combat_id=2)
+21:47:08   aimed at combat_id=2 at (0.6, 0.6)
+21:47:09 playing BattleTrance
+21:47:10 playing StrikeIronclad -> PhantasmalGardener (combat_id=3)
+21:47:12   aimed at combat_id=3 at (0.75, 0.6)
+21:47:13 ending turn
+21:47:13 turn 4: waiting for your turn
+21:47:17 stopped: combat over after 3 turns
+21:47:29 turn 1: waiting for your turn
+21:47:30 playing Uppercut -> GremlinMerc (combat_id=1)
+21:47:31   aimed at combat_id=1 at (0.65, 0.6)
+21:47:32 playing SwordBoomerang
+21:47:33 ending turn
+21:47:33 turn 2: waiting for your turn
+21:47:37 playing BattleTrance
+21:47:39 playing Taunt+ -> GremlinMerc (combat_id=1)
+21:47:39   aimed at combat_id=1 at (0.65, 0.6)
+21:47:40 playing StrikeIronclad -> GremlinMerc (combat_id=1)
+21:47:41   aimed at combat_id=1 at (0.65, 0.6)
+21:47:41 playing StrikeIronclad -> GremlinMerc (combat_id=1)
+21:47:42   aimed at combat_id=1 at (0.65, 0.6)
+21:47:42 playing Spite -> SneakyGremlin (combat_id=2)
+21:47:44   aimed at combat_id=2 at (0.65, 0.6)
+21:47:44 ending turn
+21:47:45 turn 3: waiting for your turn
+21:47:49 playing DefendIronclad
+21:47:50 playing DefendIronclad
+21:47:51 playing StrikeIronclad -> SneakyGremlin (combat_id=2)
+21:47:51   aimed at combat_id=2 at (0.65, 0.6)
+21:47:52 ending turn
+21:47:52 turn 4: waiting for your turn
+21:47:59 playing BattleTrance
+21:48:00 playing Uppercut -> SneakyGremlin (combat_id=2)
+21:48:01   aimed at combat_id=2 at (0.65, 0.6)
+21:48:01 stopped: combat over after 4 turns
+21:48:11 turn 1: waiting for your turn
+21:48:12 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:48:13   aimed at combat_id=1 at (0.6, 0.6)
+21:48:14 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:48:14   aimed at combat_id=1 at (0.6, 0.6)
+21:48:15 playing Spite -> TerrorEel (combat_id=1)
+21:48:15   aimed at combat_id=1 at (0.6, 0.6)
+21:48:16 playing Inferno
+21:48:17 drinking LuckyTonic
+21:48:22 ending turn
+21:48:22 turn 2: waiting for your turn
+21:48:26 playing Taunt+ -> TerrorEel (combat_id=1)
+21:48:27   aimed at combat_id=1 at (0.6, 0.6)
+21:48:27 playing BattleTrance
+21:48:28 playing DefendIronclad
+21:48:29 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:48:29   aimed at combat_id=1 at (0.6, 0.6)
+21:48:30 ending turn
+21:48:30 turn 3: waiting for your turn
+21:48:35 playing Uppercut -> TerrorEel (combat_id=1)
+21:48:35   aimed at combat_id=1 at (0.6, 0.6)
+21:48:36 playing SwordBoomerang
+21:48:37 ending turn
+21:48:37 turn 4: waiting for your turn
+21:48:42 playing Uppercut -> TerrorEel (combat_id=1)
+21:48:43   aimed at combat_id=1 at (0.6, 0.6)
+21:48:43 playing DefendIronclad
+21:48:44 ending turn
+21:48:45 turn 5: waiting for your turn
+21:48:50 playing Taunt+ -> TerrorEel (combat_id=1)
+21:48:50   aimed at combat_id=1 at (0.6, 0.6)
+21:48:51 playing BattleTrance
+21:48:52 playing SwordBoomerang
+21:48:53 playing StrikeIronclad -> TerrorEel (combat_id=1)
+21:48:53   aimed at combat_id=1 at (0.6, 0.6)
+21:48:54 playing Spite -> TerrorEel (combat_id=1)
+21:48:54   aimed at combat_id=1 at (0.6, 0.6)
+21:48:55 stopped: combat over after 5 turns
+21:49:14 turn 1: waiting for your turn
+21:49:15 playing Bash -> SoulFysh (combat_id=1)
+21:49:17   aimed at combat_id=1 at (0.65, 0.6)
+21:49:17 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:49:18   aimed at combat_id=1 at (0.65, 0.6)
+21:49:19 ending turn
+21:49:19 turn 2: waiting for your turn
+21:49:23 playing Beckon
+21:49:24 playing ShrugItOff
+21:49:25 playing DefendIronclad
+21:49:25 playing BattleTrance
+21:49:27 ending turn
+21:49:27 turn 3: waiting for your turn
+21:49:31 playing BloodWall
+21:49:31 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:49:32   aimed at combat_id=1 at (0.65, 0.6)
+21:49:32 playing Spite -> SoulFysh (combat_id=1)
+21:49:33   aimed at combat_id=1 at (0.65, 0.6)
+21:49:34 ending turn
+21:49:34 turn 4: waiting for your turn
+21:49:40 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:49:40   aimed at combat_id=1 at (0.65, 0.6)
+21:49:41 playing BattleTrance
+21:49:41 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:49:42   aimed at combat_id=1 at (0.65, 0.6)
+21:49:42 playing Beckon
+21:49:43 ending turn
+21:49:44 turn 5: waiting for your turn
+21:49:47 playing DefendIronclad
+21:49:48 playing ShrugItOff
+21:49:49 playing SwordBoomerang
+21:49:50 ending turn
+21:49:50 turn 6: waiting for your turn
+21:49:54 playing DefendIronclad
+21:49:55 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:49:55   aimed at combat_id=1 at (0.65, 0.6)
+21:49:56 playing Spite -> SoulFysh (combat_id=1)
+21:49:56   aimed at combat_id=1 at (0.65, 0.6)
+21:49:57 ending turn
+21:49:57 turn 7: waiting for your turn
+21:50:01 playing TrueGrit
+21:50:02 playing Beckon
+21:50:03 playing Beckon
+21:50:04 drinking WeakPotion -> SoulFysh
+21:50:05 drinking WeakPotion -> SoulFysh
+21:50:07 ending turn
+21:50:07 turn 8: waiting for your turn
+21:50:12 playing Beckon
+21:50:13 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:50:13   aimed at combat_id=1 at (0.65, 0.6)
+21:50:14 playing DefendIronclad
+21:50:15 ending turn
+21:50:15 turn 9: waiting for your turn
+21:50:20 playing BattleTrance
+21:50:21 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:50:21   aimed at combat_id=1 at (0.65, 0.6)
+21:50:22 playing Beckon
+21:50:22 playing SwordBoomerang
+21:50:23 playing Spite -> SoulFysh (combat_id=1)
+21:50:24   aimed at combat_id=1 at (0.65, 0.6)
+21:50:25 ending turn
+21:50:25 turn 10: waiting for your turn
+21:50:29 playing DefendIronclad
+21:50:29 playing Beckon
+21:50:30 playing Beckon
+21:50:31 ending turn
+21:50:31 turn 11: waiting for your turn
+21:50:35 playing ShrugItOff
+21:50:36 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:50:36   aimed at combat_id=1 at (0.65, 0.6)
+21:50:37 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:50:37   aimed at combat_id=1 at (0.65, 0.6)
+21:50:38 ending turn
+21:50:38 turn 12: waiting for your turn
+21:50:44 playing Taunt+ -> SoulFysh (combat_id=1)
+21:50:45   aimed at combat_id=1 at (0.65, 0.6)
+21:50:45 playing Beckon
+21:50:46 playing DefendIronclad
+21:50:47 ending turn
+21:50:47 turn 13: waiting for your turn
+21:50:51 playing Beckon
+21:50:51 playing Beckon
+21:50:52 playing Beckon
+21:50:53 ending turn
+21:50:53 turn 14: waiting for your turn
+21:50:58 playing BattleTrance
+21:50:59 playing Uppercut -> SoulFysh (combat_id=1)
+21:51:00   aimed at combat_id=1 at (0.65, 0.6)
+21:51:01 playing Beckon
+21:51:02 ending turn
+21:51:02 turn 15: waiting for your turn
+21:51:06 playing BloodWall
+21:51:07 playing Beckon
+21:51:08 ending turn
+21:51:08 turn 16: waiting for your turn
+21:51:13 playing Inferno+
+21:51:14 playing Beckon
+21:51:14 playing Spite -> SoulFysh (combat_id=1)
+21:51:15   aimed at combat_id=1 at (0.65, 0.6)
+21:51:15 playing StrikeIronclad -> SoulFysh (combat_id=1)
+21:51:16   aimed at combat_id=1 at (0.65, 0.6)
+21:51:17 ending turn
+21:51:17 turn 17: waiting for your turn
+21:51:22 playing Taunt+ -> SoulFysh (combat_id=1)
+21:51:22   aimed at combat_id=1 at (0.65, 0.6)
+21:51:23 playing Beckon
+21:51:23 playing Beckon
+21:51:24 ending turn
+21:51:25 turn 18: waiting for your turn
+21:51:30 playing TrueGrit
+21:51:31 playing Beckon
+21:51:32 playing Beckon
+21:51:32 ending turn
+21:51:33 turn 19: waiting for your turn
+21:51:38 stopped: you died (turn 18)
+01:52:23 turn 1: waiting for your turn
+01:52:24 playing StrikeRegent -> ShrinkerBeetle (combat_id=1)
+01:52:26   aimed at combat_id=1 at (0.7, 0.6)
+01:52:27 playing StrikeRegent -> ShrinkerBeetle (combat_id=1)
+01:52:27   aimed at combat_id=1 at (0.7, 0.6)
+01:52:28 playing GuidingStar -> ShrinkerBeetle (combat_id=1)
+01:52:28   aimed at combat_id=1 at (0.7, 0.6)
+01:52:29 ending turn
+01:52:29 turn 2: waiting for your turn
+01:52:34 playing FallingStar -> ShrinkerBeetle (combat_id=1)
+01:52:34   aimed at combat_id=1 at (0.7, 0.6)
+01:52:35 playing StrikeRegent -> ShrinkerBeetle (combat_id=1)
+01:52:35   aimed at combat_id=1 at (0.7, 0.6)
+01:52:36 playing StrikeRegent -> ShrinkerBeetle (combat_id=1)
+01:52:36   aimed at combat_id=1 at (0.7, 0.6)
+01:52:37 stopped: combat over after 2 turns
+01:52:58 turn 1: waiting for your turn
+01:52:59 playing GammaBlast -> Nibbit (combat_id=1)
+01:53:01   aimed at combat_id=1 at (0.7, 0.6)
+01:53:01 playing DefendRegent
+01:53:02 playing DefendRegent
+01:53:03 playing StrikeRegent -> Nibbit (combat_id=1)
+01:53:03   aimed at combat_id=1 at (0.7, 0.6)
+01:53:04 ending turn
+01:53:04 turn 2: waiting for your turn
+01:53:08 playing StrikeRegent -> Nibbit (combat_id=1)
+01:53:08   aimed at combat_id=1 at (0.7, 0.6)
+01:53:09 playing StrikeRegent -> Nibbit (combat_id=1)
+01:53:09   aimed at combat_id=1 at (0.7, 0.6)
+01:53:10 playing StrikeRegent -> Nibbit (combat_id=1)
+01:53:10   aimed at combat_id=1 at (0.7, 0.6)
+01:53:11 stopped: combat over after 2 turns
+01:53:40 turn 1: waiting for your turn
+01:53:41 playing Patter
+01:53:43 playing DefendRegent
+01:53:44 playing StrikeRegent -> LeafSlimeM (combat_id=2)
+01:53:45   aimed at combat_id=2 at (0.7, 0.6)
+01:53:46 playing GammaBlast -> TwigSlimeS (combat_id=1)
+01:53:48   aimed at combat_id=1 at (0.6, 0.6)
+01:53:48 ending turn
+01:53:48 turn 2: waiting for your turn
+01:53:53 playing DefendRegent
+01:53:54 playing DefendRegent
+01:53:55 playing StrikeRegent -> LeafSlimeM (combat_id=2)
+01:53:56   aimed at combat_id=2 at (0.7, 0.6)
+01:53:57 ending turn
+01:53:57 turn 3: waiting for your turn
+01:54:03 playing DefendRegent
+01:54:03 playing Slimed
+01:54:04 playing StrikeRegent -> LeafSlimeM (combat_id=2)
+01:54:05   aimed at combat_id=2 at (0.7, 0.6)
+01:54:06 ending with 0 energy; not worth playing: FallingStar
+01:54:06 ending turn
+01:54:06 turn 4: waiting for your turn
+01:54:11 playing Patter
+01:54:12 playing Slimed
+01:54:13 playing Slimed
+01:54:14 ending turn
+01:54:14 turn 5: waiting for your turn
+01:54:20 playing DefendRegent
+01:54:21 playing Venerate
+01:54:22 playing GuidingStar -> LeafSlimeM (combat_id=2)
+01:54:22   aimed at combat_id=2 at (0.7, 0.6)
+01:54:24 ending with 0 energy; not worth playing: GammaBlast
+01:54:24 ending turn
+01:54:24 turn 6: waiting for your turn
+01:54:28 playing Patter
+01:54:29 playing StrikeRegent -> LeafSlimeS (combat_id=3)
+01:54:31   aimed at combat_id=3 at (0.85, 0.6)
+01:54:32 playing StrikeRegent -> LeafSlimeS (combat_id=3)
+01:54:32   aimed at combat_id=3 at (0.85, 0.6)
+01:54:34 stopped: combat over after 6 turns
+01:55:20 turn 1: waiting for your turn
+01:55:20 drinking VulnerablePotion -> Byrdonis
+01:55:25 playing FallingStar -> Byrdonis (combat_id=1)
+01:55:26   aimed at combat_id=1 at (0.6, 0.6)
+01:55:26 playing DefendRegent
+01:55:27 playing DefendRegent
+01:55:28 playing StrikeRegent -> Byrdonis (combat_id=1)
+01:55:28   aimed at combat_id=1 at (0.6, 0.6)
+01:55:29 ending turn
+01:55:29 turn 2: waiting for your turn
+01:55:33 playing Stardust
+01:55:34 playing StrikeRegent -> Byrdonis (combat_id=1)
+01:55:34   aimed at combat_id=1 at (0.6, 0.6)
+01:55:35 playing SolarStrike -> Byrdonis (combat_id=1)
+01:55:35   aimed at combat_id=1 at (0.6, 0.6)
+01:55:36 playing GuidingStar -> Byrdonis (combat_id=1)
+01:55:36   aimed at combat_id=1 at (0.6, 0.6)
+01:55:37 ending turn
+01:55:37 turn 3: waiting for your turn
+01:55:43 playing StrikeRegent -> Byrdonis (combat_id=1)
+01:55:45   aimed at combat_id=1 at (0.6, 0.6)
+01:55:45 playing StrikeRegent -> Byrdonis (combat_id=1)
+01:55:46   aimed at combat_id=1 at (0.6, 0.6)
+01:55:47 stopped: combat over after 3 turns
+01:57:05 turn 1: waiting for your turn
+01:57:06 playing FallingStar -> Nibbit #1 (combat_id=1)
+01:57:08   aimed at combat_id=1 at (0.6, 0.6)
+01:57:09 playing StrikeRegent -> Nibbit #2 (combat_id=2)
+01:57:11   aimed at combat_id=2 at (0.75, 0.6)
+01:57:11 playing GuidingStar -> Nibbit #1 (combat_id=1)
+01:57:12   aimed at combat_id=1 at (0.6, 0.6)
+01:57:13 playing SolarStrike -> Nibbit #1 (combat_id=1)
+01:57:13   aimed at combat_id=1 at (0.6, 0.6)
+01:57:14 ending turn
+01:57:14 turn 2: waiting for your turn
+01:57:18 playing DefendRegent
+01:57:19 playing Venerate
+01:57:20 playing GammaBlast -> Nibbit (combat_id=2)
+01:57:20   aimed at combat_id=2 at (0.75, 0.6)
+01:57:21 playing DefendRegent
+01:57:22 playing Stardust
+01:57:23 ending turn
+01:57:23 turn 3: waiting for your turn
+01:57:27 playing StrikeRegent+ -> Nibbit (combat_id=2)
+01:57:28   aimed at combat_id=2 at (0.75, 0.6)
+01:57:28 playing StrikeRegent+ -> Nibbit (combat_id=2)
+01:57:29   aimed at combat_id=2 at (0.75, 0.6)
+01:57:30 stopped: combat over after 3 turns
+01:57:42 turn 1: waiting for your turn
+01:57:43 playing FallingStar -> CubexConstruct (combat_id=1)
+01:57:45   aimed at combat_id=1 at (0.75, 0.6)
+01:57:45 playing Stardust
+01:57:46 playing DefendRegent
+01:57:47 playing SolarStrike -> CubexConstruct (combat_id=1)
+01:57:47   aimed at combat_id=1 at (0.75, 0.6)
+01:57:48 playing StrikeRegent -> CubexConstruct (combat_id=1)
+01:57:48   aimed at combat_id=1 at (0.75, 0.6)
+01:57:49 ending turn
+01:57:49 turn 2: waiting for your turn
+01:57:54 playing StrikeRegent+ -> CubexConstruct (combat_id=1)
+01:57:54   aimed at combat_id=1 at (0.75, 0.6)
+01:57:55 playing GuidingStar -> CubexConstruct (combat_id=1)
+01:57:55   aimed at combat_id=1 at (0.75, 0.6)
+01:57:56 stopped: combat over after 2 turns
+01:58:12 turn 1: waiting for your turn
+01:58:16 playing FallingStar -> Inklet #1 (combat_id=1)
+01:58:18   aimed at combat_id=1 at (0.65, 0.6)
+01:58:19 playing StrikeRegent -> Inklet #2 (combat_id=2)
+01:58:21   aimed at combat_id=2 at (0.75, 0.6)
+01:58:22 playing SolarStrike -> Inklet #1 (combat_id=1)
+01:58:23   aimed at combat_id=1 at (0.65, 0.6)
+01:58:24 playing DefendRegent
+01:58:25 ending turn
+01:58:25 turn 2: waiting for your turn
+01:58:29 playing Venerate
+01:58:30 playing GammaBlast -> Inklet #2 (combat_id=3)
+01:58:33   aimed at combat_id=3 at (0.85, 0.6)
+01:58:34 playing Patter+
+01:58:35 playing CrushUnder
+01:58:36 stopped: combat over after 2 turns
+01:58:58 turn 1: waiting for your turn
+01:58:59 playing Radiate
+01:59:01 playing ManifestAuthority
+01:59:02 playing DefendRegent
+01:59:02 playing StrikeRegent -> BygoneEffigy (combat_id=1)
+01:59:04   aimed at combat_id=1 at (0.7, 0.6)
+01:59:05 drinking Duplicator
+01:59:08 playing FallingStar -> BygoneEffigy (combat_id=1)
+01:59:09   aimed at combat_id=1 at (0.7, 0.6)
+01:59:11 ending turn
+01:59:11 turn 2: waiting for your turn
+01:59:15 playing StrikeRegent+ -> BygoneEffigy (combat_id=1)
+01:59:15   aimed at combat_id=1 at (0.7, 0.6)
+01:59:16 playing GuidingStar -> BygoneEffigy (combat_id=1)
+01:59:16   aimed at combat_id=1 at (0.7, 0.6)
+01:59:17 playing SolarStrike -> BygoneEffigy (combat_id=1)
+01:59:17   aimed at combat_id=1 at (0.7, 0.6)
+01:59:18 ending turn
+01:59:19 turn 3: waiting for your turn
+01:59:23 playing CrushUnder
+01:59:24 playing SolarStrike -> BygoneEffigy (combat_id=1)
+01:59:25   aimed at combat_id=1 at (0.7, 0.6)
+01:59:26 stopped: combat over after 3 turns
+01:59:45 turn 1: waiting for your turn
+01:59:46 playing ManifestAuthority
+01:59:47 playing Stardust
+01:59:48 playing SolarStrike -> ShrinkerBeetle (combat_id=1)
+01:59:49   aimed at combat_id=1 at (0.6, 0.6)
+01:59:50 playing GoldAxe -> ShrinkerBeetle (combat_id=1)
+01:59:50   aimed at combat_id=1 at (0.6, 0.6)
+01:59:51 ending turn
+01:59:51 turn 2: waiting for your turn
+01:59:55 playing DefendRegent
+01:59:56 playing GuidingStar -> ShrinkerBeetle (combat_id=1)
+01:59:57   aimed at combat_id=1 at (0.6, 0.6)
+01:59:57 playing StrikeRegent+ -> ShrinkerBeetle (combat_id=1)
+01:59:59   aimed at combat_id=1 at (0.6, 0.6)
+02:00:00 ending with 0 energy; not worth playing: FallingStar
+02:00:00 ending turn
+02:00:00 turn 3: waiting for your turn
+02:00:08 playing StrikeRegent+ -> ShrinkerBeetle (combat_id=1)
+02:00:08   aimed at combat_id=1 at (0.6, 0.6)
+02:00:11 playing Glimmer
+02:00:13 picking Patter (GLIMMER.selectionScreenPrompt)
+02:00:14 playing SolarStrike -> FuzzyWurmCrawler (combat_id=2)
+02:00:16   aimed at combat_id=2 at (0.8, 0.6)
+02:00:17 playing Venerate
+02:00:17 playing GammaBlast -> FuzzyWurmCrawler (combat_id=2)
+02:00:18   aimed at combat_id=2 at (0.8, 0.6)
+02:00:19 playing Radiate
+02:00:19 drinking EnergyPotion
+02:00:21 playing StrikeRegent -> FuzzyWurmCrawler (combat_id=2)
+02:00:22   aimed at combat_id=2 at (0.8, 0.6)
+02:00:22 stopped: combat over after 3 turns
+02:00:44 turn 1: waiting for your turn
+02:00:45 playing FallingStar -> KinFollower #1 (combat_id=1)
+02:00:47   aimed at combat_id=1 at (0.5, 0.6)
+02:00:47 playing PhotonCut -> KinFollower #1 (combat_id=1)
+02:00:48   aimed at combat_id=1 at (0.5, 0.6)
+02:00:48 picking DefendRegent (PHOTON_CUT.selectionScreenPrompt)
+02:00:49 playing Stardust
+02:00:50 playing ManifestAuthority
+02:00:51 playing DefendRegent
+02:00:52 ending turn
+02:00:52 turn 2: waiting for your turn
+02:00:58 playing Radiate
+02:00:59 playing StrikeRegent+ -> KinFollower #1 (combat_id=1)
+02:01:00   aimed at combat_id=1 at (0.5, 0.6)
+02:01:00 playing Glimmer
+02:01:01 picking DefendRegent (GLIMMER.selectionScreenPrompt)
+02:01:02 playing SolarStrike -> KinFollower #1 (combat_id=1)
+02:01:02   aimed at combat_id=1 at (0.5, 0.6)
+02:01:03 drinking BlockPotion
+02:01:04 ending turn
+02:01:04 turn 3: waiting for your turn
+02:01:10 playing DefendRegent
+02:01:11 playing DefendRegent
+02:01:12 playing StrikeRegent+ -> KinFollower #1 (combat_id=1)
+02:01:13   aimed at combat_id=1 at (0.5, 0.6)
+02:01:13 drinking StarPotion
+02:01:14 playing GuidingStar -> KinFollower (combat_id=2)
+02:01:16   aimed at combat_id=2 at (0.7, 0.6)
+02:01:17 playing GammaBlast -> KinFollower (combat_id=2)
+02:01:17   aimed at combat_id=2 at (0.7, 0.6)
+02:01:18 ending turn
+02:01:18 turn 4: waiting for your turn
+02:01:25 playing CrushUnder
+02:01:26 playing SolarStrike -> KinFollower (combat_id=2)
+02:01:27   aimed at combat_id=2 at (0.7, 0.6)
+02:01:27 playing GuidingStar -> KinFollower (combat_id=2)
+02:01:28   aimed at combat_id=2 at (0.7, 0.6)
+02:01:29 ending turn
+02:01:29 turn 5: waiting for your turn
+02:01:33 playing Radiate
+02:01:34 playing Glimmer
+02:01:35 picking GammaBlast (GLIMMER.selectionScreenPrompt)
+02:01:35 playing DefendRegent
+02:01:36 playing Stardust
+02:01:37 playing DefendRegent
+02:01:38 ending turn
+02:01:38 turn 6: waiting for your turn
+02:01:42 playing DefendRegent
+02:01:43 playing StrikeRegent+ -> KinPriest (combat_id=3)
+02:01:45   aimed at combat_id=3 at (0.85, 0.6)
+02:01:45 playing ManifestAuthority
+02:01:46 playing SeekerStrike -> KinPriest (combat_id=3)
+02:01:47   aimed at combat_id=3 at (0.85, 0.6)
+02:01:48 ending with 0 energy; not worth playing: GammaBlast, FallingStar
+02:01:48 ending turn
+02:01:48 turn 7: waiting for your turn
+02:01:54 playing Patter+
+02:01:55 playing SolarStrike -> KinPriest (combat_id=3)
+02:01:55   aimed at combat_id=3 at (0.85, 0.6)
+02:01:56 playing DefendRegent
+02:01:56 playing Stardust
+02:01:58 ending turn
+02:01:58 turn 8: waiting for your turn
+02:02:01 playing DefendRegent
+02:02:02 playing SolarStrike -> KinPriest (combat_id=3)
+02:02:03   aimed at combat_id=3 at (0.85, 0.6)
+02:02:03 playing Radiate
+02:02:04 playing StrikeRegent -> KinPriest (combat_id=3)
+02:02:04   aimed at combat_id=3 at (0.85, 0.6)
+02:02:05 ending turn
+02:02:05 turn 9: waiting for your turn
+02:02:09 playing Glimmer
+02:02:09 picking StrikeRegent (GLIMMER.selectionScreenPrompt)
+02:02:10 playing Venerate
+02:02:11 playing GammaBlast -> KinPriest (combat_id=3)
+02:02:11   aimed at combat_id=3 at (0.85, 0.6)
+02:02:12 playing CrushUnder
+02:02:13 playing StrikeRegent+ -> KinPriest (combat_id=3)
+02:02:13   aimed at combat_id=3 at (0.85, 0.6)
+02:02:14 ending turn
+02:02:14 turn 10: waiting for your turn
+02:02:19 playing StrikeRegent+ -> KinPriest (combat_id=3)
+02:02:20   aimed at combat_id=3 at (0.85, 0.6)
+02:02:20 playing SeekerStrike -> KinPriest (combat_id=3)
+02:02:21   aimed at combat_id=3 at (0.85, 0.6)
+02:02:21 playing PhotonCut -> KinPriest (combat_id=3)
+02:02:22   aimed at combat_id=3 at (0.85, 0.6)
+02:02:23 picking DefendRegent (PHOTON_CUT.selectionScreenPrompt)
+02:02:25 ending with 0 energy; not worth playing: FallingStar
+02:02:25 ending turn
+02:02:25 turn 11: waiting for your turn
+02:02:30 playing DefendRegent
+02:02:31 playing StrikeRegent+ -> KinPriest (combat_id=3)
+02:02:31   aimed at combat_id=3 at (0.85, 0.6)
+02:02:32 playing Radiate
+02:02:33 playing StrikeRegent -> KinPriest (combat_id=3)
+02:02:33   aimed at combat_id=3 at (0.85, 0.6)
+02:02:34 ending with 0 energy; not worth playing: GammaBlast
+02:02:34 ending turn
+02:02:35 turn 12: waiting for your turn
+02:02:38 playing Patter+
+02:02:39 playing SolarStrike -> KinPriest (combat_id=3)
+02:02:40   aimed at combat_id=3 at (0.85, 0.6)
+02:02:40 playing DefendRegent
+02:02:41 playing CrushUnder
+02:02:42 ending turn
+02:02:42 turn 13: waiting for your turn
+02:02:46 playing Glimmer
+02:02:47 picking SeekerStrike (GLIMMER.selectionScreenPrompt)
+02:02:47 playing StrikeRegent -> KinPriest (combat_id=3)
+02:02:48   aimed at combat_id=3 at (0.85, 0.6)
+02:02:49 stopped: combat over after 13 turns
+02:03:14 turn 1: waiting for your turn
+02:03:15 playing GammaBlast -> BowlbugRock (combat_id=1)
+02:03:16   aimed at combat_id=1 at (0.6, 0.6)
+02:03:17 playing SolarStrike -> BowlbugEgg (combat_id=2)
+02:03:19   aimed at combat_id=2 at (0.75, 0.6)
+02:03:19 playing PhotonCut -> BowlbugEgg (combat_id=2)
+02:03:20   aimed at combat_id=2 at (0.75, 0.6)
+02:03:20 picking FallingStar (PHOTON_CUT.selectionScreenPrompt)
+02:03:21 playing DefendRegent
+02:03:22 playing Stardust
+02:03:23 ending turn
+02:03:23 turn 2: waiting for your turn
+02:03:26 playing SolarStrike -> BowlbugRock (combat_id=1)
+02:03:27   aimed at combat_id=1 at (0.6, 0.6)
+02:03:27 playing GuidingStar -> BowlbugRock (combat_id=1)
+02:03:28   aimed at combat_id=1 at (0.6, 0.6)
+02:03:29 stopped: combat over after 2 turns
+02:03:55 turn 1: waiting for your turn
+02:03:56 playing Patter+
+02:03:56 playing Radiate
+02:03:58 playing PhotonCut -> Exoskeleton #3 (combat_id=3)
+02:04:00   aimed at combat_id=3 at (0.85, 0.6)
+02:04:01 picking DefendRegent (PHOTON_CUT.selectionScreenPrompt)
+02:04:01 playing DefendRegent
+02:04:02 ending turn
+02:04:02 turn 2: waiting for your turn
+02:04:07 playing StrikeRegent+ -> Exoskeleton #1 (combat_id=1)
+02:04:08   aimed at combat_id=1 at (0.6, 0.6)
+02:04:09 playing SolarStrike -> Exoskeleton (combat_id=2)
+02:04:10   aimed at combat_id=2 at (0.7, 0.6)
+02:04:12 stopped: combat over after 2 turns
+02:04:50 turn 1: waiting for your turn
+02:04:51 playing StrikeRegent+ -> LouseProgenitor (combat_id=1)
+02:04:53   aimed at combat_id=1 at (0.65, 0.6)
+02:04:53 playing SolarStrike -> LouseProgenitor (combat_id=1)
+02:04:54   aimed at combat_id=1 at (0.65, 0.6)
+02:04:54 playing Venerate
+02:04:55 playing Radiate
+02:04:57 playing DefendRegent
+02:04:58 ending turn
+02:04:58 turn 2: waiting for your turn
+02:05:01 playing GammaBlast -> LouseProgenitor (combat_id=1)
+02:05:02   aimed at combat_id=1 at (0.65, 0.6)
+02:05:03 playing PhotonCut -> LouseProgenitor (combat_id=1)
+02:05:03   aimed at combat_id=1 at (0.65, 0.6)
+02:05:04 picking ManifestAuthority (PHOTON_CUT.selectionScreenPrompt)
+02:05:04 playing Glimmer
+02:05:05 picking GatherLight (GLIMMER.selectionScreenPrompt)
+02:05:06 playing GuidingStar -> LouseProgenitor (combat_id=1)
+02:05:06   aimed at combat_id=1 at (0.65, 0.6)
+02:05:07 playing StrikeRegent+ -> LouseProgenitor (combat_id=1)
+02:05:08   aimed at combat_id=1 at (0.65, 0.6)
+02:05:08 ending turn
+02:05:09 turn 3: waiting for your turn
+02:05:13 playing ShiningStrike -> LouseProgenitor (combat_id=1)
+02:05:14   aimed at combat_id=1 at (0.65, 0.6)
+02:05:14 playing StrikeRegent -> LouseProgenitor (combat_id=1)
+02:05:15   aimed at combat_id=1 at (0.65, 0.6)
+02:05:15 playing SolarStrike -> LouseProgenitor (combat_id=1)
+02:05:16   aimed at combat_id=1 at (0.65, 0.6)
+02:05:16 playing Stardust
+02:05:18 stopped: combat over after 3 turns
+02:05:28 turn 1: waiting for your turn
+02:05:29 playing Patter+
+02:05:30 playing Patter
+02:05:31 playing GatherLight
+02:05:31 playing StrikeRegent -> InfestedPrism (combat_id=1)
+02:05:33   aimed at combat_id=1 at (0.7, 0.6)
+02:05:34 playing Stardust
+02:05:35 ending turn
+02:05:35 turn 2: waiting for your turn
+02:05:39 playing SolarStrike -> InfestedPrism (combat_id=1)
+02:05:39   aimed at combat_id=1 at (0.7, 0.6)
+02:05:40 playing Venerate
+02:05:40 playing GammaBlast -> InfestedPrism (combat_id=1)
+02:05:41   aimed at combat_id=1 at (0.7, 0.6)
+02:05:42 playing StrikeRegent+ -> InfestedPrism (combat_id=1)
+02:05:42   aimed at combat_id=1 at (0.7, 0.6)
+02:05:43 playing SolarStrike -> InfestedPrism (combat_id=1)
+02:05:43   aimed at combat_id=1 at (0.7, 0.6)
+02:05:44 ending turn
+02:05:44 turn 3: waiting for your turn
+02:05:48 playing StrikeRegent -> InfestedPrism (combat_id=1)
+02:05:48   aimed at combat_id=1 at (0.7, 0.6)
+02:05:49 playing Radiate
+02:05:50 playing IAmInvincible
+02:05:50 playing SolarStrike -> InfestedPrism (combat_id=1)
+02:05:53   aimed at combat_id=1 at (0.7, 0.6)
+02:05:53 playing FallingStar -> InfestedPrism (combat_id=1)
+02:05:54   aimed at combat_id=1 at (0.7, 0.6)
+02:05:55 ending turn
+02:05:55 turn 4: waiting for your turn
+02:05:59 playing Glimmer
+02:06:00 picking GatherLight (GLIMMER.selectionScreenPrompt)
+02:06:01 playing KinglyPunch -> InfestedPrism (combat_id=1)
+02:06:01   aimed at combat_id=1 at (0.7, 0.6)
+02:06:02 playing PhotonCut -> InfestedPrism (combat_id=1)
+02:06:02   aimed at combat_id=1 at (0.7, 0.6)
+02:06:03 stopped: combat over after 4 turns
+02:07:07 turn 1: waiting for your turn
+02:07:08 playing IAmInvincible
+02:07:09 playing GatherLight
+02:07:09 playing Radiate
+02:07:11 playing SolarStrike -> TheObscura (combat_id=1)
+02:07:13   aimed at combat_id=1 at (0.75, 0.6)
+02:07:13 ending turn
+02:07:14 turn 2: waiting for your turn
+02:07:17 playing Glimmer
+02:07:48 picking StrikeRegent (GLIMMER.selectionScreenPrompt)
+02:08:23 turn 1: waiting for your turn
+02:08:27 playing GammaBlast -> TheObscura (combat_id=1)
+02:08:29   aimed at combat_id=1 at (0.75, 0.6)
+02:08:30 playing SolarStrike -> TheObscura (combat_id=1)
+02:08:31   aimed at combat_id=1 at (0.75, 0.6)
+02:08:32 drinking CosmicConcoction
+02:08:36 playing DefendRegent
+02:08:37 playing Venerate
+02:08:37 playing GatherLight
+02:08:38 playing Stardust
+02:08:40 playing Purity+
+02:08:40 picking Prolong (PURITY.selectionScreenPrompt)
+02:08:41 ending turn
+02:08:42 turn 2: waiting for your turn
+02:08:46 playing StrikeRegent+ -> TheObscura (combat_id=1)
+02:08:47   aimed at combat_id=1 at (0.75, 0.6)
+02:08:47 playing SolarStrike -> TheObscura (combat_id=1)
+02:08:48   aimed at combat_id=1 at (0.75, 0.6)
+02:08:48 playing StrikeRegent -> TheObscura (combat_id=1)
+02:08:49   aimed at combat_id=1 at (0.75, 0.6)
+02:08:50 stopped: combat over after 2 turns
+02:09:01 turn 1: waiting for your turn
+02:09:02 playing SolarStrike -> Myte #2 (combat_id=2)
+02:09:04   aimed at combat_id=2 at (0.8, 0.6)
+02:09:04 playing DefendRegent
+02:09:05 playing StrikeRegent+ -> Myte #2 (combat_id=2)
+02:09:06   aimed at combat_id=2 at (0.8, 0.6)
+02:09:06 playing Stardust
+02:09:08 playing Venerate
+02:09:09 ending turn
+02:09:09 turn 2: waiting for your turn
+02:09:13 playing Toxic
+02:09:14 playing Toxic
+02:09:15 playing SolarStrike -> Myte #2 (combat_id=2)
+02:09:15   aimed at combat_id=2 at (0.8, 0.6)
+02:09:16 playing GatherLight
+02:09:16 playing Stardust
+02:09:18 playing SolarStrike -> Myte #2 (combat_id=2)
+02:09:18   aimed at combat_id=2 at (0.8, 0.6)
+02:09:19 ending turn
+02:09:19 turn 3: waiting for your turn
+02:09:22 playing Patter+
+02:09:23 playing ShiningStrike -> Myte (combat_id=1)
+02:09:25   aimed at combat_id=1 at (0.6, 0.6)
+02:09:26 playing GammaBlast -> Myte (combat_id=1)
+02:09:26   aimed at combat_id=1 at (0.6, 0.6)
+02:09:27 playing Glimmer
+02:09:27 picking GuidingStar (GLIMMER.selectionScreenPrompt)
+02:09:28 playing PhotonCut -> Myte (combat_id=1)
+02:09:29   aimed at combat_id=1 at (0.6, 0.6)
+02:09:30 stopped: combat over after 3 turns
+02:09:39 turn 1: waiting for your turn
+02:09:39 playing Patter+
+02:09:40 playing StrikeRegent -> Entomancer (combat_id=1)
+02:09:42   aimed at combat_id=1 at (0.65, 0.6)
+02:09:43 playing GatherLight
+02:09:44 playing Radiate
+02:09:47 playing SolarStrike -> Entomancer (combat_id=1)
+02:09:47   aimed at combat_id=1 at (0.65, 0.6)
+02:09:48 ending turn
+02:09:49 turn 2: waiting for your turn
+02:09:53 playing Venerate
+02:09:53 playing ManifestAuthority
+02:09:54 playing Stardust
+02:09:59 playing CrushUnder
+02:10:01 playing IAmInvincible
+02:10:02 ending with 1 energy; not worth playing: Production
+02:10:02 ending turn
+02:10:02 turn 3: waiting for your turn
+02:10:06 playing SolarStrike -> Entomancer (combat_id=1)
+02:10:07   aimed at combat_id=1 at (0.65, 0.6)
+02:10:07 playing Glimmer
+02:10:08 picking DefendRegent (GLIMMER.selectionScreenPrompt)
+02:10:09 playing ShiningStrike -> Entomancer (combat_id=1)
+02:10:10   aimed at combat_id=1 at (0.65, 0.6)
+02:10:11 ending turn
+02:10:11 turn 4: waiting for your turn
+02:10:14 playing FallingStar -> Entomancer (combat_id=1)
+02:10:15   aimed at combat_id=1 at (0.65, 0.6)
+02:10:16 playing StrikeRegent+ -> Entomancer (combat_id=1)
+02:10:16   aimed at combat_id=1 at (0.65, 0.6)
+02:10:18 stopped: combat over after 4 turns
+02:10:26 turn 1: waiting for your turn
+02:10:27 playing GuidingStar -> HunterKiller (combat_id=1)
+02:10:29   aimed at combat_id=1 at (0.65, 0.6)
+02:10:30 playing HiddenCache+
+02:10:30 playing SolarStrike -> HunterKiller (combat_id=1)
+02:10:31   aimed at combat_id=1 at (0.65, 0.6)
+02:10:32 ending turn
+02:10:32 turn 2: waiting for your turn
+02:10:37 playing PhotonCut -> HunterKiller (combat_id=1)
+02:10:38   aimed at combat_id=1 at (0.65, 0.6)
+02:10:51 picking DefendRegent (PHOTON_CUT.selectionScreenPrompt)
+02:10:59 playing ManifestAuthority
+02:11:01 playing GatherLight
+02:11:02 playing FallingStar -> HunterKiller (combat_id=1)
+02:11:02   aimed at combat_id=1 at (0.65, 0.6)
+02:11:03 playing SolarStrike -> HunterKiller (combat_id=1)
+02:11:05   aimed at combat_id=1 at (0.65, 0.6)
+02:11:06 playing KinglyPunch -> HunterKiller (combat_id=1)
+02:11:06   aimed at combat_id=1 at (0.65, 0.6)
+02:11:07 playing Fisticuffs -> HunterKiller (combat_id=1)
+02:11:07   aimed at combat_id=1 at (0.65, 0.6)
+02:11:08 playing StrikeRegent+ -> HunterKiller (combat_id=1)
+02:11:09   aimed at combat_id=1 at (0.65, 0.6)
+02:11:09 ending turn
+02:11:10 turn 3: waiting for your turn
+02:11:14 playing DefendRegent
+02:11:15 playing DefendRegent
+02:11:16 playing Stardust
+02:11:18 playing Radiate
+02:11:19 drinking ColorlessPotion
+02:11:20 playing SolarStrike -> HunterKiller (combat_id=1)
+
+=== 2026-10-25 02:11:38 couldn't find enemy combat_id=1
+window (hwnd, left, top, w, h) = (7342720, 0, 0, 1922, 1080)
+enemies = [('HunterKiller', 1)]
+potions = [{'slot': 0, 'name': 'WeakPotion'}, {'slot': 1, 'name': 'GamblersBrew'}]
+(0.650,0.600) enemy=None slot=None use=False popup=False
+(0.350,0.600) enemy=None slot=None use=False popup=False
+(0.400,0.600) enemy=None slot=None use=False popup=False
+(0.450,0.600) enemy=None slot=None use=False popup=False
+(0.500,0.600) enemy=None slot=None use=False popup=False
+(0.550,0.600) enemy=None slot=None use=False popup=False
+(0.600,0.600) enemy=None slot=None use=False popup=False
+(0.650,0.600) enemy=None slot=None use=False popup=False
+(0.700,0.600) enemy=None slot=None use=False popup=False
+(0.750,0.600) enemy=None slot=None use=False popup=False
+(0.800,0.600) enemy=None slot=None use=False popup=False
+(0.850,0.600) enemy=None slot=None use=False popup=False
+(0.900,0.600) enemy=None slot=None use=False popup=False
+(0.950,0.600) enemy=None slot=None use=False popup=False
+(0.350,0.500) enemy=None slot=None use=False popup=False
+(0.400,0.500) enemy=None slot=None use=False popup=False
+(0.450,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.550,0.500) enemy=None slot=None use=False popup=False
+(0.600,0.500) enemy=None slot=None use=False popup=False
+(0.650,0.500) enemy=None slot=None use=False popup=False
+(0.700,0.500) enemy=None slot=None use=False popup=False
+(0.750,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=None slot=None use=False popup=False
+(0.850,0.500) enemy=None slot=None use=False popup=False
+(0.900,0.500) enemy=None slot=None use=False popup=False
+(0.950,0.500) enemy=None slot=None use=False popup=False
+(0.350,0.680) enemy=None slot=None use=False popup=False
+(0.400,0.680) enemy=None slot=None use=False popup=False
+(0.450,0.680) enemy=None slot=None use=False popup=False
+(0.500,0.680) enemy=None slot=None use=False popup=False
+(0.550,0.680) enemy=None slot=None use=False popup=False
+(0.600,0.680) enemy=None slot=None use=False popup=False
+(0.650,0.680) enemy=None slot=None use=False popup=False
+(0.700,0.680) enemy=None slot=None use=False popup=False
+(0.750,0.680) enemy=None slot=None use=False popup=False
+(0.800,0.680) enemy=None slot=None use=False popup=False
+(0.850,0.680) enemy=None slot=None use=False popup=False
+(0.900,0.680) enemy=None slot=None use=False popup=False
+(0.950,0.680) enemy=None slot=None use=False popup=False
+(0.350,0.400) enemy=None slot=None use=False popup=False
+(0.400,0.400) enemy=None slot=None use=False popup=False
+(0.450,0.400) enemy=None slot=None use=False popup=False
+(0.500,0.400) enemy=None slot=None use=False popup=False
+(0.550,0.400) enemy=None slot=None use=False popup=False
+(0.600,0.400) enemy=None slot=None use=False popup=False
+(0.650,0.400) enemy=None slot=None use=False popup=False
+(0.700,0.400) enemy=None slot=None use=False popup=False
+(0.750,0.400) enemy=None slot=None use=False popup=False
+(0.800,0.400) enemy=None slot=None use=False popup=False
+(0.850,0.400) enemy=None slot=None use=False popup=False
+(0.900,0.400) enemy=None slot=None use=False popup=False
+(0.950,0.400) enemy=None slot=None use=False popup=False
+(0.350,0.300) enemy=None slot=None use=False popup=False
+(0.400,0.300) enemy=None slot=None use=False popup=False
+(0.450,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.550,0.300) enemy=None slot=None use=False popup=False
+(0.600,0.300) enemy=None slot=None use=False popup=False
+(0.650,0.300) enemy=None slot=None use=False popup=False
+(0.700,0.300) enemy=None slot=None use=False popup=False
+(0.750,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.850,0.300) enemy=None slot=None use=False popup=False
+(0.900,0.300) enemy=None slot=None use=False popup=False
+(0.950,0.300) enemy=None slot=None use=False popup=False
+(0.050,0.600) enemy=None slot=None use=False popup=False
+(0.100,0.600) enemy=None slot=None use=False popup=False
+(0.150,0.600) enemy=None slot=None use=False popup=False
+(0.200,0.600) enemy=None slot=None use=False popup=False
+(0.250,0.600) enemy=None slot=None use=False popup=False
+(0.300,0.600) enemy=None slot=None use=False popup=False
+(0.050,0.500) enemy=None slot=None use=False popup=False
+(0.100,0.500) enemy=None slot=None use=False popup=False
+(0.150,0.500) enemy=None slot=None use=False popup=False
+(0.200,0.500) enemy=None slot=None use=False popup=False
+(0.250,0.500) enemy=None slot=None use=False popup=False
+(0.300,0.500) enemy=None slot=None use=False popup=False
+(0.050,0.680) enemy=None slot=None use=False popup=False
+(0.100,0.680) enemy=None slot=None use=False popup=False
+(0.150,0.680) enemy=None slot=None use=False popup=False
+(0.200,0.680) enemy=None slot=None use=False popup=False
+(0.250,0.680) enemy=None slot=None use=False popup=False
+(0.300,0.680) enemy=None slot=None use=False popup=False
+(0.050,0.400) enemy=None slot=None use=False popup=False
+(0.100,0.400) enemy=None slot=None use=False popup=False
+(0.150,0.400) enemy=None slot=None use=False popup=False
+(0.200,0.400) enemy=None slot=None use=False popup=False
+(0.250,0.400) enemy=None slot=None use=False popup=False
+(0.300,0.400) enemy=None slot=None use=False popup=False
+(0.050,0.300) enemy=None slot=None use=False popup=False
+(0.100,0.300) enemy=None slot=None use=False popup=False
+(0.150,0.300) enemy=None slot=None use=False popup=False
+(0.200,0.300) enemy=None slot=None use=False popup=False
+(0.250,0.300) enemy=None slot=None use=False popup=False
+(0.300,0.300) enemy=None slot=None use=False popup=False
+02:11:38 stopped: couldn't find HunterKiller on screen
+02:12:53 turn 1: waiting for your turn
+02:12:54 playing SolarStrike -> HunterKiller (combat_id=1)
+02:12:56   aimed at combat_id=1 at (0.65, 0.6)
+02:12:56 drinking WeakPotion -> HunterKiller
+02:12:58 ending turn
+02:12:58 turn 2: waiting for your turn
+02:13:00 stopped: combat over after 1 turns
+02:13:47 turn 1: waiting for your turn
+02:13:47 playing Patter+
+02:13:48 playing SolarStrike -> TheInsatiable (combat_id=1)
+02:13:50   aimed at combat_id=1 at (0.65, 0.6)
+02:13:50 playing GatherLight
+02:13:51 playing StrikeRegent+ -> TheInsatiable (combat_id=1)
+02:13:52   aimed at combat_id=1 at (0.65, 0.6)
+02:13:52 playing StrikeRegent -> TheInsatiable (combat_id=1)
+02:13:53   aimed at combat_id=1 at (0.65, 0.6)
+02:13:53 ending turn
+02:13:54 turn 2: waiting for your turn
+02:13:59 playing FallingStar -> TheInsatiable (combat_id=1)
+02:14:00   aimed at combat_id=1 at (0.65, 0.6)
+02:14:00 playing GammaBlast -> TheInsatiable (combat_id=1)
+02:14:01   aimed at combat_id=1 at (0.65, 0.6)
+02:14:02 playing Stardust
+02:14:02 playing PhotonCut -> TheInsatiable (combat_id=1)
+02:14:03   aimed at combat_id=1 at (0.65, 0.6)
+02:14:03 picking IAmInvincible (PHOTON_CUT.selectionScreenPrompt)
+02:14:04 playing FranticEscape
+02:14:05 drinking SkillPotion
+02:14:06 choosing Guards
+02:14:08 playing Guards
+02:14:09 ending turn
+02:14:09 turn 3: waiting for your turn
+02:14:14 playing Radiate
+02:14:15 playing DefendRegent
+02:14:15 playing ShiningStrike -> TheInsatiable (combat_id=1)
+02:14:16   aimed at combat_id=1 at (0.65, 0.6)
+02:14:16 playing GuidingStar -> TheInsatiable (combat_id=1)
+02:14:17   aimed at combat_id=1 at (0.65, 0.6)
+02:14:18 playing CloakOfStars
+02:14:19 ending turn
+02:14:19 turn 4: waiting for your turn
+02:14:23 playing ShiningStrike -> TheInsatiable (combat_id=1)
+02:14:24   aimed at combat_id=1 at (0.65, 0.6)
+02:14:24 playing DefendRegent
+02:14:25 playing StrikeRegent -> TheInsatiable (combat_id=1)
+02:14:26   aimed at combat_id=1 at (0.65, 0.6)
+02:14:26 playing HiddenCache+
+02:14:28 ending with 0 energy; not worth playing: RoyalGamble
+02:14:28 ending turn
+02:14:28 turn 5: waiting for your turn
+02:14:32 playing SolarStrike -> TheInsatiable (combat_id=1)
+02:14:33   aimed at combat_id=1 at (0.65, 0.6)
+02:14:34 playing Glimmer
+02:14:50 stopped: cancelled
+02:14:51 turn 1: waiting for your turn
+02:15:03 playing Stardust
+02:15:05 playing GatherLight
+02:15:05 playing ManifestAuthority
+02:15:06 playing MasterOfStrategy
+02:15:07 ending turn
+02:15:07 turn 2: waiting for your turn
+02:15:11 playing Patter
+02:15:12 playing Radiate
+02:15:13 playing GatherLight
+02:15:13 playing FranticEscape
+02:15:14 playing StrikeRegent+ -> TheInsatiable (combat_id=1)
+02:15:16   aimed at combat_id=1 at (0.65, 0.6)
+02:15:16 ending turn
+02:15:17 turn 3: waiting for your turn
+02:15:22 playing FallingStar -> TheInsatiable (combat_id=1)
+02:15:22   aimed at combat_id=1 at (0.65, 0.6)
+02:15:23 playing Patter
+02:15:24 playing ShiningStrike -> TheInsatiable (combat_id=1)
+02:15:24   aimed at combat_id=1 at (0.65, 0.6)
+02:15:25 playing GuidingStar -> TheInsatiable (combat_id=1)
+02:15:25   aimed at combat_id=1 at (0.65, 0.6)
+02:15:26 ending turn
+02:15:26 turn 4: waiting for your turn
+02:15:29 stopped: you died (turn 3)
+03:01:02 turn 1: waiting for your turn
+03:01:03 playing DefendNecrobinder
+03:01:04 playing StrikeNecrobinder -> TwigSlimeS (combat_id=1)
+03:01:05   aimed at combat_id=1 at (0.6, 0.6)
+03:01:06 playing StrikeNecrobinder -> TwigSlimeS (combat_id=1)
+03:01:06   aimed at combat_id=1 at (0.6, 0.6)
+03:01:07 ending turn
+03:01:07 turn 2: waiting for your turn
+03:01:12 playing StrikeNecrobinder -> LeafSlimeS (combat_id=3)
+03:01:12 stopped: combat over after 2 turns
