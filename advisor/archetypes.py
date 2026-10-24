@@ -12,38 +12,50 @@ from relics import GAMEDATA
 
 # {character: {build: (text regex, core cards, key relics)}}. Core cards count double for commitment.
 ARCHETYPES = {
+    # Core cards and relics added in v15 come from the user's Research Notes guides and Spire-Forge BUILD_DATA,
+    # kept only where the card exists in StS2 and its game text fits the build (tools/import_research.py notes).
     "Ironclad": {
-        "Strength": (r"Strength", ["DemonForm", "Inflame", "SwordBoomerang", "TwinStrike", "Whirlwind", "FightMe"],
-                     ["Anchor", "HornCleat", "RuinedHelmet"]),
+        "Strength": (r"Strength", ["DemonForm", "Inflame", "SwordBoomerang", "TwinStrike", "Whirlwind", "FightMe",
+                                   "Offering"], ["Anchor", "HornCleat", "RuinedHelmet", "Vajra", "PenNib"]),
         "Vulnerable": (r"Vulnerable", ["Bash", "Uppercut"], []),
-        "Exhaust": (r"Exhaust", ["FeelNoPain", "DarkEmbrace", "SecondWind", "TrueGrit", "BurningPact", "Corruption"], []),
+        "Exhaust": (r"Exhaust", ["FeelNoPain", "DarkEmbrace", "SecondWind", "TrueGrit", "BurningPact", "Corruption",
+                                 "FiendFire", "Brand"], []),
         "Block": (r"Block", ["BodySlam", "ShrugItOff", "Impervious", "Unmovable", "CrimsonMantle", "FlameBarrier",
-                             "BloodWall", "Armaments"], ["Sai"]),
-        "SelfDamage": (r"[Ll]ose \{?\w*\}? ?HP", ["Bloodletting", "Rupture"], []),
+                             "BloodWall", "Armaments", "Barricade"], ["Sai", "Anchor"]),
+        "SelfDamage": (r"[Ll]ose \{?\w*\}? ?HP", ["Bloodletting", "Rupture", "Offering", "Inferno", "TearAsunder", "Brand"],
+                       ["SelfFormingClay", "DemonTongue", "CentennialPuzzle"]),
+        "Strikes": (r"Strike", ["PerfectedStrike", "Hellraiser", "TwinStrike", "PommelStrike"], ["StrikeDummy", "PenNib"]),
     },
     "Silent": {
         "Poison": (r"Poison", ["NoxiousFumes", "DeadlyPoison", "PoisonedStab", "BouncingFlask", "Accelerant",
-                               "Envenom", "CorrosiveWave", "BubbleBubble", "Haze", "Mirage"], []),
-        "Shiv": (r"Shiv", ["BladeDance", "CloakAndDagger", "Accuracy", "InfiniteBlades"],
+                               "Envenom", "CorrosiveWave", "BubbleBubble", "Haze", "Mirage", "Burst"], ["SneckoSkull"]),
+        "Shiv": (r"Shiv", ["BladeDance", "CloakAndDagger", "Accuracy", "InfiniteBlades", "FanOfKnives", "Finisher"],
                  ["Shuriken", "Kunai", "OrnamentalFan"]),
         "Sly": (r"Sly|[Dd]iscard", ["Acrobatics", "Prepared", "HiddenDaggers", "Survivor", "Tactician", "Reflex",
-                                    "HandTrick"], ["Tingsha", "BagOfPreparation", "CentennialPuzzle", "LetterOpener"]),
+                                    "HandTrick", "ToolsOfTheTrade", "Untouchable", "CalculatedGamble", "GrandFinale"],
+                ["Tingsha", "BagOfPreparation", "CentennialPuzzle", "LetterOpener", "ToughBandages"]),
     },
     "Necrobinder": {
-        "Osty": (r"Osty|Summon", ["Bodyguard", "Unleash", "SicEm", "Dirge"], ["BoneFlute", "BoundPhylactery"]),
-        "Souls": (r"Soul", ["CaptureSpirit", "GraveWarden", "Dirge", "BorrowedTime"], []),
-        "Doom": (r"Doom", ["ReaperForm", "DeathMarch", "TheScythe", "Reave"], []),
+        "Osty": (r"Osty|Summon", ["Bodyguard", "Unleash", "SicEm", "Dirge", "Reanimate", "Invoke", "Rattle"],
+                 ["BoneFlute", "BoundPhylactery"]),
+        "Souls": (r"Soul", ["CaptureSpirit", "GraveWarden", "Dirge", "BorrowedTime", "Haunt", "SoulStorm", "DeathMarch"],
+                  ["FuneraryMask"]),
+        "Doom": (r"Doom", ["ReaperForm", "DeathMarch", "TheScythe", "Reave", "Countdown"], []),
     },
     "Regent": {
         "Stars": (r"singleStarIcon|Star", ["Venerate", "Glow", "ShiningStrike", "Devastate", "Reflect", "FallingStar",
-                                           "ChildOfTheStars"], []),
-        "Forge": (r"Forge|Sovereign Blade", ["SummonForth", "Conqueror", "TheSmith", "Parry", "SwordSage"], []),
+                                           "ChildOfTheStars", "SevenStars", "Stardust", "BlackHole", "BigBang",
+                                           "Convergence"], []),
+        "Forge": (r"Forge|Sovereign Blade", ["SummonForth", "Conqueror", "TheSmith", "Parry", "SwordSage", "SeekingEdge",
+                                             "BigBang"], []),
     },
     "Defect": {
         "Orbs": (r"Channel|Evoke|Focus|[Oo]rb", ["BallLightning", "ColdSnap", "LightningRod", "FocusedStrike",
                                                  "Glacier", "Chill", "Hailstorm", "Hotfix", "Capacitor", "Defragment",
-                                                 "Refract", "ShadowShield", "Tempest"], ["CrackedCore"]),
-        "Claw": (r"Claw", ["Claw", "Hologram", "Scrape", "Skim"], []),
+                                                 "Refract", "ShadowShield", "Tempest", "Darkness", "MultiCast",
+                                                 "Coolheaded", "Storm", "Loop", "BiasedCognition"],
+                 ["CrackedCore", "DataDisk", "GoldPlatedCables"]),
+        "Claw": (r"Claw", ["Claw", "Hologram", "Scrape", "Skim", "AllForOne", "Feral"], []),
     },
 }
 CORE_WEIGHT = 2
@@ -53,6 +65,25 @@ COMMIT_FULL = 8  # commitment points at which a build counts as fully committed
 
 def snake(name):
     return re.sub(r"(?<!^)(?=[A-Z])", "_", name).upper()
+
+
+@lru_cache(maxsize=4096)
+def card_text(name):
+    return GAMEDATA.get("text", {}).get(f"cards:{snake(name)}.description", "")
+
+
+def expand_power(card):
+    """Some debuffs sit under a generic "Power" var (Uppercut: "Apply {Power} Weak. Apply {Power} Vulnerable.",
+    Shockwave, Expose, Putrefy): name them from the card text so the solver and deck sim apply them."""
+    v = card.get("vars", {})
+    if "Power" not in v or card.get("target") not in ("AnyEnemy", "AllEnemies"):
+        return card
+    text = card_text(card["name"])
+    named = {key: v["Power"] for word, key in (("Weak", "WeakPower"), ("Vulnerable", "VulnerablePower"))
+             if re.search(r"\{Power[^}]*\}[^.]*\b" + word, text)}
+    if not named:
+        return card
+    return {**card, "vars": {**{k: x for k, x in v.items() if k != "Power"}, **named}}
 
 
 @lru_cache(maxsize=4096)

@@ -299,3 +299,1358 @@ potions = [{'slot': 0, 'name': 'BlockPotion'}]
 10:39:51 playing StrikeIronclad -> FuzzyWurmCrawler
 10:39:52 playing StrikeIronclad -> FuzzyWurmCrawler
 10:39:52 stopped: combat over after 6 turns
+20:19:40 turn 1: waiting for your turn
+20:19:41 playing Rainbow
+20:19:42 playing DefendDefect
+20:19:43 drinking WeakPotion -> Byrdonis
+20:19:49 ending turn
+20:19:50 turn 2: waiting for your turn
+20:19:54 playing ShadowShield
+20:19:55 playing StrikeDefect -> Byrdonis
+20:19:56 ending turn
+20:19:56 turn 3: waiting for your turn
+20:20:01 playing ColdSnap -> Byrdonis
+20:20:02 playing Defile -> Byrdonis
+20:20:03 playing GatherLight
+20:20:04 ending turn
+20:20:04 turn 4: waiting for your turn
+20:20:09 playing Barrage -> Byrdonis
+20:20:10 playing DefendDefect+
+20:20:11 playing Barrage -> Byrdonis
+20:20:12 ending turn
+20:20:13 turn 5: waiting for your turn
+20:20:13 stopped: combat over after 4 turns
+20:24:38 turn 1: waiting for your turn
+20:24:39 playing Barrage -> CeremonialBeast
+20:24:41 playing Defile -> CeremonialBeast
+20:24:42 ending turn
+20:24:42 turn 2: waiting for your turn
+20:24:46 playing ColdSnap -> CeremonialBeast
+20:24:47 playing StrikeDefect -> CeremonialBeast
+20:24:48 playing Barrage -> CeremonialBeast
+20:24:49 ending turn
+20:24:49 turn 3: waiting for your turn
+20:24:55 playing StrikeDefect -> CeremonialBeast
+20:24:56 playing GatherLight
+20:24:56 playing DefendDefect+
+20:24:57 ending turn
+20:24:58 turn 4: waiting for your turn
+20:25:00 stopped: cancelled
+20:26:52 turn 1: waiting for your turn
+20:26:53 playing ShadowShield
+20:26:54 playing DefendDefect
+20:26:55 ending turn
+20:26:55 turn 2: waiting for your turn
+20:27:01 playing GatherLight
+20:27:01 playing Darkness
+20:27:02 playing Barrage -> CeremonialBeast
+20:27:03 ending turn
+20:27:04 turn 3: waiting for your turn
+20:27:10 playing ColdSnap -> CeremonialBeast
+20:27:10 playing DefendDefect+
+20:27:12 playing StrikeDefect -> CeremonialBeast
+20:27:13 ending turn
+20:27:13 turn 4: waiting for your turn
+20:27:18 playing Defile -> CeremonialBeast
+20:27:19 playing Barrage -> CeremonialBeast
+20:27:20 playing ColdSnap -> CeremonialBeast
+20:27:21 ending turn
+20:27:21 turn 5: waiting for your turn
+20:27:26 playing DefendDefect+
+20:27:27 ending turn
+20:27:27 turn 6: waiting for your turn
+20:27:32 playing DefendDefect
+20:27:33 playing Rainbow+
+20:27:34 ending turn
+20:27:34 turn 7: waiting for your turn
+20:27:39 playing Darkness
+20:27:40 playing StrikeDefect -> CeremonialBeast
+20:27:41 playing StrikeDefect -> CeremonialBeast
+20:27:42 stopped: combat over after 7 turns
+20:30:39 turn 1: waiting for your turn
+20:30:40 playing DefendDefect
+20:30:41 playing Defile -> ThievingHopper
+20:30:43 playing DefendDefect
+20:30:44 ending turn
+20:30:44 turn 2: waiting for your turn
+20:30:47 stopped: cancelled
+20:33:25 turn 1: waiting for your turn
+20:33:26 playing Rainbow+
+20:33:27 playing Barrage -> ThievingHopper
+20:33:28 ending turn
+20:33:28 turn 2: waiting for your turn
+20:33:34 playing DefendDefect
+20:33:34 playing ShadowShield
+20:33:35 ending turn
+20:33:35 turn 3: waiting for your turn
+20:33:41 playing DefendDefect+
+20:33:41 playing Darkness
+20:33:42 playing MachineLearning
+20:33:43 ending turn
+20:33:43 turn 4: waiting for your turn
+20:33:48 playing Barrage -> ThievingHopper
+20:33:48 playing Barrage -> ThievingHopper
+20:33:49 playing Defile -> ThievingHopper
+20:33:52 stopped: combat over after 4 turns
+20:34:08 turn 1: waiting for your turn
+20:34:09 playing DefendDefect
+20:34:09 playing Rainbow+
+20:34:10 ending turn
+20:34:10 turn 2: waiting for your turn
+20:34:16 playing Barrage -> BowlbugRock
+20:34:17 playing DefendDefect
+20:34:18 playing ColdSnap -> BowlbugRock
+20:34:19 ending turn
+20:34:19 turn 3: waiting for your turn
+20:34:25 playing GatherLight
+20:34:25 playing ColdSnap -> BowlbugNectar
+20:34:28 playing DefendDefect+
+20:34:29 ending turn
+20:34:29 turn 4: waiting for your turn
+20:34:34 playing Defile -> BowlbugNectar
+20:34:35 playing ShadowShield
+20:34:36 ending turn
+20:34:36 turn 5: waiting for your turn
+20:34:36 stopped: combat over after 4 turns
+20:40:53 turn 1: waiting for your turn
+20:40:54 playing StrikeDefect -> InfestedPrism
+20:40:56 playing DefendDefect
+20:40:57 playing ColdSnap -> InfestedPrism
+20:40:58 ending turn
+20:40:58 turn 2: waiting for your turn
+20:41:02 playing Rainbow+
+20:41:03 playing BoostAway
+20:41:04 playing StrikeDefect -> InfestedPrism
+20:41:05 ending turn
+20:41:05 turn 3: waiting for your turn
+20:41:09 playing DefendDefect+
+20:41:10 playing ShadowShield
+20:41:11 ending turn
+20:41:11 turn 4: waiting for your turn
+20:41:16 playing Barrage -> InfestedPrism
+20:41:17 playing Exterminate
+20:41:18 playing ColdSnap -> InfestedPrism
+20:41:19 ending turn
+20:41:19 turn 5: waiting for your turn
+20:41:24 playing BulkUp
+20:41:25 playing Barrage -> InfestedPrism
+20:41:26 playing BoostAway
+20:41:27 ending turn
+20:41:27 turn 6: waiting for your turn
+20:41:31 playing DefendDefect
+20:41:32 playing StrikeDefect -> InfestedPrism
+20:41:33 playing ColdSnap -> InfestedPrism
+20:41:34 ending turn
+20:41:34 turn 7: waiting for your turn
+20:41:38 playing StrikeDefect -> InfestedPrism
+20:41:39 drinking DexterityPotion
+20:41:44 playing ShadowShield
+20:41:45 ending turn
+20:41:45 turn 8: waiting for your turn
+20:41:50 playing Dualcast
+20:41:50 playing Barrage -> InfestedPrism
+20:41:52 stopped: combat over after 8 turns
+20:45:56 turn 1: waiting for your turn
+20:45:57 playing Barrage -> SpinyToad
+20:45:59 playing Defile -> SpinyToad
+20:46:00 ending turn
+20:46:00 turn 2: waiting for your turn
+20:46:04 playing DefendDefect+
+20:46:05 playing StrikeDefect -> SpinyToad
+20:46:06 playing BoostAway
+20:46:06 playing Rainbow+
+20:46:07 ending turn
+20:46:07 turn 3: waiting for your turn
+20:46:13 playing UltimateStrike -> SpinyToad
+20:46:14 playing ColdSnap -> SpinyToad
+20:46:15 playing Exterminate
+20:46:16 playing ColdSnap -> SpinyToad
+20:46:17 ending turn
+20:46:17 turn 4: waiting for your turn
+20:46:21 playing Dualcast
+20:46:22 playing Barrage -> SpinyToad
+20:46:22 stopped: combat over after 4 turns
+20:47:08 turn 1: waiting for your turn
+20:47:08 playing Rainbow+
+20:47:09 playing UltimateStrike -> Entomancer
+20:47:10 ending turn
+20:47:10 turn 2: waiting for your turn
+20:47:16 playing DefendDefect+
+20:47:16 playing ColdSnap -> Entomancer
+20:47:17 ending turn
+20:47:18 turn 3: waiting for your turn
+20:47:22 playing StrikeDefect -> Entomancer
+20:47:23 playing ShadowShield
+20:47:23 playing Dualcast
+20:47:24 ending turn
+20:47:25 turn 4: waiting for your turn
+20:47:29 playing Loop
+20:47:30 playing GatherLight
+20:47:30 playing DefendDefect
+20:47:31 playing ColdSnap+ -> Entomancer
+20:47:32 ending turn
+20:47:32 turn 5: waiting for your turn
+20:47:38 playing BulkUp
+20:47:39 playing Defile -> Entomancer
+20:47:40 playing Darkness+
+20:47:41 ending turn
+20:47:41 turn 6: waiting for your turn
+20:47:45 playing ColdSnap -> Entomancer
+20:47:46 ending turn
+20:47:47 turn 7: waiting for your turn
+20:47:47 stopped: combat over after 6 turns
+20:48:20 turn 1: waiting for your turn
+20:48:21 playing Barrage -> Chomper #1
+20:48:22 playing DefendDefect+
+20:48:23 ending turn
+20:48:23 turn 2: waiting for your turn
+20:48:29 playing Null -> Chomper #2
+20:48:31 playing ColdSnap -> Chomper #2
+20:48:32 playing ColdSnap+ -> Chomper #2
+20:48:34 ending turn
+20:48:34 turn 3: waiting for your turn
+20:48:40 playing Loop
+20:48:40 playing Rainbow+
+20:48:41 playing GatherLight
+20:48:43 ending turn
+20:48:43 turn 4: waiting for your turn
+20:48:49 playing Darkness+
+20:48:50 playing BulkUp
+20:48:51 playing Barrage -> Chomper #2
+20:48:52 playing StrikeDefect -> Chomper #2
+20:48:53 ending turn
+20:48:53 turn 5: waiting for your turn
+20:49:00 playing CompileDriver+ -> Chomper
+20:49:00 playing Defile -> Chomper
+20:49:01 playing Exterminate
+20:49:02 stopped: combat over after 5 turns
+20:54:13 turn 1: waiting for your turn
+20:54:13 playing Null -> Crusher
+
+=== 2026-10-11 20:54:25 couldn't find enemy combat_id=1
+window (hwnd, left, top, w, h) = (265102, 0, 23, 1920, 1057)
+enemies = [('Crusher', 1), ('Rocket', 2)]
+potions = [{'slot': 0, 'name': 'ColorlessPotion'}, {'slot': 1, 'name': 'HeartOfIron'}, {'slot': 2, 'name': 'LuckyTonic'}, {'slot': 3, 'name': 'EssenceOfDarkness'}]
+(0.350,0.600) enemy=None slot=None use=False popup=False
+(0.400,0.600) enemy=None slot=None use=False popup=False
+(0.450,0.600) enemy=None slot=None use=False popup=False
+(0.500,0.600) enemy=None slot=None use=False popup=False
+(0.550,0.600) enemy=None slot=None use=False popup=False
+(0.600,0.600) enemy=None slot=None use=False popup=False
+(0.650,0.600) enemy=None slot=None use=False popup=False
+(0.700,0.600) enemy=None slot=None use=False popup=False
+(0.750,0.600) enemy=None slot=None use=False popup=False
+(0.800,0.600) enemy=2 slot=None use=False popup=False
+(0.850,0.600) enemy=2 slot=None use=False popup=False
+(0.900,0.600) enemy=2 slot=None use=False popup=False
+(0.950,0.600) enemy=None slot=None use=False popup=False
+(0.350,0.500) enemy=None slot=None use=False popup=False
+(0.400,0.500) enemy=None slot=None use=False popup=False
+(0.450,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.550,0.500) enemy=None slot=None use=False popup=False
+(0.600,0.500) enemy=None slot=None use=False popup=False
+(0.650,0.500) enemy=None slot=None use=False popup=False
+(0.700,0.500) enemy=None slot=None use=False popup=False
+(0.750,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=2 slot=None use=False popup=False
+(0.850,0.500) enemy=2 slot=None use=False popup=False
+(0.900,0.500) enemy=2 slot=None use=False popup=False
+(0.950,0.500) enemy=None slot=None use=False popup=False
+(0.350,0.680) enemy=None slot=None use=False popup=False
+(0.400,0.680) enemy=None slot=None use=False popup=False
+(0.450,0.680) enemy=None slot=None use=False popup=False
+(0.500,0.680) enemy=None slot=None use=False popup=False
+(0.550,0.680) enemy=None slot=None use=False popup=False
+(0.600,0.680) enemy=None slot=None use=False popup=False
+(0.650,0.680) enemy=None slot=None use=False popup=False
+(0.700,0.680) enemy=None slot=None use=False popup=False
+(0.750,0.680) enemy=None slot=None use=False popup=False
+(0.800,0.680) enemy=None slot=None use=False popup=False
+(0.850,0.680) enemy=None slot=None use=False popup=False
+(0.900,0.680) enemy=None slot=None use=False popup=False
+(0.950,0.680) enemy=None slot=None use=False popup=False
+(0.350,0.400) enemy=None slot=None use=False popup=False
+(0.400,0.400) enemy=None slot=None use=False popup=False
+(0.450,0.400) enemy=None slot=None use=False popup=False
+(0.500,0.400) enemy=None slot=None use=False popup=False
+(0.550,0.400) enemy=None slot=None use=False popup=False
+(0.600,0.400) enemy=None slot=None use=False popup=False
+(0.650,0.400) enemy=None slot=None use=False popup=False
+(0.700,0.400) enemy=None slot=None use=False popup=False
+(0.750,0.400) enemy=None slot=None use=False popup=False
+(0.800,0.400) enemy=None slot=None use=False popup=False
+(0.850,0.400) enemy=None slot=None use=False popup=False
+(0.900,0.400) enemy=None slot=None use=False popup=False
+(0.950,0.400) enemy=None slot=None use=False popup=False
+(0.350,0.300) enemy=None slot=None use=False popup=False
+(0.400,0.300) enemy=None slot=None use=False popup=False
+(0.450,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.550,0.300) enemy=None slot=None use=False popup=False
+(0.600,0.300) enemy=None slot=None use=False popup=False
+(0.650,0.300) enemy=None slot=None use=False popup=False
+(0.700,0.300) enemy=None slot=None use=False popup=False
+(0.750,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.850,0.300) enemy=None slot=None use=False popup=False
+(0.900,0.300) enemy=None slot=None use=False popup=False
+(0.950,0.300) enemy=None slot=None use=False popup=False
+20:54:25 stopped: couldn't find Crusher on screen
+20:56:46 turn 1: waiting for your turn
+20:56:46 playing Null -> Crusher
+20:56:59 drinking ColorlessPotion
+20:57:03 playing DefendDefect+
+20:57:05 stopped: DefendDefect+ didn't play
+20:57:22 turn 1: waiting for your turn
+20:57:23 playing DefendDefect+
+20:57:24 ending turn
+20:57:24 turn 2: waiting for your turn
+20:57:31 playing ShadowShield
+20:57:31 playing ColdSnap -> Rocket
+20:57:32 ending turn
+20:57:33 turn 3: waiting for your turn
+20:57:39 playing BoostAway
+20:57:39 playing GatherLight
+20:57:40 playing Darkness+
+20:57:41 playing Defile -> Crusher
+20:57:42 ending turn
+20:57:42 turn 4: waiting for your turn
+20:57:48 playing BulkUp
+20:57:49 playing ColdSnap+ -> Rocket
+20:57:50 ending turn
+20:57:50 turn 5: waiting for your turn
+20:57:56 playing Rainbow+
+20:57:57 playing ColdSnap -> Crusher
+20:57:58 ending turn
+20:57:58 turn 6: waiting for your turn
+20:58:05 playing BulkUp+
+20:58:06 playing BoostAway
+20:58:07 ending turn
+20:58:07 turn 7: waiting for your turn
+20:58:12 stopped: you died (turn 6)
+20:59:17 turn 1: waiting for your turn
+20:59:18 playing DefendIronclad
+20:59:19 playing StrikeIronclad -> Toadpole #1
+20:59:21 playing StrikeIronclad -> Toadpole #1
+20:59:22 ending turn
+20:59:22 turn 2: waiting for your turn
+20:59:26 playing Bash -> Toadpole #1
+20:59:26 playing StrikeIronclad -> Toadpole #1
+20:59:28 ending turn
+20:59:28 turn 3: waiting for your turn
+20:59:32 playing DefendIronclad
+20:59:32 playing StrikeIronclad -> Toadpole
+20:59:35 playing DefendIronclad
+20:59:36 ending turn
+20:59:36 turn 4: waiting for your turn
+20:59:40 playing Bash -> Toadpole
+20:59:41 playing StrikeIronclad -> Toadpole
+20:59:43 stopped: combat over after 4 turns
+16:18:58 turn 1: waiting for your turn
+16:18:59 playing Bash -> CorpseSlug #1
+16:19:01 playing DefendIronclad
+16:19:02 ending turn
+16:19:02 turn 2: waiting for your turn
+16:19:06 playing StrikeIronclad -> CorpseSlug #1
+16:19:07 playing StrikeIronclad -> CorpseSlug #1
+16:19:08 ending turn
+16:19:08 turn 3: waiting for your turn
+16:19:13 playing StrikeIronclad -> CorpseSlug
+16:19:15 playing StrikeIronclad -> CorpseSlug
+16:19:16 playing DefendIronclad
+16:19:17 ending turn
+16:19:17 turn 4: waiting for your turn
+16:19:20 playing Bash -> CorpseSlug
+16:19:21 playing StrikeIronclad -> CorpseSlug
+16:19:22 ending turn
+16:19:23 turn 5: waiting for your turn
+16:19:23 stopped: combat over after 4 turns
+16:22:07 turn 1: waiting for your turn
+16:22:08 playing StrikeIronclad -> PunchConstruct
+16:22:10 playing StrikeIronclad -> PunchConstruct
+16:22:11 playing StrikeIronclad -> PunchConstruct
+16:22:12 ending turn
+16:22:12 turn 2: waiting for your turn
+16:22:16 playing DefendIronclad
+16:22:16 playing DefendIronclad
+16:22:17 ending turn
+16:22:17 turn 3: waiting for your turn
+16:22:22 playing DefendIronclad
+16:22:23 playing DefendIronclad
+16:22:23 playing StrikeIronclad -> PunchConstruct
+16:22:25 ending turn
+16:22:25 turn 4: waiting for your turn
+16:22:28 playing StrikeIronclad -> PunchConstruct
+16:22:29 playing StrikeIronclad -> PunchConstruct
+16:22:30 playing StrikeIronclad -> PunchConstruct
+16:22:31 ending turn
+16:22:31 turn 5: waiting for your turn
+16:22:35 playing DefendIronclad
+16:22:36 playing DefendIronclad
+16:22:37 ending turn
+16:22:37 turn 6: waiting for your turn
+16:22:40 playing StrikeIronclad -> PunchConstruct
+16:22:41 playing StrikeIronclad -> PunchConstruct
+16:22:42 playing StrikeIronclad -> PunchConstruct
+16:22:43 drinking BlockPotion
+
+=== 2026-10-14 16:22:57 couldn't find potion slot 1 (BlockPotion)
+window (hwnd, left, top, w, h) = (3473874, 0, 23, 1920, 1057)
+enemies = []
+potions = [{'slot': 0, 'name': 'SpeedPotion'}, {'slot': 1, 'name': 'BlockPotion'}]
+(0.200,0.035) enemy=None slot=None use=False popup=False
+(0.210,0.035) enemy=None slot=None use=False popup=False
+(0.220,0.035) enemy=None slot=None use=False popup=False
+(0.230,0.035) enemy=None slot=None use=None popup=None
+(0.240,0.035) enemy=None slot=None use=None popup=None
+(0.250,0.035) enemy=None slot=None use=None popup=None
+(0.260,0.035) enemy=None slot=None use=None popup=None
+(0.270,0.035) enemy=None slot=None use=None popup=None
+(0.280,0.035) enemy=None slot=None use=None popup=None
+(0.290,0.035) enemy=None slot=None use=None popup=None
+(0.300,0.035) enemy=None slot=None use=None popup=None
+(0.310,0.035) enemy=None slot=None use=None popup=None
+(0.320,0.035) enemy=None slot=None use=None popup=None
+(0.330,0.035) enemy=None slot=None use=None popup=None
+(0.340,0.035) enemy=None slot=None use=None popup=None
+(0.350,0.035) enemy=None slot=None use=None popup=None
+(0.360,0.035) enemy=None slot=None use=None popup=None
+(0.370,0.035) enemy=None slot=None use=None popup=None
+(0.380,0.035) enemy=None slot=None use=None popup=None
+(0.390,0.035) enemy=None slot=None use=None popup=None
+(0.400,0.035) enemy=None slot=None use=None popup=None
+(0.410,0.035) enemy=None slot=None use=None popup=None
+(0.420,0.035) enemy=None slot=None use=None popup=None
+(0.430,0.035) enemy=None slot=None use=None popup=None
+(0.440,0.035) enemy=None slot=None use=None popup=None
+(0.450,0.035) enemy=None slot=None use=None popup=None
+(0.200,0.050) enemy=None slot=None use=None popup=None
+(0.210,0.050) enemy=None slot=None use=None popup=None
+(0.220,0.050) enemy=None slot=None use=None popup=None
+(0.230,0.050) enemy=None slot=None use=None popup=None
+(0.240,0.050) enemy=None slot=None use=None popup=None
+(0.250,0.050) enemy=None slot=None use=None popup=None
+(0.260,0.050) enemy=None slot=None use=None popup=None
+(0.270,0.050) enemy=None slot=None use=None popup=None
+(0.280,0.050) enemy=None slot=None use=None popup=None
+(0.290,0.050) enemy=None slot=None use=None popup=None
+(0.300,0.050) enemy=None slot=None use=None popup=None
+(0.310,0.050) enemy=None slot=None use=None popup=None
+(0.320,0.050) enemy=None slot=None use=None popup=None
+(0.330,0.050) enemy=None slot=None use=None popup=None
+(0.340,0.050) enemy=None slot=None use=None popup=None
+(0.350,0.050) enemy=None slot=None use=None popup=None
+(0.360,0.050) enemy=None slot=None use=None popup=None
+(0.370,0.050) enemy=None slot=None use=None popup=None
+(0.380,0.050) enemy=None slot=None use=None popup=None
+(0.390,0.050) enemy=None slot=None use=None popup=None
+(0.400,0.050) enemy=None slot=None use=None popup=None
+(0.410,0.050) enemy=None slot=None use=None popup=None
+(0.420,0.050) enemy=None slot=None use=None popup=None
+(0.430,0.050) enemy=None slot=None use=None popup=None
+(0.440,0.050) enemy=None slot=None use=None popup=None
+(0.450,0.050) enemy=None slot=None use=None popup=None
+(0.200,0.025) enemy=None slot=None use=None popup=None
+(0.210,0.025) enemy=None slot=None use=None popup=None
+(0.220,0.025) enemy=None slot=None use=None popup=None
+(0.230,0.025) enemy=None slot=None use=None popup=None
+(0.240,0.025) enemy=None slot=None use=None popup=None
+(0.250,0.025) enemy=None slot=None use=None popup=None
+(0.260,0.025) enemy=None slot=None use=None popup=None
+(0.270,0.025) enemy=None slot=None use=None popup=None
+(0.280,0.025) enemy=None slot=None use=None popup=None
+(0.290,0.025) enemy=None slot=None use=None popup=None
+(0.300,0.025) enemy=None slot=None use=None popup=None
+(0.310,0.025) enemy=None slot=None use=None popup=None
+(0.320,0.025) enemy=None slot=None use=None popup=None
+(0.330,0.025) enemy=None slot=None use=None popup=None
+(0.340,0.025) enemy=None slot=None use=None popup=None
+(0.350,0.025) enemy=None slot=None use=None popup=None
+(0.360,0.025) enemy=None slot=None use=None popup=None
+(0.370,0.025) enemy=None slot=None use=None popup=None
+(0.380,0.025) enemy=None slot=None use=None popup=None
+(0.390,0.025) enemy=None slot=None use=None popup=None
+(0.400,0.025) enemy=None slot=None use=None popup=None
+(0.410,0.025) enemy=None slot=None use=None popup=None
+(0.420,0.025) enemy=None slot=None use=None popup=None
+(0.430,0.025) enemy=None slot=None use=None popup=None
+(0.440,0.025) enemy=None slot=None use=None popup=None
+(0.450,0.025) enemy=None slot=None use=None popup=None
+16:22:57 stopped: couldn't find BlockPotion in the potion bar
+16:28:28 turn 1: waiting for your turn
+16:28:29 playing Inflame
+16:28:30 playing StrikeIronclad -> SkulkingColony
+16:28:32 playing StrikeIronclad -> SkulkingColony
+16:28:33 drinking BlockPotion
+16:28:37 ending turn
+16:28:38 turn 2: waiting for your turn
+16:28:41 playing StrikeIronclad -> SkulkingColony
+16:28:41 playing DefendIronclad
+16:28:42 playing StrikeIronclad -> SkulkingColony
+16:28:43 ending turn
+16:28:43 turn 3: waiting for your turn
+16:28:47 playing Bash -> SkulkingColony
+16:28:48 playing DefendIronclad
+16:28:49 ending turn
+16:28:49 turn 4: waiting for your turn
+16:28:53 playing StrikeIronclad -> SkulkingColony
+16:28:54 playing StrikeIronclad -> SkulkingColony
+16:28:55 drinking SpeedPotion
+16:28:56 playing DefendIronclad
+16:28:57 ending turn
+16:28:57 turn 5: waiting for your turn
+16:29:02 playing StrikeIronclad -> SkulkingColony
+16:29:03 playing StrikeIronclad -> SkulkingColony
+16:29:04 stopped: combat over after 5 turns
+16:29:13 turn 1: waiting for your turn
+16:29:14 playing Bash -> HauntedShip
+16:29:15 playing StrikeIronclad -> HauntedShip
+16:29:16 ending turn
+16:29:16 turn 2: waiting for your turn
+16:29:22 playing DefendIronclad
+16:29:22 playing DefendIronclad
+16:29:23 playing StrikeIronclad+ -> HauntedShip
+16:29:24 ending turn
+16:29:24 turn 3: waiting for your turn
+16:29:29 playing DefendIronclad
+16:29:29 playing CrimsonMantle
+16:29:30 playing DefendIronclad
+16:29:31 ending turn
+16:29:31 turn 4: waiting for your turn
+16:29:35 playing StrikeIronclad -> HauntedShip
+16:29:36 playing DefendIronclad
+16:29:37 playing IronWave -> HauntedShip
+16:29:38 ending turn
+16:29:38 turn 5: waiting for your turn
+16:29:42 playing Stomp+
+16:29:43 ending turn
+16:29:43 turn 6: waiting for your turn
+16:29:47 playing StrikeIronclad+ -> HauntedShip
+16:29:48 playing StrikeIronclad -> HauntedShip
+16:29:49 stopped: combat over after 6 turns
+16:30:11 turn 1: waiting for your turn
+16:30:12 playing StrikeIronclad+ -> TerrorEel
+16:30:13 playing DefendIronclad
+16:30:14 playing IronWave -> TerrorEel
+16:30:15 ending turn
+16:30:15 turn 2: waiting for your turn
+16:30:18 playing DefendIronclad
+16:30:19 playing StrikeIronclad -> TerrorEel
+16:30:20 playing DefendIronclad
+16:30:20 ending turn
+16:30:21 turn 3: waiting for your turn
+16:30:25 playing Bash -> TerrorEel
+16:30:26 playing StrikeIronclad+ -> TerrorEel
+16:30:27 ending turn
+16:30:27 turn 4: waiting for your turn
+16:30:31 playing IronWave -> TerrorEel
+16:30:32 playing PommelStrike -> TerrorEel
+16:30:32 playing StrikeIronclad -> TerrorEel
+16:30:34 ending turn
+16:30:34 turn 5: waiting for your turn
+16:30:38 playing StrikeIronclad -> TerrorEel
+16:30:39 playing PommelStrike -> TerrorEel
+16:30:39 playing Stomp+
+16:30:40 ending turn
+16:30:41 turn 6: waiting for your turn
+16:30:45 playing DefendIronclad
+16:30:45 playing DefendIronclad
+16:30:46 playing DefendIronclad
+16:30:47 ending turn
+16:30:47 turn 7: waiting for your turn
+16:30:51 playing IronWave -> TerrorEel
+16:30:52 playing DefendIronclad
+16:30:53 playing DefendIronclad
+16:30:54 ending turn
+16:30:54 turn 8: waiting for your turn
+16:30:57 playing StrikeIronclad+ -> TerrorEel
+16:30:58 playing PommelStrike -> TerrorEel
+16:30:59 playing StrikeIronclad -> TerrorEel
+16:31:01 ending turn
+16:31:01 turn 9: waiting for your turn
+16:31:05 playing Inflame
+16:31:06 playing PommelStrike -> TerrorEel
+16:31:07 stopped: combat over after 9 turns
+16:31:39 turn 1: waiting for your turn
+16:31:40 playing PommelStrike -> PhantasmalGardener #4
+16:31:44 playing StrikeIronclad+ -> PhantasmalGardener #4
+16:31:44 playing PommelStrike -> PhantasmalGardener #4
+16:31:45 drinking BlockPotion
+16:31:47 ending turn
+16:31:47 turn 2: waiting for your turn
+16:31:52 playing DefendIronclad
+16:31:53 playing DefendIronclad
+16:31:53 playing StrikeIronclad -> PhantasmalGardener #1
+16:31:55 ending turn
+16:31:55 turn 3: waiting for your turn
+16:32:00 playing IronWave -> PhantasmalGardener #3
+16:32:01 playing DefendIronclad
+16:32:02 playing StrikeIronclad -> PhantasmalGardener #1
+16:32:03 ending turn
+16:32:03 turn 4: waiting for your turn
+16:32:10 playing StrikeIronclad -> PhantasmalGardener #1
+16:32:11 playing CrimsonMantle
+16:32:12 playing StrikeIronclad -> PhantasmalGardener #1
+16:32:13 ending turn
+16:32:13 turn 5: waiting for your turn
+16:32:17 playing StrikeIronclad -> PhantasmalGardener #2
+16:32:18 playing PommelStrike -> PhantasmalGardener #2
+16:32:19 playing PommelStrike -> PhantasmalGardener #2
+16:32:20 ending turn
+16:32:20 turn 6: waiting for your turn
+16:32:24 playing DefendIronclad
+16:32:24 playing Inflame
+16:32:25 playing StrikeIronclad+ -> PhantasmalGardener
+16:32:26 ending turn
+16:32:27 turn 7: waiting for your turn
+16:32:31 playing Stomp+
+16:32:32 stopped: combat over after 7 turns
+16:32:48 turn 1: waiting for your turn
+16:32:48 playing StrikeIronclad+ -> WaterfallGiant
+16:32:51 playing StrikeIronclad -> WaterfallGiant
+16:32:51 playing StrikeIronclad -> WaterfallGiant
+16:32:53 ending turn
+16:32:53 turn 2: waiting for your turn
+16:32:56 playing DefendIronclad
+16:32:57 playing DefendIronclad
+16:32:58 playing Armaments
+16:32:59 ending turn
+16:32:59 turn 3: waiting for your turn
+16:33:02 playing DefendIronclad
+16:33:03 playing PommelStrike -> WaterfallGiant
+16:33:04 playing IronWave -> WaterfallGiant
+16:33:05 ending turn
+16:33:05 turn 4: waiting for your turn
+16:33:10 playing StrikeIronclad -> WaterfallGiant
+16:33:11 playing PommelStrike+ -> WaterfallGiant
+16:33:12 playing StrikeIronclad+ -> WaterfallGiant
+16:33:13 ending turn
+16:33:14 turn 5: waiting for your turn
+16:33:17 playing BloodWall
+16:33:18 playing IronWave -> WaterfallGiant
+16:33:19 ending turn
+16:33:19 turn 6: waiting for your turn
+16:33:23 playing DefendIronclad
+16:33:23 playing DefendIronclad
+16:33:24 playing IronWave -> WaterfallGiant
+16:33:25 ending turn
+16:33:25 turn 7: waiting for your turn
+16:33:30 playing StrikeIronclad -> WaterfallGiant
+16:33:31 playing DefendIronclad
+16:33:31 playing IronWave -> WaterfallGiant
+16:33:33 ending turn
+16:33:33 turn 8: waiting for your turn
+16:33:36 playing Bash -> WaterfallGiant
+16:33:37 playing StrikeIronclad+ -> WaterfallGiant
+16:33:38 ending turn
+16:33:38 turn 9: waiting for your turn
+16:33:42 playing PommelStrike+ -> WaterfallGiant
+16:33:43 playing StrikeIronclad -> WaterfallGiant
+16:33:44 playing PommelStrike -> WaterfallGiant
+16:33:45 ending turn
+16:33:45 turn 10: waiting for your turn
+16:33:50 playing StrikeIronclad -> WaterfallGiant
+16:33:51 drinking DexterityPotion
+16:33:52 playing Armaments
+16:33:53 picking Inflame (CHOOSE_CARD_UPGRADE_HEADER)
+16:33:54 playing DefendIronclad
+16:33:56 stopped: DefendIronclad didn't play
+16:36:26 turn 1: waiting for your turn
+16:36:27 playing DefendIronclad
+16:36:28 ending turn
+16:36:28 turn 2: waiting for your turn
+16:36:32 playing DefendIronclad
+16:36:33 playing PommelStrike -> WaterfallGiant
+16:36:35 playing IronWave -> WaterfallGiant
+16:36:36 ending turn
+16:36:36 turn 3: waiting for your turn
+16:36:39 playing DefendIronclad
+16:36:40 playing IronWave -> WaterfallGiant
+16:36:41 playing PommelStrike+ -> WaterfallGiant
+16:36:42 ending turn
+16:36:42 turn 4: waiting for your turn
+16:36:47 playing BloodWall
+16:36:48 ending turn
+16:36:48 turn 5: waiting for your turn
+16:36:52 playing CrimsonMantle
+16:36:53 ending turn
+16:36:53 turn 6: waiting for your turn
+16:36:57 playing PommelStrike+ -> WaterfallGiant
+16:36:58 playing PommelStrike -> WaterfallGiant
+16:37:00 ending turn
+16:37:00 turn 7: waiting for your turn
+16:37:03 playing DefendIronclad
+16:37:04 playing DefendIronclad
+16:37:05 ending turn
+16:37:05 turn 8: waiting for your turn
+16:37:07 stopped: combat over after 7 turns
+16:53:51 turn 1: waiting for your turn
+16:53:52 playing StrikeSilent -> LeafSlimeM
+16:53:54 stopped: cancelled
+16:57:23 turn 1: waiting for your turn
+16:57:24 playing Defy -> FuzzyWurmCrawler
+16:57:26 playing Unleash -> FuzzyWurmCrawler
+16:57:27 ending turn
+16:57:28 turn 2: waiting for your turn
+16:57:32 playing StrikeNecrobinder -> FuzzyWurmCrawler
+16:57:33 playing StrikeNecrobinder -> FuzzyWurmCrawler
+16:57:34 playing StrikeNecrobinder -> FuzzyWurmCrawler
+16:57:36 ending turn
+16:57:36 turn 3: waiting for your turn
+16:57:41 playing DefendNecrobinder
+16:57:41 playing StrikeNecrobinder -> FuzzyWurmCrawler
+16:57:42 playing Unleash -> FuzzyWurmCrawler
+16:57:44 ending turn
+16:57:44 turn 4: waiting for your turn
+16:57:48 playing StrikeNecrobinder -> FuzzyWurmCrawler
+16:57:50 playing StrikeNecrobinder -> FuzzyWurmCrawler
+16:57:51 playing Defy -> FuzzyWurmCrawler
+16:57:52 stopped: combat over after 4 turns
+16:58:09 turn 1: waiting for your turn
+16:58:09 playing Scourge -> PhrogParasite
+16:58:11 playing StrikeNecrobinder -> PhrogParasite
+16:58:12 playing Defy -> PhrogParasite
+16:58:13 ending turn
+16:58:13 turn 2: waiting for your turn
+16:58:18 playing StrikeNecrobinder -> PhrogParasite
+16:58:19 playing StrikeNecrobinder -> PhrogParasite
+16:58:20 playing Unleash -> PhrogParasite
+16:58:21 drinking Ambergris
+16:58:26 stopped: Ambergris didn't get used
+17:01:06 turn 1: waiting for your turn
+17:01:07 playing Scourge -> Wriggler #1
+17:01:09 playing StrikeNecrobinder -> Wriggler #2
+17:01:12 drinking Ambergris
+17:01:15 stopped: Ambergris didn't get used
+17:04:14 turn 1: waiting for your turn
+17:04:14 playing RightHandHand -> Byrdonis
+17:04:15 playing StrikeNecrobinder -> Byrdonis
+17:04:16 playing EnfeeblingTouch -> Byrdonis
+17:04:18 ending turn
+17:04:19 turn 2: waiting for your turn
+17:04:25 playing Defy -> Byrdonis
+17:04:26 playing StrikeNecrobinder -> Byrdonis
+17:04:27 playing Unleash -> Byrdonis
+17:04:28 ending turn
+17:04:33 stopped: end turn didn't register
+17:04:39 turn 1: waiting for your turn
+17:04:40 playing StrikeNecrobinder -> Byrdonis
+17:04:41 playing Defy -> Byrdonis
+17:04:42 playing DefendNecrobinder
+17:04:43 ending turn
+17:04:43 turn 2: waiting for your turn
+17:04:49 playing DefendNecrobinder
+17:04:49 playing DefendNecrobinder
+17:04:50 playing DefendNecrobinder
+17:04:51 ending turn
+17:04:56 stopped: end turn didn't register
+17:06:00 turn 1: waiting for your turn
+17:06:01 playing Neurosurge
+17:06:03 playing Unleash -> BygoneEffigy
+17:06:05 playing Scourge -> BygoneEffigy
+17:06:06 playing DefendNecrobinder
+17:06:07 playing Reap -> BygoneEffigy
+17:06:08 ending turn
+17:06:13 stopped: end turn didn't register
+17:06:56 turn 1: waiting for your turn
+17:06:56 playing StrikeNecrobinder -> KinPriest
+17:06:59 playing StrikeNecrobinder -> KinPriest
+17:07:00 playing EnfeeblingTouch -> KinFollower #1
+17:07:01 playing Neurosurge
+17:07:03 playing Reap -> KinPriest
+17:07:04 ending turn
+17:07:04 turn 2: waiting for your turn
+17:07:12 playing RightHandHand -> KinPriest
+17:07:13 playing GraveWarden
+17:07:14 playing Defy -> KinFollower #1
+17:07:14 stopped: cancelled
+17:09:37 turn 1: waiting for your turn
+17:09:38 playing DefendNecrobinder
+17:09:39 playing Shroud
+17:09:40 playing DefendNecrobinder
+17:09:42 ending turn
+17:09:42 turn 2: waiting for your turn
+17:09:45 stopped: cancelled
+17:09:49 turn 1: waiting for your turn
+17:09:49 playing EnfeeblingTouch -> KinFollower
+17:09:51 playing DefendNecrobinder
+17:09:52 playing StrikeNecrobinder -> KinPriest
+17:09:53 ending turn
+17:09:57 turn 2: waiting for your turn
+17:10:03 stopped: cancelled
+17:10:04 turn 1: waiting for your turn
+17:10:05 playing Reap -> KinFollower
+17:10:06 playing RightHandHand -> KinPriest
+17:10:07 ending turn
+17:10:08 turn 2: waiting for your turn
+17:10:13 playing DefendNecrobinder
+17:10:13 playing StrikeNecrobinder -> KinPriest
+17:10:15 playing EnfeeblingTouch -> KinPriest
+17:10:17 ending turn
+17:10:18 turn 3: waiting for your turn
+17:10:23 playing Unleash -> KinPriest
+17:10:24 playing GraveWarden
+17:10:25 playing RightHandHand -> KinPriest
+17:10:26 playing DefendNecrobinder
+17:10:27 ending turn
+17:10:32 stopped: end turn didn't register
+17:10:40 turn 1: waiting for your turn
+17:10:41 playing Soul
+17:10:42 playing StrikeNecrobinder -> KinPriest
+17:10:43 playing DefendNecrobinder
+17:10:44 playing DefendNecrobinder
+17:10:45 ending turn
+17:10:50 stopped: end turn didn't register
+17:11:01 turn 1: waiting for your turn
+17:11:01 playing EnfeeblingTouch -> KinPriest
+17:11:03 playing Unleash -> KinPriest
+17:11:04 ending turn
+17:11:05 turn 2: waiting for your turn
+17:11:09 playing StrikeNecrobinder -> KinPriest
+17:11:10 playing StrikeNecrobinder -> KinPriest
+17:11:11 playing Bodyguard
+17:11:12 playing RightHandHand -> KinPriest
+17:11:14 ending turn
+17:11:18 turn 3: waiting for your turn
+17:11:23 playing StrikeNecrobinder -> KinPriest
+17:11:24 playing DefendNecrobinder
+17:11:25 playing GraveWarden
+17:11:26 ending turn
+17:11:31 stopped: end turn didn't register
+17:11:43 turn 1: waiting for your turn
+17:11:44 playing Soul
+17:11:45 playing DefendNecrobinder
+17:11:45 playing Bodyguard
+17:11:46 playing RightHandHand -> KinPriest
+17:11:47 playing DefendNecrobinder
+17:11:48 ending turn
+17:11:49 turn 2: waiting for your turn
+17:11:53 playing StrikeNecrobinder -> KinPriest
+17:11:54 playing StrikeNecrobinder -> KinPriest
+17:11:55 playing GraveWarden
+17:11:56 ending turn
+17:11:56 turn 3: waiting for your turn
+17:12:00 playing DefendNecrobinder
+17:12:01 playing EnfeeblingTouch -> KinPriest
+17:12:02 playing Soul
+17:12:03 playing Unleash -> KinPriest
+17:12:05 ending turn
+17:12:05 turn 4: waiting for your turn
+17:12:10 playing EnfeeblingTouch -> KinPriest
+17:12:11 playing StrikeNecrobinder -> KinPriest
+17:12:12 playing GraveWarden
+17:12:13 ending turn
+17:12:13 turn 5: waiting for your turn
+17:12:18 playing DefendNecrobinder
+17:12:19 playing DefendNecrobinder
+17:12:20 playing DefendNecrobinder
+17:12:21 ending turn
+17:12:22 turn 6: waiting for your turn
+17:12:22 stopped: you died (turn 5)
+17:13:37 turn 1: waiting for your turn
+17:13:38 playing DefendIronclad
+17:13:39 playing StrikeIronclad -> TwigSlimeS
+17:13:40 playing StrikeIronclad -> TwigSlimeS
+17:13:41 ending turn
+17:13:45 stopped: end turn didn't register
+18:17:05 turn 1: waiting for your turn
+18:17:06 playing StrikeRegent -> SludgeSpinner
+18:17:09 playing StrikeRegent -> SludgeSpinner
+18:17:10 playing StrikeRegent -> SludgeSpinner
+18:17:11 ending turn
+18:17:11 turn 2: waiting for your turn
+18:17:15 playing DefendRegent
+18:17:16 stopped: combat over after 2 turns
+19:06:29 turn 1: waiting for your turn
+19:06:29 playing StrikeRegent -> FuzzyWurmCrawler
+19:06:32 playing StrikeRegent -> FuzzyWurmCrawler
+19:06:33 playing FallingStar -> FuzzyWurmCrawler
+19:06:34 ending turn
+19:06:34 turn 2: waiting for your turn
+19:06:38 playing DefendRegent
+19:06:39 playing StrikeRegent -> FuzzyWurmCrawler
+19:06:40 playing DefendRegent
+19:06:42 stopped: combat over after 2 turns
+19:07:00 turn 1: waiting for your turn
+19:07:01 playing StrikeRegent -> ShrinkerBeetle
+19:07:02 playing StrikeRegent -> ShrinkerBeetle
+19:07:03 ending turn
+19:07:03 turn 2: waiting for your turn
+19:07:08 playing DefendRegent
+19:07:08 playing KnowThyPlace -> ShrinkerBeetle
+19:07:10 ending turn
+19:07:13 turn 3: waiting for your turn
+19:07:18 playing StrikeRegent -> ShrinkerBeetle
+19:07:19 drinking SkillPotion
+19:07:24 stopped: cancelled
+19:38:17 turn 1: waiting for your turn
+19:38:18 playing Dash -> Toadpole #1
+19:38:18 stopped: cancelled
+13:04:21 turn 1: waiting for your turn
+13:04:22 playing DefendDefect
+13:04:23 playing DefendDefect
+13:04:23 playing Dualcast
+13:04:24 ending turn
+13:04:25 turn 2: waiting for your turn
+13:04:28 playing StrikeDefect -> Nibbit
+13:04:30 playing DefendDefect
+13:04:30 playing DefendDefect
+13:04:31 ending turn
+13:04:31 turn 3: waiting for your turn
+13:04:35 playing Zap
+13:04:36 playing StrikeDefect -> Nibbit
+13:04:42 turn 1: waiting for your turn
+13:04:43 ending turn
+13:04:48 stopped: end turn didn't register
+13:04:56 turn 1: waiting for your turn
+13:04:56 playing StrikeDefect -> Nibbit
+13:04:58 playing StrikeDefect -> Nibbit
+13:04:59 playing StrikeDefect -> Nibbit
+13:05:02 stopped: combat over after 1 turns
+13:05:17 turn 1: waiting for your turn
+13:05:18 playing StrikeDefect -> ShrinkerBeetle
+13:05:18 playing StrikeDefect -> ShrinkerBeetle
+13:05:19 playing StrikeDefect -> ShrinkerBeetle
+13:05:20 ending turn
+13:05:21 turn 2: waiting for your turn
+13:05:24 playing DefendDefect
+13:05:25 playing BeamCell -> ShrinkerBeetle
+13:05:26 playing DefendDefect
+13:05:27 playing Dualcast
+13:05:28 stopped: combat over after 2 turns
+13:13:40 turn 1: waiting for your turn
+13:13:40 playing Rage
+13:13:41 playing Uppercut -> Seapunk
+13:13:44 ending turn
+13:13:44 turn 2: waiting for your turn
+13:13:48 playing StrikeIronclad -> Seapunk
+13:13:49 playing DefendIronclad
+13:13:50 playing DefendIronclad
+13:13:50 ending turn
+13:13:51 turn 3: waiting for your turn
+13:13:55 playing StrikeIronclad -> Seapunk
+13:13:56 playing Uppercut -> Seapunk
+13:13:57 ending turn
+13:13:57 turn 4: waiting for your turn
+13:14:01 playing Rage
+13:14:02 playing Stoke
+13:14:03 playing Impervious
+13:14:04 ending turn
+13:14:04 turn 5: waiting for your turn
+13:14:09 playing Rage
+13:14:09 playing Uppercut -> Seapunk
+13:14:11 stopped: combat over after 5 turns
+13:15:39 turn 1: waiting for your turn
+13:15:40 playing StrikeIronclad -> CorpseSlug #2
+13:15:42 playing StrikeIronclad -> CorpseSlug #2
+13:15:43 playing DefendIronclad
+13:15:44 ending turn
+13:15:44 turn 2: waiting for your turn
+13:15:48 playing StrikeIronclad -> CorpseSlug #1
+13:15:49 playing StrikeIronclad -> CorpseSlug #2
+13:15:50 playing Headbutt -> CorpseSlug #2
+13:15:52 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:17:30 ending turn
+13:17:31 turn 3: waiting for your turn
+13:17:34 playing DefendIronclad
+13:17:35 playing Stoke
+13:17:37 playing Rage
+13:17:37 playing Taunt -> CorpseSlug
+13:17:38 ending turn
+13:17:39 turn 4: waiting for your turn
+13:17:43 playing StrikeIronclad -> CorpseSlug
+13:17:44 playing Headbutt -> CorpseSlug
+13:17:45 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:17:50 playing StrikeIronclad -> CorpseSlug
+13:17:53 stopped: combat over after 4 turns
+13:18:40 turn 1: waiting for your turn
+13:18:41 playing StrikeIronclad -> SludgeSpinner
+13:18:43 playing StrikeIronclad -> SludgeSpinner
+13:18:44 playing StrikeIronclad -> SludgeSpinner
+13:18:45 ending turn
+13:18:45 turn 2: waiting for your turn
+13:18:49 playing Headbutt -> SludgeSpinner
+13:18:49 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:18:53 playing Stoke
+13:18:54 ending turn
+13:18:54 turn 3: waiting for your turn
+13:18:58 playing Bash -> SludgeSpinner
+13:18:59 playing StrikeIronclad -> SludgeSpinner
+13:19:00 stopped: combat over after 3 turns
+13:19:42 turn 1: waiting for your turn
+13:19:42 playing StrikeIronclad -> FossilStalker
+13:19:43 playing StrikeIronclad -> FossilStalker
+13:19:44 playing DefendIronclad
+13:19:45 ending turn
+13:19:45 turn 2: waiting for your turn
+13:19:49 playing Thunderclap
+13:19:49 playing TrueGrit
+13:19:50 playing Headbutt -> FossilStalker
+13:19:51 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:19:57 ending turn
+13:19:57 turn 3: waiting for your turn
+13:20:01 playing DefendIronclad
+13:20:01 playing DefendIronclad
+13:20:02 playing DefendIronclad+
+13:20:03 ending turn
+13:20:03 turn 4: waiting for your turn
+13:20:07 playing Headbutt -> FossilStalker
+13:20:08 playing Thunderclap
+13:20:09 playing StrikeIronclad -> FossilStalker
+13:20:11 stopped: combat over after 4 turns
+13:21:57 turn 1: waiting for your turn
+13:21:58 playing DefendIronclad+
+13:21:58 drinking VulnerablePotion -> PhantasmalGardener #1
+13:22:03 playing Cinder -> PhantasmalGardener #2
+13:22:05 ending turn
+13:22:05 turn 2: waiting for your turn
+13:22:11 playing Thunderclap
+13:22:14 playing StrikeIronclad -> PhantasmalGardener #2
+13:22:14 playing StrikeIronclad -> PhantasmalGardener #2
+13:22:16 ending turn
+13:22:16 turn 3: waiting for your turn
+13:22:22 playing DefendIronclad
+13:22:23 playing DefendIronclad
+13:22:23 playing DefendIronclad
+13:22:24 ending turn
+13:22:24 turn 4: waiting for your turn
+13:22:30 playing DefendIronclad
+13:22:31 playing DefendIronclad
+13:22:32 playing DefendIronclad
+13:22:33 ending turn
+13:22:33 turn 5: waiting for your turn
+13:22:38 drinking StrengthPotion
+13:22:39 playing TrueGrit
+13:22:40 playing Cinder -> PhantasmalGardener #2
+13:22:43 ending turn
+13:22:43 turn 6: waiting for your turn
+13:22:49 playing Thunderclap
+13:22:50 playing Cinder -> PhantasmalGardener #2
+13:22:53 ending turn
+13:22:53 turn 7: waiting for your turn
+13:22:57 playing TrueGrit
+13:22:58 playing StrikeIronclad -> PhantasmalGardener
+13:22:59 playing DefendIronclad
+13:23:00 ending turn
+13:23:00 turn 8: waiting for your turn
+13:23:04 playing Cinder -> PhantasmalGardener
+13:23:05 stopped: combat over after 8 turns
+13:23:54 turn 1: waiting for your turn
+13:23:54 playing Thunderclap+
+13:23:55 playing StrikeIronclad+ -> SkulkingColony
+13:23:57 playing DefendIronclad+
+13:23:58 drinking SkillPotion
+13:23:59 choosing FlameBarrier
+13:24:01 playing FlameBarrier
+13:24:02 ending turn
+13:24:02 turn 2: waiting for your turn
+13:24:06 playing TrueGrit
+13:24:07 playing Headbutt -> SkulkingColony
+13:24:08 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:24:12 playing StrikeIronclad -> SkulkingColony
+13:24:13 ending turn
+13:24:13 turn 3: waiting for your turn
+13:24:16 playing DefendIronclad
+13:24:17 playing PrimalForce
+13:24:18 playing GiantRock -> SkulkingColony
+13:24:19 playing DefendIronclad
+13:24:20 ending turn
+13:24:20 turn 4: waiting for your turn
+13:24:24 playing Cinder -> SkulkingColony
+13:24:25 stopped: combat over after 4 turns
+13:24:36 turn 1: waiting for your turn
+13:24:37 playing Headbutt+ -> LivingFog
+13:24:37 playing DefendIronclad+
+13:24:38 playing PrimalForce+
+13:24:39 playing GiantRock+ -> LivingFog
+13:24:40 ending turn
+13:24:40 turn 2: waiting for your turn
+13:24:44 playing StrikeIronclad -> LivingFog
+13:24:44 playing DefendIronclad
+13:24:45 playing StrikeIronclad -> LivingFog
+13:24:46 playing StrikeIronclad -> LivingFog
+13:24:47 ending turn
+13:24:47 turn 3: waiting for your turn
+13:24:51 playing FightMe -> LivingFog
+13:24:52 playing ForgottenRitual
+13:24:53 ending turn
+13:24:53 turn 4: waiting for your turn
+13:24:58 playing Stoke
+13:24:59 playing Spite -> LivingFog
+13:25:00 playing Uppercut -> LivingFog
+13:25:02 stopped: combat over after 4 turns
+13:25:17 turn 1: waiting for your turn
+13:25:17 playing Bash+ -> SoulFysh
+13:25:18 playing ForgottenRitual+
+13:25:19 ending turn
+13:25:19 turn 2: waiting for your turn
+13:25:24 playing DefendIronclad
+13:25:24 playing FightMe -> SoulFysh
+13:25:26 ending turn
+13:25:26 turn 3: waiting for your turn
+13:25:29 playing TrueGrit
+13:25:30 playing Headbutt -> SoulFysh
+13:25:31 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:26:14 playing StrikeIronclad -> SoulFysh
+13:26:17 StrikeIronclad didn't play, retrying
+13:26:19 stopped: cancelled
+13:26:21 turn 1: waiting for your turn
+13:26:22 playing StrikeIronclad -> SoulFysh
+13:26:23 ending turn
+13:26:23 turn 2: waiting for your turn
+13:26:28 playing Stoke
+13:26:30 playing CrimsonMantle
+13:26:31 playing PactsEnd
+13:26:32 ending turn
+13:26:32 turn 3: waiting for your turn
+13:26:37 playing Beckon
+13:26:37 playing FightMe -> SoulFysh
+13:26:38 playing DefendIronclad
+13:26:39 ending turn
+13:26:40 turn 4: waiting for your turn
+13:26:44 playing PactsEnd
+13:26:44 playing Headbutt -> SoulFysh
+13:26:45 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:27:27 ending turn
+13:27:27 turn 5: waiting for your turn
+13:27:32 playing EvilEye
+13:27:33 playing TwinStrike -> SoulFysh
+13:27:34 playing Beckon
+13:27:35 ending turn
+13:27:35 turn 6: waiting for your turn
+13:27:38 playing StrikeIronclad+ -> SoulFysh
+13:27:39 playing Beckon
+13:27:40 playing TrueGrit
+13:27:41 ending turn
+13:27:41 turn 7: waiting for your turn
+13:27:47 playing Cinder+ -> SoulFysh
+13:27:48 playing PactsEnd
+13:27:50 stopped: combat over after 7 turns
+13:28:48 turn 1: waiting for your turn
+13:28:49 playing StrikeIronclad+ -> ThievingHopper
+13:28:50 playing ForgottenRitual+
+13:28:51 ending turn
+13:28:51 turn 2: waiting for your turn
+13:28:55 playing Thunderclap
+13:28:56 ending turn
+13:28:56 turn 3: waiting for your turn
+13:29:01 playing Headbutt -> ThievingHopper
+13:29:02 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:29:30 playing Cinder -> ThievingHopper
+13:29:31 playing DefendIronclad
+13:29:32 ending turn
+13:29:32 turn 4: waiting for your turn
+13:29:35 playing StrikeIronclad+ -> ThievingHopper
+13:29:36 playing StrikeIronclad -> ThievingHopper
+13:29:37 playing PrimalForce
+13:29:37 playing GiantRock -> ThievingHopper
+13:29:39 ending turn
+13:29:40 turn 5: waiting for your turn
+13:29:44 playing Stoke
+13:29:45 playing Taunt -> ThievingHopper
+13:29:46 playing Rupture
+13:29:47 playing Spite -> ThievingHopper
+13:29:48 ending turn
+13:29:48 turn 6: waiting for your turn
+13:29:52 stopped: combat over after 5 turns
+13:30:51 turn 1: waiting for your turn
+13:30:52 playing DefendIronclad+
+13:30:53 playing FlameBarrier+
+13:30:54 ending turn
+13:30:54 turn 2: waiting for your turn
+13:30:59 playing Thunderclap
+13:31:00 playing StrikeIronclad -> BowlbugEgg
+13:31:02 playing TwinStrike -> BowlbugEgg
+13:31:03 ending turn
+13:31:03 turn 3: waiting for your turn
+13:31:07 playing ForgottenRitual
+13:31:08 playing TrueGrit
+13:31:09 playing DefendIronclad
+13:31:10 ending turn
+13:31:10 turn 4: waiting for your turn
+13:31:13 playing StrikeIronclad -> BowlbugRock
+13:31:14 playing Headbutt -> BowlbugRock
+13:31:15 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:31:56 stopped: cancelled
+13:31:59 turn 1: waiting for your turn
+13:32:00 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:32:32 playing PactsEnd
+13:32:33 stopped: combat over after 1 turns
+13:32:50 turn 1: waiting for your turn
+13:32:51 playing StrikeIronclad+ -> Ovicopter
+13:32:54 playing ForgottenRitual+
+13:32:55 ending turn
+13:32:55 turn 2: waiting for your turn
+13:32:59 playing DefendIronclad
+13:33:00 playing Cinder -> ToughEgg #1
+13:33:02 playing StrikeIronclad -> Ovicopter
+13:33:03 ending turn
+13:33:03 turn 3: waiting for your turn
+13:33:09 playing ShrugItOff
+13:33:10 playing Stoke
+13:33:16 playing Rampage -> ToughEgg #1
+13:33:20 playing Hemokinesis -> ToughEgg #1
+13:33:21 playing Headbutt -> ToughEgg
+13:33:23 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:33:32 playing Spite -> ToughEgg
+13:33:33 playing Bully -> Ovicopter
+13:33:34 ending turn
+13:33:34 turn 4: waiting for your turn
+13:33:37 playing Bash -> Ovicopter
+13:33:38 playing PrimalForce
+13:33:39 playing GiantRock -> Ovicopter
+13:33:40 ending turn
+13:33:40 turn 5: waiting for your turn
+13:33:47 playing PrimalForce
+13:33:48 playing GiantRock -> ToughEgg #1
+13:33:51 playing GiantRock -> ToughEgg #1
+13:33:53 playing GiantRock -> ToughEgg #1
+13:33:54 ending turn
+13:33:54 turn 6: waiting for your turn
+13:33:59 playing DefendIronclad
+13:34:00 playing Bash -> ToughEgg
+13:34:02 playing Headbutt -> ToughEgg
+13:34:03 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:34:27 ending turn
+13:34:27 turn 7: waiting for your turn
+13:34:30 playing GiantRock -> Ovicopter
+13:34:31 playing Rampage -> Ovicopter
+13:34:32 playing GiantRock -> Ovicopter
+13:34:33 playing ShrugItOff
+13:34:34 ending turn
+13:34:34 turn 8: waiting for your turn
+13:34:38 playing CrimsonMantle
+13:34:39 playing TrueGrit+
+13:34:40 picking SpoilsMap (TO_EXHAUST)
+13:34:41 playing DefendIronclad
+13:34:42 drinking VulnerablePotion -> ToughEgg #2
+13:34:44 playing Spite -> Ovicopter
+13:34:45 ending turn
+13:34:45 turn 9: waiting for your turn
+13:34:54 playing Bully -> ToughEgg #1
+13:34:55 playing StrikeIronclad+ -> Ovicopter
+13:34:55 playing GiantRock -> Ovicopter
+13:34:56 playing DefendIronclad
+13:34:57 playing Headbutt -> Ovicopter
+13:34:59 stopped: combat over after 9 turns
+13:35:28 turn 1: waiting for your turn
+13:35:29 playing PrimalForce+
+13:35:29 playing GiantRock+ -> SpinyToad
+13:35:32 ending turn
+13:35:32 turn 2: waiting for your turn
+13:35:35 playing DefendIronclad
+13:35:36 playing DefendIronclad+
+13:35:37 playing DefendIronclad
+13:35:38 playing ShrugItOff
+13:35:39 ending turn
+13:35:39 turn 3: waiting for your turn
+13:35:43 playing Bash -> SpinyToad
+13:35:44 playing StrikeIronclad -> SpinyToad
+13:35:45 playing ShrugItOff+
+13:35:46 playing Headbutt -> SpinyToad
+13:35:47 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:36:05 ending turn
+13:36:05 turn 4: waiting for your turn
+13:36:09 playing GiantRock+ -> SpinyToad
+13:36:10 playing Stoke
+13:36:13 ending turn
+13:36:13 turn 5: waiting for your turn
+13:36:17 playing PrimalForce+
+13:36:18 playing ShrugItOff+
+13:36:18 playing GiantRock+ -> SpinyToad
+13:36:19 playing GiantRock+ -> SpinyToad
+13:36:20 stopped: combat over after 5 turns
+13:37:00 turn 1: waiting for your turn
+13:37:01 playing PrimalForce+
+13:37:02 drinking FyshOil
+13:37:03 playing GiantRock+ -> DecimillipedeSegmentFront
+13:37:05 playing GiantRock+ -> DecimillipedeSegmentFront
+13:37:06 playing GiantRock+ -> DecimillipedeSegmentBack
+13:37:09 ending turn
+13:37:09 turn 2: waiting for your turn
+13:37:14 playing TrueGrit
+13:37:15 playing Headbutt+ -> DecimillipedeSegmentMiddle
+13:37:16 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:37:29 playing PactsEnd
+13:37:30 ending turn
+13:37:30 turn 3: waiting for your turn
+13:37:36 playing GiantRock+ -> DecimillipedeSegmentFront
+13:37:37 playing StrikeIronclad -> DecimillipedeSegmentBack
+13:37:38 playing ForgottenRitual
+13:37:39 playing Cinder -> DecimillipedeSegmentBack
+13:37:40 ending turn
+13:37:40 turn 4: waiting for your turn
+13:37:45 playing DefendIronclad
+13:37:46 playing DefendIronclad
+13:37:47 playing DefendIronclad
+13:37:48 ending turn
+13:37:48 turn 5: waiting for your turn
+13:37:54 playing StrikeIronclad -> DecimillipedeSegmentBack
+13:37:55 playing DefendIronclad+
+13:37:56 playing GiantRock+ -> DecimillipedeSegmentBack
+13:37:57 playing DefendIronclad
+13:37:58 ending turn
+13:37:58 turn 6: waiting for your turn
+13:38:03 playing GiantRock+ -> DecimillipedeSegmentMiddle
+13:38:04 playing StrikeIronclad -> DecimillipedeSegmentMiddle
+13:38:04 playing TwinStrike -> DecimillipedeSegmentMiddle
+13:38:06 ending turn
+13:38:06 turn 7: waiting for your turn
+13:38:11 playing Thunderclap
+13:38:11 playing Headbutt+ -> DecimillipedeSegmentFront
+13:38:12 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:38:37 playing PactsEnd
+13:38:39 stopped: combat over after 7 turns
+13:40:19 turn 1: waiting for your turn
+13:40:20 playing StrikeIronclad+ -> TheInsatiable
+13:40:22 playing Headbutt+ -> TheInsatiable
+13:40:23 ending turn
+13:40:24 turn 2: waiting for your turn
+13:40:29 playing Thunderclap
+13:40:30 playing StrikeIronclad+ -> TheInsatiable
+13:40:31 playing PactsEnd
+13:40:32 playing HowlFromBeyond
+13:40:32 drinking BloodPotion
+13:40:33 playing ShrugItOff+
+13:40:34 ending turn
+13:40:34 turn 3: waiting for your turn
+13:40:38 stopped: cancelled
+13:40:46 turn 1: waiting for your turn
+13:40:47 playing PrimalForce
+13:40:48 playing DefendIronclad
+13:40:49 playing GiantRock -> TheInsatiable
+13:40:50 playing ForgottenRitual
+13:40:50 drinking SkillPotion
+13:40:52 ending turn
+13:40:57 stopped: end turn didn't register
+13:40:58 turn 1: waiting for your turn
+13:40:59 ending turn
+13:40:59 turn 2: waiting for your turn
+13:41:03 playing TwinStrike -> TheInsatiable
+13:41:04 playing FranticEscape
+13:41:05 ending turn
+13:41:06 turn 3: waiting for your turn
+13:41:10 playing FranticEscape
+13:41:10 playing DefendIronclad
+13:41:11 playing Headbutt+ -> TheInsatiable
+13:41:12 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+13:41:45 playing FranticEscape
+13:41:45 playing ShrugItOff
+13:41:46 ending turn
+13:41:47 turn 4: waiting for your turn
+13:41:52 playing BloodWall+
+13:41:53 ending turn
+13:41:53 turn 5: waiting for your turn
+13:41:57 playing StrikeIronclad+ -> TheInsatiable
+13:41:58 playing StrikeIronclad+ -> TheInsatiable
+13:41:59 playing ShrugItOff+
+13:41:59 playing TwinStrike -> TheInsatiable
+13:42:00 ending turn
+13:42:01 turn 6: waiting for your turn
+13:42:04 playing GiantRock -> TheInsatiable
+13:42:05 playing HowlFromBeyond
+13:42:06 playing StrikeIronclad+ -> TheInsatiable
+13:42:07 ending turn
+13:42:07 turn 7: waiting for your turn
+13:42:09 stopped: you died (turn 6)

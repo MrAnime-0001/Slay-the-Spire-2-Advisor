@@ -7,9 +7,23 @@ from pathing import (CARD_REWARD, GOLD_LEFT, HEAL_FRACTION, HP_VALUE, RELIC, SHO
                      fight_costs, should_rest)
 from enemies import predict
 from relics import GAMEDATA, KNOWLEDGE, Relics, dmg_add
-from archetypes import ARCHETYPES, commitment, snake, synergy
-from deck import hp_lost
-from solver import creates, deck_dpt, keywords, solve
+from archetypes import ARCHETYPES, commitment, expand_power, snake, synergy
+from deck import hp_lost, slot_cost
+from solver import creates, deck_dpt, keywords, solve, toss_key
+
+
+def pile_fetch(prompt):
+    """Gamedata fetch {from, to, top, count, filter} of the card/potion whose pick prompt this is
+    ("THINKING_AHEAD.selectionScreenPrompt" -> ThinkingAhead), else None."""
+    if not prompt or not prompt.endswith(".selectionScreenPrompt"):
+        return None
+    name = "".join(w.capitalize() for w in prompt.split(".")[0].split("_"))
+    return (GAMEDATA["cards"].get(name) or GAMEDATA["potions"].get(name) or {}).get("fetch")
+
+
+def on_top_score(state, hand, card):
+    """Best plan score for the rest of this turn with `card` put on top of the draw pile (next hand)."""
+    return solve({**state, "hand": hand, "hand_select": None, "card_grid": None}, kept=[card])[0].score
 
 # Value per point of each card var. Tune these.
 VAR_VALUE = {"Damage": 1, "Block": 0.9, "VulnerablePower": 4, "WeakPower": 3,
@@ -18,8 +32,9 @@ VAR_VALUE = {"Damage": 1, "Block": 0.9, "VulnerablePower": 4, "WeakPower": 3,
 UNKNOWN_VALUE = 3      # flat credit for effects we can't read from numbers (shown as "?")
 AOE_NEEDED_BONUS = 4   # card hits all enemies and the deck has no AoE attack
 BLOCK_NEEDED_BONUS = 2  # card gives block and under 30% of the deck does
-DECK_SIZE_FREE = 20    # past this, every pick costs a little (dilution)
+DECK_SIZE_FREE = 20    # no act data: past this, every pick costs a little (dilution)
 DECK_SIZE_PENALTY = 0.3
+DILUTION_TOL = 0.5     # HP/fight a simmed card must save to be worth a deck slot (below: the tier list can't rescue it)
 SKIP_BELOW = 6
 EXHAUST_STATS, RETAIN_STATS = 0.5, 1.15  # stats-only scoring (no deck sim): Exhaust = once a fight
 SCARCITY_SKIP = 1
@@ -32,15 +47,37 @@ SYNERGY = [
     ({"Vambrace", "PaelsLegion", "Orichalcum"}, lambda c: "Block" in c["vars"], 1),
     ({"LostWisp", "Permafrost", "GamePiece", "MummifiedHand"}, lambda c: c["type"] == "Power", 2),
 ]
-# Community tier (knowledge.json cards[X].tier, from Mobalytics) blended 50/50 with the stats score: the
-# stats can't see engines (exhaust, Strength scaling) and overrate one-turn buffs like Setup Strike.
+# Community tier blended 50/50 with the stats score: the stats can't see engines (exhaust, Strength scaling) and
+# overrate one-turn buffs like Setup Strike. knowledge.json cards[X]: tier (Mobalytics), stl (slaythetierlist, via
+# Spire-Forge), guide (Research Notes); the sources disagree a lot, so a card's tier value is their mean.
 TIER_VALUE = {"S": 16, "A": 12, "B": 9, "C": 6, "D": 3}
 TIER_BLEND = 0.5
 TIER_BLEND_SIM = 0.25  # cards the deck sim scores: the tier list can't see what THIS deck lacks (block vs damage)
-# Deck sim (state given): score = SKIP_BELOW + HP_SAVED_SCALE * HP saved per act boss/elite fight, so a card
-# that saves nothing lands at the skip line. Build synergy (0..2) x SYNERGY_VALUE on top.
+# Deck sim (state given): score = SKIP_BELOW + HP_SAVED_SCALE * (HP saved per act fight - DILUTION_TOL), so a card
+# that saves nothing (it dilutes as much as it adds) lands under the skip line. Build synergy (0..2) x SYNERGY_VALUE on top.
 HP_SAVED_SCALE, SYNERGY_VALUE = 0.5, 3
-# ponytail: no card-to-card synergy model beyond SYNERGY and the tier list.
+# Two-card combos (knowledge.pairs, Spire-Forge SYNERGY_PAIRS, bonus 8-16): the partner already in the deck adds
+# PAIR_SCALE x bonus, capped. Anti-synergy (knowledge.anti): a card that works against a build the deck is in.
+PAIR_SCALE, PAIR_CAP, ANTI_VALUE = 0.12, 2.4, 3
+PAIRS = {}
+for _a, _b, _bonus in KNOWLEDGE.get("pairs", []):
+    PAIRS.setdefault(_a, {})[_b] = PAIRS.setdefault(_b, {})[_a] = _bonus
+
+
+def tier_value(name):
+    """Mean of the card's community tiers (None if it has none)."""
+    k = KNOWLEDGE["cards"].get(name, {})
+    tiers = [TIER_VALUE[t] for t in (k.get("tier"), k.get("stl"), k.get("guide")) if t in TIER_VALUE]
+    return sum(tiers) / len(tiers) if tiers else None
+
+
+def combo(card, deck, relics=()):
+    """Combo bonus minus anti-synergy for this card against the deck."""
+    names = {c["name"] for c in deck}
+    bonus = min(PAIR_CAP, PAIR_SCALE * sum(b for other, b in PAIRS.get(card["name"], {}).items() if other in names))
+    built = commitment(deck, relics) if deck else {}
+    return bonus - ANTI_VALUE * sum(built.get(b, 0) for b, cards in KNOWLEDGE.get("anti", {}).items()
+                                    if card["name"] in cards)
 
 
 def is_aoe(card):
@@ -48,10 +85,11 @@ def is_aoe(card):
 
 
 def rate(card, deck, relics=(), state=None):
-    """(score, modeled). With `state` (act, ascension, energy), cards the deck sim understands are scored by
+    """(score, modeled, HP saved per fight or None). With `state` (act, ascension, energy), cards the deck sim understands are scored by
     the HP they save in this act's boss/elite fights (deck.py: damage vs block balance, draw odds, dilution);
     everything gets the build-synergy bonus (archetypes.py) and the community tier blend."""
     R = Relics(relics, GAMEDATA["relics"])
+    card = expand_power(card)  # Uppercut's generic "Power" var -> Weak + Vulnerable
     v = dict(card["vars"])
     made = creates(card)  # Blade Dance etc.: value the Shivs it makes, not its count var as card draw
     if made:
@@ -80,19 +118,26 @@ def rate(card, deck, relics=(), state=None):
     if "Block" in v and sum("Block" in c["vars"] for c in deck) < 0.3 * len(deck):
         score += BLOCK_NEEDED_BONUS
     score += sum(bonus for names, fits, bonus in SYNERGY if fits(card) and any(n in R for n in names))
-    score -= DECK_SIZE_PENALTY * max(0, len(deck) - DECK_SIZE_FREE)
     simmed = state is not None and modeled and card["type"] in ("Attack", "Skill")
+    saved = None
     if simmed:
         saved = hp_lost(deck, state) - hp_lost(list(deck) + [card], state)
-        score = SKIP_BELOW + HP_SAVED_SCALE * saved + sum(
+        score = SKIP_BELOW + HP_SAVED_SCALE * (saved - DILUTION_TOL) + sum(
             bonus for names, fits, bonus in SYNERGY if fits(card) and any(n in R for n in names))
-    score += SYNERGY_VALUE * synergy(card, deck, relics)
-    tier = KNOWLEDGE["cards"].get(card["name"], {}).get("tier")
-    if tier:
+    elif state is None:
+        score -= DECK_SIZE_PENALTY * max(0, len(deck) - DECK_SIZE_FREE)
+    elif card["type"] != "Power":  # Powers leave the piles once played; anything else is drawn every cycle
+        score -= HP_SAVED_SCALE * slot_cost(deck, state)
+    score += SYNERGY_VALUE * synergy(card, deck, relics) + combo(card, deck, relics)
+    sim = score
+    tier = tier_value(card["name"])
+    if tier is not None:
         blend = TIER_BLEND_SIM if simmed else TIER_BLEND
-        score = (1 - blend) * score + blend * TIER_VALUE[tier]
+        score = (1 - blend) * score + blend * tier
         modeled = True  # the tier covers what the numbers miss
-    return round(score, 1), modeled
+    if simmed and saved < DILUTION_TOL:
+        score = min(score, sim)  # the deck fights worse with it: the tier list can't overrule the draw odds
+    return round(score, 1), modeled, None if saved is None else round(saved, 1)
 
 
 def pick(cards, deck, relics=(), state=None):
@@ -168,16 +213,39 @@ def hand_pick(state, upgrades=UPGRADES):
     if upgrade:
         order = sorted(range(len(pool)), key=lambda i: -upgrade_gain(pool[i], deck, upgrades, relics))
         n = sel["max"]
+    elif (f := pile_fetch(sel["prompt"])) and f["to"] == "Draw":
+        # hand -> top of draw (Thinking Ahead, Glimmer, Photon Cut): keep the card worth more next turn than now
+        # (the Defend on a quiet turn before a big hit; the big attack this turn can't afford).
+        order = sorted(range(len(pool)), key=lambda i: -on_top_score(state, pool[:i] + pool[i + 1:], pool[i]))
+        n = sel["max"]
     elif sel["prompt"] in BAD_PICKS:
-        # Sly cards discarded are played for free: discard them right after junk
+        # same order the solver plans with (solver.toss_key): junk, then Sly (discarded = played free), then weakest
         sly = lambda c: sel["prompt"] == "TO_DISCARD" and "Sly" in keywords(c)
-        order = sorted(range(len(pool)), key=lambda i: (not junk(pool[i]), not sly(pool[i]), rate(pool[i], deck, relics)[0]))
+        order = sorted(range(len(pool)), key=lambda i: toss_key(pool[i], sel["prompt"] == "TO_DISCARD",
+                                                                lambda c: rate(c, deck, relics)[0]))
         n = max(sel["min"], min(sel["max"], sum(junk(c) or sly(c) for c in pool)))  # optional picks: junk + Sly
     else:
         order = sorted(range(len(pool)), key=lambda i: -rate(pool[i], deck, relics)[0])
         n = max(sel["min"], min(sel["max"], 1))
     chosen = sorted(order[:max(0, n - sel["selected"])], reverse=True)
     return [i + 1 for i in chosen], [pool[i]["name"] for i in chosen]
+
+
+def pile_pick(state):
+    """Card names to pick on an in-combat pile screen (card_grid: Headbutt, Hologram, Dredge, Secret Weapon...).
+    To hand: whichever makes the best plan now (at its printed cost). To top of draw: best next turn.
+    Anything else (exhaust/transform from a pile): junk first, then the weakest."""
+    grid = state["card_grid"]
+    cards, f = grid["cards"], pile_fetch(grid.get("prompt"))
+    rest = {**state, "hand_select": None, "card_grid": None}
+    if f and f["to"] == "Hand":
+        key = lambda c: -solve({**rest, "hand": state["hand"] + [c]})[0].score
+    elif f and f["to"] == "Draw":
+        key = lambda c: -on_top_score(state, state["hand"], c)
+    else:
+        key = lambda c: toss_key(c, False, lambda x: rate(x, state.get("deck", []), state.get("relics", []))[0])
+    n = max(grid["min"], min(grid["max"], len(cards)))
+    return [c["name"] for c in sorted(cards, key=key)[:n]]
 
 
 # --- "choose a card" screen (Knowledge Demon's curse, Attack/Skill/Power potions, Discovery, some relics) ---
@@ -260,15 +328,41 @@ def potion_value(name, state):
     return value + POTION_FIT * fit
 
 
-def removal_target(deck, relics=(), state=None):
-    """Curse/Status first, then the weakest Basic card (Strike/Defend), then the weakest card."""
+def removal_order(deck, relics=(), state=None):
+    """Removable cards, worst first: Curse/Status, then the weakest Basic card (Strike/Defend), then the weakest."""
     def badness(c):
         tier = 0 if c["type"] in ("Curse", "Status") else 1 if c.get("rarity") == "Basic" else 2
         rest = list(deck)
         rest.remove(c)
         return tier, rate(c, rest, relics, state)[0]  # what the deck loses without it
-    removable = [c for c in deck if not eternal(c)]
-    return min(removable, key=badness, default=None)
+    return sorted((c for c in deck if not eternal(c)), key=badness)
+
+
+def removal_target(deck, relics=(), state=None):
+    return next(iter(removal_order(deck, relics, state)), None)
+
+
+# --- deck grid out of combat (events, rest site, shop: upgrade / remove / transform / enchant a card) ---
+DECK_VERBS = {"TO_UPGRADE": "Upgrade", "TO_REMOVE": "Remove", "TO_TRANSFORM": "Transform", "TO_ENCHANT": "Enchant"}
+
+
+def deck_pick(state):
+    """(verb, cards to pick, ranked distinct names) for a deck grid. Upgrade: biggest gain. Remove/Transform: junk,
+    then the weakest. Enchant/other: the strongest card. ponytail: enchant ignores which enchantment it is
+    (Sown, Sharpness, Nimble...); rate per enchantment if it picks badly."""
+    g, deck, relics = state["card_grid"], state.get("deck", []), state.get("relics", [])
+    screen = g.get("screen") or ""
+    key = g.get("prompt") or next((f"TO_{w.upper()}" for w in ("Upgrade", "Transform", "Enchant") if w in screen), None)
+    verb, pool = DECK_VERBS.get(key, "Pick"), list(g["cards"])
+    if verb == "Upgrade":
+        pool = [c for c in pool if not c["upgraded"] and c["name"] in UPGRADES] or pool
+        order = sorted(pool, key=lambda c: -upgrade_gain(c, deck, UPGRADES, relics, state) if c["name"] in UPGRADES else 99)
+    elif verb in ("Remove", "Transform"):
+        order = removal_order(pool, relics, state)
+    else:
+        order = sorted(pool, key=lambda c: -rate(c, deck, relics, state)[0])
+    picks = [c["name"] + ("+" if c["upgraded"] else "") for c in order[:max(g.get("max") or 1, 1)]]
+    return verb, picks, list(dict.fromkeys(c["name"] + ("+" if c["upgraded"] else "") for c in order))
 
 
 def eternal(card):
@@ -288,6 +382,9 @@ RELIC_DRAWBACK = {
     "Ectoplasm": (6, set()), "Sozu": (4, set()), "PhilosophersStone": (5, {"Ironclad:Block", "Defect:Orbs"}),
     "BigMushroom": (2, set()), "BlessedAntler": (3, {"Defect:Claw", "Silent:Sly"}),
     "CallingBell": (5, set()), "NeowsBones": (5, set()), "SereTalon": (4, set()),
+    # Research Notes "Avoid": random costs break 0-cost/cycle builds; a kept hand stops discard triggers
+    "SneckoEye": (2, {"Defect:Claw", "Silent:Sly", "Necrobinder:Souls"}),
+    "RunicPyramid": (1, {"Silent:Sly", "Ironclad:Exhaust"}),
 }
 
 
@@ -370,12 +467,14 @@ def option_text(state, option):
     text = GAMEDATA.get("text", {}).get(option["desc"] or "", "")
     v = state["event"]["vars"]
     def fill(m):
-        val = v.get(m[1], "?")
-        if m[2]:  # {Cards:plural:card|cards}
-            one, many = m[2].split(":", 1)[-1].split("|")
-            return one if val == 1 else many
+        val, fmt = v.get(m[1], "?"), m[2] or ""
+        if fmt.startswith("plural:") and "|" in fmt:  # {Cards:plural:card|cards}, {N:plural:x|{} xs}
+            one, many = fmt[len("plural:"):].split("|", 1)
+            return (one if val == 1 else many).replace("{}", str(val))
+        if icon := re.match(r"(energy|star)Icons\((\d*)\)", fmt):  # {Energy:energyIcons()}, {x:energyIcons(1)}
+            return f"{icon[2] or val} {icon[1]}"
         return str(val)
-    return re.sub(r"\{(\w+)(?::([^}]*))?\}", fill, text)
+    return re.sub(r"\{(\w+)(?::((?:[^{}]|\{\})*))?\}", fill, text)
 
 
 def option_value(state, option, text):

@@ -1,0 +1,70 @@
+20:28:18 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\overlay.py", line 168, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\overlay.py", line 221, in render
+    head, lines = event_advice(state)
+                  ~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 504, in event_advice
+    text = option_text(state, o) or (o["relic"] or o["key"] or "?")
+           ~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 440, in option_text
+    return re.sub(r"\{(\w+)(?::([^}]*))?\}", fill, text)
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\AppData\Local\Python\pythoncore-3.14-64\Lib\re\__init__.py", line 208, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 437, in fill
+    one, many = m[2].split(":", 1)[-1].split("|")
+    ^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+
+20:29:56 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\overlay.py", line 168, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\overlay.py", line 221, in render
+    head, lines = event_advice(state)
+                  ~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 504, in event_advice
+    rated = []
+    
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 440, in option_text
+    return f"{icon[2] or val} {icon[1]}"
+  File "C:\Users\Yutti Chylong\AppData\Local\Python\pythoncore-3.14-64\Lib\re\__init__.py", line 208, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 437, in fill
+    one, many = fmt[len("plural:"):].split("|", 1)
+    ^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+
+20:29:56 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\overlay.py", line 168, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\overlay.py", line 221, in render
+    head, lines = event_advice(state)
+                  ~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 504, in event_advice
+    rated = []
+    
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 440, in option_text
+    return f"{icon[2] or val} {icon[1]}"
+  File "C:\Users\Yutti Chylong\AppData\Local\Python\pythoncore-3.14-64\Lib\re\__init__.py", line 208, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Downloads\sts2-advisor\advisor\picker.py", line 437, in fill
+    one, many = fmt[len("plural:"):].split("|", 1)
+    ^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+
+13:31:15 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 179, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 274, in render
+    + "".join(f"  {p['name']} {p['creature']['hp']}hp" for p in state.get("pets", []))
+                                                                ~~~~~~~~~^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+

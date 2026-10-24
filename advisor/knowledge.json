@@ -1,104 +1,257 @@
 {
+ "anti": {
+  "Defect:Claw": [
+   "GeneticAlgorithm"
+  ],
+  "Ironclad:Block": [],
+  "Ironclad:Exhaust": [
+   "BattleTrance"
+  ],
+  "Necrobinder:Doom": [
+   "Defy",
+   "Defile",
+   "CallOfTheVoid"
+  ],
+  "Necrobinder:Osty": [
+   "BoneShards"
+  ],
+  "Silent:Sly": [
+   "Impervious",
+   "Barricade"
+  ]
+ },
  "archetypes": {},
+ "boss_tips": {
+  "AeonglassBoss": {
+   "defect": "Orbs deal damage without playing cards (fewer Withering Presence triggers). Frost passive block tanks Ebb and Eye Lasers.",
+   "general": "512 HP, 3 Artifact. Cycle: Ebb 22 + 33 Block \u2192 Eye Lasers 11x2 \u2192 Increasing Intensity (Wither + growing Strength). Every 6 cards you play adds a Wither to your hand. You need real scaling.",
+   "ironclad": "Stoke and Burning Pact exhaust Wither. Corruption makes Wither-clearing free. Demon Form scaling keeps up with its Strength.",
+   "necrobinder": "Souls (draw 2, Exhaust) clear Wither from hand. Osty tanks chip damage. Doom ticks regardless of Wither.",
+   "regent": "GUARDS!!! exhausts Wither. Void Form free plays offset Wither cost. Star burst on non-Ebb turns.",
+   "silent": "Calculated Gamble discards a hand of Wither (they come back on shuffle). Poison ignores its Block on Ebb turns."
+  },
+  "CeremonialBeastBoss": {
+   "defect": "Multi-Cast and Hyperbeam burst past 150. Frost passive block covers Ringing turns.",
+   "general": "252 HP. Phase 1: Plow 18 dmg +2 Str every turn. Dropping it to 150 HP stuns it and wipes its Strength. Phase 2: Beast Cry (Ringing: 1 card that turn) \u2192 Stomp 15 \u2192 Crush 17 +3 Str.",
+   "ironclad": "Bludgeon and Strength burst reach the 150 threshold fast. Barricade+Body Slam is perfect for Phase 2 \u2014 one card, big damage on Ringing turns.",
+   "necrobinder": "Doom on the Beast works through both phases. Osty banks HP. One big Grave Warden turn crosses 150.",
+   "regent": "Seven Stars is one card with massive burst for the threshold. Sovereign Blade makes each Ringing turn count.",
+   "silent": "Stack Poison (Accelerant doubles ticks) to reach the threshold. On Ringing turns play your single best card."
+  },
+  "KaiserCrabBoss": {
+   "defect": "Lightning orbs and Hyperbeam pressure both claws. Loop/Defragment scale all damage sources.",
+   "general": "Crusher (209 HP) + Rocket (199 HP). Rocket's Laser hits 31; Crusher's Bug Sting applies Weak and Frail. Surrounded: +50% damage from the claw behind you. Crab Rage: the survivor gains 6 Str + 99 Block \u2014 finish both close together.",
+   "ironclad": "Whirlwind hits both claws. Bludgeon finishes the second claw before Crab Rage matters. Block hardest before Laser.",
+   "necrobinder": "The Scythe AoE hits both. Doom on both claws lets them die close together. Rattle multi-hits.",
+   "regent": "Seven Stars hits both claws. Stardust damages both consistently. Black Hole AoE.",
+   "silent": "Poison ticks on both claws at once \u2014 ideal for balanced damage. Dagger Spray hits both."
+  },
+  "KnowledgeDemonBoss": {
+   "defect": "Echo Form compensates for Sloth. Frost orbs block through Disintegration. Defragment scales through resource curses.",
+   "general": "379 HP; heals 30 and gains Str every cycle. Cycle: Curse of Knowledge (pick Disintegration 6/7/8 dmg per turn OR Mind Rot / Sloth / Waste Away) \u2192 Slap 17 \u2192 8x3 \u2192 Ponder. Needs real scaling.",
+   "ironclad": "Demon Form and Strength scaling outpace the heals. Corruption+Feel No Pain handles Disintegration chip damage. Fiend Fire for burst.",
+   "necrobinder": "Doom executes regardless of curses and heals. Osty tanks Disintegration damage. Souls cycle past Mind Rot.",
+   "regent": "Sovereign Blade is draw-independent \u2014 counters Mind Rot. Void Form free plays counter Waste Away.",
+   "silent": "Poison keeps ticking through every curse. Waste Away hurts least with 0-cost cards. Malaise cuts its Strength."
+  },
+  "LagavulinMatriarchBoss": {
+   "defect": "Free turns for Defragment/Loop/Echo Form. Orb damage and orb block ignore the Str/Dex loss completely.",
+   "general": "222 HP, 12 Plating, asleep for 3 turns (or until it takes unblocked damage). Each Soul Siphon permanently removes 2 Str and 2 Dex from you. Kill before the 2nd Soul Siphon.",
+   "ironclad": "Use the 3 free turns for Demon Form/Inflame/Offering. Favour big single hits (Bludgeon) and big single blocks (Impervious) \u2014 Soul Siphon hurts multi-hits most.",
+   "necrobinder": "Doom ignores the Str/Dex loss. Osty blocks regardless of your Dex. Use the free turns for Capture Spirit/Dirge.",
+   "regent": "Free turns are perfect for Forge setup (Sword Sage, Seeking Edge). Sovereign Blade forge damage ignores the Strength loss.",
+   "silent": "Free turns for Noxious Fumes and Footwork setup. Poison ignores the Strength loss. Big Dex-based blocks lose value after each Siphon."
+  },
+  "QueenBoss": {
+   "defect": "Frost orbs give block that ignores Frail. Creative AI makes powers. Defragment scales Focus. Echo Form for value.",
+   "general": "Queen (400 HP) + Torch Head Amalgam (199 HP). T1: 3 Chains of Binding (first 3 cards drawn are Bound). T2: 99 Frail/Weak/Vulnerable. Kill the Amalgam, then the Queen enrages: 3x5 \u2192 15 \u2192 +2 Str.",
+   "ironclad": "Offering and Battle Trance draw past Bound cards. Feel No Pain + Dark Embrace block ignores Frail. Barricade keeps block across turns.",
+   "necrobinder": "Souls (draw 2, Exhaust) cycle past Bound cards. Osty blocks regardless of Frail. Doom on the Queen ignores her Block.",
+   "regent": "Void Form free plays offset Bound cards. Sovereign Blade forge outscales the fight. Star generators work through Chains.",
+   "silent": "Adrenaline/Tools of the Trade keep drawing past Bound cards. Poison damage ignores your Weak. Afterimage blocks ignore Frail."
+  },
+  "SoulFyshBoss": {
+   "defect": "Coolheaded draws past Beckons while channeling Frost. Scrape cycles through them. Hologram fetches key cards back.",
+   "general": "211 HP. Cycle: Beckon (2 Beckons) \u2192 De-Gas 16 \u2192 Gaze 7 + Beckon \u2192 Fade (Intangible) \u2192 Scream 13 + 3 Vulnerable. Clear Beckons and don't waste burst on Fade turns.",
+   "ironclad": "True Grit/Burning Pact exhaust Beckons. Fiend Fire dumps a cluttered hand. Feel No Pain turns each exhausted Beckon into block.",
+   "necrobinder": "Souls (draw 2, Exhaust) cycle past Beckons. Osty soaks chip damage. Haunt deals damage through Fade.",
+   "regent": "Void Form free plays offset energy spent on Beckons. Glow draws past them. Convergence holds key cards.",
+   "silent": "Discard engine (Prepared, Calculated Gamble, Acrobatics) clears Beckons. Afterimage gives block per card played. Hold attacks on Fade turns."
+  },
+  "TestSubjectBoss": {
+   "defect": "Orb damage needs no Skills in Phase 1. Frost block holds Phase 2 claws. Echo Form doubles value in Phase 3.",
+   "general": "Phase 1 (100 HP): Enrage \u2014 gains Str whenever you play a Skill; Bite 20 / Skull Bash 14 + Vuln. Phase 2 (200 HP): Multi-Claw 10x3, +1 hit every turn. Phase 3 (300 HP): Lacerate 10x3 \u2192 Big Pounce 45 \u2192 Burning Growl (Burns + Str).",
+   "ironclad": "Attack-heavy turns in Phase 1 (avoid Skills). Kill Phase 2 fast before Multi-Claw stacks. Impervious for Big Pounce. Strength scaling carries all three phases.",
+   "necrobinder": "Doom executes in every phase. Osty tanks Phase 2 claws and Big Pounce. Souls cycle past Burns.",
+   "regent": "Sovereign Blade forge scaling carries through all three phases. Seven Stars burst to end Phase 2 quickly.",
+   "silent": "Shivs are Attacks, so they are safe in Phase 1; Poison Skills feed Enrage. Wraith Form blunts Multi-Claw. Block every Big Pounce."
+  },
+  "TheInsatiableBoss": {
+   "defect": "TURBO/Double Energy fuel the Escape costs. Echo Form doubles value per turn.",
+   "general": "321 HP. Opens with 4 Sandpit and 6 Frantic Escapes. Play Frantic Escapes to push back Sandpit, or you die. Cycle: Thrash 8x2 \u2192 Lunging Bite 28 \u2192 Salivate +2 Str \u2192 Thrash. Draw and energy are survival.",
+   "ironclad": "Corruption makes Frantic Escapes free (they are Skills). Offering/Bloodletting give the energy. Demon Form scales between Escapes.",
+   "necrobinder": "Borrowed Time gives energy for Escapes. Graveblast retrieves key cards. Osty tanks Lunging Bite while you cycle.",
+   "regent": "Void Form makes Escapes free. Convergence retains hand to guarantee an Escape. Alignment generates Stars for burst windows.",
+   "silent": "Adrenaline/Tactician provide the energy. Calculated Gamble cycles to find Escapes."
+  },
+  "TheKinBoss": {
+   "defect": "Hyperbeam clears all three at once. Frost orb block ignores Frail. Focus the Priest with single-target orbs.",
+   "general": "Priest (190 HP) + 2 Followers (58-59 HP). All three gain Strength; Priest applies Weak and Frail. The fight ends when the Priest dies \u2014 Followers flee.",
+   "ironclad": "Whirlwind/Conflagration AoE pressures all three while you focus the Priest. Feel No Pain block ignores Frail. Flame Barrier punishes their many small hits.",
+   "necrobinder": "The Scythe AoE hits all three. Doom on the Priest \u2014 once it dies the Followers flee. Rattle multi-hits.",
+   "regent": "Seven Stars and Astral Pulse hit all three. Gamma Blast AoE wave. Sovereign Blade singles out the Priest.",
+   "silent": "Dagger Spray and Haze hit all three. Poison and No Escape ignore Weak. Focus the Priest \u2014 no Follower cleanup needed."
+  },
+  "VantomBoss": {
+   "defect": "Lightning orbs strip 1 Slippery per hit. Claw spam strips Slippery fast. Scrape cycles through Wounds.",
+   "general": "173 HP with 9 Slippery (each hit deals 1 and removes a stack). Cycle: Ink Blot 7 \u2192 Inky Lance 6x2 \u2192 Dismember 27 + 3 Wounds \u2192 Prepare +2 Str. Kill before the 3rd Dismember.",
+   "ironclad": "Whirlwind/Conflagration multi-hits strip Slippery. Inferno ticks remove a stack every turn. Stoke and Burning Pact clear the Wounds Dismember adds.",
+   "necrobinder": "Doom ignores Slippery entirely \u2014 execute when Doom >= HP. Osty soaks Dismember. Souls (draw 2, Exhaust) cycle past Wounds.",
+   "regent": "Seven Stars strips 7 Slippery stacks in one play. Lunar Blast multi-hits. Forge scaling on Sovereign Blade outpaces Vantom's +2 Str/cycle.",
+   "silent": "Shivs strip Slippery 1 stack per Shiv. Even small Poison removes a stack per turn (Accelerant: more). Weak from Neutralize/Leg Sweep softens Dismember. Prepared discards Wounds."
+  },
+  "WaterfallGiantBoss": {
+   "defect": "Frost orbs give passive block that carries through the explosion. Glacier channels 2 Frost. Hyperbeam burst.",
+   "general": "240 HP. Heals 15 with Siphon; Pressure Gun grows +5 each use. Stores Steam Eruption all fight \u2014 after the kill it turns invulnerable and Explodes for the stored amount next turn. Keep a big block for that turn.",
+   "ironclad": "Demon Form scales through the long fight. Impervious covers the explosion. Second Wind blocks through it.",
+   "necrobinder": "A Doom kill with no Steam Eruption stored skips the explosion. Osty absorbs the blast. Dirge heals you back.",
+   "regent": "Save a big block via Bulwark/Bodyguard. Sovereign Blade forge scales through the fight. Void Form free plays save energy for block.",
+   "silent": "Poison keeps ticking for steady damage through the heals. Backflip and Leg Sweep for the explosion turn."
+  }
+ },
  "cards": {
   "Abrasive": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Accelerant": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Accuracy": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Acrobatics": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "A"
   },
   "AdaptiveStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Adrenaline": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Afterimage": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Afterlife": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Aggression": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "Alignment": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "AllForOne": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "B"
   },
   "Anger": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Anticipate": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Armaments": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Arsenal": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "AshenStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Assassinate": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "AstralPulse": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Backflip": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Backstab": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "BallLightning": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "BansheesCry": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Barrage": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Barricade": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "D"
   },
   "BattleTrance": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "BeaconOfHope": {
@@ -106,31 +259,44 @@
    "tier": "S"
   },
   "BeamCell": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "BeatIntoShape": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Begone": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "BelieveInYou": {
    "src": "mobalytics",
    "tier": "A"
   },
+  "BiasedCognition": {
+   "guide": "C"
+  },
   "BigBang": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "BlackHole": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "BladeDance": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "BladeOfInk": {
@@ -139,34 +305,47 @@
   },
   "BlightStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "BloodWall": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "Bloodletting": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Bludgeon": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "Blur": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "BodySlam": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
+  "Bodyguard": {
+   "guide": "D"
+  },
   "Bombardment": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "BoneShards": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "BoostAway": {
@@ -175,18 +354,23 @@
   },
   "BootSequence": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "BorrowedTime": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "A"
   },
   "BouncingFlask": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Brand": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Break": {
@@ -195,162 +379,215 @@
   },
   "Breakthrough": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "BubbleBubble": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "Buffer": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "BulkUp": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "BulletTime": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Bully": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Bulwark": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "BundleOfJoy": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "BurningPact": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Burst": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Bury": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "D"
   },
   "Calcify": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "CalculatedGamble": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "CallOfTheVoid": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Capacitor": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "CaptureSpirit": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Cascade": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "CelestialMight": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Chaos": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "D"
   },
   "Charge": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "ChargeBattery": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "ChildOfTheStars": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Chill": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Cinder": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
+  "Clash": {
+   "guide": "D"
+  },
   "Claw": {
+   "guide": "C",
    "src": "mobalytics",
    "tier": "D"
   },
   "Cleanse": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "C"
   },
   "CloakAndDagger": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "CloakOfStars": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "ColdSnap": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "CollisionCourse": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Colossus": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Comet": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Compact": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "CompileDriver": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Conflagration": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Conqueror": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "ConsumingShadow": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Convergence": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Coolant": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "Coolheaded": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Coordinate": {
@@ -359,38 +596,49 @@
   },
   "CorrosiveWave": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Corruption": {
+   "guide": "S",
    "src": "mobalytics",
    "tier": "A"
   },
   "CosmicIndifference": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Countdown": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "CrashLanding": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "CreativeAi": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "CrescentSpear": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "CrimsonMantle": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Cruelty": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "CrushUnder": {
@@ -399,78 +647,109 @@
   },
   "DaggerSpray": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "DaggerThrow": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "DanseMacabre": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "DarkEmbrace": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Darkness": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Dash": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "DeadlyPoison": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "DeathMarch": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Deathbringer": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "DeathsDoor": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "Debilitate": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "DecisionsDecisions": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
+  "DefendNecrobinder": {
+   "guide": "D"
+  },
   "Defile": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "Deflect": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Defragment": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Defy": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Delay": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Demesne": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "DemonForm": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "DemonicShield": {
@@ -479,62 +758,83 @@
   },
   "Devastate": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "DevourLife": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Dirge": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "Dismantle": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
+  },
+  "Distraction": {
+   "guide": "D"
   },
   "DodgeAndRoll": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Dominate": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "DoubleEnergy": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "DrainPower": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Dredge": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "B"
   },
   "DrumOfBattle": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "DyingStar": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "EchoForm": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "EchoingSlash": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Eidolon": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "EndOfDays": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "EnergySurge": {
@@ -543,22 +843,28 @@
   },
   "EnfeeblingTouch": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Envenom": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "Eradicate": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "EscapePlan": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "EvilEye": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "ExpectAFight": {
@@ -567,58 +873,78 @@
   },
   "Expertise": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Expose": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
+  },
+  "FallingStar": {
+   "guide": "A"
   },
   "FanOfKnives": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Fear": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Feed": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "A"
   },
   "FeelNoPain": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Feral": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "Fetch": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "FiendFire": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "FightMe": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "FightThrough": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Finisher": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "FlakCannon": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "FlameBarrier": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Flanking": {
@@ -627,50 +953,63 @@
   },
   "Flatten": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Flechettes": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "FlickFlack": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "FocusedStrike": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "Footwork": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "ForegoneConclusion": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "C"
   },
   "ForgottenRitual": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Friendship": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Ftl": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Furnace": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Fusion": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "GammaBlast": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "GangUp": {
@@ -679,26 +1018,33 @@
   },
   "GatherLight": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "Genesis": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "C"
   },
   "GeneticAlgorithm": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Glacier": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Glasswork": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Glimmer": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "GlimpseBeyond": {
@@ -707,42 +1053,55 @@
   },
   "Glitterstream": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "Glow": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "GoForTheEyes": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "GrandFinale": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "GraveWarden": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "Graveblast": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "D"
   },
   "Guards": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "GuidingStar": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "GunkUp": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Hailstorm": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "HammerTime": {
@@ -751,18 +1110,23 @@
   },
   "HandTrick": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Hang": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Haunt": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Havoc": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Haze": {
@@ -771,18 +1135,23 @@
   },
   "Headbutt": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "A"
   },
   "HeavenlyDrill": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "Hegemony": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "HeirloomHammer": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "HelixDrill": {
@@ -791,26 +1160,33 @@
   },
   "Hellraiser": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Hemokinesis": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "HiddenCache": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "HiddenDaggers": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "HighFive": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "Hologram": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "Hotfix": {
@@ -819,6 +1195,7 @@
   },
   "HowlFromBeyond": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "HuddleUp": {
@@ -831,10 +1208,12 @@
   },
   "IAmInvincible": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "IceLance": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "Ignition": {
@@ -842,23 +1221,30 @@
    "tier": "C"
   },
   "Impervious": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "InfernalBlade": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Inferno": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "InfiniteBlades": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Inflame": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Intercept": {
@@ -866,35 +1252,44 @@
    "tier": "C"
   },
   "Invoke": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "IronWave": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "Iteration": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Juggernaut": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Juggling": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "KinglyKick": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "KinglyPunch": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "KnifeTrap": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Knockdown": {
@@ -903,10 +1298,12 @@
   },
   "KnockoutBlow": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "KnowThyPlace": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "Largesse": {
@@ -915,14 +1312,17 @@
   },
   "LeadingStrike": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Leap": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "LegSweep": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "LegionOfBone": {
@@ -931,6 +1331,7 @@
   },
   "Lethality": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Lift": {
@@ -939,46 +1340,57 @@
   },
   "LightningRod": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Loop": {
+   "guide": "C",
    "src": "mobalytics",
    "tier": "S"
   },
   "LunarBlast": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "MachineLearning": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "MakeItSo": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Malaise": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Mangle": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "ManifestAuthority": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "MasterPlanner": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Melancholy": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "MementoMori": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "MeteorShower": {
@@ -987,6 +1399,7 @@
   },
   "MeteorStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Mimic": {
@@ -999,214 +1412,275 @@
   },
   "Misery": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Modded": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "MoltenFist": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "MomentumStrike": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "MonarchsGaze": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "Monologue": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "MultiCast": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Murder": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "NecroMastery": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "NegativePulse": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "Neurosurge": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "NeutronAegis": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Nightmare": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "NoEscape": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "NoxiousFumes": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Null": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Oblivion": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Offering": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "OneTwoPunch": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Orbit": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Outbreak": {
+   "guide": "C",
    "src": "mobalytics",
    "tier": "B"
   },
+  "Outmaneuver": {
+   "guide": "D"
+  },
   "Overclock": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "PactsEnd": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Pagestorm": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "PaleBlueDot": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Parry": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Parse": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "ParticleWall": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "A"
   },
   "Patter": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "PerfectedStrike": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "PhantomBlades": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "PhotonCut": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "PiercingWail": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Pillage": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "PillarOfCreation": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Pinpoint": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "PoisonedStab": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Poke": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "PommelStrike": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "Pounce": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "PreciseCut": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "Predator": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "Prepared": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "PrimalForce": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Prophesize": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "PullAggro": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "PullFromBelow": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Putrefy": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Pyre": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Quasar": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Radiate": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Rage": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Rainbow": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Rally": {
@@ -1214,59 +1688,77 @@
    "tier": "S"
   },
   "Rampage": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Rattle": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Reanimate": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Reap": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "ReaperForm": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "Reave": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Reboot": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "RefineBlade": {
+   "guide": "D",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Reflect": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Reflex": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "B"
   },
   "Refract": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "A"
   },
   "Resonance": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Ricochet": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "RightHandHand": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "RocketPunch": {
@@ -1275,134 +1767,172 @@
   },
   "RoyalGamble": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Royalties": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Rupture": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Sacrifice": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Scavenge": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Scourge": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Scrape": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "SculptingStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Seance": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "C"
   },
   "SecondWind": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "SeekingEdge": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "SentryMode": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "SerpentForm": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "SetupStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "SevenStars": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Severance": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "ShadowShield": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "ShadowStep": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Shadowmeld": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "SharedFate": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Shatter": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "S"
   },
   "ShiningStrike": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "Shroud": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "ShrugItOff": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "SicEm": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "SignalBoost": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Skewer": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Skim": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "SleightOfFlesh": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Slice": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Smokestack": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Snakebite": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "Snap": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Sneaky": {
@@ -1411,78 +1941,102 @@
   },
   "SolarStrike": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "SoulStorm": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Sow": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "SpectrumShift": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Speedster": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Spinner": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "SpiritOfAsh": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Spite": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "SpoilsOfBattle": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Spur": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "Squeeze": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
+  },
+  "Stack": {
+   "guide": "D"
   },
   "Stampede": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Stardust": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Stoke": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "A"
   },
   "Stomp": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "StoneArmor": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Storm": {
+   "guide": "A",
    "src": "mobalytics",
    "tier": "C"
   },
   "StormOfSteel": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Strangle": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Subroutine": {
@@ -1491,34 +2045,43 @@
   },
   "SuckerPunch": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "SummonForth": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Sunder": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Supercritical": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Supermassive": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "SweepingBeam": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "D"
   },
   "SwordBoomerang": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "SwordSage": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "Synchronize": {
@@ -1527,10 +2090,13 @@
   },
   "Synthesis": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "B"
   },
   "Tactician": {
+   "guide": "A",
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "TagTeam": {
@@ -1543,10 +2109,12 @@
   },
   "Taunt": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "TearAsunder": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Tempest": {
@@ -1555,18 +2123,23 @@
   },
   "Terraforming": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "C"
   },
   "TeslaCoil": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "TheHunt": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "TheScythe": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "TheSealedThrone": {
@@ -1575,82 +2148,106 @@
   },
   "TheSmith": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Thrash": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "Thunder": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Thunderclap": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "TimesUp": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "ToolsOfTheTrade": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Tracking": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "S"
   },
   "Transfigure": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "B"
   },
   "TrashToTreasure": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Tremble": {
    "src": "mobalytics",
+   "stl": "D",
    "tier": "S"
   },
   "TrueGrit": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "C"
   },
   "Turbo": {
    "src": "mobalytics",
+   "stl": "B",
    "tier": "A"
   },
   "TwinStrike": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Tyranny": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "A"
   },
   "Undeath": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "A"
+  },
+  "Unleash": {
+   "guide": "D"
   },
   "Unmovable": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Unrelenting": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "B"
   },
   "Untouchable": {
    "src": "mobalytics",
+   "stl": "S",
    "tier": "C"
   },
   "UpMySleeve": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "D"
   },
   "Uppercut": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "S"
   },
   "Uproar": {
@@ -1659,18 +2256,23 @@
   },
   "Veilpiercer": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Vicious": {
    "src": "mobalytics",
+   "stl": "A",
    "tier": "C"
   },
   "VoidForm": {
+   "guide": "S",
    "src": "mobalytics",
+   "stl": "S",
    "tier": "S"
   },
   "Voltaic": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "WellLaidPlans": {
@@ -1678,19 +2280,28 @@
    "tier": "S"
   },
   "Whirlwind": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "B",
    "tier": "B"
   },
   "WhiteNoise": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   },
   "Wisp": {
+   "guide": "C",
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
+  },
+  "WraithForm": {
+   "guide": "S"
   },
   "WroughtInWar": {
    "src": "mobalytics",
+   "stl": "C",
    "tier": "C"
   }
  },
@@ -2578,6 +3189,763 @@
  },
  "events": {},
  "monsters": {},
+ "pairs": [
+  [
+   "Corruption",
+   "DarkEmbrace",
+   12
+  ],
+  [
+   "Corruption",
+   "FeelNoPain",
+   10
+  ],
+  [
+   "Corruption",
+   "ForgottenRitual",
+   10
+  ],
+  [
+   "DemonForm",
+   "Whirlwind",
+   10
+  ],
+  [
+   "Rupture",
+   "Bloodletting",
+   12
+  ],
+  [
+   "Rupture",
+   "Inferno",
+   8
+  ],
+  [
+   "Barricade",
+   "BodySlam",
+   14
+  ],
+  [
+   "Barricade",
+   "Juggernaut",
+   8
+  ],
+  [
+   "Cruelty",
+   "MoltenFist",
+   12
+  ],
+  [
+   "Hellraiser",
+   "PommelStrike",
+   14
+  ],
+  [
+   "FeelNoPain",
+   "SecondWind",
+   8
+  ],
+  [
+   "FiendFire",
+   "Corruption",
+   10
+  ],
+  [
+   "Accuracy",
+   "InfiniteBlades",
+   14
+  ],
+  [
+   "Accuracy",
+   "BladeDance",
+   12
+  ],
+  [
+   "Accuracy",
+   "KnifeTrap",
+   12
+  ],
+  [
+   "Accuracy",
+   "FanOfKnives",
+   8
+  ],
+  [
+   "MasterPlanner",
+   "Tactician",
+   14
+  ],
+  [
+   "MasterPlanner",
+   "Reflex",
+   12
+  ],
+  [
+   "CalculatedGamble",
+   "Tactician",
+   12
+  ],
+  [
+   "NoxiousFumes",
+   "Accelerant",
+   14
+  ],
+  [
+   "Accelerant",
+   "BubbleBubble",
+   10
+  ],
+  [
+   "Afterimage",
+   "ToolsOfTheTrade",
+   8
+  ],
+  [
+   "SerpentForm",
+   "Accelerant",
+   8
+  ],
+  [
+   "Defragment",
+   "EchoForm",
+   14
+  ],
+  [
+   "Defragment",
+   "BiasedCognition",
+   12
+  ],
+  [
+   "Capacitor",
+   "Loop",
+   12
+  ],
+  [
+   "Darkness",
+   "MultiCast",
+   14
+  ],
+  [
+   "Darkness",
+   "ConsumingShadow",
+   10
+  ],
+  [
+   "Coolheaded",
+   "Glacier",
+   12
+  ],
+  [
+   "Coolheaded",
+   "Loop",
+   10
+  ],
+  [
+   "AllForOne",
+   "Claw",
+   14
+  ],
+  [
+   "Feral",
+   "Claw",
+   10
+  ],
+  [
+   "Compact",
+   "Smokestack",
+   12
+  ],
+  [
+   "Compact",
+   "FlakCannon",
+   10
+  ],
+  [
+   "EchoForm",
+   "CreativeAi",
+   10
+  ],
+  [
+   "MeteorStrike",
+   "Hologram",
+   10
+  ],
+  [
+   "Neurosurge",
+   "Eradicate",
+   16
+  ],
+  [
+   "Wisp",
+   "Eradicate",
+   10
+  ],
+  [
+   "BorrowedTime",
+   "Eradicate",
+   14
+  ],
+  [
+   "Friendship",
+   "Eradicate",
+   10
+  ],
+  [
+   "Demesne",
+   "Eradicate",
+   8
+  ],
+  [
+   "Neurosurge",
+   "Wisp",
+   10
+  ],
+  [
+   "Neurosurge",
+   "BorrowedTime",
+   14
+  ],
+  [
+   "Neurosurge",
+   "Friendship",
+   10
+  ],
+  [
+   "Lethality",
+   "Eradicate",
+   14
+  ],
+  [
+   "Lethality",
+   "TheScythe",
+   12
+  ],
+  [
+   "Debilitate",
+   "Lethality",
+   12
+  ],
+  [
+   "Debilitate",
+   "Eradicate",
+   10
+  ],
+  [
+   "Putrefy",
+   "Lethality",
+   8
+  ],
+  [
+   "NoEscape",
+   "Countdown",
+   12
+  ],
+  [
+   "NoEscape",
+   "Deathbringer",
+   10
+  ],
+  [
+   "NoEscape",
+   "DeathsDoor",
+   10
+  ],
+  [
+   "NoEscape",
+   "BorrowedTime",
+   12
+  ],
+  [
+   "ReaperForm",
+   "NoEscape",
+   10
+  ],
+  [
+   "NoEscape",
+   "Shroud",
+   8
+  ],
+  [
+   "Haunt",
+   "Dirge",
+   14
+  ],
+  [
+   "Haunt",
+   "GraveWarden",
+   10
+  ],
+  [
+   "Haunt",
+   "CaptureSpirit",
+   10
+  ],
+  [
+   "Haunt",
+   "SoulStorm",
+   12
+  ],
+  [
+   "Haunt",
+   "GlimpseBeyond",
+   10
+  ],
+  [
+   "Dirge",
+   "DevourLife",
+   12
+  ],
+  [
+   "Oblivion",
+   "Haunt",
+   8
+  ],
+  [
+   "NecroMastery",
+   "Squeeze",
+   12
+  ],
+  [
+   "NecroMastery",
+   "Rattle",
+   8
+  ],
+  [
+   "Fetch",
+   "Flatten",
+   12
+  ],
+  [
+   "Rattle",
+   "Flatten",
+   10
+  ],
+  [
+   "Lethality",
+   "BansheesCry",
+   10
+  ],
+  [
+   "SpiritOfAsh",
+   "Pagestorm",
+   10
+  ],
+  [
+   "Lethality",
+   "Reap",
+   8
+  ],
+  [
+   "Alignment",
+   "Glow",
+   14
+  ],
+  [
+   "Alignment",
+   "Genesis",
+   12
+  ],
+  [
+   "Alignment",
+   "RoyalGamble",
+   10
+  ],
+  [
+   "VoidForm",
+   "SevenStars",
+   14
+  ],
+  [
+   "SevenStars",
+   "Genesis",
+   10
+  ],
+  [
+   "Comet",
+   "ChildOfTheStars",
+   8
+  ],
+  [
+   "Bulwark",
+   "Conqueror",
+   12
+  ],
+  [
+   "SeekingEdge",
+   "SummonForth",
+   10
+  ],
+  [
+   "Convergence",
+   "VoidForm",
+   10
+  ],
+  [
+   "Cruelty",
+   "Uppercut",
+   10
+  ],
+  [
+   "Cruelty",
+   "Taunt",
+   10
+  ],
+  [
+   "Cruelty",
+   "Vicious",
+   8
+  ],
+  [
+   "Cruelty",
+   "Tremble",
+   8
+  ],
+  [
+   "Juggernaut",
+   "Impervious",
+   8
+  ],
+  [
+   "Barricade",
+   "Entrench",
+   10
+  ],
+  [
+   "DarkEmbrace",
+   "BurningPact",
+   10
+  ],
+  [
+   "Offering",
+   "Corruption",
+   8
+  ],
+  [
+   "DemonForm",
+   "Rupture",
+   10
+  ],
+  [
+   "DemonForm",
+   "TwinStrike",
+   10
+  ],
+  [
+   "DemonForm",
+   "Inflame",
+   10
+  ],
+  [
+   "Rupture",
+   "Brand",
+   8
+  ],
+  [
+   "NotYet",
+   "Bloodletting",
+   8
+  ],
+  [
+   "Pyre",
+   "Whirlwind",
+   10
+  ],
+  [
+   "Feed",
+   "DemonForm",
+   8
+  ],
+  [
+   "Afterimage",
+   "CalculatedGamble",
+   10
+  ],
+  [
+   "Afterimage",
+   "Acrobatics",
+   8
+  ],
+  [
+   "Footwork",
+   "Afterimage",
+   8
+  ],
+  [
+   "WellLaidPlans",
+   "Tactician",
+   12
+  ],
+  [
+   "ToolsOfTheTrade",
+   "Tactician",
+   14
+  ],
+  [
+   "ToolsOfTheTrade",
+   "Reflex",
+   12
+  ],
+  [
+   "Burst",
+   "NoxiousFumes",
+   12
+  ],
+  [
+   "Burst",
+   "DeadlyPoison",
+   12
+  ],
+  [
+   "Burst",
+   "Accelerant",
+   12
+  ],
+  [
+   "KnifeTrap",
+   "BladeDance",
+   12
+  ],
+  [
+   "InfiniteBlades",
+   "Finisher",
+   10
+  ],
+  [
+   "Envenom",
+   "Accuracy",
+   8
+  ],
+  [
+   "GrandFinale",
+   "CalculatedGamble",
+   8
+  ],
+  [
+   "Defragment",
+   "Loop",
+   12
+  ],
+  [
+   "Capacitor",
+   "Defragment",
+   10
+  ],
+  [
+   "Loop",
+   "Hailstorm",
+   10
+  ],
+  [
+   "Glacier",
+   "Hailstorm",
+   10
+  ],
+  [
+   "EchoForm",
+   "Coolheaded",
+   12
+  ],
+  [
+   "BiasedCognition",
+   "MultiCast",
+   12
+  ],
+  [
+   "Darkness",
+   "Loop",
+   10
+  ],
+  [
+   "AllForOne",
+   "Ftl",
+   8
+  ],
+  [
+   "Scrape",
+   "AllForOne",
+   10
+  ],
+  [
+   "Voltaic",
+   "Capacitor",
+   8
+  ],
+  [
+   "Storm",
+   "EchoForm",
+   8
+  ],
+  [
+   "Fusion",
+   "MeteorStrike",
+   8
+  ],
+  [
+   "SleightOfFlesh",
+   "NoEscape",
+   10
+  ],
+  [
+   "SleightOfFlesh",
+   "Deathbringer",
+   10
+  ],
+  [
+   "SleightOfFlesh",
+   "Debilitate",
+   10
+  ],
+  [
+   "DeathMarch",
+   "Dirge",
+   10
+  ],
+  [
+   "DeathMarch",
+   "Haunt",
+   8
+  ],
+  [
+   "Hang",
+   "Hang",
+   12
+  ],
+  [
+   "ReaperForm",
+   "TheScythe",
+   12
+  ],
+  [
+   "ReaperForm",
+   "Lethality",
+   10
+  ],
+  [
+   "Shroud",
+   "Deathbringer",
+   12
+  ],
+  [
+   "Shroud",
+   "Scourge",
+   10
+  ],
+  [
+   "NecroMastery",
+   "Fetch",
+   8
+  ],
+  [
+   "SicEm",
+   "NecroMastery",
+   10
+  ],
+  [
+   "BorrowedTime",
+   "Bury",
+   12
+  ],
+  [
+   "BorrowedTime",
+   "BansheesCry",
+   10
+  ],
+  [
+   "BorrowedTime",
+   "EndOfDays",
+   12
+  ],
+  [
+   "Radiate",
+   "Genesis",
+   12
+  ],
+  [
+   "Radiate",
+   "Glow",
+   10
+  ],
+  [
+   "Radiate",
+   "RoyalGamble",
+   12
+  ],
+  [
+   "Radiate",
+   "HiddenCache",
+   8
+  ],
+  [
+   "Radiate",
+   "ShiningStrike",
+   8
+  ],
+  [
+   "ChildOfTheStars",
+   "Genesis",
+   10
+  ],
+  [
+   "ChildOfTheStars",
+   "Alignment",
+   10
+  ],
+  [
+   "ChildOfTheStars",
+   "RoyalGamble",
+   12
+  ],
+  [
+   "BlackHole",
+   "Genesis",
+   10
+  ],
+  [
+   "BlackHole",
+   "Alignment",
+   10
+  ],
+  [
+   "BlackHole",
+   "RoyalGamble",
+   12
+  ],
+  [
+   "SevenStars",
+   "Comet",
+   10
+  ],
+  [
+   "SevenStars",
+   "Radiate",
+   8
+  ],
+  [
+   "SeekingEdge",
+   "Conqueror",
+   12
+  ],
+  [
+   "TheSmith",
+   "Conqueror",
+   10
+  ],
+  [
+   "VoidForm",
+   "Comet",
+   12
+  ],
+  [
+   "BigBang",
+   "Alignment",
+   8
+  ],
+  [
+   "BigBang",
+   "Radiate",
+   8
+  ]
+ ],
  "potions": {
   "Ashwater": {
    "src": "mobalytics",

@@ -1,4 +1,5 @@
-// External, read-only state reader for Slay the Spire 2 (field names verified against v0.107.1).
+// External, read-only state reader for Slay the Spire 2. Field names verified against v0.107.1 and v0.111.0 (beta);
+// members a newer build moved are read through FP/BP with the old path first, so every build keeps working.
 // Attaches to SlayTheSpire2.exe with ClrMD, walks the managed heap from static singletons,
 // and prints one JSON line to stdout whenever the state changes.
 using System.Diagnostics;
@@ -25,6 +26,10 @@ string[] UiTypes = [.. new[] {
 List<ulong> uiAddrs = [];
 DateTime uiScanned = DateTime.MinValue, uiChanged = DateTime.MinValue;
 string uiScreen = "";
+string gameVersion = "?"; // release_info.json next to the game exe
+List<string> warnings = []; // sections that failed this frame (renamed field in another game build)
+int mySlot = 0; // our index in RunState._players: shop inventories, rest sites and events are per player slot
+var pathFields = new Dictionary<string, ClrInstanceField>(); // "path#step" -> field, once resolved (see Resolve)
 
 while (true)
 {
@@ -44,6 +49,8 @@ void Emit(object state)
 
 void Watch(Process proc)
 {
+    gameVersion = GameVersion(proc);
+    pathFields.Clear(); // the game (and its build) may have changed
     using var dt = DataTarget.AttachToProcess(proc.Id, suspend: false);
     using var rt = (dt.ClrVersions.FirstOrDefault() ?? throw new Exception("game still loading")).CreateRuntime();
     singletons.Clear();
@@ -59,56 +66,112 @@ void Watch(Process proc)
 
 object Snapshot(ClrRuntime rt)
 {
+    warnings.Clear();
     var runMgr = Singleton(rt, "MegaCrit.Sts2.Core.Runs.RunManager");
     var run = F(runMgr, "State");
-    if (run.IsNull) return new { status = "no_run", ui = Ui(rt, run) };
-    var player = Items(F(run, "_players")).First(); // single-player: local player is Players[0]
+    if (run.IsNull) return new { status = "no_run", game_version = gameVersion, ui = Safe("ui", () => Ui(rt, run)), warnings = warnings.ToArray() };
+    // Multiplayer: Players[0] is the host. The local player's NetId lives on RunManager's synchronizers
+    // (LocalContext.NetId is a static, which ClrMD can't read here).
+    var players = Items(F(run, "_players")).ToList();
+    var myId = Safe<ulong?>("local_player", () => F(runMgr, "RewardSynchronizer") is { IsNull: false } rs
+        ? Field(rs, "_localPlayerId").Read<ulong>(rs.Address, false) : null);
+    var player = players.FirstOrDefault(p => myId != null && Field(p, "NetId").Read<ulong>(p.Address, false) == myId);
+    if (player.IsNull) player = players.First();
+    mySlot = Math.Max(0, players.FindIndex(p => p.Address == player.Address));
     var me = F(player, "Creature");
-    if (I(me, "_currentHp") <= 0) return new { status = "game_over", player = Creature(me), ui = Ui(rt, run) }; // RunState.IsGameOver
+    if (I(me, "_currentHp") <= 0) // RunState.IsGameOver
+        return new { status = "game_over", game_version = gameVersion, player = Creature(me), ui = Safe("ui", () => Ui(rt, run)), warnings = warnings.ToArray() };
     var deck = Items(F(F(player, "Deck"), "_cards")).Select(Card).ToArray();
 
     var cm = Singleton(rt, "MegaCrit.Sts2.Core.Combat.CombatManager");
-    var choose = ChooseCard(rt);
+    var choose = Safe("choose_card", () => ChooseCard(rt));
     var pcs = F(player, "PlayerCombatState");
-    if (!B(cm, "IsInProgress") || pcs.IsNull)
-        return new { status = "out_of_combat", player = Creature(me), deck, card_reward = CardReward(runMgr),
-                     rest_site = RestSite(runMgr, run), potions = Potions(player), relics = Relics(player),
+    // v0.111.0 moved combat state into CombatManager._turnState (CombatTurnState).
+    if (!BP(cm, "IsInProgress", "_turnState.IsInProgress") || pcs.IsNull)
+    {
+        var outside = new { status = "out_of_combat", game_version = gameVersion, player = Creature(me), deck,
+                     card_reward = Safe("card_reward", () => CardReward(runMgr)), rest_site = Safe("rest_site", () => RestSite(runMgr, run)),
+                     potions = Potions(player), relics = Relics(player),
                      potion_slots = Items(F(player, "_potionSlots")).Count(), gold = I(player, "_gold"),
-                     act = I(run, "_currentActIndex"), ascension = I(run, "AscensionLevel"), map = Map(run), shop = Shop(run),
-                     act_name = Items(F(run, "Acts")).ElementAtOrDefault(I(run, "_currentActIndex")) is { IsNull: false } a ? Name(a) : null,
-                     map_open = MapOpen(rt), choose_card = ChooseCard(rt), @event = Event(runMgr, run), ui = Ui(rt, run), card_grid = CardGrid(rt),
-                     character = Name(F(player, "Character")) };
+                     act = I(run, "_currentActIndex"), ascension = I(run, "AscensionLevel"),
+                     map = Safe("map", () => Map(run)), shop = Safe("shop", () => Shop(run)),
+                     act_name = Safe("act_name", () => Items(F(run, "Acts")).ElementAtOrDefault(I(run, "_currentActIndex")) is { IsNull: false } a ? Name(a) : null),
+                     map_open = Safe<bool?>("map_open", () => MapOpen(rt)), choose_card = choose,
+                     @event = Safe("event", () => Event(runMgr, run)), ui = Safe("ui", () => Ui(rt, run)),
+                     card_grid = Safe("card_grid", () => CardGrid(rt)), character = Name(F(player, "Character")),
+                     // open chest's relics (multiplayer: one per player, each votes)
+                     treasure = Safe("treasure", () => F(runMgr, "TreasureRoomRelicSynchronizer") is { IsNull: false } ts
+                         && F(ts, "_currentRelics") is { IsNull: false } cur ? Items(cur).Select(Name).ToArray() : null),
+                     warnings = Array.Empty<string>() };
+        return outside with { warnings = warnings.ToArray() };
+    }
+    var cs = FP(cm, "_state", "_turnState.State"); // CombatState
 
-    return new
+    var fight = new
     {
         status = "combat",
+        game_version = gameVersion,
+        character = Safe("character", () => Name(F(player, "Character"))), // boss tips per character
         turn = I(pcs, "TurnNumber"),
         phase = Phases.ElementAtOrDefault(I(pcs, "_phase")) ?? "?", // "Play" = player can act
         energy = I(pcs, "_energy"),
         max_energy = I(player, "MaxEnergy"),
         player = Creature(me),
         hand = Items(Pile(pcs, "Hand")).Select(Card).ToArray(),
-        draw = Items(Pile(pcs, "DrawPile")).Select(Card).ToArray(),
+        // Sorted: the pile's real order is hidden from players (draws take Cards.First()); the advisor only uses
+        // what a player knows, the draw pile's contents.
+        draw = Items(Pile(pcs, "DrawPile")).OrderBy(Name).Select(Card).ToArray(),
         discard = Items(Pile(pcs, "DiscardPile")).Select(Card).ToArray(),
         exhaust = Items(Pile(pcs, "ExhaustPile")).Select(Card).ToArray(),
+        playing = Safe<int?>("playing", () => Items(Pile(pcs, "PlayPile")).Count()), // > 0 while a played card still resolves
         deck,
         potions = Potions(player),
         potion_slots = Items(F(player, "_potionSlots")).Count(),
         relics = Relics(player),
-        encounter = F(F(cm, "_state"), "_encounter") is { IsNull: false } enc ? Name(enc) : null, // fight type via gamedata
-        enemies = Items(F(F(cm, "_state"), "_enemies")).Where(e => I(e, "_currentHp") > 0).Select(Enemy).ToArray(),
-        hovered = Hovered(rt), // combat_id of the creature under the mouse while targeting (auto-play uses it)
-        potion_ui = PotionUi(rt, player), // which potion slot / Use button is under the mouse (auto-play)
-        hand_select = HandSelect(rt, F(cm, "_state").Address), // a card asked you to pick hand cards
+        encounter = Safe("encounter", () => F(cs, "_encounter") is { IsNull: false } enc ? Name(enc) : null), // fight type via gamedata
+        enemies = Items(F(cs, "_enemies")).Where(e => I(e, "_currentHp") > 0).Select(Enemy).ToArray(),
+        hovered = Safe("hovered", () => Hovered(rt)), // combat_id of the creature under the mouse while targeting (auto-play uses it)
+        potion_ui = Safe("potion_ui", () => PotionUi(rt, player)), // which potion slot / Use button is under the mouse (auto-play)
+        hand_select = Safe("hand_select", () => HandSelect(rt, cs.Address)), // a card asked you to pick hand cards
+        holding = Safe("holding", () => Holding(rt)), // a card is picked up / being aimed (Esc puts it back)
         choose_card = choose, // "choose a card" screen: Knowledge Demon curse, Attack/Skill potions...
         ascension = I(run, "AscensionLevel"), // enemy numbers switch at A8 (HP) / A9 (damage)
-        cards_played = CardsPlayed(cm), // this turn, for Sloth / Ringing / Slow
-        stars = I(pcs, "_stars"), // Regent's second resource
-        orbs = Items(F(F(pcs, "OrbQueue"), "_orbs")).Select(o => new { name = Name(o), // Dark grows its evoke, Glass shrinks
-            value = (TryField(o, "_evokeVal") ?? TryField(o, "_passiveVal"))?.Read<decimal>(o.Address, false) is { } d ? (int?)(int)d : null }).ToArray(),
-        orb_slots = I(F(pcs, "OrbQueue"), "Capacity"),
-        pets = Items(F(pcs, "_pets")).Select(c => new { name = F(c, "Monster") is { IsNull: false } m ? Name(m) : "?", creature = Creature(c) }).ToArray(), // Osty
+        cards_played = CardsPlayed(cm, cs), // this turn, for Sloth / Ringing / Slow
+        card_grid = Safe("card_grid", () => CardGrid(rt)), // pile pick screen (Headbutt: discard -> top of draw...)
+        stars = Safe<int?>("stars", () => I(pcs, "_stars")), // Regent's second resource
+        orbs = Safe("orbs", () => Items(F(F(pcs, "OrbQueue"), "_orbs")).Select(o => new { name = Name(o), // Dark grows its evoke, Glass shrinks
+            value = (TryField(o, "_evokeVal") ?? TryField(o, "_passiveVal"))?.Read<decimal>(o.Address, false) is { } d ? (int?)(int)d : null }).ToArray()),
+        orb_slots = Safe<int?>("orb_slots", () => I(F(pcs, "OrbQueue"), "Capacity")),
+        pets = Safe("pets", () => Items(F(pcs, "_pets")).Select(c => new { name = F(c, "Monster") is { IsNull: false } m ? Name(m) : "?", creature = Creature(c) }).ToArray()), // Osty
+        warnings = Array.Empty<string>(),
     };
+    return fight with { warnings = warnings.ToArray() };
+}
+
+T? Safe<T>(string section, Func<T?> read)
+{
+    // Optional section: a member renamed in another game build disables only this part (reported in `warnings`).
+    try { return read(); }
+    catch (Exception e) { warnings.Add($"{section}: {e.Message}"); return default; }
+}
+
+string GameVersion(Process proc)
+{
+    try
+    {
+        var dir = Path.GetDirectoryName(proc.MainModule!.FileName)!;
+        using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(dir, "release_info.json")));
+        return doc.RootElement.GetProperty("version").GetString() ?? "?";
+    }
+    catch { return "?"; }
+}
+
+bool? Holding(ClrRuntime rt)
+{
+    // NPlayerHand._currentCardPlay is set while a card is picked up or aimed. Esc with nothing held opens the pause menu.
+    foreach (var hand in Instances(rt, "MegaCrit.Sts2.Core.Nodes.Combat.NPlayerHand", force: false).Where(Live))
+        if (TryField(hand, "_currentCardPlay") is { } f) return !f.ReadObject(hand.Address, false).IsNull;
+    return null;
 }
 
 object? HandSelect(ClrRuntime rt, ulong combat)
@@ -223,7 +286,7 @@ object? RestSite(ClrObject runMgr, ClrObject run)
 {
     var room = Items(F(run, "_currentRooms")).LastOrDefault();
     if (room.IsNull || Name(room) != "RestSiteRoom") return null;
-    var site = Items(F(F(runMgr, "RestSiteSynchronizer"), "_restSites")).FirstOrDefault(); // single-player
+    var site = Items(F(F(runMgr, "RestSiteSynchronizer"), "_restSites")).ElementAtOrDefault(mySlot);
     if (site.IsNull) return null;
     var chosen = Field(site, "lastChosenOptionIndex").ReadStruct(site.Address, false); // uint?
     return new
@@ -241,7 +304,7 @@ object? Shop(ClrObject run)
     {
         var room = Items(F(run, "_currentRooms")).LastOrDefault();
         if (room.IsNull || Name(room) != "MerchantRoom") return null;
-        var inv = Items(F(room, "Inventories")).FirstOrDefault(); // single-player
+        var inv = Items(F(room, "Inventories")).ElementAtOrDefault(mySlot);
         if (inv.IsNull) return null;
         var cards = Items(F(inv, "_characterCardEntries")).Concat(Items(F(inv, "_colorlessCardEntries")))
             .Where(e => !F(e, "CreationResult").IsNull)
@@ -263,14 +326,14 @@ object? Shop(ClrObject run)
 
 object? Event(ClrObject runMgr, ClrObject run)
 {
-    // EventRoom (normal ? events and Ancients): EventSynchronizer._events[0] is our live EventModel.
+    // EventRoom (normal ? events and Ancients): EventSynchronizer._events[mySlot] is our live EventModel.
     // Options carry TextKey + Description LocString (table/key into the game's loc JSON); numbers live in
     // the event's DynamicVars (decimals, or StringValue for names like Relic/Card1).
     try
     {
         var room = Items(F(run, "_currentRooms")).LastOrDefault();
         if (room.IsNull || Name(room) != "EventRoom") return null;
-        var ev = Items(F(F(runMgr, "EventSynchronizer"), "_events")).FirstOrDefault();
+        var ev = Items(F(F(runMgr, "EventSynchronizer"), "_events")).ElementAtOrDefault(mySlot);
         if (ev.IsNull || B(ev, "_isFinished")) return null;
         var vars = new Dictionary<string, object>();
         var set = F(ev, "_dynamicVars");
@@ -305,12 +368,12 @@ object? Event(ClrObject runMgr, ClrObject run)
     catch { return null; }
 }
 
-int? CardsPlayed(ClrObject cm)
+int? CardsPlayed(ClrObject cm, ClrObject cs)
 {
     // CombatManager.History._entries: newest last; count CardPlayStartedEntry of the current round.
     try
     {
-        int round = I(F(cm, "_state"), "RoundNumber");
+        int round = I(cs, "RoundNumber");
         return Items(F(F(cm, "History"), "_entries")).Reverse().TakeWhile(e => I(e, "RoundNumber") == round)
             .Count(e => e.Type!.Name!.EndsWith("CardPlayStartedEntry"));
     }
@@ -447,7 +510,24 @@ object? CardGrid(ClrRuntime rt)
             min = prefs.ReadField<int>("<MinSelect>k__BackingField");
             max = prefs.ReadField<int>("<MaxSelect>k__BackingField");
         }
-        return new { screen = Name(top), prompt, min, max, cards = Items(F(top, "_cards")).Select(Card).ToArray() };
+        // pile (combat pile screens: Headbutt, Hologram...); hovered = index of this screen's card under the mouse,
+        // matched through the holders' CardModels like ChooseCard (nothing behind the overlay counts).
+        string[] piles = ["None", "Draw", "Hand", "Discard", "Exhaust", "Play", "Deck"];
+        var pileObj = TryField(top, "_pile")?.ReadObject(top.Address, false) ?? default;
+        var models = Items(F(top, "_cards")).Select(c => c.Address).ToList();
+        int? hovered = null;
+        int matched = 0;
+        foreach (var h in Instances(rt, "MegaCrit.Sts2.Core.Nodes.Cards.Holders.NGridCardHolder", force: false).Where(Live))
+        {
+            var cn = F(h, "CardNode");
+            int idx = cn.IsNull ? -1 : models.IndexOf(F(cn, "_model").Address);
+            if (idx < 0) continue;
+            matched++;
+            if (B(h, "_isHovered")) hovered = idx;
+        }
+        if (matched < models.Count) Instances(rt, "MegaCrit.Sts2.Core.Nodes.Cards.Holders.NGridCardHolder", force: true);
+        return new { screen = Name(top), prompt, min, max, cards = Items(F(top, "_cards")).Select(Card).ToArray(),
+                     pile = pileObj.IsNull ? null : piles.ElementAtOrDefault(I(pileObj, "Type")), hovered };
     }
     catch { return null; }
 }
@@ -528,7 +608,8 @@ object Creature(ClrObject c) => new
     max_hp = I(c, "_maxHp"),
     block = I(c, "_block"),
     powers = Items(F(c, "_powers")).Select(p => new { name = Name(p), amount = I(p, "_amount"),
-                                                       played = TryField(p, "_cardsPlayedThisTurn")?.Read<int>(p.Address, false) }).ToArray(), // Sloth
+                                                       played = TryField(p, "_cardsPlayedThisTurn")?.Read<int>(p.Address, false), // Sloth
+                                                       facing = TryField(p, "_facing")?.Read<int>(p.Address, false) }).ToArray(), // Surrounded: 0 Right, 1 Left
 };
 
 object Enemy(ClrObject c)
@@ -597,6 +678,9 @@ object Card(ClrObject c)
 {
     var vars = new Dictionary<string, int>();
     var set = F(c, "_dynamicVars");
+    // Enchanted cards (Sharp, Steady...): DynamicVar._enchantedValue = base + the enchantment's Damage/Block change,
+    // part of the card in the game's eyes (set when the card is drawn/previewed; reset to base otherwise).
+    var ench = F(c, "Enchantment");
     if (!set.IsNull)
     {
         var dict = F(set, "_vars"); // Dictionary<string, DynamicVar>: _entries[] of {key, value}, _count
@@ -606,7 +690,10 @@ object Card(ClrObject c)
         {
             var e = entries.AsArray().GetStructValue(i);
             var v = e.ReadObjectField("value");
-            if (!v.IsNull) vars[e.ReadObjectField("key").AsString() ?? "?"] = (int)Field(v, "_baseValue").Read<decimal>(v.Address, false);
+            if (v.IsNull) continue;
+            decimal value = Field(v, "_baseValue").Read<decimal>(v.Address, false);
+            if (!ench.IsNull && Field(v, "_enchantedValue").Read<decimal>(v.Address, false) is var ev && ev > 0) value = ev;
+            vars[e.ReadObjectField("key").AsString() ?? "?"] = (int)value;
         }
     }
     var cost = F(c, "_energyCost");
@@ -625,6 +712,7 @@ object Card(ClrObject c)
         affliction = F(c, "Affliction") is { IsNull: false } aff ? Name(aff) : null, // Ringing/Smog/Bound limit plays
         keywords = Keywords(c), // null = the card's printed keywords (gamedata)
         star_cost = B(c, "_starCostSet") ? I(c, "_baseStarCost") : (int?)null, // null = printed (gamedata)
+        enchantment = ench.IsNull ? null : new { name = Name(ench), amount = I(ench, "_amount") },
     };
 }
 
@@ -676,7 +764,39 @@ ClrInstanceField? TryField(ClrObject o, string p)
 }
 
 ClrInstanceField Field(ClrObject o, string p) =>
-    TryField(o, p) ?? throw new Exception($"{o.Type?.Name}.{p} not found (game update renamed it?)");
+    TryField(o, p) ?? throw new Exception($"{o.Type?.Name}.{p} not found (game {gameVersion}: update renamed it?)");
+
+// Version-tolerant reads: each path is dot-separated ("_turnState.IsInProgress") and tried in order (old build
+// first). A path whose members exist but passes through a null object reads as null/false.
+(bool found, ClrObject obj, ClrInstanceField? field) Resolve(ClrObject o, string path)
+{
+    var parts = path.Split('.');
+    for (int i = 0; i < parts.Length; i++)
+    {
+        var f = o.IsNull ? null : TryField(o, parts[i]);
+        var key = path + "#" + i;
+        if (f != null) pathFields[key] = f;
+        // A freshly created object (v0.111.0 makes a new CombatTurnState per fight) can briefly have no readable
+        // type: reuse the field found before instead of failing every frame (that froze the overlay on "map").
+        else if (!o.IsNull && o.Type == null) pathFields.TryGetValue(key, out f);
+        if (f == null) return (o.IsNull && i > 0, o, null);
+        if (i == parts.Length - 1) return (true, o, f);
+        o = f.ReadObject(o.Address, false);
+    }
+    return (false, o, null);
+}
+
+(ClrObject obj, ClrInstanceField? field) Pick(ClrObject o, string[] paths)
+{
+    foreach (var p in paths)
+        if (Resolve(o, p) is { found: true } r) return (r.obj, r.field);
+    throw new Exception($"{o.Type?.Name}.{string.Join(" | ", paths)} not found (game {gameVersion}: update renamed it?)");
+}
+
+ClrObject FP(ClrObject o, params string[] paths) =>
+    Pick(o, paths) is { field: { } f } r ? f.ReadObject(r.obj.Address, false) : default;
+bool BP(ClrObject o, params string[] paths) =>
+    Pick(o, paths) is { field: { } f } r && f.Read<bool>(r.obj.Address, false);
 
 ClrObject F(ClrObject o, string p) => Field(o, p).ReadObject(o.Address, false);
 int I(ClrObject o, string p) => Field(o, p).Read<int>(o.Address, false);

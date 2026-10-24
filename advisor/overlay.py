@@ -16,9 +16,9 @@ import autoplay  # first: sets DPI awareness before any window exists
 from pathing import DEATH, best_routes, direction
 from archetypes import describe as describe_build
 from deck import profile
-from picker import choose_card, event_advice, hand_pick, pick, rest_advice, shop_advice
-from relics import GAMEDATA, Relics
-from solver import fight_type, solve, unmodeled_player_powers, unmodeled_powers
+from picker import choose_card, deck_pick, event_advice, hand_pick, pick, pile_pick, relic_value, rest_advice, shop_advice
+from relics import GAMEDATA, KNOWLEDGE, Relics
+from solver import fight_type, next_turn_unblocked, solve, unmodeled_player_powers, unmodeled_powers
 
 READER = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                       "..", "reader", "bin", "Release", "net10.0", "Sts2Reader.exe")
@@ -72,7 +72,8 @@ def play():
         with open(autoplay.DEBUG_LOG, "a", encoding="utf-8") as f:
             f.write(f"{time.strftime('%H:%M:%S')} {m}\n")
     result = autoplay.autopilot(get_state, lambda s: solve(s)[0], hand_pick, cancel, log,
-                                choose=lambda g, c, l: autoplay.click_choice(g, c, l, lambda s: choose_card(s)[0]))
+                                choose=lambda g, c, l: autoplay.click_choice(g, c, l, lambda s: choose_card(s)[0]),
+                                pile=lambda g, c, l: autoplay.pick_from_pile(g, c, l, pile_pick))
     log("stopped: " + result)
     if not (result.startswith(("combat over", "you died")) or result == "cancelled"):
         worker["alert"] = True  # stopped mid-fight: you're playing now, make it impossible to miss
@@ -119,16 +120,27 @@ def describe(plan):
 
 def describe_kit(state):
     """potions + relics line; flags relics that change in-turn math but have no solver rule."""
+    game = state.get("game_version")
+    data = GAMEDATA.get("version")
+    head = (f"game {game}" + (f" (no game data for it, using {data or 'default'}: run tools/gen_gamedata.py)"
+                              if game and game != "?" and data != game else "") + "\n") if game else ""
     if "relics" not in state:
-        return ""
+        return head.strip()
     potions = ", ".join(p["name"] for p in state.get("potions", [])) or "none"
     unmodeled = Relics(state["relics"], GAMEDATA["relics"]).unmodeled()
     foes = unmodeled_powers(state)
     mine = unmodeled_player_powers(state) if state.get("status") == "combat" else []
-    return (f"potions: {potions} · relics: {len(state['relics'])}"
+    return (head + f"potions: {potions} · relics: {len(state['relics'])}"
             + (f" (not modeled: {', '.join(unmodeled)})" if unmodeled else "")
             + (f"\nenemy powers not modeled: {', '.join(foes)}" if foes else "")
-            + (f"\nyour powers not modeled: {', '.join(mine)}" if mine else ""))
+            + (f"\nyour powers not modeled: {', '.join(mine)}" if mine else "")
+            + (f"\nboss tip: {tip}" if (tip := boss_tip(state)) else ""))
+
+
+def boss_tip(state):
+    """Spire-Forge boss tip for this fight: your character's, else the general one (tools/import_research.py)."""
+    tips = KNOWLEDGE.get("boss_tips", {}).get(state.get("encounter")) if state.get("status") == "combat" else None
+    return tips and (tips.get((state.get("character") or "").lower()) or tips.get("general"))
 
 
 def deck_lines(state):
@@ -181,9 +193,9 @@ def render():
     if f8.is_set():
         f8.clear()
         on_f8()
-    hint.config(text=f"F8: combat autopilot {'ON' if worker['thread'] and worker['thread'].is_alive() else 'off'}"
-                     " · Ctrl+right-click: quit")
     running = bool(worker["thread"] and worker["thread"].is_alive())
+    hint.config(text=f"F8: combat autopilot {'ON' if running else 'off'} · Ctrl+right-click: quit",
+                fg="#5c5" if running else "#c55")  # green on, red off
     if running != passing:  # click-through exactly while autopilot runs (Tk calls stay on this thread)
         click_through(running)
         passing = running
@@ -194,17 +206,31 @@ def render():
         shown = line
         shown_err["text"] = ""
         state = json.loads(line)
+        if state.get("warnings"):  # reader sections a renamed field broke on this game build; the rest still works
+            shown_err["text"] = "reader: " + "; ".join(state["warnings"])
         kit.config(text=describe_kit(state))
         if state.get("choose_card"):  # Knowledge Demon curse, Attack Potion, Discovery...: click the pick
             best, rated = choose_card(state)
             status.config(text="choose a card" + ("  (skip allowed)" if state["choose_card"]["can_skip"] else ""))
             main.config(text=f"Choose: {best}")
             alts.config(text="\n".join(f"{name:<16} {label}" for name, _, label in rated))
+        elif state["status"] != "combat" and (g := state.get("card_grid")) and (g.get("prompt") or "Select" in (g.get("screen") or "")):
+            verb, picks, ranked = deck_pick(state)  # event/rest/shop deck grid: which card to upgrade/remove/...
+            status.config(text=f"{verb.lower()} a card  (deck {len(state.get('deck', []))})")
+            main.config(text=f"{verb}: {', '.join(picks)}")
+            alts.config(text="\n".join(f"next: {n}" for n in [n for n in ranked if n not in picks][:4]))
+        elif state["status"] != "combat" and state.get("treasure"):  # chest: one relic per player, you vote for one
+            ranked = sorted(state["treasure"], key=lambda r: -relic_value(r, state))
+            status.config(text=f"treasure  ({len(ranked)} relics)")
+            main.config(text=f"Take: {ranked[0]}")
+            alts.config(text="\n".join(f"{r:<22} {relic_value(r, state):>5.1f}" for r in ranked))
         elif state.get("card_reward"):
             best, rated = pick(state["card_reward"], state["deck"], state.get("relics", []), state)
             status.config(text=f"card reward  (deck {len(state['deck'])})")
             main.config(text=f"Pick: {best}")
-            alts.config(text="\n".join([f"{name:<16} {score:>5}{'' if ok else '  (?)'}" for name, score, ok in rated]
+            alts.config(text="\n".join([f"{name:<16} {score:>5}{'' if ok else '  (?)'}"
+                                        + ("" if saved is None else f"  ({saved:+.1f} HP{': dilutes' if saved < 0 else ''})")
+                                        for name, score, ok, saved in rated]
                                        + deck_lines(state)))
         elif (state.get("rest_site") or {}).get("chosen") is False:
             head, lines = rest_advice(state)
@@ -245,8 +271,15 @@ def render():
                                + (f"  stars {state['stars']}" if state.get("stars") else "")
                                + (f"  orbs {' '.join(o['name'].removesuffix('Orb') for o in state['orbs'])}"
                                   if state.get("orbs") else "")
-                               + "".join(f"  {p['name']} {p['creature']['hp']}hp" for p in state.get("pets", [])))
-            if state.get("hand_select"):  # a card asked to pick hand cards: that comes before any plan
+                               + "".join(f"  {p['name']} {p['creature']['hp']}hp" for p in state.get("pets", []))
+                               + (f"\ndraw {len(state['draw'])} · discard {len(state.get('discard', []))} · "
+                                  f"exhaust {len(state.get('exhaust', []))}  next turn ~{next_turn_unblocked(state):.0f} "
+                                  f"unblocked" if "draw" in state else ""))
+            if state.get("card_grid"):  # Headbutt, Hologram, Dredge...: pick from a pile
+                grid = state["card_grid"]
+                main.config(text=f"Pick from {(grid.get('pile') or 'pile').lower()}: {', '.join(pile_pick(state))}")
+                alts.config(text=f"({grid['min']}-{grid['max']} cards)")
+            elif state.get("hand_select"):  # a card asked to pick hand cards: that comes before any plan
                 sel = state["hand_select"]
                 _, names = hand_pick(state)
                 main.config(text=f"Pick: {', '.join(names) or 'nothing - confirm'}")

@@ -47,7 +47,7 @@ from picker import pick
 DECK = [STRIKE] * 5 + [DEFEND] * 4 + [BASH]
 CLEAVE = card("Cleave", 1, "Attack", "AllEnemies", Damage=8)
 TWIN = card("SingleHit", 1, "Attack", "AnyEnemy", Damage=8)
-UPPERCUT = card("Uppercut", 2, "Attack", "AnyEnemy", Damage=13, WeakPower=1, VulnerablePower=1)
+UPPERCUT = card("Uppercut", 2, "Attack", "AnyEnemy", Damage=13, Power=1)  # the game's var shape: Weak + Vulnerable
 WEAK1 = card("Meh", 2, "Skill", "Self", Block=3)
 WEAK2 = card("Bleh", 3, "Attack", "AnyEnemy", Damage=5)
 
@@ -398,7 +398,7 @@ assert [s[0] for s in best.steps] == ["BigHit"], best
 assert solve(fight([BASH, STRIKE], [boss(100, [("ArtifactPower", 1)])], energy=3))[0].damage == 14
 
 # 61. Overlay flag: modeled enemy powers stay quiet, unknown ones are listed.
-assert unmodeled_powers({"enemies": [boss(50, [("ArtifactPower", 1), ("VitalSparkPower", 1)])]}) == ["VitalSpark"]
+assert unmodeled_powers({"enemies": [boss(50, [("ArtifactPower", 1), ("PaperCutsPower", 1)])]}) == ["PaperCuts"]
 
 # 62. Sloth 3 with 2 cards already played: only one more card this turn.
 slow_me = fight([STRIKE, STRIKE, STRIKE], [boss(100, [])], energy=3)
@@ -464,8 +464,13 @@ def real(name):
             "x_cost": False, "vars": {k: int(v) for k, v in c["vars"].items()}}
 
 
-# 52. Tier list fixes the stats heuristic: Tremble (S) over Setup Strike (C); Feel No Pain (A) worth taking.
-assert rate(real("Tremble"), DECK)[0] > rate(real("SetupStrike"), DECK)[0]
+# 52. Tier list corrects the stats heuristic: a tiered card's score moves from its stats-only score toward its
+# tier value; Feel No Pain (A) worth taking. (v15: tiers are averaged over Mobalytics/slaythetierlist/guides,
+# which disagree on Tremble (S vs D), so Tremble no longer beats Setup Strike outright.)
+from picker import tier_value
+_stats = rate(dict(real("Tremble"), name="_UntieredTremble"), DECK)[0]
+assert min(_stats, tier_value("Tremble")) <= rate(real("Tremble"), DECK)[0] <= max(_stats, tier_value("Tremble"))
+assert rate(real("Tremble"), DECK)[0] != _stats
 assert rate(real("FeelNoPain"), DECK)[0] >= SKIP_BELOW
 
 print("all card-tier checks passed")
@@ -823,3 +828,459 @@ assert ap.click_choice(chooser, threading.Event(), lambda m: None, lambda s: "B"
 assert len(clicked) == 1 and abs(clicked[0][0] - 960) < 120
 ap.find_game, ap.user32, ap.click, ap.time.sleep = saved
 print("all choose-card click checks passed")
+
+# --- piles: draw / discard / exhaust, cards that move cards between them ---
+import random
+from picker import hand_pick, pile_pick
+
+
+def piled(hand, draw, enemy, energy=1, hp=50, discard=()):
+    return {"status": "combat", "energy": energy, "max_energy": 3, "hand": hand, "draw": list(draw),
+            "discard": list(discard), "exhaust": [], "deck": hand + list(draw) + list(discard),
+            "player": {"hp": hp, "max_hp": 80, "block": 0, "powers": []}, "enemies": [enemy]}
+
+
+quiet = {**eel, "move": None}  # no foresight: nothing predicted next turn
+# 124. Crash (22) next turn and no Defends left to draw: block now. Defends still in the draw pile: attack.
+assert solve(piled([STRIKE, DEFEND], [STRIKE] * 10, eel))[0].steps[0][0] == "Defend"
+assert solve(piled([STRIKE, DEFEND], [DEFEND] * 10, eel))[0].steps[0][0] == "Strike"
+# 125. Only the draw pile's contents matter, not its order.
+mix = [STRIKE] * 5 + [DEFEND] * 5
+a = solve(piled([STRIKE, DEFEND], mix, eel))[0]
+b = solve(piled([STRIKE, DEFEND], random.Random(3).sample(mix, 10), eel))[0]
+assert [s[0] for s in a.steps] == [s[0] for s in b.steps] and a.score == b.score
+# 126. 30 cards left to draw: an Exhaust card won't come back before the fight ends, so it costs nothing.
+assert solve(piled([BIG, STRIKE], [STRIKE] * 30, boss(60, [])))[0].steps[0][0] == "Bigshot"
+# 127. Hologram: fetch the 30-Block card from the discard and play it against a 30 hit.
+WALL1 = card("Wall30", 1, "Skill", "Self", Block=30)
+hit30 = {**quiet, "intents": [{"kind": "x", "damage": 30, "hits": 1}]}
+best = solve(piled([real_card("Hologram")], [STRIKE] * 5, hit30, energy=2, discard=[STRIKE, WALL1]))[0]
+assert [s[0] for s in best.steps] == ["Hologram", "Wall30"], best
+# 128. A draw card is worth more with strong cards to draw than with curses.
+POMMEL, GOOD = real_card("PommelStrike"), card("Big20", 1, "Attack", "AnyEnemy", Damage=20)
+CURSE = card("Regretful", -1, "Curse", "None")
+assert solve(piled([POMMEL], [GOOD] * 5, quiet, energy=2))[0].score > solve(piled([POMMEL], [CURSE] * 5, quiet, energy=2))[0].score
+# 129. Headbutt (discard -> top of draw): Defend before the 22 Crash, Strike before a quiet turn.
+grid = lambda st: {**st, "card_grid": {"prompt": "HEADBUTT.selectionScreenPrompt", "min": 1, "max": 1,
+                                       "cards": [STRIKE, DEFEND], "pile": "Discard", "hovered": None}}
+assert pile_pick(grid(piled([], [STRIKE] * 5, eel, energy=0))) == ["Defend"]
+assert pile_pick(grid(piled([], [STRIKE] * 5, quiet, energy=0))) == ["Strike"]
+# 130. Thinking Ahead (hand -> top), enemy buffing now and Crash next: the Defend goes on top, the Strike is played.
+think = lambda st, hand: {**st, "hand_select": {"mode": "select", "prompt": "THINKING_AHEAD.selectionScreenPrompt",
+                                                "min": 1, "max": 1, "selected": 0}}
+buff = {**eel, "intents": []}
+assert hand_pick(think(piled([STRIKE, DEFEND], [STRIKE] * 5, buff), None))[1] == ["Defend"]
+# 131. Enemy stays Vulnerable next turn, no energy now: the big attack goes on top, not the Strike.
+vul = {**quiet, "creature": {**quiet["creature"], "powers": [{"name": "VulnerablePower", "amount": 2}]}}
+BIG12 = card("Big12", 2, "Attack", "AnyEnemy", Damage=12)
+assert hand_pick(think(piled([STRIKE, BIG12], [STRIKE] * 5, vul, energy=0), None))[1] == ["Big12"]
+print("all pile checks passed")
+
+# 132. Pile-screen autoclick: sweeps until the reader says card #1 is hovered, clicks once, remembers the spot.
+saved = (ap.find_game, ap.user32, ap.click, ap.time.sleep)
+pos, clicked = {"x": 0, "y": 0}, []
+ap.find_game = lambda: (0, 0, 0, 1920, 1080)
+ap.user32 = type("U", (), {"SetCursorPos": staticmethod(lambda x, y: pos.update(x=x, y=y)),
+                           "SetForegroundWindow": staticmethod(lambda h: None)})()
+ap.click = lambda: clicked.append((pos["x"], pos["y"]))
+ap.time.sleep = lambda t: None
+
+
+def pile_screen():
+    if clicked:
+        return {"card_grid": None}
+    hov = 1 if 700 < pos["x"] < 800 and 500 < pos["y"] < 600 else 0 if pos["x"] < 700 and 500 < pos["y"] < 600 else None
+    return {"card_grid": {"cards": CHOICES, "hovered": hov, "pile": "Discard", "min": 1, "max": 1}}
+
+
+assert ap.pick_from_pile(pile_screen, threading.Event(), lambda m: None, lambda s: ["B"]) is None
+assert len(clicked) == 1 and 700 < clicked[0][0] < 800 and 1 in ap.grid_spots
+ap.find_game, ap.user32, ap.click, ap.time.sleep = saved
+print("all pile click checks passed")
+
+# 133. Event deck grid (Sapphire Seed "Consume", rest Smith, shop removal): the overlay names the card.
+from picker import deck_pick
+DECK_G = [real_card("StrikeDefect")] * 4 + [real_card("DefendDefect")] * 3 + [real_card(n) for n in ("Defile", "GatherLight", "ColdSnap")]
+grid_of = lambda prompt: {"deck": DECK_G, "relics": [], "card_grid": {"screen": "NDeckCardSelectScreen", "prompt": prompt,
+                                                                    "min": 1, "max": 1, "cards": DECK_G}}
+verb, picks, _ = deck_pick(grid_of("TO_UPGRADE"))
+from picker import UPGRADES, upgrade_gain
+best_up = max(DECK_G, key=lambda c: upgrade_gain(c, DECK_G, UPGRADES, [], grid_of("TO_UPGRADE")))["name"]
+assert verb == "Upgrade" and picks == [best_up], picks  # same ranking as the rest site's Smith
+verb, picks, _ = deck_pick(grid_of("TO_REMOVE"))
+assert verb == "Remove" and picks == ["StrikeDefect"], picks
+assert deck_pick(grid_of("TO_TRANSFORM"))[1] == ["StrikeDefect"]
+assert deck_pick({**grid_of(None), "card_grid": {**grid_of(None)["card_grid"], "screen": "NDeckUpgradeSelectScreen"}})[0] == "Upgrade"
+print("all deck grid checks passed")
+
+# 134. Vital Spark 2 (Infested Prism): a Tainted Defend blocks 5 but adds 2 to each hit. Vs 1x15 still worth it,
+#      vs 5x3 it costs more than it blocks (5 hits x 2 = 10 > 5), so attack instead.
+TDEF = {**DEFEND, "affliction": "Tainted"}
+prism = lambda hits, dmg: boss(100, [("VitalSparkPower", 2)]) | {"intents": [{"kind": "x", "damage": dmg, "hits": hits}]}
+assert next(p for p in solve(fight([STRIKE, TDEF], [prism(1, 15)])) if p.steps[0][0] == "Defend").hp_loss == 12  # 15+2-5
+assert solve(fight([STRIKE, TDEF], [prism(5, 3)]))[0].steps[0][0] == "Strike"
+assert solve(fight([TDEF], [prism(5, 3)]))[0].hp_loss == 15  # not played: 5 x 3
+print("all tainted checks passed")
+
+# --- enemy/relic effects (research/effects-audit.md) ---
+from solver import keywords, next_draw
+HIT10 = card("Hit10", 1, "Attack", "AnyEnemy", Damage=10)
+blocked = lambda b, block: {**b, "creature": {**b["creature"], "block": block}}
+# 135. Plow 150 (Ceremonial Beast): dropping it from 160 to 150 stuns it, so its 20 hit never lands.
+assert solve(fight([HIT10], [boss(160, [("PlowPower", 150)], now=20)]))[0].hp_loss == 0
+# 136. Burrowed (Tunneler): breaking all 8 Block stuns it.
+assert solve(fight([STRIKE, STRIKE], [blocked(boss(30, [("BurrowedPower", 1)], now=15), 8)], energy=2))[0].hp_loss == 0
+# 137. Ravenous (Corpse Slug): kill the small enemy and the Slug eats it instead of hitting us for 15.
+slug, gnat = {**boss(40, [("RavenousPower", 1)], now=15), "combat_id": 1}, {**boss(6, [], now=3), "combat_id": 2}
+best = solve(fight([STRIKE], [slug, gnat]))[0]
+assert best.steps[0][4] == 2 and best.hp_loss == 0, best
+# 138. Crab Rage: killing one crab gives the other +6 per hit (10 -> 16).
+crab = lambda hp, cid, now: {**boss(hp, [("CrabRagePower", 1)], now=now), "combat_id": cid}
+assert next(p for p in solve(fight([STRIKE], [crab(6, 1, 0), crab(40, 2, 10)])) if p.kills).hp_loss == 16
+# 139. Waterfall Giant: killing it isn't a win (it erupts next turn); a dead one at 999999999 HP isn't a target.
+assert not solve(fight([STRIKE], [boss(6, [("SteamEruptionPower", 30)])]))[0].win
+giant, other = {**boss(999999999, []), "combat_id": 1}, {**boss(40, [], now=5), "combat_id": 2}
+assert solve(fight([STRIKE], [giant, other]))[0].steps[0][4] == 2
+# 140. Thieves: kill the Fat Gremlin carrying 50 gold over a 6 HP enemy hitting for 4; without loot, the reverse.
+fat = lambda powers: {**boss(6, powers), "combat_id": 1}
+brute = {**boss(6, [], now=4), "combat_id": 2}
+assert solve(fight([STRIKE], [fat([("HeistPower", 50)]), brute]))[0].steps[0][4] == 1
+assert solve(fight([STRIKE], [fat([]), brute]))[0].steps[0][4] == 2
+# ...same for the Thieving Hopper holding a stolen card.
+assert solve(fight([STRIKE], [fat([("SwipePower", 1)]), brute]))[0].steps[0][4] == 1
+# 141. Bowlbug Rock (Imbalanced): fully blocking its Headbutt means no Headbutt next turn.
+rock = {**foe("BowlbugRock", "HEADBUTT_MOVE", powers=[("ImbalancedPower", 1)]), "combat_id": 1,
+        "creature": {"hp": 40, "max_hp": 40, "block": 0, "powers": [{"name": "ImbalancedPower", "amount": 1}]},
+        "intents": [{"kind": "x", "damage": 5, "hits": 1}]}
+assert solve(fight([STRIKE, DEFEND], [rock], hp=80))[0].steps[0][0] == "Defend"
+plain_rock = {**rock, "creature": {**rock["creature"], "powers": []}}
+assert solve(fight([STRIKE, DEFEND], [plain_rock], hp=80))[0].steps[0][0] == "Strike"  # no stun to earn: attack
+# 142. Galvanized Power (Globe Head 3): playing it costs 3 HP. Hexed (Spectral Knight): the card is Ethereal.
+GPOW = {**card("Inflame", 1, "Power", "Self", StrengthPower=2), "affliction": "Galvanized"}
+assert next(p for p in solve(fight([GPOW], [boss(100, [("GalvanicPower", 3)])])) if p.steps).hp_loss == 3
+assert "Ethereal" in keywords({**STRIKE, "affliction": "Hexed"})
+# 143. Pael's Tears: ending with energy left is worth +2 energy next turn; Pael's Blood draws 6.
+tears = lambda relics: {**piled([], [STRIKE] * 5, quiet, energy=1), "relics": relics}
+end_score = lambda st: next(p for p in solve(st) if not p.steps).score
+assert end_score(tears([{"name": "PaelsTears"}])) > end_score(tears([]))
+assert next_draw({"relics": [{"name": "PaelsBlood"}]}) == 6 and next_draw({}) == 5
+print("all enemy/relic effect checks passed")
+
+# 144. Choose-1-of-3 potions: the Attack Potion's free card (stand-in: Stomp, 12) + Strike kill an 18 HP enemy.
+atk = {**kit(state([STRIKE], energy=1, enemy_hp=18, intent_dmg=30), potions=["AttackPotion"]),
+       "deck": [real_card("StrikeIronclad")] * 5}
+best = solve(atk)[0]
+assert best.win and "POTION AttackPotion" in [s[0] for s in best.steps], best
+from solver import potion_cards
+assert potion_cards("CunningPotion", {"hand": []}) and potion_cards("CunningPotion", {"hand": []})[0][0]["vars"]["Damage"] == 6
+print("all card potion checks passed")
+
+# 145. Surrounded (Crusher + Rocket): facing Right, the Crusher on our left hits 1.5x. Striking it turns us to face it:
+#      20 + 4 x 1.5 = 26 instead of 20 x 1.5 + 4 = 34.
+crusher = {**boss(200, [("BackAttackLeftPower", 1)], now=20), "name": "Crusher", "combat_id": 1}
+rocket = {**boss(200, [("BackAttackRightPower", 1)], now=4), "name": "Rocket", "combat_id": 2}
+sur = fight([STRIKE], [crusher, rocket])
+sur["player"]["powers"] = [{"name": "SurroundedPower", "amount": 1, "facing": 0}]
+best = solve(sur)[0]
+assert best.steps[0][4] == 1 and best.hp_loss == 26, best
+assert next(p for p in solve(sur) if not p.steps).hp_loss == 34
+print("all surrounded checks passed")
+
+# 146. Autopilot waits for a played card to resolve: the frame where energy is spent but the killing blow hasn't
+#      landed yet (enemy at 1 HP, playing=1) must not be planned on (it drank a Block Potion after a kill).
+saved = (ap.time.sleep, ap.find_game)
+ap.time.sleep = lambda t: None
+ap.find_game = lambda: (0, 0, 0, 1920, 1080)
+mid = {"status": "combat", "phase": "Play", "turn": 6, "energy": 0, "hand": [DEFEND], "playing": 1,
+       "enemies": [{"name": "PunchConstruct", "creature": {"hp": 1}}], "potions": [{"name": "BlockPotion", "slot": 1}]}
+frames = iter([mid] * 6)
+planned = []
+get = lambda: next(frames, {"status": "out_of_combat"})
+ap.autopilot(get, lambda s: planned.append(s) or type("P", (), {"steps": []})(), lambda s: ([], []),
+             threading.Event(), lambda m: None)
+assert not planned, planned
+ap.time.sleep, ap.find_game = saved
+print("all resolve-wait checks passed")
+
+# 147. The state changes between planning and playing (a teammate's hit, a poison tick): don't play the stale plan,
+#      replan from the new state, then play.
+saved = (ap.time.sleep, ap.find_game, ap.play_step)
+ap.time.sleep = lambda t: None
+ap.find_game = lambda: (0, 0, 0, 1920, 1080)
+foe40 = lambda hp: {"name": "X", "combat_id": 1, "creature": {"hp": hp, "block": 0, "powers": []}, "intents": []}
+A = {"status": "combat", "phase": "Play", "turn": 1, "energy": 1, "hand": [STRIKE], "player": {"hp": 50, "block": 0, "powers": []},
+     "enemies": [foe40(40)]}
+B = {**A, "enemies": [foe40(34)]}  # someone else hit it for 6 after we planned
+planned, played = [], []
+step = ("Strike", "X", True, STRIKE, 1, "card")
+get = lambda: A if not planned else B if not played else {"status": "out_of_combat"}
+ap.play_step = lambda st, s, *a: played.append(s) or None
+ap.autopilot(get, lambda s: planned.append(s) or type("P", (), {"steps": [step]})(), lambda s: ([], []),
+             threading.Event(), lambda m: None)
+assert [p["enemies"][0]["creature"]["hp"] for p in planned][:2] == [40, 34], planned
+assert played and played[0]["enemies"][0]["creature"]["hp"] == 34
+ap.time.sleep, ap.find_game, ap.play_step = saved
+print("all replan-on-change checks passed")
+
+# 148. A play the game ignores (key pressed during Armaments' upgrade animation): no Esc when nothing is held (Esc
+#      would open the pause menu), retry once, and the retry goes through.
+saved = (ap.time.sleep, ap.find_game, ap.tap, ap.click, ap.user32)
+keys, clicks = [], []
+ap.time.sleep = lambda t: None
+ap.find_game = lambda: (0, 0, 0, 1920, 1080)
+ap.tap = keys.append
+ap.click = lambda: clicks.append(1)
+ap.user32 = type("U", (), {"SetCursorPos": staticmethod(lambda x, y: None), "SetForegroundWindow": staticmethod(lambda h: None)})()
+st = {"status": "combat", "phase": "Play", "energy": 1, "hand": [DEFEND], "holding": False}
+done = {**st, "energy": 0, "hand": []}
+get = lambda: done if len(clicks) >= 2 else st  # first click ignored, second one plays
+assert ap.play_step(("Defend", None, True, DEFEND, None, "card"), st, get, threading.Event(), lambda m: None) is None
+assert ap.SCAN_ESC not in keys and len(clicks) == 2, (keys, clicks)
+ap.time.sleep, ap.find_game, ap.tap, ap.click, ap.user32 = saved
+print("all ignored-play checks passed")
+
+# --- deck dilution (v14) ---
+from picker import SKIP_BELOW, TIER_BLEND_SIM, TIER_VALUE, KNOWLEDGE
+from deck import slot_cost, encounter
+HEAVY20 = card("Heavy", 2, "Attack", "AnyEnemy", Damage=20)
+WALL12 = card("Wall", 1, "Skill", "Self", Block=12)
+POMMEL = card("Pommel", 1, "Attack", "AnyEnemy", Damage=11)
+LEAN = [HEAVY20] * 2 + [POMMEL] * 3 + [WALL12] * 3 + [BASH, DEFEND]
+BIG = STARTER10 + [STRIKE] * 8 + [DEFEND] * 7
+# 149. A weak card under a strong name (A-tier "Anger") in a lean deck makes fights worse: the tier list used to
+# lift it over the skip line; now the draw odds win and the shop values it at 0.
+WEAK_ANGER = card("Anger", 1, "Attack", "AnyEnemy", Damage=4)
+assert KNOWLEDGE["cards"]["Anger"]["tier"] in ("A", "S")
+score, _, saved = rate(WEAK_ANGER, LEAN, (), {**ACT1, "deck": LEAN})
+assert saved < 0 and score < SKIP_BELOW, (score, saved)
+assert (1 - TIER_BLEND_SIM) * (SKIP_BELOW + 0.5 * saved) + TIER_BLEND_SIM * TIER_VALUE["A"] >= SKIP_BELOW - 1  # old rule ~took it
+assert pick([WEAK_ANGER, STRIKE], LEAN, (), {**ACT1, "deck": LEAN})[0] == "Skip"
+# 150. Each dead card costs less HP the bigger the deck (12 vs 25 cards); a good card still clears the bar in both.
+assert slot_cost(STARTER10, ACT1) > slot_cost(BIG, ACT1) > 0
+assert pick([POMMEL], STARTER10, (), {**ACT1, "deck": STARTER10})[0] == "Pommel"
+# 151. A card saving about nothing (an extra Strike in a 25-card Strike/Defend deck) is a Skip, not a coin flip.
+assert pick([STRIKE], BIG, (), {**ACT1, "deck": BIG})[0] == "Skip"
+# 152. One-turn Strength (Coordinate) is worth a slot only when drawn with attacks.
+COORD = card("Coordinate", 1, "Skill", "Self", StrengthPower=5)
+ATK6, ATK1 = [STRIKE] * 6 + [DEFEND] * 3 + [BASH], [STRIKE] + [DEFEND] * 8 + [BASH]
+assert rate(COORD, ATK6, (), {**ACT1, "deck": ATK6})[2] > rate(COORD, ATK1, (), {**ACT1, "deck": ATK1})[2]
+# 153. Status-adding enemies (Haunted Ship: 5 Dazed) put dead cards in the sim's piles: more HP lost.
+ship = next(e for e, v in GD["encounters"].items() if "HauntedShip" in v["monsters"])
+assert encounter(ship, 0)[3] > 0
+import deck as _dd
+with_status = _dd.hp_lost(STARTER10, ACT1)
+_dd.STATUS_SHARE, share = 0, _dd.STATUS_SHARE
+_dd.threats.cache_clear(); _dd._hp_lost.cache_clear()
+assert _dd.hp_lost(STARTER10, ACT1) < with_status
+_dd.STATUS_SHARE = share
+_dd.threats.cache_clear(); _dd._hp_lost.cache_clear()
+print("all deck dilution checks passed")
+
+# --- research imports (v15: Research Notes + Spire-Forge, tools/import_research.py) ---
+import picker as _pk
+from relics import KNOWLEDGE as _KN
+# 154. A card's tier value is the mean of its sources (Mobalytics tier, slaythetierlist stl, guide).
+_KN["cards"]["_TwoTier"] = {"tier": "S", "stl": "D"}
+_KN["cards"]["_OneTier"] = {"guide": "A"}
+assert _pk.tier_value("_TwoTier") == (_pk.TIER_VALUE["S"] + _pk.TIER_VALUE["D"]) / 2
+assert _pk.tier_value("_OneTier") == _pk.TIER_VALUE["A"] and _pk.tier_value("_NoTier") is None
+del _KN["cards"]["_TwoTier"], _KN["cards"]["_OneTier"]
+# 155. A combo partner already in the deck raises the score, capped at PAIR_CAP.
+assert _pk.PAIRS, "knowledge.json has no pairs: run tools/import_research.py"
+_pk.PAIRS["_ComboA"] = {"Strike": 10, "Defend": 30}
+CA = card("_ComboA", 1, "Skill", "Self", Block=5)
+assert _pk.combo(CA, [STRIKE]) == _pk.PAIR_SCALE * 10 and _pk.combo(CA, []) == 0
+assert _pk.combo(CA, [STRIKE, DEFEND]) == _pk.PAIR_CAP
+assert rate(CA, [STRIKE] * 3)[0] > rate(CA, [BASH] * 3)[0]
+del _pk.PAIRS["_ComboA"]
+# 156. Anti-synergy: Defy (Spire-Forge: bad in Doom builds) is worth less to a Doom-committed deck.
+DOOM_DECK = [real_card(n) for n in ("ReaperForm", "DeathMarch", "TheScythe", "Reave", "Countdown")] * 2
+assert "Defy" in _KN.get("anti", {}).get("Necrobinder:Doom", [])
+assert _pk.combo(real_card("Defy"), DOOM_DECK) < 0 == _pk.combo(real_card("Defy"), [])
+# 157. Every archetype core card / key relic exists: test 82 covers the v15 additions on both builds.
+# 158. Snecko Eye (random costs) is worth less to a Claw deck.
+CLAW_DECK = [real_card(n) for n in ("Claw", "Scrape", "AllForOne", "Feral", "Hologram")] * 2
+assert relic_value("SneckoEye", {"deck": CLAW_DECK}) < relic_value("SneckoEye", {"deck": []})
+print("all research import checks passed")
+
+# --- v16: F8 autopilot play fixes ---
+# 159. Uppercut's debuffs sit under a generic "Power" var: Uppercut first, so Strike hits the Vulnerable enemy
+# (13 + 9) and the enemy's 10 hit is Weak (x0.75).
+best = solve(state([STRIKE, UPPERCUT], enemy_hp=60, intent_dmg=10))[0]
+assert [s[0] for s in best.steps] == ["Uppercut", "Strike"] and best.damage == 22 and best.hp_loss < 10, best
+# 160. Strength from an attack (Setup Strike: deal 7, gain 2 Strength this turn) comes after its own hit: play it
+# before the Strike (7 + 8). Fight Me! (5x2, +3 Strength) gives the enemy +1 Strength: its 10 hit becomes 11.
+SETUP = card("SetupStrike", 1, "Attack", "AnyEnemy", Damage=7, StrengthPower=2)
+best = solve(state([STRIKE, SETUP], energy=2, enemy_hp=60, intent_dmg=0))[0]
+assert [s[0] for s in best.steps] == ["SetupStrike", "Strike"] and best.damage == 15, best
+FIGHT = card("FightMe", 2, "Attack", "AnyEnemy", Damage=5, Repeat=2, StrengthPower=3, EnemyStrength=1)
+best = solve(state([FIGHT, STRIKE], energy=3, enemy_hp=60, intent_dmg=10))[0]
+assert [s[0] for s in best.steps] == ["FightMe", "Strike"] and best.damage == 19 and best.hp_loss == 11, best
+# 161. Lasting Strength has value past this turn: Inflame with no attack in hand still beats ending the turn.
+# Demon Form's Strength comes at the start of later turns, so this turn's Strike still deals 6.
+INFLAME = card("Inflame", 1, "Power", "Self", StrengthPower=2)
+DEMON = card("DemonForm", 3, "Power", "Self", StrengthPower=2)
+s161 = {**state([INFLAME], energy=1, intent_dmg=0), "deck": [STRIKE] * 5 + [DEFEND] * 4 + [INFLAME]}
+assert [s[0] for s in solve(s161)[0].steps] == ["Inflame"]
+best = solve({**state([DEMON, STRIKE], energy=4, intent_dmg=0), "deck": [STRIKE] * 5 + [DEFEND] * 4 + [DEMON]})[0]
+assert {s[0] for s in best.steps} == {"DemonForm", "Strike"} and best.damage == 6, best
+# 162. One Defend already blocks the 5 hit: the second one adds nothing, but it costs nothing either, so the turn
+# doesn't end with energy left.
+best = solve(state([DEFEND, DEFEND], energy=2, intent_dmg=5))[0]
+assert [s[0] for s in best.steps] == ["Defend", "Defend"] and best.energy_left == 0, best
+#      Autopilot: an empty plan with energy and an affordable card left -> replan once, then log why before E.
+saved = (ap.time.sleep, ap.find_game, ap.tap)
+ap.time.sleep, ap.find_game, ap.tap = (lambda t: None), (lambda: (0, 0, 0, 1920, 1080)), (lambda k: None)
+spare_st = {"status": "combat", "phase": "Play", "turn": 1, "energy": 1, "hand": [DEFEND],
+            "player": {"hp": 50, "block": 0, "powers": []}, "enemies": []}
+frames, planned, logs = iter([spare_st] * 16), [], []
+ap.autopilot(lambda: next(frames, {"status": "out_of_combat"}),
+             lambda s: planned.append(s) or type("P", (), {"steps": []})(), lambda s: ([], []), threading.Event(), logs.append)
+assert len(planned) == 2 and any("ending with 1 energy" in m and "Defend" in m for m in logs), (planned, logs)
+ap.time.sleep, ap.find_game, ap.tap = saved
+# 163. Two 30-HP Gardeners, one Strike kills neither: hit the one with Ritual 3 (3 now, +3 every turn) rather than
+#      the one hitting 7 now and never growing (the 2-turn view used to pick the 7).
+rit = lambda cid, now, powers: {**gardener("FLAIL_MOVE", now, hp=30, cid=cid),
+                                "creature": {"hp": 30, "max_hp": 30, "block": 0, "powers": powers}}
+best = solve(fight([STRIKE], [rit(1, 3, [{"name": "RitualPower", "amount": 3}]), rit(2, 7, [])]))[0]
+assert best.steps[0][4] == 1, best
+# 164. Aiming with a lagging reader: enemy 2 sits at sweep point 3, enemy 1 at point 4. Point 3's first read is
+#      stale (empty), so the sweep moves on; point 4's first read is stale too (still enemy 2). The cursor must go
+#      back to point 3 and confirm enemy 2 there, not click enemy 1.
+saved = ap.time.sleep
+ap.time.sleep = lambda t: None
+ap.positions.clear()
+spot = {"p": None}
+at_ = lambda fx, fy: spot.update(p=(fx, fy))
+on = {ap.SWEEP[3]: 2, ap.SWEEP[4]: 1}
+lag = {"left": 1}
+
+
+def lagged():
+    hov = on.get(spot["p"])
+    if spot["p"] == ap.SWEEP[4] and lag["left"]:
+        lag["left"] -= 1
+        hov = 2  # the snapshot from when the mouse was still on point 3
+    return {"status": "combat", "hovered": hov, "enemies": [{"combat_id": 1}, {"combat_id": 2}]}
+
+
+first = {"seen": False}
+
+
+def lag_first():  # point 3's own first read is stale too (still the empty point 2), so the sweep moves on
+    if spot["p"] == ap.SWEEP[3] and not first["seen"]:
+        first["seen"] = True
+        return {"status": "combat", "hovered": None, "enemies": [{"combat_id": 1}, {"combat_id": 2}]}
+    return lagged()
+
+
+assert ap.aim(2, at_, lag_first, threading.Event()) and spot["p"] == ap.SWEEP[3] and ap.positions[2] == ap.SWEEP[3]
+ap.time.sleep = saved
+# 165. Forgotten Ritual: v0.107.1 gives its 3 energy only if a card was Exhausted earlier this turn; the beta always.
+#      1 energy, a 3-cost 30-damage attack: on v0.107.1 Ritual alone can't pay for it (and isn't burned for nothing);
+#      after an Exhaust card (or an exhaust earlier this turn) it can. On the beta Ritual always pays for it.
+from archetypes import card_text
+import solver as _sv
+FR, BIG3 = real_card("ForgottenRitual"), card("Big30", 3, "Attack", "AnyEnemy", Damage=30)
+EXH = {**card("Burnout", 0, "Skill", "Self", Block=1), "keywords": ["Exhaust"]}
+names = lambda p: [s[0] for s in p.steps]
+if "If you Exhausted" in card_text("ForgottenRitual"):
+    assert names(solve(state([FR, BIG3], energy=1, enemy_hp=60, intent_dmg=0))[0]) == []
+    assert names(solve(state([EXH, FR, BIG3], energy=1, enemy_hp=60, intent_dmg=0))[0]) == ["Burnout", "ForgottenRitual", "Big30"]
+    _sv._turn_exhaust.clear()
+    first_look = {**state([FR, BIG3], energy=1, enemy_hp=60, intent_dmg=0), "turn": 4, "exhaust": [STRIKE]}
+    solve(first_look)  # turn 4 starts with 1 card in the exhaust pile
+    later = {**first_look, "exhaust": [STRIKE, DEFEND]}  # a card was exhausted since
+    assert names(solve(later)[0]) == ["ForgottenRitual", "Big30"]
+else:
+    assert names(solve(state([FR, BIG3], energy=1, enemy_hp=60, intent_dmg=0))[0]) == ["ForgottenRitual", "Big30"]
+print("all v16 play checks passed")
+
+# --- v17a: player powers in the turn math (game hooks, .planning/research/powers.md) ---
+def powered(s, **powers):
+    s["player"]["powers"] = [{"name": n + "Power", "amount": a} for n, a in powers.items()]
+    return s
+
+
+# 166. Plating 5 gives 5 Block at our turn end vs a 10 hit (unpowered: Dexterity and Frail don't change it).
+#      Orichalcum checks for 0 Block before Plating lands, so both fire: 6 + 5 >= 10.
+assert solve(powered(state([], energy=0, intent_dmg=10), Plating=5))[0].hp_loss == 5
+assert solve(powered(state([], energy=0, intent_dmg=10), Plating=5, Dexterity=3, Frail=1))[0].hp_loss == 5
+assert solve(kit(powered(state([], energy=0, intent_dmg=10), Plating=5), relics=[("Orichalcum", {})]))[0].hp_loss == 0
+# 167. Stone Armor played this turn adds 4 Plating: a 10 hit costs 6.
+best = solve(state([real_card("StoneArmor")], energy=1, intent_dmg=10))[0]
+assert names(best) == ["StoneArmor"] and best.hp_loss == 6 and best.steps[0][2], best
+# 168. Buffer cancels the 12 hit. 169. Intangible: three 10-damage hits cost 1 each.
+assert solve(powered(state([], energy=0, intent_dmg=12), Buffer=1))[0].hp_loss == 0
+tri = state([], energy=0)
+tri["enemies"][0]["intents"] = [{"kind": "x", "damage": 10, "hits": 3}]
+assert solve(powered(tri, Intangible=1))[0].hp_loss == 3
+# 170. Afterimage 1: two Strikes give 2 Block. Rage 3: a Strike gives 3 Block. Juggernaut 6: Defend's Block deals 6.
+#      Vigor 4: the next Attack deals 6 + 4.
+assert solve(powered(state([STRIKE, STRIKE], energy=2, intent_dmg=0), Afterimage=1))[0].block == 2
+assert solve(powered(state([STRIKE], energy=1, intent_dmg=0), Rage=3))[0].block == 3
+assert solve(powered(state([DEFEND], energy=1, intent_dmg=5), Juggernaut=6))[0].damage == 6
+assert solve(powered(state([STRIKE], energy=1, intent_dmg=0), Vigor=4))[0].damage == 10
+# 171. Thorns 3 on us: an enemy hitting 2x5 takes 6 back.
+two_hits = state([], energy=0)
+two_hits["enemies"][0]["intents"] = [{"kind": "x", "damage": 5, "hits": 2}]
+assert solve(powered(two_hits, Thorns=3))[0].damage == 6
+# 172. Feel No Pain 3: an Exhaust card gives 3 Block. Plating/Buffer/... aren't flagged as unmodeled any more.
+assert solve(powered(state([EXH], energy=1, intent_dmg=10), FeelNoPain=3))[0].block == 4
+from solver import unmodeled_player_powers
+assert unmodeled_player_powers(powered(state([], energy=0), Plating=1, Buffer=1, Regen=2)) == []
+print("all v17a power checks passed")
+
+# --- v17b: card effects read from the game code (gamedata ops, tools/gen_gamedata.parse_ops) ---
+from solver import from_ops
+# 173. Uppercut's generic "Power" var is Weak + Vulnerable by its code (no text patch): the Strike after it hits 9.
+up = from_ops(real_card("Uppercut"))
+assert up.get("ops") and up["vars"]["WeakPower"] == up["vars"]["VulnerablePower"] == real_card("Uppercut")["vars"]["Power"]
+assert solve(state([real_card("Uppercut"), STRIKE], energy=3, enemy_hp=99, intent_dmg=0))[0].damage == 13 + 9
+# 174. Twin Strike hits twice (WithHitCount(2) in code; the old var path counted one hit).
+assert from_ops(real_card("TwinStrike"))["vars"]["Repeat"] == 2
+assert solve(state([real_card("TwinStrike")], energy=1, enemy_hp=99, intent_dmg=0))[0].damage == 10
+# 175. Shrug It Off: Block + draw; the draw count var survives for the pile math, the play counts as modeled.
+shrug = from_ops(real_card("ShrugItOff"))
+assert shrug["vars"]["Block"] == 8 and shrug["vars"]["Cards"] == 1
+assert solve(state([real_card("ShrugItOff")], energy=1, intent_dmg=10))[0].steps[0][2]
+# 176. Whirlwind: X hits to all enemies.
+ww = {**real_card("Whirlwind"), "x_cost": True}
+assert solve(state([ww], energy=3, enemy_hp=99, intent_dmg=0))[0].damage == 15
+# 177. Live vars rule: an Uppercut whose Power reads 2 (upgraded/buffed in game) applies 2 of each.
+assert from_ops({**real_card("Uppercut"), "vars": {"Damage": 13, "Power": 2}})["vars"]["VulnerablePower"] == 2
+# 178. Self vs enemy Strength by code: Shared Fate costs us 2 and takes 2 from the enemy; ally cards (Blaze) and
+#      fetch cards (Headbutt) keep the old var path. At least 80% of cards parse fully on this build.
+sf = from_ops(real_card("SharedFate"))["vars"]
+assert sf["StrengthPower"] < 0 and sf["StrengthLoss"] > 0
+assert not from_ops(real_card("Headbutt")).get("ops")  # fetch: pile_moves path
+if "Blaze" in GD["cards"]:  # v0.111.0 card
+    assert not from_ops(real_card("Blaze")).get("ops")
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "tools"))
+from gen_gamedata import ops_coverage
+done, total, _ = ops_coverage(GD["cards"])
+assert done / total >= 0.8, (done, total)
+print("all v17b card-op checks passed")
+
+# --- v17c: picks inside a card (discard / exhaust from hand), solver.toss ---
+BURN = card("Burn", -1, "Status", "None", Damage=2)
+DAZED = card("Dazed", -1, "Status", "None")
+# 179. Acrobatics discards the Burn (unplayable, 2 damage at turn end) instead of a real card: no damage taken.
+best = solve(state([real_card("Acrobatics"), BURN], energy=1, intent_dmg=0))[0]
+assert names(best) == ["Acrobatics"] and best.hp_loss == 0, best
+assert solve(state([BURN], energy=0, intent_dmg=0))[0].hp_loss == 2
+# 180. True Grit+ exhausts the Dazed, not the Strike: the Strike is still played after it.
+tg_up = {**real_card("TrueGrit"), "upgraded": True}
+best = solve(state([tg_up, STRIKE, DAZED], energy=2, enemy_hp=99, intent_dmg=10))[0]
+assert sorted(names(best)) == ["Strike", "TrueGrit+"] and best.damage == 6, best
+# 181. A Sly card discarded by Survivor is played for free.
+sly = {**card("SlyStab", 2, "Attack", "AnyEnemy", Damage=10), "keywords": ["Sly"]}
+best = solve(state([real_card("Survivor"), sly], energy=1, enemy_hp=99, intent_dmg=10))[0]
+assert names(best) == ["Survivor"] and best.damage == 10, best
+# 182. True Grit's random exhaust still triggers Feel No Pain. (With only a Strike beside it, the solver rightly
+#      keeps the Strike: a sure exhaust of your attack costs more than 10 Block.)
+tg = real_card("TrueGrit")
+best = solve(powered(state([tg, DAZED], energy=1, enemy_hp=99, intent_dmg=20), FeelNoPain=3))[0]
+assert names(best) == ["TrueGrit"] and best.block == tg["vars"]["Block"] + 3, best
+print("all v17c pick checks passed")

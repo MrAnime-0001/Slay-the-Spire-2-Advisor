@@ -12,6 +12,7 @@ import heapq
 import random
 from functools import lru_cache
 
+from archetypes import expand_power
 from enemies import attacks, num
 from relics import GAMEDATA
 
@@ -36,30 +37,37 @@ def card_keywords(name, upgraded=False):
         (kw.discard if k[0] == "-" else kw.add)(k[1:])
     return kw
 HALLWAY = 0.4  # share of a deck's value judged on hallway fights (most fights; HP lost there carries over)
-FALLBACK = [(1.0, 150, (8, 20, 14), False)]  # (weight, HP, incoming per turn, several enemies) when act data is missing
+FALLBACK = [(1.0, 150, (8, 20, 14), False, 0)]  # (weight, HP, incoming per turn, several enemies, statuses) without act data
+# Status-adding enemies (Dazed, Slimed, Burn...): over a ~FIGHT_TURNS fight about this share of what they add sits in
+# the piles at once (half the fight, and Ethereal/Exhaust ones leave once drawn). Bigger decks dilute them.
+STATUS_SHARE = 0.25
+STATUS_KEY = ("Dazed", False, "Status", None, -1, False, ())
 # ponytail: enemy scaling over a fight, card draw beyond one level, exhaust/retain and orbs aren't simulated;
 # the tier blend in picker.rate covers engines the numbers miss.
 
 
 def card_key(c):
+    c = expand_power(c)
     return (c["name"], c.get("upgraded", False), c["type"], c.get("target"), c["cost"], c.get("x_cost", False),
             tuple(sorted(c["vars"].items())))
 
 
 def encounter(name, asc):
-    """(HP, incoming per turn, several enemies) of one encounter from the monster tables."""
+    """(HP, incoming per turn, several enemies, statuses in the piles) of one encounter from the monster tables."""
     mons = GAMEDATA["encounters"].get(name, {}).get("monsters", [])
-    hp, seqs = 0, []
+    hp, seqs, added = 0, [], 0.0
     for m in mons:
         ai = GAMEDATA["monsters"].get(m)
         if not ai:
             continue
         hp += sum(num(x, asc) or 0 for x in ai["hp"]) / max(len(ai["hp"]), 1)
         seqs.append([sum(d * h for d, h in attacks(mv, asc)) for mv in ai["moves"].values()] or [0])
+        added += sum(num(e.get("count", 3), asc) or 0 for mv in ai["moves"].values() for e in mv["effects"]
+                     if "adds_card" in e) / max(len(ai["moves"]), 1)  # per turn
     # per-turn incoming: turn k uses each monster's move k (mod its move count), so big hits come as spikes
     # ponytail: move order = table order, not the real cycle; good enough for spike sizes and frequency
     n = max((len(s) for s in seqs), default=1)
-    return hp, tuple(sum(s[k % len(s)] for s in seqs) for k in range(n)), len(mons) > 1
+    return hp, tuple(sum(s[k % len(s)] for s in seqs) for k in range(n)), len(mons) > 1, round(added * FIGHT_TURNS * STATUS_SHARE)
 
 
 @lru_cache(maxsize=64)
@@ -75,9 +83,9 @@ def threats(act_name, asc):
     out = []
     for pool, w in ((bosses, (1 - HALLWAY) / 2), (elites, (1 - HALLWAY) / 2), (hallway, HALLWAY)):
         for e in pool:
-            hp, incs, multi = encounter(e, asc)
+            hp, incs, multi, statuses = encounter(e, asc)
             if hp:
-                out.append((w / len(pool), hp, incs, multi))
+                out.append((w / len(pool), hp, incs, multi, statuses))
     return out or FALLBACK
 
 
@@ -93,7 +101,7 @@ def exchange_rate(state):
     if not deck or not foes:
         return None
     if enc in GAMEDATA["encounters"]:
-        _, incs, multi = encounter(enc, state.get("ascension", 0))
+        _, incs, multi, _ = encounter(enc, state.get("ascension", 0))
     else:  # unknown fight: assume the enemies keep hitting like they intend to now
         incs = (sum((it.get("damage") or 0) * max(it.get("hits", 1), 1) for e in foes for it in e.get("intents", [])),)
         multi = len(foes) > 1
@@ -102,7 +110,8 @@ def exchange_rate(state):
 
 
 def effect(key):
-    """(cost, dmg single, dmg aoe, block, draw, energy, vuln, weak, self hp loss, perm str, perm dex) or None."""
+    """(cost, dmg single, dmg aoe, block, draw, energy, vuln, weak, self hp loss, perm str, perm dex,
+    this-turn str, this-turn dex, attack hits, has Block) or None."""
     name, _, ctype, target, cost, x, v = key
     v = dict(v)
     if ctype in ("Curse", "Status") or (cost < 0 and not x):
@@ -131,7 +140,9 @@ def effect(key):
             block += ORB_TURNS * (orb == "Frost") * 2
     return (cost, 0 if aoe else dmg, dmg if aoe else 0, block, int(v.get("Cards", 0)),
             v.get("Energy", 0), v.get("VulnerablePower", 0) > 0 and not power, v.get("WeakPower", 0) > 0 and not power,
-            v.get("HpLoss", 0), v.get("StrengthPower", 0) if power else 0, v.get("DexterityPower", 0) if power else 0)
+            v.get("HpLoss", 0), v.get("StrengthPower", 0) if power else 0, v.get("DexterityPower", 0) if power else 0,
+            0 if power else v.get("StrengthPower", 0), 0 if power else v.get("DexterityPower", 0),
+            max(v.get("Repeat", 1), 1) * times if ctype == "Attack" and dmg else 0, v.get("Block", 0) > 0)
 
 
 def options(hand, energy):
@@ -149,8 +160,13 @@ def options(hand, energy):
             continue  # unaffordable, or another card still fits
         picked = [cards[i] for i in range(n) if m >> i & 1]
         vuln = VULN_MULT if any(e[6] for e in picked) else 1
-        out.append((sum(e[1] for e in picked) * vuln, sum(e[2] for e in picked) * vuln, sum(e[3] for e in picked),
-                    any(e[7] for e in picked), sum(e[8] for e in picked)))
+        # One-turn Strength/Dexterity from a Skill/Attack (Coordinate, Anticipate...) lands on the OTHER attacks /
+        # block cards drawn with it: worth something only when drawn together.
+        ts, td = sum(e[11] for e in picked), sum(e[12] for e in picked)
+        single = sum(e[1] + (ts - e[11]) * e[13] * (not e[2]) for e in picked)
+        aoe = sum(e[2] + (ts - e[11]) * e[13] * bool(e[2]) for e in picked)
+        block = sum(e[3] + (td - e[12]) * e[14] for e in picked)
+        out.append((single * vuln, aoe * vuln, block, any(e[7] for e in picked), sum(e[8] for e in picked)))
     return out or [(0, 0, 0, False, 0)]
 
 
@@ -219,8 +235,8 @@ def _hp_lost(keys, act_name, asc, energy):
     eff = [effect(k) for k in keys]
     perm_str = sum(e[9] for e in eff if e)
     perm_dex = sum(e[10] for e in eff if e)
-    return sum(w * fight(opts, hp, inc, multi, perm_str, perm_dex)[1]
-               for w, hp, inc, multi in threats(act_name, asc))
+    return sum(w * fight(hands(keys + (STATUS_KEY,) * st, energy) if st else opts, hp, inc, multi, perm_str, perm_dex)[1]
+               for w, hp, inc, multi, st in threats(act_name, asc))
 
 
 def hp_lost(deck, state):
@@ -243,5 +259,13 @@ def profile(state):
     hp = sum(t[1] for t in bosses) / max(len(bosses), 1)
     inc = sum(sum(t[2]) / len(t[2]) for t in bosses) / max(len(bosses), 1)
     turns, lost, dpt, bpt, _ = fight(opts, hp, bosses[0][2] if bosses else (inc,), any(t[3] for t in bosses), *perm)
-    return (f"deck ~{dpt:.0f} dmg / {bpt:.0f} block a turn · boss ~{hp:.0f} HP hitting ~{inc:.0f}: "
-            f"~{turns:.0f} turns, ~{lost:.0f} HP lost")
+    return (f"deck {len(deck)} cards ~{dpt:.0f} dmg / {bpt:.0f} block a turn · boss ~{hp:.0f} HP hitting ~{inc:.0f}: "
+            f"~{turns:.0f} turns, ~{lost:.0f} HP lost · a dead card costs ~{slot_cost(deck, state):.1f} HP/fight")
+
+
+def slot_cost(deck, state):
+    """HP per act fight that one more card doing nothing costs this deck (it pushes good cards out of hands)."""
+    return hp_lost(list(deck) + [DEAD], state) - hp_lost(deck, state)
+
+
+DEAD = {"name": "Dead", "type": "Status", "target": None, "cost": -1, "vars": {}}

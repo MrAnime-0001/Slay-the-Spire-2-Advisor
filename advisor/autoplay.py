@@ -25,6 +25,8 @@ SCAN_DIGIT = {d: 0x02 + (d - 1) % 10 for d in range(1, 11)}  # keys 1..9 -> 0x02
 STEP_DELAY = 0.18   # seconds per sweep step: one game frame + one reader poll (100 ms)
 # Rows ordered by where monsters usually stand; the hand starts around 78% height, so stay above it.
 SWEEP = [(fx / 100, fy / 100) for fy in (60, 50, 68, 40, 30) for fx in range(35, 96, 5)]
+# Enemies on our left (Crusher in the Crusher + Rocket fight) are searched after the usual right side.
+SWEEP += [(fx / 100, fy / 100) for fy in (60, 50, 68, 40, 30) for fx in range(5, 35, 5)]
 # ponytail: fixed sweep grid; a monster outside it fails with "couldn't find". Add rows if one does.
 UNTARGETED_CLICK = (0.5, 0.4)
 # Potion bar sits in the top bar, left of center (~27-35% across in 1920x1057 screenshots).
@@ -119,13 +121,16 @@ def ended(s, turns):
     return f"you died (turn {turns})" if s.get("status") == "game_over" else f"combat over after {turns} turns"
 
 
-def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None):
+def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None, pile=None):
     """Every turn: re-plan from the live state after each card (so kills, draws and mispredictions
     never leave a stale plan), play the plan's first card, and press E once the plan is empty.
     When a card asks to pick hand cards (upgrade/exhaust/discard...), pick_for chooses them first.
     Stops when combat ends, on cancel, or on any failed card (so a targeting bug can't skip turns).
-    choose(get_state, cancel, log) handles a choose-a-card screen; default: wait for you to click it."""
+    choose(get_state, cancel, log) handles a choose-a-card screen, pile(...) a pick-from-pile screen (Headbutt,
+    Hologram...); default for both: wait for you to click it."""
     choose = choose or wait_choice
+    pile = pile or wait_pile
+    positions.clear()  # combat_ids repeat between fights: last fight's spots would point at other creatures
     turns = 0
     while not cancel.is_set():
         log(f"turn {turns + 1}: waiting for your turn")
@@ -141,7 +146,7 @@ def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None):
             return ended(get_state(), turns)
         time.sleep(0.8)  # let the draw animation finish before reading the hand
 
-        plays = 0
+        plays, rechecked = 0, False
         while True:
             s = get_state()
             if cancel.is_set():
@@ -158,13 +163,30 @@ def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None):
                 if error:
                     return error
                 continue
+            if s.get("card_grid"):
+                error = pile(get_state, cancel, log)
+                if error:
+                    return error
+                continue
+            if s.get("playing"):  # a played card hasn't resolved yet (its damage may not have landed): don't plan on it
+                time.sleep(0.05)
+                continue
             steps = plan_for(s).steps
+            if plan_key(get_state()) != plan_key(s):  # changed while planning (teammate, poison, orb...): replan
+                continue
             if not steps:
                 time.sleep(0.3)  # a pick prompt can open just after the last card resolves
-                if get_state().get("hand_select") or get_state().get("choose_card"):
+                if any(get_state().get(k) for k in ("hand_select", "choose_card", "card_grid")):
                     continue
+                spare = affordable(get_state())
+                if spare and not rechecked:  # energy left and a card we could play: replan once from a settled state
+                    rechecked = True
+                    time.sleep(STEP_DELAY)
+                    continue
+                if spare:
+                    log(f"ending with {get_state().get('energy')} energy; not worth playing: {', '.join(spare)}")
                 break
-            plays += 1
+            plays, rechecked = plays + 1, False
             if plays > MAX_PLAYS_PER_TURN:
                 return f"over {MAX_PLAYS_PER_TURN} plays this turn, stopping"
             play = play_potion if steps[0][5] == "potion" else play_step
@@ -179,6 +201,22 @@ def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None):
             return "end turn didn't register"
         turns += 1
     return "cancelled"
+
+
+def affordable(s):
+    """Names of hand cards we could still pay for (Attack/Skill/Power)."""
+    energy = s.get("energy") or 0
+    return [c["name"] for c in s.get("hand", [])
+            if c.get("type") in ("Attack", "Skill", "Power") and 0 <= c.get("cost", -1) <= energy]
+
+
+def plan_key(s):
+    """What a plan depends on: energy, hand, potions, our and each enemy's HP/block/powers, enemy intents.
+    (Mouse-hover fields are left out: they change every frame.)"""
+    body = lambda c: (c.get("hp"), c.get("block"), tuple((x["name"], x["amount"]) for x in c.get("powers", [])))
+    return (s.get("status"), s.get("energy"), s.get("playing"), tuple(c["name"] for c in s.get("hand", [])),
+            tuple(x["name"] for x in s.get("potions", [])), body(s["player"]) if s.get("player") else None,
+            tuple((e.get("combat_id"), body(e["creature"]), repr(e.get("intents"))) for e in s.get("enemies", [])))
 
 
 def wait_choice(get_state, cancel, log):
@@ -234,6 +272,68 @@ def click_choice(get_state, cancel, log, choose_for):
     return None
 
 
+def wait_pile(get_state, cancel, log):
+    """Fallback for a pick-from-pile screen: beep, the overlay shows the pick, you click it."""
+    log("PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits")
+    winsound.MessageBeep(winsound.MB_ICONASTERISK)
+    if not wait_until(lambda: not get_state().get("card_grid"), 300, cancel):
+        return "cancelled" if cancel.is_set() else "pile pick still open after 5 min"
+    time.sleep(0.5)
+    return None
+
+
+# Pick-from-pile screen (NCombatPileCardSelectScreen): a grid whose columns depend on the window, so sweep the
+# grid area; every card seen under the mouse is remembered by index, so later picks go straight to it.
+# ponytail: piles taller than the screen need scrolling; a card below the fold falls back to wait_pile.
+GRID_SWEEP = [(fx / 100, fy / 100) for fy in (30, 50, 70, 40, 60, 25) for fx in range(14, 87, 4)]
+grid_spots = {}  # card index on the pile screen -> where it was last hovered
+
+
+def pick_from_pile(get_state, cancel, log, pick_for):
+    """Click the cards pick_for(state) names on the pile screen; reader-verified like click_choice. The screen
+    closes itself at its max picks, else E confirms. Falls back to wait_pile."""
+    s = get_state()
+    if not s.get("card_grid"):
+        return None
+    names, game = pick_for(s), find_game()
+    if not names or not game:
+        return wait_pile(get_state, cancel, log)
+    hwnd, left, top, w, h = game
+    at = lambda fx, fy: user32.SetCursorPos(int(left + w * fx), int(top + h * fy))
+    user32.SetForegroundWindow(hwnd)
+    time.sleep(0.6)  # grid fades in
+
+    def learn(st, p):
+        i = (st.get("card_grid") or {}).get("hovered")
+        if i is not None:
+            grid_spots[i] = p
+    taken = set()
+    for name in names:
+        g = get_state().get("card_grid")
+        if not g:
+            break  # closed itself at max picks
+        idx = next((i for i, c in enumerate(g["cards"]) if c["name"] == name and i not in taken), None)
+        if idx is None:
+            return wait_pile(get_state, cancel, log)
+        log(f"picking {name} from the {(g.get('pile') or 'pile').lower()} pile")
+        on_it = lambda st: (st.get("card_grid") or {}).get("hovered") == idx
+        pts = ([grid_spots[idx]] if idx in grid_spots else []) + GRID_SWEEP
+        spot = seek(pts, at, on_it, get_state, cancel, f"pile card {name} (#{idx})", game, learn=learn)
+        if spot:
+            time.sleep(STEP_DELAY)  # re-read: a lagging reader could report the previous point
+        if not spot or not on_it(get_state()):
+            return None if cancel.is_set() else wait_pile(get_state, cancel, log)
+        click()
+        taken.add(idx)
+        time.sleep(0.35)
+    if get_state().get("card_grid"):
+        tap(SCAN_E)
+    if not wait_until(lambda: not get_state().get("card_grid"), 3, cancel):
+        return None if cancel.is_set() else wait_pile(get_state, cancel, log)
+    time.sleep(0.5)
+    return None
+
+
 def pick_cards(s, get_state, pick_for, cancel, log):
     """Hand-pick prompt: number keys pick from the cards still shown (highest first, since picked cards
     leave the row), then E confirms unless the game already closed it at the max picks."""
@@ -270,23 +370,30 @@ def play_step(step, s, get_state, cancel, log):
     if idx is None or idx > 9:
         return f"{label} not in hand"
     before = ([c["name"] for c in s["hand"]], s["energy"])
-    log(f"playing {label}" + (f" -> {target_name}" if target_name else ""))
+    log(f"playing {label}" + (f" -> {target_name} (combat_id={combat_id})" if target_name else ""))
 
-    tap(SCAN_DIGIT[idx + 1])
-    time.sleep(0.15)
-    if card["target"] == "AnyEnemy":
-        if not aim(combat_id, at, get_state, cancel, game):
-            return missed(get_state, cancel, combat_id, target_name)
-    else:
-        at(*UNTARGETED_CLICK)
-        time.sleep(0.05)
-    click()
-
-    if not wait_until(lambda: changed(get_state(), before), 2.0, cancel):
+    for _ in range(2):  # a key press during an animation (Armaments' upgrade) can be ignored: retry once
+        tap(SCAN_DIGIT[idx + 1])
+        time.sleep(0.15)
+        if card["target"] == "AnyEnemy":
+            if not aim(combat_id, at, get_state, cancel, game):
+                return missed(get_state, cancel, combat_id, target_name)
+            log(f"  aimed at combat_id={combat_id} at {positions.get(combat_id)}")
+        else:
+            at(*UNTARGETED_CLICK)
+            time.sleep(0.05)
+        click()
+        if wait_until(lambda: changed(get_state(), before), 2.0, cancel):
+            time.sleep(0.35)  # let the play animation settle before picking up the next card
+            return None
         drop(get_state)
-        return None if cancel.is_set() or get_state().get("status") != "combat" else f"{label} didn't play"
-    time.sleep(0.35)  # let the play animation settle before picking up the next card
-    return None
+        if cancel.is_set() or get_state().get("status") != "combat":
+            return None
+        time.sleep(0.5)
+        if changed(get_state(), before):  # it went through late
+            return None
+        log(f"{label} didn't play, retrying")
+    return f"{label} didn't play"
 
 
 def play_potion(step, s, get_state, cancel, log):
@@ -311,7 +418,7 @@ def play_potion(step, s, get_state, cancel, log):
     spot = seek(tries, at, lambda st: ui(st).get("hovered_slot") == slot, get_state, cancel,
                 f"potion slot {slot} ({pot['name']})", game, learn)
     if not spot:
-        return f"couldn't find {pot['name']} in the potion bar"
+        return None if get_state().get("status") != "combat" else f"couldn't find {pot['name']} in the potion bar"
     click()
     if not wait_until(lambda: ui(get_state()).get("popup_open"), 1.5, cancel):
         return f"{pot['name']} menu didn't open"
@@ -320,7 +427,7 @@ def play_potion(step, s, get_state, cancel, log):
                lambda st: ui(st).get("use_hovered"), get_state, cancel, "potion Use button", game)
     if not use:
         drop(get_state)
-        return f"couldn't find the Use button for {pot['name']}"
+        return None if get_state().get("status") != "combat" else f"couldn't find the Use button for {pot['name']}"
     use_offset[:] = [(use[0] - spot[0], use[1] - spot[1])]
     before = [p["name"] for p in s.get("potions", [])]
     click()
@@ -341,8 +448,10 @@ def target_gone(st, combat_id):
 
 
 def drop(get_state):
-    """Esc puts a held card back, but outside our turn (fight over) it opens the pause menu instead."""
-    if my_turn(get_state()):
+    """Esc puts a held card back, but with nothing held (or outside our turn) it opens the pause menu instead.
+    Readers that report `holding` press it only when a card is held; older ones fall back to "during our turn"."""
+    s = get_state()
+    if s.get("holding") or (s.get("holding") is None and my_turn(s)):
         tap(SCAN_ESC)
 
 
@@ -359,13 +468,34 @@ def aim(combat_id, at, get_state, cancel, game=None):
     if combat_id is None:
         return False
 
-    def learn(st, point):
-        if st.get("hovered") is not None:
-            positions[st["hovered"]] = point  # remember every enemy we pass over
+    prev, cur = [None], [None]  # the mouse's last two points
 
-    tries = ([positions[combat_id]] if combat_id in positions else []) + SWEEP
-    return seek(tries, at, lambda st: st.get("hovered") == combat_id, get_state, cancel,
-                f"enemy combat_id={combat_id}", game, learn, gone=lambda st: target_gone(st, combat_id)) is not None
+    def move(fx, fy):
+        prev[0], cur[0] = cur[0], (fx, fy)
+        at(fx, fy)
+
+    def still_on():
+        time.sleep(STEP_DELAY)
+        return get_state().get("hovered") == combat_id
+
+    def on_it(st):
+        """Click only on a hover confirmed by a second read: a lagging reader can report the previous point's enemy
+        after the mouse already moved on (to the enemy next to it). Then the target is at the previous point."""
+        if st.get("hovered") != combat_id:
+            return False
+        if still_on():
+            return True
+        if prev[0] is not None:
+            move(*prev[0])
+            return still_on()
+        return False
+
+    tries = ([positions.pop(combat_id)] if combat_id in positions else []) + SWEEP
+    found = seek(tries, move, on_it, get_state, cancel, f"enemy combat_id={combat_id}", game,
+                 gone=lambda st: target_gone(st, combat_id))
+    if found is not None:
+        positions[combat_id] = cur[0]  # only confirmed points are remembered
+    return found is not None
 
 
 def seek(points, at, matches, get_state, cancel, what, game=None, learn=None, gone=None):
