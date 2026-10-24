@@ -1,0 +1,301 @@
+09:47:56 turn 1: waiting for your turn
+09:47:57 playing StrikeIronclad -> Seapunk
+09:47:59 playing StrikeIronclad -> Seapunk
+09:48:00 playing DefendIronclad
+09:48:01 ending turn
+09:48:01 turn 2: waiting for your turn
+09:48:04 playing DefendIronclad
+09:48:04 playing StrikeIronclad -> Seapunk
+09:48:05 playing StrikeIronclad -> Seapunk
+09:48:06 ending turn
+09:48:07 turn 3: waiting for your turn
+09:48:11 playing StrikeIronclad -> Seapunk
+09:48:12 playing StrikeIronclad -> Seapunk
+09:48:13 ending turn
+09:48:13 turn 4: waiting for your turn
+09:48:16 playing Bash -> Seapunk
+09:48:17 playing StrikeIronclad -> Seapunk
+09:48:18 ending turn
+09:48:19 turn 5: waiting for your turn
+09:48:19 rewards: proceed
+09:57:59 turn 1: waiting for your turn
+09:58:00 playing Whirlwind
+09:58:01 ending turn
+09:58:01 turn 2: waiting for your turn
+09:58:05 playing Stomp
+09:58:06 ending turn
+09:58:06 turn 3: waiting for your turn
+09:58:08 clicked reward:gold:20
+09:58:11 clicking reward:gold:20 did nothing (try 1)
+09:58:16 clicked reward:gold:20
+09:58:17 clicked reward:potion:BlockPotion
+09:58:18 clicked reward:card
+09:58:21 clicked card:Anger
+
+=== 2026-10-11 09:58:39 couldn't find card reward Anger
+window (hwnd, left, top, w, h) = (1114246, 0, 23, 1920, 1057)
+enemies = []
+potions = [{'slot': 0, 'name': 'BlockPotion'}]
+(0.48,0.45) None
+(0.48,0.45) None
+(0.44,0.45) None
+(0.52,0.45) None
+(0.40,0.45) None
+(0.56,0.45) None
+(0.36,0.45) None
+(0.60,0.45) None
+(0.48,0.38) None
+(0.48,0.52) None
+(0.44,0.38) None
+(0.44,0.52) None
+(0.52,0.38) None
+(0.52,0.52) None
+(0.32,0.45) None
+(0.64,0.45) None
+(0.40,0.38) None
+(0.40,0.52) None
+(0.56,0.38) None
+(0.56,0.52) None
+(0.36,0.38) None
+(0.60,0.38) None
+(0.36,0.52) None
+(0.60,0.52) None
+(0.28,0.45) None
+(0.68,0.45) None
+(0.32,0.38) None
+(0.32,0.52) None
+(0.64,0.38) None
+(0.64,0.52) None
+(0.24,0.45) None
+(0.72,0.45) None
+(0.28,0.38) None
+(0.28,0.52) None
+(0.68,0.38) None
+(0.68,0.52) None
+(0.24,0.38) None
+(0.72,0.38) None
+(0.24,0.52) None
+(0.72,0.52) None
+(0.20,0.45) None
+(0.76,0.45) None
+(0.48,0.60) None
+(0.48,0.30) None
+(0.44,0.60) None
+(0.52,0.60) None
+(0.44,0.30) None
+(0.52,0.30) None
+(0.40,0.60) None
+(0.56,0.60) None
+(0.40,0.30) None
+(0.56,0.30) None
+(0.20,0.38) None
+(0.20,0.52) None
+(0.76,0.38) None
+(0.76,0.52) None
+(0.16,0.45) None
+(0.80,0.45) None
+(0.36,0.60) None
+(0.60,0.60) None
+(0.36,0.30) None
+(0.60,0.30) None
+(0.32,0.60) None
+(0.64,0.60) None
+(0.32,0.30) None
+(0.64,0.30) None
+(0.16,0.38) None
+(0.16,0.52) None
+(0.80,0.38) None
+(0.80,0.52) None
+(0.84,0.45) None
+(0.28,0.60) None
+(0.68,0.60) None
+(0.28,0.30) None
+(0.68,0.30) None
+(0.24,0.60) None
+(0.72,0.60) None
+(0.24,0.30) None
+(0.72,0.30) None
+(0.84,0.38) None
+(0.84,0.52) None
+(0.20,0.60) None
+(0.76,0.60) None
+(0.20,0.30) None
+(0.76,0.30) None
+(0.16,0.60) None
+(0.16,0.30) None
+(0.80,0.60) None
+(0.80,0.30) None
+(0.84,0.60) None
+(0.84,0.30) None
+09:58:39 couldn't find card reward Anger (try 1)
+09:58:41 rewards: proceed
+09:58:41 rewards: proceed
+09:58:44 rewards: proceed: nothing happened (try 1)
+09:58:46 rewards: proceed
+09:58:49 rewards: proceed: nothing happened (try 2)
+09:58:50 rewards: proceed
+09:58:52 turn 1: waiting for your turn
+09:58:53 playing Stomp
+09:58:53 playing Anger -> CalcifiedCultist
+09:58:55 ending turn
+09:58:55 turn 2: waiting for your turn
+09:59:00 playing Whirlwind
+09:59:01 ending turn
+09:59:01 turn 3: waiting for your turn
+09:59:06 playing DefendIronclad
+09:59:07 playing StrikeIronclad -> CalcifiedCultist
+09:59:08 playing StrikeIronclad -> DampCultist
+09:59:10 ending turn
+09:59:11 turn 4: waiting for your turn
+09:59:14 playing StrikeIronclad -> DampCultist
+09:59:15 playing DefendIronclad
+09:59:15 playing DefendIronclad
+09:59:17 ending turn
+09:59:17 turn 5: waiting for your turn
+09:59:21 playing Anger -> DampCultist
+09:59:22 playing StrikeIronclad -> DampCultist
+09:59:22 playing StrikeIronclad -> DampCultist
+09:59:24 rewards: proceed
+
+=== 2026-10-11 09:59:36 couldn't find reward:gold:20
+window (hwnd, left, top, w, h) = (1114246, 0, 23, 1920, 1057)
+enemies = []
+potions = [{'slot': 0, 'name': 'BlockPotion'}]
+(0.58,0.37) None
+(0.58,0.37) None
+(0.58,0.34) None
+(0.58,0.40) None
+(0.50,0.37) None
+(0.50,0.34) None
+(0.50,0.40) None
+(0.58,0.31) None
+(0.58,0.43) None
+(0.50,0.31) None
+(0.50,0.43) None
+(0.42,0.37) None
+(0.42,0.34) None
+(0.42,0.40) None
+(0.58,0.28) None
+(0.58,0.46) None
+(0.50,0.28) None
+(0.50,0.46) None
+(0.42,0.31) None
+(0.42,0.43) None
+(0.58,0.25) None
+(0.58,0.49) None
+(0.42,0.28) None
+(0.42,0.46) None
+(0.50,0.25) None
+(0.50,0.49) None
+(0.42,0.25) None
+(0.42,0.49) None
+(0.58,0.22) None
+(0.58,0.52) None
+(0.50,0.22) None
+(0.50,0.52) map:3,6
+(0.42,0.22) None
+(0.42,0.52) None
+(0.58,0.55) None
+(0.50,0.55) map:3,6
+(0.42,0.55) None
+(0.58,0.58) None
+(0.50,0.58) None
+(0.42,0.58) None
+(0.58,0.61) None
+(0.50,0.61) None
+(0.42,0.61) None
+(0.58,0.64) None
+(0.50,0.64) None
+(0.42,0.64) None
+(0.58,0.67) None
+(0.50,0.67) None
+(0.42,0.67) None
+(0.58,0.70) None
+(0.50,0.70) None
+(0.42,0.70) None
+(0.58,0.73) None
+(0.50,0.73) None
+(0.42,0.73) None
+(0.58,0.76) None
+(0.50,0.76) None
+(0.42,0.76) None
+(0.58,0.79) None
+(0.50,0.79) None
+(0.42,0.79) None
+09:59:36 couldn't find reward:gold:20 (try 1)
+10:09:15 turn 1: waiting for your turn
+10:09:15 playing Bash -> WaterfallGiant
+10:09:17 playing Whirlwind+
+10:09:18 drinking PotionShapedRock -> WaterfallGiant
+10:09:22 ending turn
+10:09:22 turn 2: waiting for your turn
+10:09:26 playing DefendIronclad
+10:09:26 playing StrikeIronclad -> WaterfallGiant
+10:09:27 playing StrikeIronclad -> WaterfallGiant
+10:09:28 ending turn
+10:09:28 turn 3: waiting for your turn
+10:09:32 playing DefendIronclad
+10:09:33 playing Uppercut -> WaterfallGiant
+10:09:34 ending turn
+10:09:34 turn 4: waiting for your turn
+10:09:39 playing Uppercut -> WaterfallGiant
+10:09:40 playing StrikeIronclad -> WaterfallGiant
+10:09:41 ending turn
+10:09:42 turn 5: waiting for your turn
+10:09:46 playing DefendIronclad
+10:09:46 playing Tremble -> WaterfallGiant
+10:09:47 playing StrikeIronclad+ -> WaterfallGiant
+10:09:48 ending turn
+10:09:48 turn 6: waiting for your turn
+10:09:52 playing DefendIronclad
+10:09:53 playing Whirlwind+
+10:09:54 ending turn
+10:09:54 turn 7: waiting for your turn
+10:09:58 playing StrikeIronclad -> WaterfallGiant
+10:09:59 playing DefendIronclad
+10:10:00 playing StrikeIronclad -> WaterfallGiant
+10:10:01 ending turn
+10:10:01 turn 8: waiting for your turn
+10:10:05 playing DefendIronclad
+10:10:05 playing StrikeIronclad -> WaterfallGiant
+10:10:06 playing DefendIronclad
+10:10:08 ending turn
+10:10:08 turn 9: waiting for your turn
+10:10:12 playing StrikeIronclad+ -> WaterfallGiant
+10:10:13 playing Whirlwind+
+10:10:14 ending turn
+10:10:14 turn 10: waiting for your turn
+10:10:17 playing DefendIronclad
+10:10:18 playing StrikeIronclad -> WaterfallGiant
+10:10:19 playing StrikeIronclad -> WaterfallGiant
+10:10:20 ending turn
+10:10:20 turn 11: waiting for your turn
+10:10:22 stopped: you died (turn 10)
+10:39:18 turn 1: waiting for your turn
+10:39:18 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:21 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:21 playing DefendIronclad
+10:39:22 ending turn
+10:39:22 turn 2: waiting for your turn
+10:39:26 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:27 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:28 ending turn
+10:39:28 turn 3: waiting for your turn
+10:39:32 playing DefendIronclad
+10:39:33 playing DefendIronclad
+10:39:33 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:34 ending turn
+10:39:34 turn 4: waiting for your turn
+10:39:38 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:39 playing DefendIronclad
+10:39:39 playing DefendIronclad
+10:39:40 ending turn
+10:39:41 turn 5: waiting for your turn
+10:39:44 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:45 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:46 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:47 ending turn
+10:39:47 turn 6: waiting for your turn
+10:39:51 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:52 playing StrikeIronclad -> FuzzyWurmCrawler
+10:39:52 stopped: combat over after 6 turns

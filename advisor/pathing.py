@@ -24,6 +24,9 @@ HEAL_FRACTION = 0.3     # game's base rest heal (HealRestSiteOption.GetBaseHealA
 MAX_PATHS = 20000
 FIGHTS = ("Monster", "Elite", "Boss")
 Route = namedtuple("Route", "coords types score hp gold")
+# Ascension (code-facts.md): A3 Poverty = fight gold x0.75, A7 Scarcity = rare odds halved (elite rare card worth
+# half), A10 DoubleBoss = two bosses at the end of act 3 (boss cost x2).
+POVERTY, SCARCITY, DOUBLE_BOSS = 3, 7, 10
 # ponytail: your history mixes ascensions (A0-A8) and characters; enemies only get stronger at A8/A9.
 # No relic heal modifiers, no second boss.
 
@@ -38,6 +41,8 @@ def fight_costs(state):
                 if GAMEDATA["encounters"].get(e, {}).get("class") == cls and "dmg" in KNOWLEDGE["encounters"].get(e, {})]
         if seen:
             out[cls] = (statistics.mean(d["mean"] for d in seen), statistics.mean(d["p90"] for d in seen))
+    if act == 2 and state.get("ascension", 0) >= DOUBLE_BOSS:
+        out["Boss"] = tuple(2 * x for x in out["Boss"])
     return out
 
 
@@ -54,8 +59,10 @@ def should_rest(hp, max_hp, ahead, costs=None):
     return None
 
 
-def simulate(types, hp, max_hp, gold, costs):
+def simulate(types, hp, max_hp, gold, costs, asc=0):
     score = 0
+    gold_mult = 0.75 if asc >= POVERTY else 1
+    rare = RARE_CARD * (0.5 if asc >= SCARCITY else 1)
     for i, t in enumerate(types):
         if t in FIGHTS:
             score -= RISK * max(0, costs[t][1] - hp)
@@ -63,11 +70,11 @@ def simulate(types, hp, max_hp, gold, costs):
             break
         if t in ("Monster", "Elite"):
             hp -= costs[t][0]
-            gold += FIGHT_GOLD[t]
-            score += CARD_REWARD if t == "Monster" else RELIC + RARE_CARD
+            gold += FIGHT_GOLD[t] * gold_mult
+            score += CARD_REWARD if t == "Monster" else RELIC + rare
         elif t == "Unknown":
             hp -= EVENT_RISK * costs["Monster"][0]
-            gold += FIGHT_GOLD[t]
+            gold += FIGHT_GOLD[t] * gold_mult
             score += EVENT
         elif t == "Treasure":
             score += RELIC
@@ -96,7 +103,7 @@ def best_routes(state, top=3):
     cur = tuple(m["current"]) if m["current"] else None
     firsts = [tuple(c) for c in nodes[cur]["next"]] if cur in nodes else [tuple(m["start"])]
     p = state["player"]
-    args = (p["hp"], p["max_hp"], state.get("gold", 0), fight_costs(state))
+    args = (p["hp"], p["max_hp"], state.get("gold", 0), fight_costs(state), state.get("ascension", 0))
     best, left = {}, [0]
 
     def walk(path):

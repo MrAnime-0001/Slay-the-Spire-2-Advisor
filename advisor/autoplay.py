@@ -17,7 +17,7 @@ try:
 except (AttributeError, OSError):
     pass
 
-VK_F8, WM_HOTKEY, MOD_NOREPEAT = 0x77, 0x0312, 0x4000
+VK_F8, VK_F9, WM_HOTKEY, MOD_NOREPEAT = 0x77, 0x78, 0x0312, 0x4000
 KEYEVENTF_SCANCODE, KEYEVENTF_KEYUP = 0x0008, 0x0002
 MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP = 0x0002, 0x0004
 SCAN_ESC, SCAN_E = 0x01, 0x12  # E = end turn (game default binding)
@@ -94,11 +94,11 @@ def find_game():
     return hwnd, pt.x, pt.y, rc.right, rc.bottom
 
 
-def listen_hotkey(callback):
-    """Call callback() on every F8 press, from a background thread (needs its own message loop)."""
+def listen_hotkey(callback, vk=VK_F8):
+    """Call callback() on every press of vk (F8 default), from a background thread (needs its own message loop)."""
     def loop():
-        if not user32.RegisterHotKey(None, 1, MOD_NOREPEAT, VK_F8):
-            return  # F8 taken by another app
+        if not user32.RegisterHotKey(None, vk, MOD_NOREPEAT, vk):
+            return  # key taken by another app
         msg = wintypes.MSG()
         while user32.GetMessageW(ctypes.byref(msg), None, 0, 0) > 0:
             if msg.message == WM_HOTKEY:
@@ -119,11 +119,13 @@ def ended(s, turns):
     return f"you died (turn {turns})" if s.get("status") == "game_over" else f"combat over after {turns} turns"
 
 
-def autopilot(get_state, plan_for, pick_for, cancel, log):
+def autopilot(get_state, plan_for, pick_for, cancel, log, choose=None):
     """Every turn: re-plan from the live state after each card (so kills, draws and mispredictions
     never leave a stale plan), play the plan's first card, and press E once the plan is empty.
     When a card asks to pick hand cards (upgrade/exhaust/discard...), pick_for chooses them first.
-    Stops when combat ends, on cancel, or on any failed card (so a targeting bug can't skip turns)."""
+    Stops when combat ends, on cancel, or on any failed card (so a targeting bug can't skip turns).
+    choose(get_state, cancel, log) handles a choose-a-card screen; default: wait for you to click it."""
+    choose = choose or wait_choice
     turns = 0
     while not cancel.is_set():
         log(f"turn {turns + 1}: waiting for your turn")
@@ -131,7 +133,7 @@ def autopilot(get_state, plan_for, pick_for, cancel, log):
                           or get_state().get("choose_card"), 60, cancel):
             return "cancelled" if cancel.is_set() else "timed out waiting for turn"
         if get_state().get("choose_card"):
-            error = wait_choice(get_state, cancel, log)
+            error = choose(get_state, cancel, log)
             if error:
                 return error
             continue
@@ -152,7 +154,7 @@ def autopilot(get_state, plan_for, pick_for, cancel, log):
                     return error
                 continue
             if s.get("choose_card"):
-                error = wait_choice(get_state, cancel, log)
+                error = choose(get_state, cancel, log)
                 if error:
                     return error
                 continue
@@ -180,13 +182,54 @@ def autopilot(get_state, plan_for, pick_for, cancel, log):
 
 
 def wait_choice(get_state, cancel, log):
-    """Choose-a-card screen (Knowledge Demon curse, Attack Potion...): the overlay shows the pick and
-    you click it; autopilot carries on once the screen closes.
-    ponytail: not clicked automatically, card positions on that screen aren't verified yet."""
+    """Fallback for the choose-a-card screen when click_choice can't find or click the card: beep, the
+    overlay shows the pick, you click it; autopilot carries on once the screen closes."""
     log("CHOOSE A CARD YOURSELF (see overlay) - autopilot waits")
     winsound.MessageBeep(winsound.MB_ICONASTERISK)
     if not wait_until(lambda: not get_state().get("choose_card"), 300, cancel):
         return "cancelled" if cancel.is_set() else "card choice still open after 5 min"
+    time.sleep(0.5)
+    return None
+
+
+# Choose-a-card screen: cards sit in a centered row 340 px apart (NChooseACardSelectionScreen, 1920 px wide UI).
+CHOICE_GAP = 340 / 1920
+CHOICE_ROWS = (0.45, 0.4, 0.5, 0.55, 0.35, 0.6)
+CHOICE_NUDGE = (0, -0.03, 0.03)
+choice_y = []  # height where a choice card was last found
+
+
+def click_choice(get_state, cancel, log, choose_for):
+    """Click the card choose_for(state) names on the choose-a-card screen. The reader's `hovered` index only
+    counts this screen's own cards, so nothing behind the overlay can be clicked. Falls back to waiting for
+    you (wait_choice) when the card isn't found or the click doesn't register."""
+    s = get_state()
+    sel = s.get("choose_card")
+    if not sel:
+        return None
+    name = choose_for(s)
+    idx = next((i for i, c in enumerate(sel["cards"]) if c["name"] == name), None)
+    game = find_game()
+    if idx is None or not game:
+        return wait_choice(get_state, cancel, log)
+    hwnd, left, top, w, h = game
+    at = lambda fx, fy: user32.SetCursorPos(int(left + w * fx), int(top + h * fy))
+    user32.SetForegroundWindow(hwnd)
+    log(f"choosing {name}")
+    time.sleep(0.6)  # cards slide in over 0.5 s
+    x = 0.5 + (idx - (len(sel["cards"]) - 1) / 2) * CHOICE_GAP
+    rows = choice_y + [y for y in CHOICE_ROWS if y not in choice_y]
+    on_it = lambda st: (st.get("choose_card") or {}).get("hovered") == idx
+    spot = seek([(x + dx, y) for y in rows for dx in CHOICE_NUDGE], at, on_it, get_state, cancel,
+                 f"choice card {name} (#{idx})", game)
+    if spot:
+        time.sleep(STEP_DELAY)  # re-read: a lagging reader could report the previous point
+    if not spot or not on_it(get_state()):
+        return None if cancel.is_set() else wait_choice(get_state, cancel, log)
+    choice_y[:] = [spot[1]]
+    click()
+    if not wait_until(lambda: not get_state().get("choose_card"), 3, cancel):
+        return None if cancel.is_set() else wait_choice(get_state, cancel, log)
     time.sleep(0.5)
     return None
 

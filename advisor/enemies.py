@@ -11,18 +11,29 @@ ATTACKS = ("SingleAttack", "DeathBlow")
 # Strength-down on enemies are not projected past this turn.
 
 
-def num(v, asc):
-    """A gamedata number at this ascension (None when the code computes it at runtime)."""
+# Attack numbers the code computes at runtime (args kept as source text by gen_gamedata), from the code.
+RUNTIME = {
+    "DreadDamage": lambda asc, pw: (15 if asc >= 9 else 13) + pw.get("DexterityPower", 0),  # The Forgotten
+    "SteamEruptionDamage": lambda asc, pw: pw.get("SteamEruptionPower", 0),  # Waterfall Giant's explode
+    "CurrentPressureGunDamage": lambda asc, pw: 23 if asc >= 9 else 20,  # ponytail: +5 per use not tracked
+    "BaseMultiClawCount + ExtraMultiClawCount": lambda asc, pw: 3,  # Test Subject (extra claws not tracked)
+}
+
+
+def num(v, asc, powers=None):
+    """A gamedata number at this ascension (None when the code computes it at runtime and it's unknown)."""
     if isinstance(v, dict):
         return v["asc"] if asc >= v["at"] else v["base"]
+    if isinstance(v, str) and v in RUNTIME:
+        return RUNTIME[v](asc, powers or {})
     return v if isinstance(v, (int, float)) else None
 
 
-def attacks(move, asc):
+def attacks(move, asc, powers=None):
     """[(damage per hit, hits)] for each attack intent of a move."""
     out = []
     for it in move["intents"]:
-        a = [num(x, asc) for x in it["args"]]
+        a = [num(x, asc, powers) for x in it["args"]]
         if it["kind"] in ATTACKS and a and a[0] is not None:
             out.append((a[0], 1))
         elif it["kind"] == "MultiAttack" and len(a) >= 2 and None not in a[:2]:
@@ -86,7 +97,7 @@ def predict(enemy, asc=0, turns=2):
         for mv, p in dist.items():
             for to, q in follow(ai, mv, mv, used, enemy.get("slot")).items():
                 nxt[to] = nxt.get(to, 0) + p * q
-        dmg = sum(p * sum((d + strength + vigor) * h for d, h in attacks(ai["moves"][mv], asc))
+        dmg = sum(p * sum((d + strength + vigor) * h for d, h in attacks(ai["moves"][mv], asc, powers))
                   for mv, p in nxt.items())
         if any(attacks(ai["moves"][mv], asc) for mv in nxt):
             vigor = 0  # ponytail: Vigor dropped once any likely move attacks

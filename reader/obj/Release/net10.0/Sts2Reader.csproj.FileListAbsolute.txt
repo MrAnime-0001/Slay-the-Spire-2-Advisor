@@ -35,3 +35,8 @@ C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readerbuild\Sts2Reader.deps.jso
 C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readerbuild\Sts2Reader.runtimeconfig.json
 C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readerbuild\Sts2Reader.dll
 C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readerbuild\Sts2Reader.pdb
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Downloads\0edb7d0f-e15d-4dd8-ab82-981f6bff6201\scratchpad\rbuild\Sts2Reader.exe
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Downloads\0edb7d0f-e15d-4dd8-ab82-981f6bff6201\scratchpad\rbuild\Sts2Reader.deps.json
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Downloads\0edb7d0f-e15d-4dd8-ab82-981f6bff6201\scratchpad\rbuild\Sts2Reader.runtimeconfig.json
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Downloads\0edb7d0f-e15d-4dd8-ab82-981f6bff6201\scratchpad\rbuild\Sts2Reader.dll
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Downloads\0edb7d0f-e15d-4dd8-ab82-981f6bff6201\scratchpad\rbuild\Sts2Reader.pdb

@@ -542,3 +542,284 @@ assert [s[0] for s in solve(state([TOXIC], energy=1, intent_dmg=0))[0].steps] ==
 assert unmodeled_player_powers(me_with(state([]), ("WeakPower", 1), ("NoDrawPower", 1))) == ["NoDraw"]
 
 print("all cost and debuff checks passed")
+
+# 78. Beckon (1 energy, 6 unblockable at turn end in hand): play it instead of a Defend vs a 3 hit.
+BECKON = card("Beckon", 1, "Status", "None", HpLoss=6)
+assert [s[0] for s in solve(state([BECKON, DEFEND], energy=1, intent_dmg=3))[0].steps] == ["Beckon"]
+print("all beckon checks passed")
+
+# 79. Ascender's Bane (A5 curse) is Eternal: removal picks the Strike instead.
+BANE = {**card("AscendersBane", -1, "Curse", "None"), "rarity": "Curse"}
+assert removal_target([BANE, {**STRIKE, "rarity": "Basic"}])["name"] == "Strike"
+print("all eternal checks passed")
+
+# 80. Normality in hand: at most 3 cards this turn.
+NORM = card("Normality", -1, "Curse", "None")
+assert len(solve(state([NORM, STRIKE, STRIKE, STRIKE, STRIKE], energy=5, enemy_hp=100))[0].steps) == 3
+
+# 81. Enthralled (2 energy) in hand must be played first: with 2 energy nothing else fits.
+ENTH = card("Enthralled", 2, "Curse", "None")
+assert [s[0] for s in solve(state([ENTH, STRIKE], energy=2, enemy_hp=100))[0].steps] in (["Enthralled"], [])
+assert all(s[0] != "Strike" for s in solve(state([ENTH, STRIKE], energy=2, enemy_hp=100))[0].steps)
+print("all curse-limit checks passed")
+
+# 82. Every build's core card and key relic exists in this game version (guides can be stale).
+from archetypes import ARCHETYPES, commitment, synergy
+for char, builds in ARCHETYPES.items():
+    for build, (_, core, relics_) in builds.items():
+        assert all(GAMEDATA["cards"].get(n, {}).get("pool") == char for n in core), (char, build)
+        assert all(r in GAMEDATA["relics"] for r in relics_), (char, build)
+
+# 83. A deck with 3 poison cards is committed to Poison; the next poison card gets synergy, a Shiv card none.
+POISON_DECK = [{"name": n} for n in ["StrikeSilent"] * 5 + ["DefendSilent"] * 5 + ["NoxiousFumes", "DeadlyPoison", "PoisonedStab"]]
+assert commitment(POISON_DECK)["Silent:Poison"] >= 0.7
+assert synergy({"name": "BouncingFlask"}, POISON_DECK) > synergy({"name": "BladeDance"}, POISON_DECK) == 0
+print("all archetype checks passed")
+
+# 84. Velvet Choker (energy, but a card cap) is worth less, and much less to a committed Shiv deck.
+from picker import relic_value
+SHIV_DECK = [{"name": n} for n in ["BladeDance", "CloakAndDagger", "Accuracy", "InfiniteBlades"]]
+assert relic_value("VelvetChoker", {"deck": SHIV_DECK}) < relic_value("VelvetChoker", {"deck": []}) < relic_value("VelvetChoker") + 0.01
+print("all relic drawback checks passed")
+
+# --- deck balance (deck.py sim through picker.pick with state) ---
+ACT1 = {"act_name": "Overgrowth", "ascension": 0, "max_energy": 3}
+BIG_BLOCK = card("BigBlock", 1, "Skill", "Self", Block=12)
+HIT = card("Hit", 1, "Attack", "AnyEnemy", Damage=12)
+# 85. Attack-heavy deck: the block card wins; block-heavy deck: the attack wins.
+ATK = [STRIKE] * 9 + [DEFEND]
+BLK = [STRIKE] * 2 + [DEFEND] * 8
+assert pick([card("Hit", 1, "Attack", "AnyEnemy", Damage=9), card("Wall", 1, "Skill", "Self", Block=9)], ATK, (), {**ACT1, "deck": ATK})[0] == "Wall"
+assert pick([card("Hit", 1, "Attack", "AnyEnemy", Damage=9), card("Wall", 1, "Skill", "Self", Block=9)], BLK, (), {**ACT1, "deck": BLK})[0] == "Hit"
+# 86. A plain extra Strike in a starter deck dilutes it: skip.
+STARTER10 = [STRIKE] * 5 + [DEFEND] * 4 + [BASH]
+assert pick([STRIKE], STARTER10, (), {**ACT1, "deck": STARTER10})[0] == "Skip"
+# 87. Deterministic: same inputs, same score.
+assert rate(HIT, STARTER10, (), ACT1) == rate(HIT, STARTER10, (), ACT1)
+print("all deck balance checks passed")
+
+# --- full-run autopilot decisions (runpilot.act with clicks/keys recorded instead of sent) ---
+import runpilot
+
+calls = []
+runpilot.press = lambda want, area, *a: calls.append((area, next((t for t in TARGETS if want(t)), None)))
+runpilot.key = lambda scan, *a, check=True: calls.append(("key", a[3]))
+
+
+def screen(name, targets, **extra):
+    global TARGETS
+    TARGETS = targets
+    calls.clear()
+    st = {**shop(100), "status": "out_of_combat", "act": 0, "ui": {"screen": name, "targets": targets}, **extra}
+    return runpilot.act(st, None, None, print, MEM, lambda: RETRY), calls[:]
+
+
+MEM, RETRY = {}, False
+# 88. Loot: gold first; a potion with no free slot is left; then the card reward; then proceed.
+LOOT = ["reward:card", "reward:potion:FirePotion", "reward:gold:45"]
+assert screen("NRewardsScreen", LOOT)[1] == [("reward", "reward:gold:45")]
+assert screen("NRewardsScreen", LOOT[:2], potion_slots=1, potions=[{"slot": 0, "name": "BlockPotion"}])[1] == [("reward", "reward:card")]
+MEM["skipped"] = True  # card reward skipped: it stays listed but isn't reopened
+assert screen("NRewardsScreen", ["reward:card"])[1] == [("key", "rewards: proceed")]
+# 89. Map: clicks the first point of the best route.
+st = fork("Elite", "Monster")
+assert screen("Map", ["map:0,1", "map:2,1"], map=st["map"], map_open=True)[1] == [("map", "map:0,1")]
+# 90. Deck grid to remove: the curse goes.
+GRID = {"screen": "NDeckCardSelectScreen", "prompt": "TO_REMOVE", "min": 1, "max": 1, "cards": STARTER + [REGRET]}
+assert screen("NDeckCardSelectScreen", ["card:Strike", "card:Regret"], card_grid=GRID)[1] == [("grid", "card:Regret")]
+# 91. Shop: open the merchant first; dead with auto-retry off -> stop with a reason.
+assert screen("MerchantRoom", [])[1] == [("key", "shop: open merchant")]
+assert "auto-retry off" in screen("NGameOverScreen", [], status="game_over")[0]
+print("all run-pilot checks passed")
+
+# --- character mechanics (P5) ---
+POISON = card("Venom", 1, "Skill", "AnyEnemy", PoisonPower=5)
+# 92. Poison ticks at the enemy's turn start: 5 poison on a 5 HP enemy kills it before its 30-damage hit.
+best = solve(state([POISON, DEFEND], energy=1, enemy_hp=5, intent_dmg=30))[0]
+assert best.win and best.hp_loss == 0 and best.steps[0][0] == "Venom", best
+# 93. Doom 10 on a 10 HP enemy: it still hits this turn, then dies (a kill), so Doom beats a 6-damage Strike.
+best = solve(state([card("Reap", 1, "Skill", "AnyEnemy", DoomPower=10), STRIKE], energy=1, enemy_hp=10, intent_dmg=5))[0]
+assert best.steps[0][0] == "Reap" and best.kills == 1 and best.hp_loss == 5, best
+# 94. Osty (8 HP) soaks unblocked attack damage: a 10 hit costs us 2.
+assert solve({**state([], intent_dmg=10), "pets": [{"name": "Osty", "creature": {"hp": 8}}]})[0].hp_loss == 2
+# 95. Orbs: Frost's passive Block soaks a 2 hit; channeling Ball Lightning into a full slot evokes the old
+# Lightning (8) on top of its 7 damage: 15 kills.
+assert solve({**state([], intent_dmg=2), "orbs": [{"name": "FrostOrb"}], "orb_slots": 3})[0].hp_loss == 0
+BL = card("BallLightning", 1, "Attack", "AnyEnemy", Damage=7)
+best = solve({**state([BL], energy=1, enemy_hp=15, intent_dmg=20), "orbs": [{"name": "LightningOrb"}], "orb_slots": 1})[0]
+assert best.win, best
+# 96. Stars: Devastate costs 4 stars (gamedata star_cost); with 2 stars it can't be played.
+DEV = card("Devastate", 1, "Attack", "AnyEnemy", Damage=30)
+assert not solve({**state([DEV]), "stars": 2})[0].steps
+assert solve({**state([DEV]), "stars": 4})[0].steps[0][0] == "Devastate"
+# 97. Ethereal: equal cards, one burns away if held -> play that one.
+GHOST = {**card("GhostWall", 1, "Skill", "Self", Block=5), "keywords": ["Ethereal"]}
+assert solve(state([DEFEND, GHOST], energy=1, intent_dmg=5))[0].steps[0][0] == "GhostWall"
+print("all character mechanic checks passed")
+# 98. Discard 1: a Sly card (played free when discarded) goes before a plain Strike.
+SLY = {**card("Slick", 1, "Attack", "AnyEnemy", Damage=9), "keywords": ["Sly"]}
+assert hand_pick(picking([STRIKE, SLY], prompt="TO_DISCARD"))[1] == ["Slick"]
+print("all sly checks passed")
+# 99. Deck sim values engines: a 1-cost 4-poison card and a Ball Lightning beat nothing (not 0 value).
+from deck import hp_lost
+assert hp_lost(STARTER10 + [card("Venom", 1, "Skill", "AnyEnemy", PoisonPower=4)], ACT1) < hp_lost(STARTER10 + [DAZED], ACT1)
+assert hp_lost(STARTER10 + [BL], ACT1) < hp_lost(STARTER10 + [card("Plain", 1, "Attack", "AnyEnemy", Damage=7)], ACT1)
+print("all deck engine checks passed")
+
+# --- ascension (P7) ---
+from pathing import fight_costs
+# 100. A9 enemies hit harder / have more HP: the same deck loses more HP than at A0.
+assert hp_lost(STARTER10, {**ACT1, "ascension": 9}) > hp_lost(STARTER10, ACT1)
+# 101. A10 act 3: two bosses -> boss cost doubles; A3 Poverty: less fight gold on a route.
+A3 = {"act": 2, "act_name": "Glory"}
+assert fight_costs({**A3, "ascension": 10})["Boss"][0] == 2 * fight_costs({**A3, "ascension": 9})["Boss"][0]
+assert best_routes({**fork("Monster", "Monster"), "ascension": 3})[0].gold < best_routes(fork("Monster", "Monster"))[0].gold
+# 102. A7 Scarcity: a card just under the normal skip line gets taken.
+import picker
+real_rate, picker.rate = picker.rate, lambda *a, **k: (SKIP_BELOW - 0.5, True)
+assert picker.pick([STRIKE], DECK, (), {"ascension": 0})[0] == "Skip"
+assert picker.pick([STRIKE], DECK, (), {"ascension": 7})[0] == "Strike"
+picker.rate = real_rate
+print("all ascension checks passed")
+# 103. The Forgotten's Dread has no readable damage: 13 + its Dexterity (2) = 15 incoming.
+FORGOTTEN = {**state([])["enemies"][0], "name": "TheForgotten",
+             "creature": {"hp": 40, "max_hp": 40, "block": 0, "powers": [{"name": "DexterityPower", "amount": 2}]},
+             "intents": [{"kind": "SingleAttackIntent", "damage": None, "hits": 1}]}
+assert solve({**state([]), "enemies": [FORGOTTEN]})[0].hp_loss == 15
+print("all dynamic intent checks passed")
+# 104. Gas Bomb's explode (Death Blow) has no readable damage: 8 at A0.
+BOMB = {**FORGOTTEN, "name": "GasBomb", "creature": {"hp": 7, "max_hp": 7, "block": 0, "powers": []},
+        "intents": [{"kind": "DeathBlowIntent", "damage": None, "hits": 1}]}
+assert solve({**state([]), "enemies": [BOMB]})[0].hp_loss == 8
+print("all death blow checks passed")
+# 105. Foresight resolves runtime attack numbers: Waterfall Giant about to explode hits for its Steam Eruption.
+from enemies import predict
+WG = {"name": "WaterfallGiant", "move": "ABOUT_TO_BLOW_MOVE", "history": [], "slot": None,
+      "creature": {"hp": 50, "powers": [{"name": "SteamEruptionPower", "amount": 40}]}}
+fc = predict(WG, 0, 1)
+assert fc and fc[0]["dmg"] == 40, fc
+print("all runtime foresight checks passed")
+
+# --- P4 tests the plan listed ---
+from relics import GAMEDATA as GD
+
+
+def real_card(name):
+    c = GD["cards"][name]
+    return {"name": name, "upgraded": False, "type": c["type"], "target": c["target"], "cost": c["cost"],
+            "x_cost": False, "vars": {k: int(v) for k, v in c["vars"].items()}, "rarity": c["rarity"]}
+
+
+SILENT = [real_card("StrikeSilent")] * 5 + [real_card("DefendSilent")] * 5 + [real_card(n) for n in
+          ("Neutralize", "Survivor", "NoxiousFumes", "DeadlyPoison", "PoisonedStab")]
+# 106. Bouncing Flask = 3 poison x 3 bounces: 9 on a lone enemy.
+best = solve(state([real_card("BouncingFlask")], energy=2, enemy_hp=40, intent_dmg=0))[0]
+assert best.steps and best.steps[0][0] == "BouncingFlask"
+# 107. A committed Poison deck takes the poison card over a B-tier off-build card (Dagger Spray).
+assert pick([real_card("BouncingFlask"), real_card("DaggerSpray")], SILENT, (), {**ACT1, "deck": SILENT})[0] == "BouncingFlask"
+# 108. A curse makes the deck worse.
+assert hp_lost(STARTER10 + [REGRET], ACT1) > hp_lost(STARTER10, ACT1)
+# 109. The shop won't buy a relic whose drawback wrecks the build (Velvet Choker, committed Shiv deck).
+SHIVS = STARTER + [real_card(n) for n in ("BladeDance", "CloakAndDagger", "Accuracy", "InfiniteBlades")]
+head, _ = shop_advice({**shop(400, relics=[("VelvetChoker", 150)], deck=SHIVS), **ACT1})
+assert "VelvetChoker" not in head, head
+print("all P4 checks passed")
+# 110. Strike Dummy: worth less once the Strikes are gone.
+from picker import relic_value
+assert relic_value("StrikeDummy", {"deck": [STRIKE] * 5}) > relic_value("StrikeDummy", {"deck": [STRIKE]}) > 0
+print("all strike relic checks passed")
+# 111. Poison Potion is worth more to a committed Poison deck than to an Ironclad starter.
+from picker import potion_value
+assert potion_value("PoisonPotion", {"deck": SILENT}) > potion_value("PoisonPotion", {"deck": STARTER10})
+print("all potion fit checks passed")
+# 112. Devastate (4 stars) is worth more in a deck that makes stars (Venerate x3) than in one that doesn't.
+DEVA = real_card("Devastate")
+VEN = real_card("Venerate")
+base = STARTER10 + [VEN] * 3
+assert hp_lost(base, ACT1) - hp_lost(base + [DEVA], ACT1) > hp_lost(STARTER10 + [DEFEND] * 3, ACT1) - hp_lost(STARTER10 + [DEFEND] * 3 + [DEVA], ACT1)
+print("all star sim checks passed")
+# 113. Channeling a Dark orb (stored damage for later) beats doing nothing when there's no threat.
+DARKC = card("Darkness", 1, "Skill", "Self")
+import solver as _s
+_s.GAMEDATA["cards"].setdefault("Darkness", {"channel": ["Dark"]})
+assert solve({**state([DARKC], energy=1, intent_dmg=0), "orb_slots": 3})[0].steps
+print("all held orb checks passed")
+
+# --- Retain / Exhaust ---
+BIG = {**card("Bigshot", 1, "Attack", "AnyEnemy", Damage=10), "keywords": ["Exhaust"]}
+# 114. Long fight: a 10-damage Exhaust card would be gone for good; a Strike now keeps it for later...
+assert solve(state([BIG, STRIKE], energy=1, enemy_hp=60, intent_dmg=0))[0].steps[0][0] == "Strike"
+# ...but when it's lethal, use it.
+assert solve(state([BIG, STRIKE], energy=1, enemy_hp=10, intent_dmg=0))[0].steps[0][0] == "Bigshot"
+# 115. Retain: play the Strike now and keep the retained 8-damage card for a sure play next turn.
+KEEP = {**card("Keeper", 1, "Attack", "AnyEnemy", Damage=8), "keywords": ["Retain"]}
+assert solve(state([KEEP, STRIKE], energy=1, enemy_hp=40, intent_dmg=0))[0].steps[0][0] == "Strike"
+print("all retain/exhaust checks passed")
+# 116. Deck sim: Impervious-style 30 Block that Exhausts is worth less than the same card without Exhaust.
+WALL = card("Wall30", 2, "Skill", "Self", Block=30)
+import deck as _d
+_d.GAMEDATA["cards"].setdefault("Wall30X", {"keywords": ["Exhaust"]})
+WALLX = {**WALL, "name": "Wall30X"}
+assert hp_lost(STARTER10 + [WALLX], ACT1) > hp_lost(STARTER10 + [WALL], ACT1)
+print("all exhaust sim checks passed")
+
+# --- HP value per character, kill priority ---
+# 117. Burning Blood at full HP: a 3 hit would be healed back anyway, so Strike beats Defend; without it, block.
+chip = lambda relics, hp: {**state([STRIKE, DEFEND], energy=1, enemy_hp=40, intent_dmg=3, hp=hp), "relics": relics,
+                         "max_energy": 1}
+assert solve(chip([{"name": "BurningBlood"}], 80))[0].steps[0][0] == "Strike"
+assert solve(chip([], 80))[0].steps[0][0] == "Defend"
+# ...and at 60/80 the heal doesn't cover it: block.
+assert solve(chip([{"name": "BurningBlood"}], 60))[0].steps[0][0] == "Defend"
+# 118. A killable enemy that hits hard: kill it rather than block a small hit from the other one.
+big = {"name": "Brute", "creature": {"hp": 6, "max_hp": 30, "block": 0, "powers": []},
+       "intents": [{"kind": "SingleAttackIntent", "damage": 12, "hits": 1}]}
+small = {"name": "Gnat", "creature": {"hp": 40, "max_hp": 40, "block": 0, "powers": []},
+         "intents": [{"kind": "SingleAttackIntent", "damage": 4, "hits": 1}]}
+best = solve({**state([STRIKE, DEFEND], energy=1), "enemies": [big, small]})[0]
+assert best.steps[0][0] == "Strike" and best.steps[0][1] == "Brute", best
+print("all hp value checks passed")
+
+# --- cards made mid-turn, random targets ---
+BD = real_card("BladeDance")
+# 119. Blade Dance makes 3 Shivs (4 each) that can be played the same turn: 12 HP enemy dies.
+best = solve(state([BD], energy=1, enemy_hp=12, intent_dmg=10))[0]
+assert best.win and [s[0] for s in best.steps] == ["BladeDance", "Shiv", "Shiv", "Shiv"], best
+# 120. Accuracy 2: Shivs hit for 6, so two of them kill a 12 HP enemy.
+acc = state([real_card("Shiv")] * 2, energy=0, enemy_hp=12, intent_dmg=10)
+acc["player"]["powers"] = [{"name": "AccuracyPower", "amount": 2}]
+assert solve(acc)[0].win
+# 121. Lightning's passive hits a random enemy: with a 3 HP and a 40 HP enemy it's not a sure kill.
+two = {**state([]), "orbs": [{"name": "LightningOrb"}], "orb_slots": 3,
+       "enemies": [{**state([])["enemies"][0], "creature": {"hp": 3, "max_hp": 3, "block": 0, "powers": []}},
+                   {**state([])["enemies"][0], "creature": {"hp": 40, "max_hp": 40, "block": 0, "powers": []}}]}
+assert solve(two)[0].kills == 0
+# 122. Deck sim / picks see Blade Dance as 12 damage, not as "draw 3".
+from deck import effect, card_key
+assert effect(card_key(BD))[1] + effect(card_key(BD))[2] == 12 and effect(card_key(BD))[4] == 0
+print("all made-card checks passed")
+
+# 123. Choose-a-card autoclick: mouse goes to the 2nd of 3 cards and clicks only once the reader says it's hovered.
+import threading
+import autoplay as ap
+saved = (ap.find_game, ap.user32, ap.click, ap.time.sleep)
+pos, clicked = {"x": 0, "y": 0}, []
+ap.find_game = lambda: (0, 0, 0, 1920, 1080)
+ap.user32 = type("U", (), {"SetCursorPos": staticmethod(lambda x, y: pos.update(x=x, y=y)),
+                           "SetForegroundWindow": staticmethod(lambda h: None)})()
+ap.click = lambda: clicked.append((pos["x"], pos["y"]))
+ap.time.sleep = lambda t: None
+CHOICES = [{"name": n} for n in ("A", "B", "C")]
+
+
+def chooser():
+    if clicked:
+        return {"choose_card": None}
+    on_b = abs(pos["x"] - 960) < 120 and 380 < pos["y"] < 560
+    return {"choose_card": {"cards": CHOICES, "hovered": 1 if on_b else None}}
+
+
+assert ap.click_choice(chooser, threading.Event(), lambda m: None, lambda s: "B") is None
+assert len(clicked) == 1 and abs(clicked[0][0] - 960) < 120
+ap.find_game, ap.user32, ap.click, ap.time.sleep = saved
+print("all choose-card click checks passed")

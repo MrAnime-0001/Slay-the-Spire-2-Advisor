@@ -100,6 +100,19 @@ def parse_potions(src_dir):
     return table
 
 
+def created(source):
+    """[card, count var] for cards a card puts in your hand (Shivs, Debris, Fuel...), else None.
+    ponytail: Storm of Steel (one Shiv per card discarded) and discard-pile adds aren't listed."""
+    if m := re.search(r'Shiv\.CreateInHand\(Owner, DynamicVars(?:\.(\w+)|\["(\w+)"\])\.IntValue', source):
+        return ["Shiv", m[1] or m[2]]
+    if "Shiv.CreateInHand(Owner, CombatState)" in source:
+        loop = re.search(r'i < DynamicVars\.(\w+)\.IntValue', source)
+        return ["Shiv", loop[1] if loop else None]
+    if (m := re.search(r'CreateCard<(\w+)>\(Owner\)', source)) and ("PileType.Hand" in source or "PileType." not in source):
+        return [m[1], None]
+    return None
+
+
 def parse_cards(src_dir):
     """{Card: {pool, cost, type, rarity, target, vars, keywords}} for every card in a character/colorless pool."""
     pool_of = {}
@@ -114,6 +127,14 @@ def parse_cards(src_dir):
                            "vars": canonical_vars(source),
                            "keywords": sorted(set(re.findall(r'CardKeyword\.(\w+)', kw[1]))) if (
                                kw := re.search(r'CanonicalKeywords =>([^;]+);', source)) else []}
+            if sc := re.search(r'CanonicalStarCost => (\d+)', source):
+                table[name]["star_cost"] = int(sc[1])  # Regent: costs stars on top of energy
+            if orbs := re.findall(r'OrbCmd\.Channel<(\w+)Orb>', source):
+                table[name]["channel"] = orbs  # Defect: orbs channeled on play (ponytail: loops count once)
+            if made := created(source):
+                table[name]["creates"] = made  # [card, count var or None (= 1)]: cards put into your hand on play
+            if "HasTurnEndInHandEffect => true" in source:
+                table[name]["turn_end"] = True  # Burn, Beckon, Regret...: acts at our turn end while in hand
     return table
 
 
@@ -268,7 +289,8 @@ def parse_monsters(src_dir):
     return table
 
 
-def parse_text(game_dir, tables=("events", "ancients")):
+def parse_text(game_dir, tables=("events", "ancients", "cards", "card_keywords", "powers", "relics", "potions", "orbs",
+                                   "afflictions", "enchantments")):
     """English option text from SlayTheSpire2.pck (Godot pack v3: header, then a file directory at dir_offset;
     offsets are relative to file_base when flag 2 is set). Keys are "table:key" like the reader's option desc;
     BBCode markup is stripped, {Var} placeholders kept."""
@@ -288,7 +310,7 @@ def parse_text(game_dir, tables=("events", "ancients")):
         for table, (off, size) in found.items():
             f.seek(off)
             for k, v in json.loads(f.read(size)).items():
-                if ".options." in k or k.endswith(".title"):
+                if ".options." in k or k.endswith(".title") or (k.endswith(".description") and table != "events"):
                     out[f"{table}:{k}"] = re.sub(r"\[/?\w+[^\]]*\]", "", v).strip()
     return out
 

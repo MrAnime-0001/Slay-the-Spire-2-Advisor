@@ -3,20 +3,26 @@ import math
 import re
 from itertools import combinations
 
-from pathing import CARD_REWARD, HEAL_FRACTION, HP_VALUE, RELIC, UPGRADE, best_routes, fight_costs, should_rest
+from pathing import (CARD_REWARD, GOLD_LEFT, HEAL_FRACTION, HP_VALUE, RELIC, SHOP_PER_100, UPGRADE, best_routes,
+                     fight_costs, should_rest)
 from enemies import predict
 from relics import GAMEDATA, KNOWLEDGE, Relics, dmg_add
-from solver import deck_dpt, solve
+from archetypes import ARCHETYPES, commitment, snake, synergy
+from deck import hp_lost
+from solver import creates, deck_dpt, keywords, solve
 
 # Value per point of each card var. Tune these.
 VAR_VALUE = {"Damage": 1, "Block": 0.9, "VulnerablePower": 4, "WeakPower": 3,
-             "StrengthPower": 6, "DexterityPower": 5, "Cards": 3, "Energy": 6, "HpLoss": -1.5}
+             "StrengthPower": 6, "DexterityPower": 5, "Cards": 3, "Energy": 6, "HpLoss": -1.5,
+             "PoisonPower": 2.5, "DoomPower": 1, "OstyDamage": 1, "Summon": 0.9}  # engines: same as deck.py
 UNKNOWN_VALUE = 3      # flat credit for effects we can't read from numbers (shown as "?")
 AOE_NEEDED_BONUS = 4   # card hits all enemies and the deck has no AoE attack
 BLOCK_NEEDED_BONUS = 2  # card gives block and under 30% of the deck does
 DECK_SIZE_FREE = 20    # past this, every pick costs a little (dilution)
 DECK_SIZE_PENALTY = 0.3
 SKIP_BELOW = 6
+EXHAUST_STATS, RETAIN_STATS = 0.5, 1.15  # stats-only scoring (no deck sim): Exhaust = once a fight
+SCARCITY_SKIP = 1
 # Relic synergies: relic -> (which cards benefit, bonus). Damage relics (Strike Dummy etc.) are applied
 # directly through relics.dmg_add instead.
 ATTACK_COUNT_RELICS = {"Kunai", "Shuriken", "OrnamentalFan", "PenNib", "Nunchaku", "Kusarigama"}
@@ -30,6 +36,10 @@ SYNERGY = [
 # stats can't see engines (exhaust, Strength scaling) and overrate one-turn buffs like Setup Strike.
 TIER_VALUE = {"S": 16, "A": 12, "B": 9, "C": 6, "D": 3}
 TIER_BLEND = 0.5
+TIER_BLEND_SIM = 0.25  # cards the deck sim scores: the tier list can't see what THIS deck lacks (block vs damage)
+# Deck sim (state given): score = SKIP_BELOW + HP_SAVED_SCALE * HP saved per act boss/elite fight, so a card
+# that saves nothing lands at the skip line. Build synergy (0..2) x SYNERGY_VALUE on top.
+HP_SAVED_SCALE, SYNERGY_VALUE = 0.5, 3
 # ponytail: no card-to-card synergy model beyond SYNERGY and the tier list.
 
 
@@ -37,13 +47,30 @@ def is_aoe(card):
     return card["type"] == "Attack" and card["target"] in ("AllEnemies", "RandomEnemy")
 
 
-def rate(card, deck, relics=()):
+def rate(card, deck, relics=(), state=None):
+    """(score, modeled). With `state` (act, ascension, energy), cards the deck sim understands are scored by
+    the HP they save in this act's boss/elite fights (deck.py: damage vs block balance, draw odds, dilution);
+    everything gets the build-synergy bonus (archetypes.py) and the community tier blend."""
     R = Relics(relics, GAMEDATA["relics"])
-    v = card["vars"]
+    v = dict(card["vars"])
+    made = creates(card)  # Blade Dance etc.: value the Shivs it makes, not its count var as card draw
+    if made:
+        var = GAMEDATA["cards"][card["name"]]["creates"][1]
+        v.pop(var, None)
+        for k, x in made[0]["vars"].items():
+            v[k] = v.get(k, 0) + x * made[1]
     hits = max(v.get("Repeat", 1), 1)
     value = sum(VAR_VALUE[k] * n for k, n in v.items() if k in VAR_VALUE and k not in ("Damage",))
+    if card["type"] != "Attack" and "PoisonPower" in v:  # Bouncing Flask: Repeat = bounces, each poisons
+        value += VAR_VALUE["PoisonPower"] * v["PoisonPower"] * (hits - 1)
     if "Damage" in v:
         value += (v["Damage"] + dmg_add(card, R)) * hits * (1.5 if is_aoe(card) else 1)
+    kw = set(keywords(card))
+    if "Exhaust" in kw and card["type"] != "Power":  # one hit/Block per fight; lasting debuffs/buffs keep value
+        once = v.get("Damage", 0) * hits * (1.5 if is_aoe(card) else 1) + VAR_VALUE["Block"] * v.get("Block", 0)
+        value -= (1 - EXHAUST_STATS) * once
+    if "Retain" in kw:
+        value *= RETAIN_STATS
     modeled = set(v) <= set(VAR_VALUE) | {"Repeat"} and bool(v)
     if not modeled:
         value += UNKNOWN_VALUE
@@ -54,17 +81,26 @@ def rate(card, deck, relics=()):
         score += BLOCK_NEEDED_BONUS
     score += sum(bonus for names, fits, bonus in SYNERGY if fits(card) and any(n in R for n in names))
     score -= DECK_SIZE_PENALTY * max(0, len(deck) - DECK_SIZE_FREE)
+    simmed = state is not None and modeled and card["type"] in ("Attack", "Skill")
+    if simmed:
+        saved = hp_lost(deck, state) - hp_lost(list(deck) + [card], state)
+        score = SKIP_BELOW + HP_SAVED_SCALE * saved + sum(
+            bonus for names, fits, bonus in SYNERGY if fits(card) and any(n in R for n in names))
+    score += SYNERGY_VALUE * synergy(card, deck, relics)
     tier = KNOWLEDGE["cards"].get(card["name"], {}).get("tier")
     if tier:
-        score = (1 - TIER_BLEND) * score + TIER_BLEND * TIER_VALUE[tier]
+        blend = TIER_BLEND_SIM if simmed else TIER_BLEND
+        score = (1 - blend) * score + blend * TIER_VALUE[tier]
         modeled = True  # the tier covers what the numbers miss
     return round(score, 1), modeled
 
 
-def pick(cards, deck, relics=()):
-    rated = [(c["name"], *rate(c, deck, relics)) for c in cards]
+def pick(cards, deck, relics=(), state=None):
+    rated = [(c["name"], *rate(c, deck, relics, state)) for c in cards]
     best = max(rated, key=lambda r: r[1], default=None)
-    return (best[0] if best and best[1] >= SKIP_BELOW else "Skip"), rated
+    # A7 Scarcity halves rare odds: good cards come less often, so the bar to take one drops a little
+    bar = SKIP_BELOW - (SCARCITY_SKIP if (state or {}).get("ascension", 0) >= 7 else 0)
+    return (best[0] if best and best[1] >= bar else "Skip"), rated
 
 
 # --- rest site ---
@@ -80,11 +116,20 @@ def upgraded(card, up):
     return {**card, "vars": v, "cost": max(0, card["cost"] + up.get("cost", 0)), "upgraded": True}
 
 
-def upgrade_gain(card, deck, upgrades=UPGRADES, relics=()):
+def upgrade_gain(card, deck, upgrades=UPGRADES, relics=(), state=None):
     up = upgrades[card["name"]]
-    gain = rate(upgraded(card, up), deck, relics)[0] - rate(card, deck, relics)[0]
+    rest = list(deck)
+    if state is not None and card in rest:
+        rest.remove(card)  # compare deck+card vs deck+upgraded card
+    gain = rate(upgraded(card, up), rest, relics, state)[0] - rate(card, rest, relics, state)[0]
     gain += sum(KEYWORD_VALUE.get(k, 1) for k in up.get("keywords", []))
     return round(gain, 1)
+
+
+def rest_choice(state, upgrades=UPGRADES):
+    """("Smith", card name) or ("Heal", None): what autopilot clicks at a rest site."""
+    head, _ = rest_advice(state, upgrades)
+    return ("Smith", head.split("upgrade ", 1)[1]) if head.startswith("Smith") else ("Heal", None)
 
 
 def rest_advice(state, upgrades=UPGRADES):
@@ -96,7 +141,7 @@ def rest_advice(state, upgrades=UPGRADES):
     for c in deck:
         if not c["upgraded"] and c["name"] in upgrades and c["name"] not in seen:
             seen.add(c["name"])
-            gains.append((c["name"], upgrade_gain(c, deck, upgrades, relics)))
+            gains.append((c["name"], upgrade_gain(c, deck, upgrades, relics, state)))
     gains.sort(key=lambda g: -g[1])
     others = [o for o in opts if o not in ("Heal", "Smith")]
     tail = [f"also available: {', '.join(others)} (not rated)"] if others else []
@@ -124,8 +169,10 @@ def hand_pick(state, upgrades=UPGRADES):
         order = sorted(range(len(pool)), key=lambda i: -upgrade_gain(pool[i], deck, upgrades, relics))
         n = sel["max"]
     elif sel["prompt"] in BAD_PICKS:
-        order = sorted(range(len(pool)), key=lambda i: (not junk(pool[i]), rate(pool[i], deck, relics)[0]))
-        n = max(sel["min"], min(sel["max"], sum(map(junk, pool))))  # optional picks: only junk
+        # Sly cards discarded are played for free: discard them right after junk
+        sly = lambda c: sel["prompt"] == "TO_DISCARD" and "Sly" in keywords(c)
+        order = sorted(range(len(pool)), key=lambda i: (not junk(pool[i]), not sly(pool[i]), rate(pool[i], deck, relics)[0]))
+        n = max(sel["min"], min(sel["max"], sum(junk(c) or sly(c) for c in pool)))  # optional picks: junk + Sly
     else:
         order = sorted(range(len(pool)), key=lambda i: -rate(pool[i], deck, relics)[0])
         n = max(sel["min"], min(sel["max"], 1))
@@ -179,7 +226,7 @@ def choose_card(state):
         scored = [(c["name"], round(solve({**state, "hand": state["hand"] + [{**c, "cost": 0}],
                                            "choose_card": None})[0].score, 1)) for c in cards]
     else:
-        scored = [(c["name"], rate(c, state.get("deck", []), state.get("relics", []))[0]) for c in cards]
+        scored = [(c["name"], rate(c, state.get("deck", []), state.get("relics", []), state)[0]) for c in cards]
     scored.sort(key=lambda r: -r[1])
     return scored[0][0], [(n, s, f"score {s}") for n, s in scored]
 
@@ -188,48 +235,108 @@ def choose_card(state):
 RELIC_VALUE = {"Common": 12, "Uncommon": 14, "Rare": 16, "Shop": 13}  # by rarity, when untiered
 RELIC_TIER_VALUE = {"S": 20, "A": 15, "B": 11, "C": 7, "D": 3}  # knowledge.relics tier (Mobalytics)
 POTION_VALUE = {"Common": 3, "Uncommon": 4, "Rare": 5}
+POTION_FIT = 2  # bonus for a potion that feeds the deck's committed build
 # knowledge.potions tier (Mobalytics): value in act 1 / later acts
 POTION_TIER_VALUE = {"Good Always": (6, 6), "Good Early": (5, 3), "Good Late": (3, 5), "Niche": (2, 2),
                      "Mediocre": (1, 1)}
 REMOVE_VALUE = {"Curse": 14, "Status": 10, "Basic": 7}  # by what gets removed; anything else 3
-GOLD_KEEP, GOLD_KEEP_SHOP_AHEAD = 0.02, 0.05  # value of a gold not spent (more if another shop is coming)
+# Value of a gold not spent: what pathing says a later shop on the route buys with it (SHOP_PER_100), else
+# what leftover gold is worth at the boss (GOLD_LEFT), so the map and shop advice price gold the same way.
+GOLD_KEEP, GOLD_KEEP_SHOP_AHEAD = GOLD_LEFT, SHOP_PER_100 / 100
 MAX_BASKET_ITEMS = 14  # brute-force cap: 2^14 baskets
 # ponytail: relics valued by rarity only; add per-relic overrides if it buys bad relics.
 
 
-def removal_target(deck, relics=()):
+def potion_value(name, state):
+    """Mobalytics tier value for this act (act 1 vs later), else by rarity, plus POTION_FIT x how committed the
+    deck is to a build the potion's text feeds (Poison Potion in a Poison deck). Under 2 = not worth a slot."""
+    tier = KNOWLEDGE["potions"].get(name, {}).get("tier")
+    value = (POTION_TIER_VALUE[tier][state.get("act", 0) > 0] if tier
+             else POTION_VALUE.get(GAMEDATA["potions"].get(name, {}).get("rarity"), 3))
+    text = GAMEDATA.get("text", {}).get(f"potions:{snake(name)}.description", "")
+    built = commitment(state.get("deck", []), state.get("relics", []))
+    fit = max((v for b, v in built.items() if text and re.search(ARCHETYPES[b.split(":")[0]][b.split(":")[1]][0], text)),
+              default=0)
+    return value + POTION_FIT * fit
+
+
+def removal_target(deck, relics=(), state=None):
     """Curse/Status first, then the weakest Basic card (Strike/Defend), then the weakest card."""
     def badness(c):
         tier = 0 if c["type"] in ("Curse", "Status") else 1 if c.get("rarity") == "Basic" else 2
-        return tier, rate(c, deck, relics)[0]
-    return min(deck, key=badness, default=None)
+        rest = list(deck)
+        rest.remove(c)
+        return tier, rate(c, rest, relics, state)[0]  # what the deck loses without it
+    removable = [c for c in deck if not eternal(c)]
+    return min(removable, key=badness, default=None)
 
 
-def relic_value(name):
+def eternal(card):
+    """Eternal cards (Ascender's Bane, Bad Luck, Curse of the Bell...) can't be removed from the deck."""
+    return "Eternal" in (card.get("keywords") or GAMEDATA["cards"].get(card["name"], {}).get("keywords", []))
+
+
+# Relics with a drawback (from their game text): base penalty, and builds the drawback wrecks (penalty doubled
+# when the deck is committed to one). Card-count caps hurt spam builds; no gold/potions hurt early.
+# Relics that only help cards named "Strike"/"Defend" (game text): full value with WORD_CARDS_FULL such cards.
+CARD_WORD_RELICS = {"StrikeDummy": "Strike", "FakeStrikeDummy": "Strike", "NutritiousSoup": "Strike", "PaelsClaw": "Defend"}
+WORD_CARDS_FULL = 4
+CLASH = 2  # a fully committed build that the drawback wrecks pays the penalty 3x (Velvet Choker + Shivs: skip)
+RELIC_DRAWBACK = {
+    "VelvetChoker": (4, {"Silent:Shiv", "Silent:Sly", "Defect:Claw", "Necrobinder:Souls"}),
+    "DiamondDiadem": (2, {"Silent:Shiv", "Silent:Sly", "Defect:Claw", "Necrobinder:Souls"}),
+    "Ectoplasm": (6, set()), "Sozu": (4, set()), "PhilosophersStone": (5, {"Ironclad:Block", "Defect:Orbs"}),
+    "BigMushroom": (2, set()), "BlessedAntler": (3, {"Defect:Claw", "Silent:Sly"}),
+    "CallingBell": (5, set()), "NeowsBones": (5, set()), "SereTalon": (4, set()),
+}
+
+
+def relic_value(name, state=None):
     tier = KNOWLEDGE["relics"].get(name, {}).get("tier")
-    return RELIC_TIER_VALUE[tier] if tier else RELIC_VALUE.get(GAMEDATA["relics"].get(name, {}).get("rarity"), 12)
+    value = RELIC_TIER_VALUE[tier] if tier else RELIC_VALUE.get(GAMEDATA["relics"].get(name, {}).get("rarity"), 12)
+    if name in RELIC_DRAWBACK:
+        base, hates = RELIC_DRAWBACK[name]
+        built = commitment(state.get("deck", []), state.get("relics", [])) if state else {}
+        clash = max((built.get(b, 0) for b in hates), default=0)
+        late = state.get("act", 0) >= 2 if state else False  # gold/potion drawbacks matter less at the end
+        value -= base * (0.5 if late and name in ("Ectoplasm", "Sozu") else 1) * (1 + CLASH * clash)
+    if name in CARD_WORD_RELICS and state:  # Strike Dummy in a deck that removed its Strikes is worth little
+        word = CARD_WORD_RELICS[name]
+        have = sum(word in c["name"] for c in state.get("deck", []))
+        value *= min(1, have / WORD_CARDS_FULL)
+    return value
+
+
+def shop_basket(state):
+    """[(kind, name)] to buy: kind is card / relic / potion / remove (name = the card to remove)."""
+    return _shop(state)[2]
 
 
 def shop_advice(state):
     """Return (headline, detail lines): the most valuable basket that fits in your gold and potion slots."""
+    return _shop(state)[:2]
+
+
+def _shop(state):
     shop, deck, relics, gold = state["shop"], state["deck"], state.get("relics", []), state.get("gold", 0)
     route = (best_routes(state, top=1) or [None])[0]
     keep = GOLD_KEEP_SHOP_AHEAD if route and "Shop" in route.types else GOLD_KEEP
-    items = []  # (label, price, value, is_potion)
+    items, keys = [], []  # (label, price, value, is_potion); keys[i] = autopilot target ("card", name)...
     for e in shop["cards"]:
-        value = max(0, rate(e["card"], deck, relics)[0] - SKIP_BELOW)
+        value = max(0, rate(e["card"], deck, relics, state)[0] - SKIP_BELOW)
         items.append((e["card"]["name"] + (" (sale)" if e["sale"] else ""), e["price"], value, False))
+        keys.append(("card", e["card"]["name"]))
     for r in shop["relics"]:
-        items.append((r["name"], r["price"], relic_value(r["name"]), False))
+        items.append((r["name"], r["price"], relic_value(r["name"], state), False))
+        keys.append(("relic", r["name"]))
     for p in shop["potions"]:
-        tier = KNOWLEDGE["potions"].get(p["name"], {}).get("tier")
-        value = (POTION_TIER_VALUE[tier][state.get("act", 0) > 0] if tier
-                 else POTION_VALUE.get(GAMEDATA["potions"].get(p["name"], {}).get("rarity"), 3))
-        items.append((p["name"], p["price"], value, True))
-    worst = removal_target(deck, relics)
+        items.append((p["name"], p["price"], potion_value(p["name"], state), True))
+        keys.append(("potion", p["name"]))
+    worst = removal_target(deck, relics, state)
     if shop.get("removal") is not None and worst:
         tier = worst["type"] if worst["type"] in ("Curse", "Status") else worst.get("rarity")
         items.append((f"Remove {worst['name']}", shop["removal"], REMOVE_VALUE.get(tier, 3), False))
+        keys.append(("remove", worst["name"]))
     slots = state.get("potion_slots", 3) - len(state.get("potions", []))
     worth = sorted((i for i, it in enumerate(items) if it[2] > keep * it[1]),
                    key=lambda i: -items[i][2] / max(items[i][1], 1))[:MAX_BASKET_ITEMS]
@@ -244,9 +351,9 @@ def shop_advice(state):
     lines = [f"{'*' if i in best else ' '} {label:<22} {price:>4}g  value {value:.1f}"
              for i, (label, price, value, _) in sorted(enumerate(items), key=lambda x: -x[1][2])]
     if not best:
-        return f"Leave - save gold ({gold})", lines
+        return f"Leave - save gold ({gold})", lines, []
     spent = sum(items[i][1] for i in best)
-    return f"Buy: {' + '.join(items[i][0] for i in best)}  [{spent}/{gold}]", lines
+    return f"Buy: {' + '.join(items[i][0] for i in best)}  [{spent}/{gold}]", lines, [keys[i] for i in best]
 
 
 # --- events (? rooms and Ancients) ---
@@ -274,7 +381,7 @@ def option_text(state, option):
 def option_value(state, option, text):
     """(score, parsed anything?) for one event option."""
     if option.get("relic"):
-        return relic_value(option["relic"]), True
+        return relic_value(option["relic"], state), True
     p = state["player"]
     n = lambda s: WORDS.get(s.lower(), None) if not s.isdigit() else int(s)
     score, hp, hit = 0.0, p["hp"], False
@@ -322,7 +429,12 @@ def option_value(state, option, text):
     return round(score, 1), hit
 
 
-def event_advice(state):
+def event_choice(state):
+    """The option dict autopilot clicks (best unlocked), or None."""
+    return event_advice(state, raw=True)
+
+
+def event_advice(state, raw=False):
     """(headline, detail lines) for an event: every option's text and score."""
     ev = state["event"]
     rated = []
@@ -333,6 +445,8 @@ def event_advice(state):
             score = -math.inf
         rated.append((score, ok, text, o))
     best = max((r for r in rated if not r[3]["locked"]), key=lambda r: r[0], default=None)
+    if raw:
+        return best[3] if best else None
     title = lambda r: GAMEDATA.get("text", {}).get((r[3]["desc"] or "").replace(".description", ".title")) \
         or r[3]["relic"] or r[3]["key"]
     lines = [f"{'LOCKED ' if r[3]['locked'] else ''}{title(r)}: {r[2][:70]}  "
