@@ -1654,3 +1654,870 @@ potions = [{'slot': 0, 'name': 'SpeedPotion'}, {'slot': 1, 'name': 'BlockPotion'
 13:42:07 ending turn
 13:42:07 turn 7: waiting for your turn
 13:42:09 stopped: you died (turn 6)
+16:53:51 turn 1: waiting for your turn
+16:53:52 playing StrikeNecrobinder -> CorpseSlug #2 (combat_id=2)
+16:53:54   aimed at combat_id=2 at (0.8, 0.6)
+16:53:55 playing DefendNecrobinder
+16:53:56 playing StrikeNecrobinder -> CorpseSlug #2 (combat_id=2)
+16:53:56   aimed at combat_id=2 at (0.8, 0.6)
+16:53:57 ending turn
+16:53:57 turn 2: waiting for your turn
+16:54:01 playing DefendNecrobinder
+16:54:02 playing Unleash -> CorpseSlug #1 (combat_id=1)
+16:54:03   aimed at combat_id=1 at (0.65, 0.6)
+16:54:04 playing DefendNecrobinder
+16:54:05 ending turn
+16:54:05 turn 3: waiting for your turn
+16:54:10 playing DefendNecrobinder
+16:54:11 playing DefendNecrobinder
+16:54:11 playing DefendNecrobinder
+16:54:12 ending turn
+16:54:12 turn 4: waiting for your turn
+16:54:16 playing StrikeNecrobinder -> CorpseSlug #2 (combat_id=2)
+16:54:17   aimed at combat_id=2 at (0.8, 0.6)
+16:54:17 playing StrikeNecrobinder -> CorpseSlug #2 (combat_id=2)
+16:54:18   aimed at combat_id=2 at (0.8, 0.6)
+16:54:19 playing Unleash -> CorpseSlug #2 (combat_id=2)
+16:54:19   aimed at combat_id=2 at (0.8, 0.6)
+16:54:20 ending turn
+16:54:21 turn 5: waiting for your turn
+16:54:25 playing StrikeNecrobinder -> CorpseSlug (combat_id=1)
+16:54:25   aimed at combat_id=1 at (0.65, 0.6)
+16:54:26 playing Unleash -> CorpseSlug (combat_id=1)
+16:54:26   aimed at combat_id=1 at (0.65, 0.6)
+16:54:27 playing StrikeNecrobinder -> CorpseSlug (combat_id=1)
+16:54:27   aimed at combat_id=1 at (0.65, 0.6)
+16:54:28 stopped: combat over after 5 turns
+16:54:43 turn 1: waiting for your turn
+16:54:44 playing StrikeNecrobinder -> SludgeSpinner (combat_id=1)
+16:54:45   aimed at combat_id=1 at (0.7, 0.6)
+16:54:46 playing StrikeNecrobinder -> SludgeSpinner (combat_id=1)
+16:54:46   aimed at combat_id=1 at (0.7, 0.6)
+16:54:47 playing DefendNecrobinder
+16:54:48 ending turn
+16:54:48 turn 2: waiting for your turn
+16:54:52 playing DefendNecrobinder
+16:54:52 playing DefendNecrobinder
+16:54:53 playing DefendNecrobinder
+16:54:54 ending turn
+16:54:54 turn 3: waiting for your turn
+16:54:58 playing Skim
+16:54:59 playing DefendNecrobinder
+16:55:00 playing DefendNecrobinder
+16:55:00 ending turn
+16:55:01 turn 4: waiting for your turn
+16:55:04 playing DefendNecrobinder
+16:55:05 playing DefendNecrobinder
+16:55:06 playing StrikeNecrobinder -> SludgeSpinner (combat_id=1)
+16:55:07   aimed at combat_id=1 at (0.7, 0.6)
+16:55:07 ending turn
+16:55:07 turn 5: waiting for your turn
+16:55:12 playing Bodyguard
+16:55:13 playing Skim
+16:55:13 playing DefendNecrobinder
+16:55:14 ending turn
+16:55:14 turn 6: waiting for your turn
+16:55:18 playing Flatten -> SludgeSpinner (combat_id=1)
+16:55:18   aimed at combat_id=1 at (0.7, 0.6)
+16:55:19 playing DefendNecrobinder
+16:55:20 ending turn
+16:55:20 turn 7: waiting for your turn
+16:55:24 playing StrikeNecrobinder -> SludgeSpinner (combat_id=1)
+16:55:25   aimed at combat_id=1 at (0.7, 0.6)
+16:55:25 playing StrikeNecrobinder -> SludgeSpinner (combat_id=1)
+16:55:26   aimed at combat_id=1 at (0.7, 0.6)
+16:55:27 stopped: combat over after 7 turns
+17:04:37 turn 1: waiting for your turn
+17:04:38 playing StrikeNecrobinder -> Toadpole #2 (combat_id=2)
+17:04:40   aimed at combat_id=2 at (0.8, 0.6)
+17:04:40 playing DefendNecrobinder
+17:04:41 playing DefendNecrobinder
+17:04:42 ending turn
+17:04:42 turn 2: waiting for your turn
+17:04:46 playing Poke -> Toadpole #1 (combat_id=1)
+17:04:48   aimed at combat_id=1 at (0.6, 0.6)
+17:04:48 playing Bodyguard
+17:04:49 playing Unleash -> Toadpole #1 (combat_id=1)
+17:04:49   aimed at combat_id=1 at (0.6, 0.6)
+17:04:50 playing StrikeNecrobinder -> Toadpole #2 (combat_id=2)
+17:04:50   aimed at combat_id=2 at (0.8, 0.6)
+17:04:51 playing Flatten -> Toadpole #1 (combat_id=1)
+17:04:52   aimed at combat_id=1 at (0.6, 0.6)
+17:04:52 ending turn
+17:04:52 turn 3: waiting for your turn
+17:04:57 playing DefendNecrobinder
+17:04:57 playing DefendNecrobinder
+17:04:58 playing StrikeNecrobinder -> Toadpole (combat_id=2)
+17:04:58   aimed at combat_id=2 at (0.8, 0.6)
+17:04:59 ending turn
+17:04:59 turn 4: waiting for your turn
+17:05:03 playing StrikeNecrobinder -> Toadpole (combat_id=2)
+17:05:06   aimed at combat_id=2 at (0.8, 0.6)
+17:05:06 stopped: combat over after 4 turns
+17:07:07 turn 1: waiting for your turn
+17:07:08 playing StrikeNecrobinder -> GremlinMerc (combat_id=1)
+17:07:09   aimed at combat_id=1 at (0.65, 0.6)
+17:07:10 playing DefendNecrobinder
+17:07:11 playing DefendNecrobinder
+17:07:12 ending with 0 energy; not worth playing: Dirge
+17:07:12 ending turn
+17:07:12 turn 2: waiting for your turn
+17:07:16 playing StrikeNecrobinder -> GremlinMerc (combat_id=1)
+17:07:16   aimed at combat_id=1 at (0.65, 0.6)
+17:07:17 playing Poke -> GremlinMerc (combat_id=1)
+17:07:17   aimed at combat_id=1 at (0.65, 0.6)
+17:07:18 playing DefendNecrobinder
+17:07:19 playing Bodyguard
+17:07:20 ending turn
+17:07:20 turn 3: waiting for your turn
+17:07:23 playing DefendNecrobinder
+17:07:24 playing Flatten -> GremlinMerc (combat_id=1)
+17:07:24   aimed at combat_id=1 at (0.65, 0.6)
+17:07:25 ending turn
+17:07:25 turn 4: waiting for your turn
+17:07:30 playing Poke -> GremlinMerc (combat_id=1)
+17:07:30   aimed at combat_id=1 at (0.65, 0.6)
+17:07:31 playing DefendNecrobinder
+17:07:32 playing DefendNecrobinder
+17:07:32 playing Dirge
+17:07:34 ending turn
+17:07:34 turn 5: waiting for your turn
+17:07:37 playing DefendNecrobinder
+17:07:38 playing Bodyguard
+17:07:39 playing Soul
+17:07:39 playing Unleash -> GremlinMerc (combat_id=1)
+17:07:40   aimed at combat_id=1 at (0.65, 0.6)
+17:07:41 ending turn
+17:07:41 turn 6: waiting for your turn
+17:07:45 playing DefendNecrobinder
+17:07:46 playing Flatten -> GremlinMerc (combat_id=1)
+17:07:46   aimed at combat_id=1 at (0.65, 0.6)
+17:07:47 playing Poke -> SneakyGremlin (combat_id=3)
+17:07:48   aimed at combat_id=3 at (0.65, 0.6)
+17:07:49 ending turn
+17:07:49 turn 7: waiting for your turn
+17:07:53 playing DefendNecrobinder
+17:07:54 playing StrikeNecrobinder -> SneakyGremlin (combat_id=3)
+17:07:55   aimed at combat_id=3 at (0.65, 0.6)
+17:07:55 playing Bodyguard
+17:07:56 ending turn
+17:07:56 turn 8: waiting for your turn
+17:08:00 stopped: combat over after 7 turns
+17:02:25 turn 1: waiting for your turn
+17:02:25 playing Unleash -> CalcifiedCultist (combat_id=1)
+17:02:27   aimed at combat_id=1 at (0.6, 0.6)
+17:02:27 playing Dirge
+17:02:28 playing Flatten -> CalcifiedCultist (combat_id=1)
+17:02:29   aimed at combat_id=1 at (0.6, 0.6)
+17:02:29 ending turn
+17:02:30 turn 2: waiting for your turn
+17:02:34 playing PullAggro+
+17:02:35 playing Soul
+17:02:36 playing Soul
+17:02:37 playing StrikeNecrobinder -> CalcifiedCultist (combat_id=1)
+17:02:37   aimed at combat_id=1 at (0.6, 0.6)
+17:02:38 playing Poke -> CalcifiedCultist (combat_id=1)
+17:02:38   aimed at combat_id=1 at (0.6, 0.6)
+17:02:39 ending turn
+17:02:39 turn 3: waiting for your turn
+17:02:44 playing DefendNecrobinder
+17:02:45 playing DefendNecrobinder
+17:02:46 playing DefendNecrobinder
+17:02:47 ending turn
+17:02:47 turn 4: waiting for your turn
+17:02:51 playing Unleash -> CalcifiedCultist (combat_id=1)
+17:02:52   aimed at combat_id=1 at (0.6, 0.6)
+17:02:52 playing PullAggro+
+17:02:53 ending turn
+17:02:53 turn 5: waiting for your turn
+17:02:57 playing Poke -> DampCultist (combat_id=2)
+17:02:59   aimed at combat_id=2 at (0.8, 0.6)
+17:02:59 playing Flatten -> DampCultist (combat_id=2)
+17:03:00   aimed at combat_id=2 at (0.8, 0.6)
+17:03:00 playing Skim
+17:03:02 playing DefendNecrobinder
+17:03:03 playing DefendNecrobinder
+17:03:04 ending turn
+17:03:04 turn 6: waiting for your turn
+17:03:07 playing DefendNecrobinder
+17:03:08 playing PullAggro+
+17:03:08 playing Poke -> DampCultist (combat_id=2)
+17:03:09   aimed at combat_id=2 at (0.8, 0.6)
+17:03:10 ending turn
+17:03:10 turn 7: waiting for your turn
+17:03:14 playing Skim
+17:03:15 playing DefendNecrobinder
+17:03:16 playing DefendNecrobinder
+17:03:17 ending turn
+17:03:17 turn 8: waiting for your turn
+17:03:20 playing Poke -> DampCultist (combat_id=2)
+17:03:21   aimed at combat_id=2 at (0.8, 0.6)
+17:03:21 playing PullAggro+
+17:03:22 playing DefendNecrobinder
+17:03:23 ending turn
+17:03:23 turn 9: waiting for your turn
+17:03:27 playing Bodyguard
+17:03:28 playing DefendNecrobinder
+17:03:29 playing Poke -> DampCultist (combat_id=2)
+17:03:29   aimed at combat_id=2 at (0.8, 0.6)
+17:03:30 playing DefendNecrobinder
+17:03:31 ending turn
+17:03:31 turn 10: waiting for your turn
+17:03:34 playing StrikeNecrobinder -> DampCultist (combat_id=2)
+17:03:35   aimed at combat_id=2 at (0.8, 0.6)
+17:03:35 playing Flatten -> DampCultist (combat_id=2)
+17:03:36   aimed at combat_id=2 at (0.8, 0.6)
+17:03:37 stopped: combat over after 10 turns
+17:03:58 turn 1: waiting for your turn
+17:03:59 playing StrikeNecrobinder -> HauntedShip (combat_id=1)
+17:04:01   aimed at combat_id=1 at (0.6, 0.6)
+17:04:01 playing Unleash -> HauntedShip (combat_id=1)
+17:04:02   aimed at combat_id=1 at (0.6, 0.6)
+17:04:02 playing Snap -> HauntedShip (combat_id=1)
+17:04:03   aimed at combat_id=1 at (0.6, 0.6)
+17:04:03 picking SicEm (SNAP.selectionScreenPrompt)
+17:04:04 playing SicEm -> HauntedShip (combat_id=1)
+17:04:05   aimed at combat_id=1 at (0.6, 0.6)
+17:04:05 ending turn
+17:04:05 turn 2: waiting for your turn
+17:04:11 playing StrikeNecrobinder -> HauntedShip (combat_id=1)
+17:04:11   aimed at combat_id=1 at (0.6, 0.6)
+17:04:12 playing Bodyguard
+17:04:12 playing DefendNecrobinder
+17:04:13 ending turn
+17:04:13 turn 3: waiting for your turn
+17:04:17 playing StrikeNecrobinder -> HauntedShip (combat_id=1)
+17:04:17   aimed at combat_id=1 at (0.6, 0.6)
+17:04:18 playing DefendNecrobinder
+17:04:19 playing DefendNecrobinder
+17:04:19 playing Poke -> HauntedShip (combat_id=1)
+17:04:20   aimed at combat_id=1 at (0.6, 0.6)
+17:04:20 playing Flatten -> HauntedShip (combat_id=1)
+17:04:21   aimed at combat_id=1 at (0.6, 0.6)
+17:04:22 ending turn
+17:04:22 turn 4: waiting for your turn
+17:04:27 playing DefendNecrobinder
+17:04:27 playing DefendNecrobinder
+17:04:28 playing Dirge
+17:04:29 ending turn
+17:04:29 turn 5: waiting for your turn
+17:04:33 playing StrikeNecrobinder -> HauntedShip (combat_id=1)
+17:04:33   aimed at combat_id=1 at (0.6, 0.6)
+17:04:34 playing Snap -> HauntedShip (combat_id=1)
+17:04:35   aimed at combat_id=1 at (0.6, 0.6)
+17:04:36 stopped: combat over after 5 turns
+17:04:56 turn 1: waiting for your turn
+17:04:56 playing Unleash -> CorpseSlug #1 (combat_id=1)
+17:04:58   aimed at combat_id=1 at (0.55, 0.6)
+17:04:58 playing DefendNecrobinder
+17:04:59 playing DefendNecrobinder
+17:05:00 playing NegativePulse
+17:05:01 ending turn
+17:05:01 turn 2: waiting for your turn
+17:05:06 playing PullAggro+
+17:05:07 playing Dirge
+17:05:08 ending turn
+17:05:08 turn 3: waiting for your turn
+17:05:13 playing DefendNecrobinder
+17:05:14 playing CaptureSpirit -> CorpseSlug #1 (combat_id=1)
+17:05:14   aimed at combat_id=1 at (0.55, 0.6)
+17:05:15 playing StrikeNecrobinder -> CorpseSlug #1 (combat_id=1)
+17:05:15   aimed at combat_id=1 at (0.55, 0.6)
+17:05:16 playing Poke -> CorpseSlug #1 (combat_id=1)
+17:05:16   aimed at combat_id=1 at (0.55, 0.6)
+17:05:18 ending with 0 energy; not worth playing: Soul
+17:05:18 ending turn
+17:05:18 turn 4: waiting for your turn
+17:05:24 playing StrikeNecrobinder -> CorpseSlug #1 (combat_id=2)
+17:05:26   aimed at combat_id=2 at (0.7, 0.6)
+17:05:26 playing Flatten -> CorpseSlug #1 (combat_id=2)
+17:05:27   aimed at combat_id=2 at (0.7, 0.6)
+17:05:28 ending with 0 energy; not worth playing: Soul
+17:05:28 ending turn
+17:05:28 turn 5: waiting for your turn
+17:05:34 playing Soul
+17:05:35 playing Soul
+17:05:35 playing StrikeNecrobinder -> CorpseSlug (combat_id=3)
+17:05:38   aimed at combat_id=3 at (0.85, 0.6)
+17:05:38 playing Snap -> CorpseSlug (combat_id=3)
+17:05:39   aimed at combat_id=3 at (0.85, 0.6)
+17:05:39 picking CaptureSpirit (SNAP.selectionScreenPrompt)
+17:05:40 playing StrikeNecrobinder -> CorpseSlug (combat_id=3)
+17:05:41   aimed at combat_id=3 at (0.85, 0.6)
+17:05:42 ending with 0 energy; not worth playing: Soul
+17:05:42 ending turn
+17:05:42 turn 6: waiting for your turn
+17:05:46 playing Soul
+17:05:46 playing Flatten -> CorpseSlug (combat_id=3)
+17:05:47   aimed at combat_id=3 at (0.85, 0.6)
+17:05:48 stopped: combat over after 6 turns
+17:06:01 turn 1: waiting for your turn
+17:06:02 playing Snap -> LivingFog (combat_id=1)
+17:06:04   aimed at combat_id=1 at (0.7, 0.6)
+17:06:04 picking CaptureSpirit (SNAP.selectionScreenPrompt)
+17:06:05 playing DefendNecrobinder
+17:06:08 DefendNecrobinder didn't play, retrying
+17:06:11 DefendNecrobinder didn't play, retrying
+17:06:11 stopped: DefendNecrobinder didn't play
+17:06:14 turn 1: waiting for your turn
+17:06:15 playing DefendNecrobinder
+17:06:18 DefendNecrobinder didn't play, retrying
+17:06:21 DefendNecrobinder didn't play, retrying
+17:06:21 stopped: DefendNecrobinder didn't play
+17:06:31 turn 1: waiting for your turn
+17:06:32 playing Flatten -> LivingFog (combat_id=1)
+17:06:34   aimed at combat_id=1 at (0.7, 0.6)
+17:06:34 playing DefendNecrobinder
+17:06:35 playing Poke -> LivingFog (combat_id=1)
+17:06:36   aimed at combat_id=1 at (0.7, 0.6)
+17:06:36 ending turn
+17:06:36 turn 2: waiting for your turn
+17:06:40 playing CaptureSpirit -> GasBomb (combat_id=3)
+17:06:44   aimed at combat_id=3 at (0.55, 0.5)
+17:06:44 playing StrikeNecrobinder -> GasBomb (combat_id=3)
+17:06:45   aimed at combat_id=3 at (0.55, 0.5)
+17:06:45 playing StrikeNecrobinder -> LivingFog (combat_id=1)
+17:06:46   aimed at combat_id=1 at (0.7, 0.6)
+17:06:46 ending turn
+17:06:47 turn 3: waiting for your turn
+17:06:50 playing StrikeNecrobinder -> LivingFog (combat_id=1)
+17:06:50   aimed at combat_id=1 at (0.7, 0.6)
+17:06:51 playing Dirge
+17:06:52 ending with 0 energy; not worth playing: Soul, Soul, Soul
+17:06:52 ending turn
+17:06:52 turn 4: waiting for your turn
+17:06:57 playing Skim
+17:06:58 playing StrikeNecrobinder -> LivingFog (combat_id=1)
+17:06:59   aimed at combat_id=1 at (0.7, 0.6)
+17:06:59 playing Snap -> GasBomb (combat_id=4)
+17:07:03   aimed at combat_id=4 at (0.55, 0.5)
+17:07:03 picking CaptureSpirit (SNAP.selectionScreenPrompt)
+17:07:07 stopped: card pick didn't register - pick it yourself
+00:13:41 turn 1: waiting for your turn
+00:13:42 playing DefendIronclad
+00:13:43 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:13:45   aimed at combat_id=1 at (0.7, 0.6)
+00:13:45 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:13:46   aimed at combat_id=1 at (0.7, 0.6)
+00:13:46 ending turn
+00:13:47 turn 2: waiting for your turn
+00:13:50 playing DefendIronclad
+00:13:50 playing DefendIronclad
+00:13:51 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:13:52   aimed at combat_id=1 at (0.7, 0.6)
+00:13:52 ending turn
+00:13:52 turn 3: waiting for your turn
+00:13:57 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:13:57   aimed at combat_id=1 at (0.7, 0.6)
+00:13:58 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:13:58   aimed at combat_id=1 at (0.7, 0.6)
+00:13:59 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:13:59   aimed at combat_id=1 at (0.7, 0.6)
+00:14:00 ending turn
+00:14:00 turn 4: waiting for your turn
+00:14:03 playing DefendIronclad
+00:14:04 playing DefendIronclad
+00:14:05 playing DefendIronclad
+00:14:06 ending turn
+00:14:06 turn 5: waiting for your turn
+00:14:10 playing DefendIronclad
+00:14:10 playing DefendIronclad
+00:14:11 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:14:12   aimed at combat_id=1 at (0.7, 0.6)
+00:14:12 ending turn
+00:14:12 turn 6: waiting for your turn
+00:14:16 playing Bash -> Nibbit (combat_id=1)
+00:14:16   aimed at combat_id=1 at (0.7, 0.6)
+00:14:17 playing StrikeIronclad -> Nibbit (combat_id=1)
+00:14:17   aimed at combat_id=1 at (0.7, 0.6)
+00:14:18 stopped: combat over after 6 turns
+00:21:29 turn 1: waiting for your turn
+00:21:30 playing StrikeIronclad -> FuzzyWurmCrawler (combat_id=1)
+00:21:32   aimed at combat_id=1 at (0.7, 0.6)
+00:21:32 playing StrikeIronclad -> FuzzyWurmCrawler (combat_id=1)
+00:21:33   aimed at combat_id=1 at (0.7, 0.6)
+00:21:33 playing StrikeIronclad -> FuzzyWurmCrawler (combat_id=1)
+00:21:34   aimed at combat_id=1 at (0.7, 0.6)
+00:21:35 ending turn
+00:21:35 turn 2: waiting for your turn
+00:21:38 playing Bash -> FuzzyWurmCrawler (combat_id=1)
+00:21:39   aimed at combat_id=1 at (0.7, 0.6)
+00:21:39 playing StrikeIronclad -> FuzzyWurmCrawler (combat_id=1)
+00:21:40   aimed at combat_id=1 at (0.7, 0.6)
+00:21:40 playing Anger -> FuzzyWurmCrawler (combat_id=1)
+00:21:41   aimed at combat_id=1 at (0.7, 0.6)
+00:21:41 ending turn
+00:21:42 turn 3: waiting for your turn
+00:21:46 playing StrikeIronclad -> FuzzyWurmCrawler (combat_id=1)
+00:21:46   aimed at combat_id=1 at (0.7, 0.6)
+00:21:47 playing Anger -> FuzzyWurmCrawler (combat_id=1)
+00:21:47   aimed at combat_id=1 at (0.7, 0.6)
+00:21:48 stopped: combat over after 3 turns
+00:21:59 turn 1: waiting for your turn
+00:22:00 playing Anger -> LeafSlimeS (combat_id=3)
+00:22:02   aimed at combat_id=3 at (0.85, 0.6)
+00:22:03 playing FightMe -> TwigSlimeS (combat_id=1)
+00:22:04   aimed at combat_id=1 at (0.6, 0.6)
+00:22:05 playing StrikeIronclad -> LeafSlimeS (combat_id=3)
+00:22:05   aimed at combat_id=3 at (0.85, 0.6)
+00:22:06 ending turn
+00:22:06 turn 2: waiting for your turn
+00:22:11 playing DefendIronclad
+00:22:11 playing Bash -> TwigSlimeM (combat_id=2)
+00:22:13   aimed at combat_id=2 at (0.7, 0.6)
+00:22:14 ending turn
+00:22:14 turn 3: waiting for your turn
+00:22:18 playing StrikeIronclad -> TwigSlimeM (combat_id=2)
+00:22:19   aimed at combat_id=2 at (0.7, 0.6)
+00:22:19 playing StrikeIronclad -> TwigSlimeM (combat_id=2)
+00:22:20   aimed at combat_id=2 at (0.7, 0.6)
+00:22:21 stopped: combat over after 3 turns
+00:22:31 turn 1: waiting for your turn
+00:22:32 playing Anger -> Mawler (combat_id=1)
+00:22:34   aimed at combat_id=1 at (0.65, 0.6)
+00:22:34 playing StrikeIronclad -> Mawler (combat_id=1)
+00:22:35   aimed at combat_id=1 at (0.65, 0.6)
+00:22:35 playing Hemokinesis -> Mawler (combat_id=1)
+00:22:36   aimed at combat_id=1 at (0.65, 0.6)
+00:22:36 playing DefendIronclad
+00:22:37 ending turn
+00:22:37 turn 2: waiting for your turn
+00:22:41 playing FightMe -> Mawler (combat_id=1)
+00:22:41   aimed at combat_id=1 at (0.65, 0.6)
+00:22:42 playing StrikeIronclad -> Mawler (combat_id=1)
+00:22:43   aimed at combat_id=1 at (0.65, 0.6)
+00:22:43 ending turn
+00:22:43 turn 3: waiting for your turn
+00:22:48 playing FightMe -> Mawler (combat_id=1)
+00:22:48   aimed at combat_id=1 at (0.65, 0.6)
+00:22:49 playing StrikeIronclad -> Mawler (combat_id=1)
+00:22:49   aimed at combat_id=1 at (0.65, 0.6)
+00:22:50 stopped: combat over after 3 turns
+00:23:00 turn 1: waiting for your turn
+00:23:01 playing FightMe -> Fogmog (combat_id=1)
+00:23:03   aimed at combat_id=1 at (0.75, 0.6)
+00:23:03 playing Hemokinesis -> Fogmog (combat_id=1)
+00:23:04   aimed at combat_id=1 at (0.75, 0.6)
+00:23:05 ending turn
+00:23:05 turn 2: waiting for your turn
+00:23:08 playing Bash -> Fogmog (combat_id=1)
+00:23:09   aimed at combat_id=1 at (0.75, 0.6)
+00:23:09 playing Anger -> Fogmog (combat_id=1)
+00:23:10   aimed at combat_id=1 at (0.75, 0.6)
+00:23:10 playing StrikeIronclad -> Fogmog (combat_id=1)
+00:23:11   aimed at combat_id=1 at (0.75, 0.6)
+00:23:12 ending turn
+00:23:12 turn 3: waiting for your turn
+00:23:18 playing StrikeIronclad -> EyeWithTeeth (combat_id=2)
+00:23:20   aimed at combat_id=2 at (0.6, 0.6)
+00:23:20 playing StrikeIronclad -> Fogmog (combat_id=1)
+00:23:21   aimed at combat_id=1 at (0.75, 0.6)
+00:23:22 stopped: combat over after 3 turns
+00:23:34 turn 1: waiting for your turn
+00:23:35 playing FightMe -> SnappingJaxfruit (combat_id=1)
+00:23:37   aimed at combat_id=1 at (0.65, 0.6)
+00:23:38 playing StrikeIronclad -> SnappingJaxfruit (combat_id=1)
+00:23:38   aimed at combat_id=1 at (0.65, 0.6)
+00:23:39 ending turn
+00:23:39 turn 2: waiting for your turn
+00:23:43 playing DefendIronclad
+00:23:44 playing DefendIronclad
+00:23:45 playing Hemokinesis -> SnappingJaxfruit (combat_id=1)
+00:23:45   aimed at combat_id=1 at (0.65, 0.6)
+00:23:46 ending turn
+00:23:46 turn 3: waiting for your turn
+00:23:49 playing Bash -> SlitheringStrangler (combat_id=2)
+00:23:52   aimed at combat_id=2 at (0.8, 0.6)
+00:23:52 playing Spite -> SlitheringStrangler (combat_id=2)
+00:23:53   aimed at combat_id=2 at (0.8, 0.6)
+00:23:53 drinking StrengthPotion
+00:23:57 playing StrikeIronclad -> SlitheringStrangler (combat_id=2)
+00:23:57   aimed at combat_id=2 at (0.8, 0.6)
+00:23:58 playing Anger -> SlitheringStrangler (combat_id=2)
+00:23:58   aimed at combat_id=2 at (0.8, 0.6)
+00:23:59 stopped: combat over after 3 turns
+00:43:50 turn 1: waiting for your turn
+00:43:51 playing Bash -> BygoneEffigy (combat_id=1)
+00:43:53   aimed at combat_id=1 at (0.7, 0.6)
+00:43:53 playing StrikeIronclad -> BygoneEffigy (combat_id=1)
+00:43:54   aimed at combat_id=1 at (0.7, 0.6)
+00:43:55 ending turn
+00:43:55 turn 2: waiting for your turn
+00:43:58 playing FightMe+ -> BygoneEffigy (combat_id=1)
+00:43:59   aimed at combat_id=1 at (0.7, 0.6)
+00:44:00 playing Hemokinesis -> BygoneEffigy (combat_id=1)
+00:44:00   aimed at combat_id=1 at (0.7, 0.6)
+00:44:01 playing Spite -> BygoneEffigy (combat_id=1)
+00:44:01   aimed at combat_id=1 at (0.7, 0.6)
+00:44:02 ending turn
+00:44:02 turn 3: waiting for your turn
+00:44:06 playing Anger -> BygoneEffigy (combat_id=1)
+00:44:07   aimed at combat_id=1 at (0.7, 0.6)
+00:44:07 playing HowlFromBeyond
+00:44:08 stopped: combat over after 3 turns
+00:45:04 turn 1: waiting for your turn
+00:45:06 drinking FlexPotion
+00:45:09 playing Spite -> Byrdonis (combat_id=1)
+00:45:10   aimed at combat_id=1 at (0.6, 0.6)
+00:45:11 playing Anger -> Byrdonis (combat_id=1)
+00:45:11   aimed at combat_id=1 at (0.6, 0.6)
+00:45:12 playing DefendIronclad+
+00:45:12 playing Anger -> Byrdonis (combat_id=1)
+00:45:13   aimed at combat_id=1 at (0.6, 0.6)
+00:45:13 drinking SwiftPotion
+00:45:17 playing FightMe+ -> Byrdonis (combat_id=1)
+00:45:17   aimed at combat_id=1 at (0.6, 0.6)
+00:45:18 ending turn
+00:45:18 turn 2: waiting for your turn
+00:45:22 playing StrikeIronclad -> Byrdonis (combat_id=1)
+00:45:23   aimed at combat_id=1 at (0.6, 0.6)
+00:45:23 playing StrikeIronclad -> Byrdonis (combat_id=1)
+00:45:24   aimed at combat_id=1 at (0.6, 0.6)
+00:45:24 playing StrikeIronclad -> Byrdonis (combat_id=1)
+00:45:25   aimed at combat_id=1 at (0.6, 0.6)
+00:45:26 stopped: combat over after 2 turns
+00:46:27 turn 1: waiting for your turn
+00:46:29 playing FightMe -> KinFollower #1 (combat_id=1)
+00:46:30   aimed at combat_id=1 at (0.5, 0.6)
+00:46:31 stopped: cancelled
+00:46:42 turn 1: waiting for your turn
+00:46:43 playing Anger -> KinFollower #1 (combat_id=1)
+00:46:44   aimed at combat_id=1 at (0.5, 0.6)
+00:46:45 playing Anger -> KinFollower #1 (combat_id=1)
+00:46:45   aimed at combat_id=1 at (0.5, 0.6)
+00:46:46 playing Colossus
+00:46:46 drinking FirePotion -> KinFollower #1
+00:46:48 drinking ColorlessPotion
+00:46:49 choosing Salvo
+00:46:51 playing Salvo -> KinFollower #1 (combat_id=1)
+00:46:51   aimed at combat_id=1 at (0.5, 0.6)
+00:46:52 ending turn
+00:46:52 turn 2: waiting for your turn
+00:46:58 playing FightMe+ -> KinFollower (combat_id=2)
+00:47:00   aimed at combat_id=2 at (0.7, 0.6)
+00:47:00 playing StrikeIronclad -> KinFollower (combat_id=2)
+00:47:01   aimed at combat_id=2 at (0.7, 0.6)
+00:47:02 ending turn
+00:47:02 turn 3: waiting for your turn
+00:47:07 playing StrikeIronclad -> KinFollower (combat_id=2)
+00:47:08   aimed at combat_id=2 at (0.7, 0.6)
+00:47:09 playing DefendIronclad
+00:47:09 playing Hemokinesis+ -> KinPriest (combat_id=3)
+00:47:12   aimed at combat_id=3 at (0.85, 0.6)
+00:47:12 playing Spite -> KinFollower (combat_id=2)
+00:47:13   aimed at combat_id=2 at (0.7, 0.6)
+00:47:14 ending turn
+00:47:14 turn 4: waiting for your turn
+00:47:18 playing StrikeIronclad -> KinPriest (combat_id=3)
+00:47:18   aimed at combat_id=3 at (0.85, 0.6)
+00:47:19 playing PommelStrike -> KinPriest (combat_id=3)
+00:47:19   aimed at combat_id=3 at (0.85, 0.6)
+00:47:21 playing StrikeIronclad -> KinPriest (combat_id=3)
+00:47:21   aimed at combat_id=3 at (0.85, 0.6)
+00:47:22 ending turn
+00:47:22 turn 5: waiting for your turn
+00:47:26 playing DefendIronclad+
+00:47:26 playing Hemokinesis+ -> KinPriest (combat_id=3)
+00:47:27   aimed at combat_id=3 at (0.85, 0.6)
+00:47:27 playing Spite -> KinPriest (combat_id=3)
+00:47:28   aimed at combat_id=3 at (0.85, 0.6)
+00:47:28 playing StrikeIronclad -> KinPriest (combat_id=3)
+00:47:29   aimed at combat_id=3 at (0.85, 0.6)
+00:47:30 ending turn
+00:47:30 turn 6: waiting for your turn
+00:47:34 playing FightMe+ -> KinPriest (combat_id=3)
+00:47:35   aimed at combat_id=3 at (0.85, 0.6)
+00:47:36 playing Anger -> KinPriest (combat_id=3)
+00:47:36   aimed at combat_id=3 at (0.85, 0.6)
+00:47:37 playing Salvo -> KinPriest (combat_id=3)
+00:47:37   aimed at combat_id=3 at (0.85, 0.6)
+00:47:38 stopped: combat over after 6 turns
+00:48:04 turn 1: waiting for your turn
+00:48:05 playing FightMe+ -> Tunneler (combat_id=1)
+00:48:06   aimed at combat_id=1 at (0.7, 0.6)
+00:48:07 playing DefendIronclad+
+00:48:08 playing Anger -> Tunneler (combat_id=1)
+00:48:08   aimed at combat_id=1 at (0.7, 0.6)
+00:48:09 ending turn
+00:48:09 turn 2: waiting for your turn
+00:48:13 playing FightMe -> Tunneler (combat_id=1)
+00:48:13   aimed at combat_id=1 at (0.7, 0.6)
+00:48:14 playing Anger+ -> Tunneler (combat_id=1)
+00:48:14   aimed at combat_id=1 at (0.7, 0.6)
+00:48:15 playing Spite+ -> Tunneler (combat_id=1)
+00:48:16   aimed at combat_id=1 at (0.7, 0.6)
+00:48:16 playing StrikeIronclad -> Tunneler (combat_id=1)
+00:48:17   aimed at combat_id=1 at (0.7, 0.6)
+00:48:18 stopped: combat over after 2 turns
+00:48:31 turn 1: waiting for your turn
+00:48:32 playing Colossus+
+00:48:32 playing StrikeIronclad -> ThievingHopper (combat_id=1)
+00:48:34   aimed at combat_id=1 at (0.7, 0.6)
+00:48:34 playing DefendIronclad+
+00:48:35 ending turn
+00:48:36 turn 2: waiting for your turn
+00:48:40 playing StrikeIronclad -> ThievingHopper (combat_id=1)
+00:48:40   aimed at combat_id=1 at (0.7, 0.6)
+00:48:41 playing Hemokinesis+ -> ThievingHopper (combat_id=1)
+00:48:42   aimed at combat_id=1 at (0.7, 0.6)
+00:48:42 playing Anger+ -> ThievingHopper (combat_id=1)
+00:48:43   aimed at combat_id=1 at (0.7, 0.6)
+00:48:43 playing PommelStrike -> ThievingHopper (combat_id=1)
+00:48:44   aimed at combat_id=1 at (0.7, 0.6)
+00:48:45 ending turn
+00:48:45 turn 3: waiting for your turn
+00:48:49 playing DefendIronclad
+00:48:50 playing StrikeIronclad+ -> ThievingHopper (combat_id=1)
+00:48:50   aimed at combat_id=1 at (0.7, 0.6)
+00:48:51 playing DefendIronclad+
+00:48:52 ending turn
+00:48:52 turn 4: waiting for your turn
+00:48:55 playing Uppercut -> ThievingHopper (combat_id=1)
+00:48:56   aimed at combat_id=1 at (0.7, 0.6)
+00:48:57 playing Anger -> ThievingHopper (combat_id=1)
+00:48:57   aimed at combat_id=1 at (0.7, 0.6)
+00:48:58 playing StrikeIronclad -> ThievingHopper (combat_id=1)
+00:48:58   aimed at combat_id=1 at (0.7, 0.6)
+00:48:59 playing Spite+ -> ThievingHopper (combat_id=1)
+00:49:00   aimed at combat_id=1 at (0.7, 0.6)
+00:49:00 stopped: combat over after 4 turns
+00:49:23 turn 1: waiting for your turn
+00:49:24 playing HowlFromBeyond+
+00:49:25 ending turn
+00:49:25 turn 2: waiting for your turn
+00:49:31 playing FightMe+ -> Exoskeleton #3 (combat_id=3)
+00:49:33   aimed at combat_id=3 at (0.75, 0.6)
+00:49:34 playing DefendIronclad+
+00:49:34 playing Spite+ -> Exoskeleton #3 (combat_id=3)
+00:49:35   aimed at combat_id=3 at (0.75, 0.6)
+00:49:36 ending turn
+00:49:36 turn 3: waiting for your turn
+00:49:41 playing DefendIronclad+
+00:49:41 playing Colossus+
+00:49:42 playing StrikeIronclad+ -> Exoskeleton #1 (combat_id=1)
+00:49:43   aimed at combat_id=1 at (0.55, 0.6)
+00:49:44 playing Anger+ -> Exoskeleton #1 (combat_id=1)
+00:49:44   aimed at combat_id=1 at (0.55, 0.6)
+00:49:45 ending turn
+00:49:45 turn 4: waiting for your turn
+00:49:50 playing Hemokinesis+ -> Exoskeleton #2 (combat_id=4)
+00:49:52   aimed at combat_id=4 at (0.85, 0.6)
+00:49:53 playing StrikeIronclad -> Exoskeleton #2 (combat_id=4)
+00:49:53   aimed at combat_id=4 at (0.85, 0.6)
+00:49:54 playing DefendIronclad+
+00:49:55 ending turn
+00:49:55 turn 5: waiting for your turn
+00:49:59 playing FightMe -> Exoskeleton (combat_id=2)
+00:50:01   aimed at combat_id=2 at (0.65, 0.6)
+00:50:02 playing StrikeIronclad -> Exoskeleton (combat_id=2)
+00:50:02   aimed at combat_id=2 at (0.65, 0.6)
+00:50:03 stopped: combat over after 5 turns
+00:50:35 turn 1: waiting for your turn
+00:50:36 playing HowlFromBeyond+
+00:50:37 ending turn
+00:50:37 turn 2: waiting for your turn
+00:50:43 playing Impervious
+00:50:44 playing MoltenFist -> DecimillipedeSegmentFront (combat_id=1)
+00:50:45   aimed at combat_id=1 at (0.5, 0.6)
+00:50:46 ending turn
+00:50:46 turn 3: waiting for your turn
+00:50:52 playing PommelStrike -> DecimillipedeSegmentMiddle (combat_id=2)
+00:50:54   aimed at combat_id=2 at (0.65, 0.6)
+00:50:55 playing Hemokinesis+ -> DecimillipedeSegmentMiddle (combat_id=2)
+00:50:55   aimed at combat_id=2 at (0.65, 0.6)
+00:50:56 playing Colossus+
+00:50:57 ending turn
+00:50:57 turn 4: waiting for your turn
+00:51:03 drinking StrengthPotion
+00:51:04 playing Bash -> DecimillipedeSegmentBack (combat_id=3)
+00:51:06   aimed at combat_id=3 at (0.8, 0.6)
+00:51:07 playing Anger+ -> DecimillipedeSegmentBack (combat_id=3)
+00:51:08   aimed at combat_id=3 at (0.8, 0.6)
+00:51:08 playing PommelStrike -> DecimillipedeSegmentBack (combat_id=3)
+00:51:09   aimed at combat_id=3 at (0.8, 0.6)
+00:51:09 ending turn
+00:51:09 turn 5: waiting for your turn
+00:51:16 playing Rupture
+00:51:17 playing FightMe+ -> DecimillipedeSegmentFront (combat_id=1)
+00:51:17   aimed at combat_id=1 at (0.5, 0.6)
+00:51:18 playing Spite+ -> DecimillipedeSegmentMiddle (combat_id=2)
+00:51:19   aimed at combat_id=2 at (0.65, 0.6)
+00:51:19 playing Anger -> DecimillipedeSegmentMiddle (combat_id=2)
+00:51:20   aimed at combat_id=2 at (0.65, 0.6)
+00:51:21 stopped: combat over after 5 turns
+00:51:37 turn 1: waiting for your turn
+00:51:38 drinking PotionOfBinding
+00:51:39 playing DefendIronclad+
+00:51:40 playing StrikeIronclad -> Entomancer (combat_id=1)
+00:51:41   aimed at combat_id=1 at (0.65, 0.6)
+00:51:42 playing MoltenFist -> Entomancer (combat_id=1)
+00:51:43   aimed at combat_id=1 at (0.65, 0.6)
+00:51:44 ending turn
+00:51:44 turn 2: waiting for your turn
+00:51:48 playing FightMe+ -> Entomancer (combat_id=1)
+00:51:49   aimed at combat_id=1 at (0.65, 0.6)
+00:51:51 playing StrikeIronclad+ -> Entomancer (combat_id=1)
+00:51:51   aimed at combat_id=1 at (0.65, 0.6)
+00:51:52 drinking WeakPotion -> Entomancer
+00:51:54 ending turn
+00:51:54 turn 3: waiting for your turn
+00:51:58 playing Mangle -> Entomancer (combat_id=1)
+00:51:58   aimed at combat_id=1 at (0.65, 0.6)
+00:52:00 ending turn
+00:52:00 turn 4: waiting for your turn
+00:52:05 playing Bash -> Entomancer (combat_id=1)
+00:52:05   aimed at combat_id=1 at (0.65, 0.6)
+00:52:06 playing Hemokinesis+ -> Entomancer (combat_id=1)
+00:52:07   aimed at combat_id=1 at (0.65, 0.6)
+00:52:08 stopped: combat over after 4 turns
+00:52:34 turn 1: waiting for your turn
+00:52:35 playing Bash -> BowlbugRock (combat_id=1)
+00:52:36   aimed at combat_id=1 at (0.45, 0.6)
+00:52:36 playing Hemokinesis+ -> BowlbugRock (combat_id=1)
+00:52:37   aimed at combat_id=1 at (0.45, 0.6)
+00:52:38 ending turn
+00:52:38 turn 2: waiting for your turn
+00:52:43 playing FightMe+ -> BowlbugRock (combat_id=1)
+00:52:43   aimed at combat_id=1 at (0.45, 0.6)
+00:52:44 playing PommelStrike -> BowlbugSilk (combat_id=2)
+00:52:45   aimed at combat_id=2 at (0.55, 0.6)
+00:52:45 playing Anger+ -> BowlbugSilk (combat_id=2)
+00:52:46   aimed at combat_id=2 at (0.55, 0.6)
+00:52:47 ending turn
+00:52:47 turn 3: waiting for your turn
+00:52:52 playing FightMe -> BowlbugSilk (combat_id=2)
+00:52:52   aimed at combat_id=2 at (0.55, 0.6)
+00:52:53 playing MoltenFist -> SlumberingBeetle (combat_id=3)
+00:52:54   aimed at combat_id=3 at (0.65, 0.6)
+00:52:55 playing Anger -> SlumberingBeetle (combat_id=3)
+00:52:56   aimed at combat_id=3 at (0.65, 0.6)
+00:52:56 ending turn
+00:52:57 turn 4: waiting for your turn
+00:53:00 playing DrumOfBattle+
+00:53:01 playing Impervious
+00:53:02 playing Spite+ -> SlumberingBeetle (combat_id=3)
+00:53:02   aimed at combat_id=3 at (0.65, 0.6)
+00:53:03 ending turn
+00:53:03 turn 5: waiting for your turn
+00:53:08 playing DefendIronclad+
+00:53:08 playing Colossus+
+00:53:09 playing PommelStrike -> SlumberingBeetle (combat_id=3)
+00:53:10   aimed at combat_id=3 at (0.65, 0.6)
+00:53:10 playing Anger -> SlumberingBeetle (combat_id=3)
+00:53:11   aimed at combat_id=3 at (0.65, 0.6)
+00:53:11 ending turn
+00:53:11 turn 6: waiting for your turn
+00:53:16 playing DrumOfBattle+
+00:53:17 playing Rupture+
+00:53:17 playing Anger+ -> SlumberingBeetle (combat_id=3)
+00:53:18   aimed at combat_id=3 at (0.65, 0.6)
+00:53:18 playing StrikeIronclad -> SlumberingBeetle (combat_id=3)
+00:53:19   aimed at combat_id=3 at (0.65, 0.6)
+00:53:20 stopped: combat over after 6 turns
+00:57:31 turn 1: waiting for your turn
+00:57:32 playing DefendIronclad+
+00:57:33 playing SwordBoomerang
+00:57:34 playing PommelStrike -> InfestedPrism (combat_id=1)
+00:57:35   aimed at combat_id=1 at (0.7, 0.6)
+00:57:36 ending turn
+00:57:36 turn 2: waiting for your turn
+00:57:40 playing Mangle -> InfestedPrism (combat_id=1)
+00:57:40   aimed at combat_id=1 at (0.7, 0.6)
+00:57:41 ending turn
+00:57:41 turn 3: waiting for your turn
+00:57:45 playing Spite+ -> InfestedPrism (combat_id=1)
+00:57:46   aimed at combat_id=1 at (0.7, 0.6)
+00:57:46 playing PommelStrike -> InfestedPrism (combat_id=1)
+00:57:47   aimed at combat_id=1 at (0.7, 0.6)
+00:57:47 playing Rupture
+00:57:49 ending with 1 energy; not worth playing: DefendIronclad, Hemokinesis, DrumOfBattle
+00:57:49 ending turn
+00:57:49 turn 4: waiting for your turn
+00:57:53 playing StrikeIronclad -> InfestedPrism (combat_id=1)
+00:57:53   aimed at combat_id=1 at (0.7, 0.6)
+00:57:54 playing HowlFromBeyond+
+00:57:55 ending turn
+00:57:55 turn 5: waiting for your turn
+00:57:58 playing Anger+ -> InfestedPrism (combat_id=1)
+00:57:59   aimed at combat_id=1 at (0.7, 0.6)
+00:58:00 playing Impervious
+00:58:00 playing Anger -> InfestedPrism (combat_id=1)
+00:58:01   aimed at combat_id=1 at (0.7, 0.6)
+00:58:01 playing MoltenFist -> InfestedPrism (combat_id=1)
+00:58:02   aimed at combat_id=1 at (0.7, 0.6)
+00:58:03 ending turn
+00:58:03 turn 6: waiting for your turn
+00:58:07 playing Colossus+
+00:58:08 playing SwordBoomerang
+00:58:09 playing DefendIronclad+
+00:58:10 ending turn
+00:58:10 turn 7: waiting for your turn
+00:58:14 playing Uppercut -> InfestedPrism (combat_id=1)
+00:58:15   aimed at combat_id=1 at (0.7, 0.6)
+00:58:15 playing StrikeIronclad -> InfestedPrism (combat_id=1)
+00:58:16   aimed at combat_id=1 at (0.7, 0.6)
+00:58:16 playing Anger+ -> InfestedPrism (combat_id=1)
+00:58:17   aimed at combat_id=1 at (0.7, 0.6)
+00:58:18 ending turn
+00:58:18 turn 8: waiting for your turn
+00:58:22 playing SwordBoomerang
+00:58:23 playing Anger -> InfestedPrism (combat_id=1)
+00:58:24   aimed at combat_id=1 at (0.7, 0.6)
+00:58:24 playing Spite+ -> InfestedPrism (combat_id=1)
+00:58:25   aimed at combat_id=1 at (0.7, 0.6)
+00:58:26 stopped: combat over after 8 turns
+00:58:52 turn 1: waiting for your turn
+00:58:53 playing Uppercut -> KnowledgeDemon (combat_id=1)
+00:58:54   aimed at combat_id=1 at (0.65, 0.6)
+00:58:55 playing SwordBoomerang
+00:58:56 ending turn
+00:58:56 turn 2: waiting for your turn
+00:58:58 choosing MindRot
+00:59:00 turn 2: waiting for your turn
+00:59:02 playing Rupture
+00:59:02 playing SwordBoomerang
+00:59:04 ending with 1 energy; not worth playing: Bloodletting
+00:59:04 ending turn
+00:59:04 turn 3: waiting for your turn
+00:59:08 playing Anger -> KnowledgeDemon (combat_id=1)
+00:59:08   aimed at combat_id=1 at (0.65, 0.6)
+00:59:09 playing DrumOfBattle+
+00:59:10 playing StrikeIronclad -> KnowledgeDemon (combat_id=1)
+00:59:10   aimed at combat_id=1 at (0.65, 0.6)
+00:59:11 playing Colossus+
+00:59:12 playing DefendIronclad+
+00:59:13 ending turn
+00:59:13 turn 4: waiting for your turn
+00:59:17 playing FightMe+ -> KnowledgeDemon (combat_id=1)
+00:59:18   aimed at combat_id=1 at (0.65, 0.6)
+00:59:19 playing DefendIronclad+
+00:59:19 playing Spite+ -> KnowledgeDemon (combat_id=1)
+00:59:20   aimed at combat_id=1 at (0.65, 0.6)
+00:59:21 ending turn
+00:59:21 turn 5: waiting for your turn
+00:59:24 playing Hemokinesis+ -> KnowledgeDemon (combat_id=1)
+00:59:25   aimed at combat_id=1 at (0.65, 0.6)
+00:59:25 playing PommelStrike -> KnowledgeDemon (combat_id=1)
+00:59:26   aimed at combat_id=1 at (0.65, 0.6)
+00:59:26 playing StrikeIronclad+ -> KnowledgeDemon (combat_id=1)
+00:59:27   aimed at combat_id=1 at (0.65, 0.6)
+00:59:28 ending turn
+00:59:28 turn 6: waiting for your turn
+00:59:29 choosing Sloth
+00:59:31 turn 6: waiting for your turn
+00:59:34 playing FightMe+ -> KnowledgeDemon (combat_id=1)
+00:59:34   aimed at combat_id=1 at (0.65, 0.6)
+00:59:35 playing Bloodletting
+00:59:36 playing Impervious
+00:59:37 ending with 1 energy; not worth playing: Anger
+00:59:37 ending turn
+00:59:37 turn 7: waiting for your turn
+00:59:41 playing DefendIronclad
+00:59:41 playing StrikeIronclad+ -> KnowledgeDemon (combat_id=1)
+00:59:42   aimed at combat_id=1 at (0.65, 0.6)
+00:59:43 playing Hemokinesis+ -> KnowledgeDemon (combat_id=1)
+00:59:43   aimed at combat_id=1 at (0.65, 0.6)
+00:59:44 ending with 1 energy; not worth playing: DrumOfBattle, MoltenFist
+00:59:44 ending turn
+00:59:45 turn 8: waiting for your turn
+00:59:47 stopped: you died (turn 7)

@@ -92,7 +92,11 @@ def predict(enemy, asc=0, turns=2):
     vigor = (0 if attacks(shown, asc) else powers.get("VigorPower", 0)) + self_power(shown, asc, "VigorPower")
     used = set(enemy.get("history", [])) | {move}
     dist, out = {move: 1.0}, []
-    for _ in range(turns):
+    ritual = self_power(shown, asc, "RitualPower")  # applied by the shown move: skips that turn's trigger
+    for k in range(turns):
+        if k == 1:  # its first trigger: end of the next turn
+            territorial += ritual
+            strength += ritual
         nxt = {}
         for mv, p in dist.items():
             for to, q in follow(ai, mv, mv, used, enemy.get("slot")).items():

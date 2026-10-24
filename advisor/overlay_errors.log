@@ -68,3 +68,15 @@ ValueError: not enough values to unpack (expected 2, got 1)
                                                                 ~~~~~~~~~^^^^^^^^^^^^
 TypeError: 'NoneType' object is not iterable
 
+16:23:50 Traceback (most recent call last):
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 179, in tick
+    render()
+    ~~~~~~^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\overlay.py", line 253, in render
+    main.config(text=f"Next: {best.types[0]} ({direction(state, best.coords[0])})")
+                                               ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor\advisor\pathing.py", line 132, in direction
+    kids = sorted(next(n["next"] for n in m["nodes"] if [n["c"], n["r"]] == m["current"]))
+                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopIteration
+

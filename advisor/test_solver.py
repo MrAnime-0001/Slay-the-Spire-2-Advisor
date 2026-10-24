@@ -189,7 +189,10 @@ def fork(left, right, hp=80, gold=0, then=("RestSite",)):
 # 26. Healthy: take the elite (relic + rare card), it's on the left.
 st = fork("Elite", "Monster")
 best = best_routes(st)[0]
-assert best.types[0] == "Elite" and direction(st, best.coords[0]) == "left", best
+assert best.types[0] == "Elite" and direction(st, best.coords[0]) == "left  ● ○", best
+# 4 choices on columns 0, 3, 4, 6: column 4 is the 3rd from the left.
+four = {"map": {"current": [3, 0], "nodes": [{"c": 3, "r": 0, "next": [[6, 1], [0, 1], [4, 1], [3, 1]]}]}}
+assert direction(four, (4, 1)) == "3rd from left  ○ ○ ● ○"
 
 # 27. 24/80 HP: the elite is survivable but too risky; take the hallway fight.
 assert best_routes(fork("Elite", "Monster", hp=24))[0].types[0] == "Monster"
@@ -335,11 +338,12 @@ best = solve(fight([STRIKE], [gardener("ENLARGE_MOVE", 0, cid=1), gardener("FLAI
 assert best.steps[0][4] == 1, best
 
 # 45. 50/80 HP, Terror Eel shows a 3 hit now: with a 22 Crash coming next turn, Defend beats Strike.
-#     Without foresight (no move known) the same hand attacks.
+#     Without foresight (no move known) it still blocks (v19: hallway HP is costly; 6 damage into a 140-HP enemy
+#     doesn't remove a turn, so it isn't worth 3 HP).
 eel = {**foe("TerrorEel", "THRASH_MOVE"), "combat_id": 1, "creature": {"hp": 140, "max_hp": 140, "block": 0,
        "powers": []}, "intents": [{"kind": "x", "damage": 3, "hits": 1}]}
 assert [s[0] for s in solve(fight([STRIKE, DEFEND], [eel], hp=50))[0].steps] == ["Defend"]
-assert [s[0] for s in solve(fight([STRIKE, DEFEND], [{**eel, "move": None}], hp=50))[0].steps] == ["Strike"]
+assert [s[0] for s in solve(fight([STRIKE, DEFEND], [{**eel, "move": None}], hp=50))[0].steps] == ["Defend"]
 
 print("all foresight checks passed")
 
@@ -405,10 +409,13 @@ slow_me = fight([STRIKE, STRIKE, STRIKE], [boss(100, [])], energy=3)
 slow_me["player"]["powers"] = [{"name": "SlothPower", "amount": 3, "played": 2}]
 assert len(solve(slow_me)[0].steps) == 1
 
-# 63. Ringing card after a card was played this turn: unplayable; Smog: never playable.
+# 63. Ringing card after a card was played this turn: unplayable. Smog (Living Fog's Smoggy): "You cannot play
+#     additional Skills this turn", so one Smog Skill is fine, a second one isn't (v19: was "never playable").
 ring = fight([{**STRIKE, "affliction": "Ringing"}, {**DEFEND, "affliction": "Smog"}], [boss(100, [])], energy=3)
-assert solve({**ring, "cards_played": 1})[0].steps == []
-assert [s[0] for s in solve(ring)[0].steps] == ["Strike"]
+assert [s[0] for s in solve({**ring, "cards_played": 1})[0].steps] == ["Defend"]
+assert [s[0] for s in solve(ring)[0].steps] == ["Strike", "Defend"]
+two = fight([{**DEFEND, "affliction": "Smog"}, {**DEFEND, "affliction": "Smog"}], [boss(100, [], now=20)], energy=3)
+assert [s[0] for s in solve(two)[0].steps] == ["Defend"]
 
 # 64. Disintegration 7 burns us at turn end like an unblocked hit (Defend 5 soaks part of it).
 burn = fight([DEFEND], [boss(100, [])])
@@ -954,7 +961,10 @@ rock = {**foe("BowlbugRock", "HEADBUTT_MOVE", powers=[("ImbalancedPower", 1)]), 
         "intents": [{"kind": "x", "damage": 5, "hits": 1}]}
 assert solve(fight([STRIKE, DEFEND], [rock], hp=80))[0].steps[0][0] == "Defend"
 plain_rock = {**rock, "creature": {**rock["creature"], "powers": []}}
-assert solve(fight([STRIKE, DEFEND], [plain_rock], hp=80))[0].steps[0][0] == "Strike"  # no stun to earn: attack
+# v19: a fully blockable 5 hit is blocked either way (hallway HP); the stun still makes that Defend worth more.
+stun = next(p for p in solve(fight([STRIKE, DEFEND], [rock], hp=80), top=5) if p.steps and p.steps[0][0] == "Defend")
+plain = next(p for p in solve(fight([STRIKE, DEFEND], [plain_rock], hp=80), top=5) if p.steps and p.steps[0][0] == "Defend")
+assert stun.score > plain.score
 # 142. Galvanized Power (Globe Head 3): playing it costs 3 HP. Hexed (Spectral Knight): the card is Ethereal.
 GPOW = {**card("Inflame", 1, "Power", "Self", StrengthPower=2), "affliction": "Galvanized"}
 assert next(p for p in solve(fight([GPOW], [boss(100, [("GalvanicPower", 3)])])) if p.steps).hp_loss == 3
@@ -1284,3 +1294,64 @@ tg = real_card("TrueGrit")
 best = solve(powered(state([tg, DAZED], energy=1, enemy_hp=99, intent_dmg=20), FeelNoPain=3))[0]
 assert names(best) == ["TrueGrit"] and best.block == tg["vars"]["Block"] + 3, best
 print("all v17c pick checks passed")
+
+# --- v19a: HP discipline (hallway HP costs most, boss HP least) and focus fire ---
+# 183. Hallway fight, 80/80 HP, 6 incoming: Defend (0 HP) beats chipping a 40-HP enemy.
+assert names(solve(state([STRIKE, DEFEND], energy=1, enemy_hp=40, intent_dmg=6))[0]) == ["Defend"]
+# 184. Two Gardeners with the same move: the one nearer death takes the Strike (threat per HP left).
+best = solve(fight([STRIKE], [gardener("BITE_MOVE", 5, hp=25, cid=1), gardener("BITE_MOVE", 5, hp=8, cid=2)]))[0]
+assert best.steps[0][4] == 2, best
+# 185. Boss hits 25: the exhausting 30-Block card is spent (boss HP is cheap, so is the card kept for later).
+WALL = {**card("Wall", 1, "Skill", "Self", Block=30), "keywords": ["Exhaust"]}
+st = {**state([STRIKE, WALL], energy=1, enemy_hp=200, intent_dmg=25), "encounter": BOSS,
+      "deck": [STRIKE] * 5 + [DEFEND] * 5 + [WALL]}
+assert names(solve(st)[0]) == ["Wall"], solve(st)[0]
+# 186. Burning Blood at 79/80 doesn't make a 4 hit free when the Wurm has 11 and 18 hits still to come: the heal's
+#      spare room is used up later in the fight anyway. Defend + 2 Strikes (0 HP) over 3 Strikes (-4).
+wurm = {**foe("FuzzyWurmCrawler", "FIRST_ACID_GOOP"), "combat_id": 1, "intents": [{"kind": "x", "damage": 4, "hits": 1}],
+        "creature": {"hp": 55, "max_hp": 55, "block": 0, "powers": []}}
+st = {**fight([DEFEND, STRIKE, DEFEND, STRIKE, STRIKE], [wurm], energy=3, hp=79), "relics": [{"name": "BurningBlood"}]}
+assert solve(st)[0].hp_loss == 0, solve(st)[0]
+# 187. Spite hits twice only if HP was lost this turn; a lethal plan with a Strength Potion drinks it first.
+SPITE = card("Spite", 0, "Attack", "AnyEnemy", Damage=5, Repeat=2)
+assert solve(state([SPITE], energy=0, enemy_hp=40, intent_dmg=0))[0].damage == 5
+best = solve({**state([STRIKE, STRIKE], energy=2, enemy_hp=14, intent_dmg=10),
+              "potions": [{"name": "StrengthPotion", "slot": 0}]})[0]
+assert best.win and names(best)[0] == "POTION StrengthPotion", best
+# 188. Played an extra time: Duplicator + Strike kills a 12-HP enemy; Echo Form doubles the first card; One-Two Punch
+#      goes before the Twin Strike it doubles (Strength from Inflame counts on every hit); Dominate gains Strength
+#      per Vulnerable (first: its Vulnerable makes Bash hit harder too).
+best = solve({**state([STRIKE], energy=1, enemy_hp=12, intent_dmg=20), "potions": [{"name": "Duplicator", "slot": 0}]})[0]
+assert best.win and names(best) == ["POTION Duplicator", "Strike"], best
+assert solve(powered(state([STRIKE, STRIKE], energy=2, enemy_hp=99, intent_dmg=0), EchoForm=1))[0].damage == 18
+best = solve(state([real_card("TwinStrike"), real_card("OneTwoPunch"), real_card("Inflame")], energy=4, enemy_hp=99,
+                   intent_dmg=0))[0]
+assert names(best) == ["Inflame", "OneTwoPunch", "TwinStrike"] and best.damage == 28, best
+assert solve(state([STRIKE, real_card("Dominate"), BASH], energy=4, enemy_hp=99, intent_dmg=0))[0].damage == 23
+# --- W1 (wiki rules): combat correctness ---
+# 189. Strength -9: a Strike deals 0 and doesn't add Block to the enemy (negative hit).
+st = fight([STRIKE], [boss(40, [])]); st["player"]["powers"] = [{"name": "StrengthPower", "amount": -9}]
+st["enemies"][0]["creature"]["block"] = 5
+assert solve(st)[0].damage == 0
+from solver import hit
+e = [40, 5, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0]
+hit(e, -3)
+assert e[1] == 5, e
+# 190. Enemy Intangible caps the hit to 1 before Block: 20 into 5 Block + Intangible = Block 4, HP untouched.
+e = [40, 5, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0]
+assert hit(e, 20) == 0 and e[1] == 4 and e[0] == 40, e
+# 191. Strength only boosts Attacks: a damaging Skill ignores it.
+ZAP = card("TestZap", 1, "Skill", "AnyEnemy", Damage=6)
+st = fight([ZAP], [boss(40, [])]); st["player"]["powers"] = [{"name": "StrengthPower", "amount": 3}]
+assert solve(st)[0].damage == 6
+# 192. Poison on an Intangible enemy ticks for 1 (HP loss is capped too).
+assert solve(fight([], [boss(40, [("PoisonPower", 9), ("IntangiblePower", 1)])]))[0].steps == []
+# 193. Artifact blocks enemy Strength loss (a debuff) just like Vulnerable.
+SHACKLE = card("TestShackle", 0, "Skill", "AnyEnemy", StrengthLoss=6)
+assert solve(fight([SHACKLE], [boss(40, [], now=10)]))[0].hp_loss == 4
+assert solve(fight([SHACKLE], [boss(40, [("ArtifactPower", 1)], now=10)]))[0].hp_loss == 10
+# 194. Cultist's Incantation (Ritual 2) skips that turn's trigger: Dark Strike 9, then 11, 13.
+inc = {"name": "CalcifiedCultist", "move": "INCANTATION_MOVE", "history": [], "slot": None, "creature": {"powers": []}}
+assert [t["dmg"] for t in predict(inc, 0, 3)] == [9, 11, 13]
+print("all W1 checks passed")
+print("all v19a checks passed")

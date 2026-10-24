@@ -131,4 +131,7 @@ def direction(state, coord):
         return ""
     kids = sorted(next(n["next"] for n in m["nodes"] if [n["c"], n["r"]] == m["current"]))
     names = {1: ["only path"], 2: ["left", "right"], 3: ["left", "middle", "right"]}.get(len(kids))
-    return names[kids.index(list(coord))] if names else f"column {coord[0]}"
+    i = kids.index(list(coord))
+    word = names[i] if names else f"{i + 1}{'st' if i == 0 else 'nd' if i == 1 else 'rd' if i == 2 else 'th'} from left"
+    dots = " ".join("●" if k == i else "○" for k in range(len(kids)))  # the paths as on screen, ours filled
+    return word if len(kids) == 1 else f"{word}  {dots}"

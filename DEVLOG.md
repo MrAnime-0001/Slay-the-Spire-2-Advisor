@@ -15,6 +15,67 @@ Version history is kept here and in `.planning/*.md`. The code itself is not und
 
 ---
 
+## v19a (2026-10-21): combat HP discipline, focus fire
+You said hallway fights should cost about 0 HP, and that the advisor traded HP for damage too easily. Strategy research for this phase is in `.planning/research/strategy.md`.
+- **Damage is worth the enemy turns it removes, not a flat rate.**
+  - Damage is valued by how much HP those enemies would still take off you before they die: their forecast hits over the fight, less what your deck usually blocks, divided by your deck's damage per turn. The cap is 0.5 HP per damage point in hallway fights and 0.8 in elite and boss fights.
+  - An enemy with no AI table counts as hitting 6 per turn.
+  - The old `deck.exchange_rate` (up to 5 HP per damage point) and the tempo term are gone.
+- **HP costs depend on the fight type:** hallway 1.5x, elite 1.25x, boss 0.75x.
+  - Hallway HP costs the most: it turns later rest sites from Smith into Rest.
+  - Boss HP costs the least because the act ends.
+  - Potion cost scales the same way.
+- **Future credits stay at the base rate or lower.** These are draw value, retained or top-decked cards, Dexterity, Plating and exhaust cards kept for later. They never use the 1.5x hallway rate because they are expected, not certain. In a boss fight they drop with boss HP, so a boss's Impervious is spent on a big hit instead of being saved.
+- **Unknown draw pile:** next turn's Block is your deck's average Block per turn, not 0.
+- **Certain draws:** a draw that takes the whole draw pile (Drum of Battle with 2 cards left) puts those cards in hand for this turn's plan. Exception: when a drawn card draws too (Soul drawing Soul), which looped forever.
+- **Focus fire:** damage counts by an enemy's threat per HP left, so the scaler or the nearly dead enemy is finished first.
+  - In the Phantasmal Gardeners elite, the first hit on a Gardener gives it 6 Block (Skittish), and that Block is gone at its turn.
+  - The first hit each turn still goes to the one about to Enlarge. Leftover hits go to another Gardener when they would only hit the Block, because that damage is permanent progress there and wasted on the shield.
+  - Follow-up hits stay on the same Gardener when they kill it.
+- **Tests 45 and 141** used to expect trading HP. They now expect blocking (6 damage into a 140-HP Eel doesn't remove a turn).
+- **New tests:**
+  - 183: hallway Defend.
+  - 184: the Strike goes to the Gardener nearer death.
+  - 185: the boss's exhaust-Block card gets spent.
+- **New tool `tools/hp_audit.py`:** measures avoidable damage over the recordings.
+  - On the first 2500 recorded turns, hallway loss is 1.87 HP per turn. 1.50 of that can't be avoided with the cards in hand.
+  - Most of the rest was chip trades (about 3 HP for 9 damage with no kill), which the model rated as shortening the fight.
+  - Hallway damage value is now capped at 0.5 HP per point; elites and bosses keep 0.8. On 700 hallway turns, chip trades fell from 102 HP to 72 HP, and damage dealt fell from 6.6 to 6.4 per turn.
+  - Capping at 0.3 would halve chip trades but deal 6% less damage. That's close to even in expected HP, so 0.5 is the middle setting (`VPD_CAP` in `solver.py`).
+  - The forced part of hallway damage comes from the deck, which Phases A/B (upgrades, picks) target.
+- Replay: 654 turns, mean error 2.3. Tests pass on both builds.
+- **Burning Blood fix:** at 79/80, a 4 hit counted as free because the 6 HP heal after the fight would overflow max HP. But that spare room is shared by the whole fight. The free part now subtracts the hits expected on later turns, so with more attacks coming nothing is free. In the Fuzzy Wurm Crawler fight, the advisor now plays Defend + 2 Strikes for 0 HP instead of 3 Strikes for -4 (test 186).
+- **Spite fix:** Spite hits twice only if you lost HP this turn, but the solver always counted 2 hits. In the Slithering Strangler fight it planned a kill without the Strength Potion, came up 12 short when Spite hit once, and only then drank the potion for the last two attacks. Spite now counts 1 hit unless the plan loses HP first (Bloodletting, Hemokinesis). HP lost earlier in the turn isn't in the game state, so after such a replan it still counts 1 hit: it under-counts, never over-counts.
+- **Strength first:** of plans that end the same way, the one that plays Strength sources (Strength Potion, Inflame...) first is kept, then Vulnerable (Bash), then the attacks. Every later hit gains the bonus, so if the damage falls short the next replan still has it. Strength only adds to card attacks, not to potion damage, orbs or Osty; the solver already did that.
+- Tests 187 (Spite one hit, Strength Potion first). Both fail on the old code.
+- **Played an extra time:** Duplicator (next card), One-Two Punch (next Attacks this turn), Burst (next Skills this turn) and an active Echo Form (first cards each turn) now replay the card for free. Strength, Vulnerable and Vigor gained so far count on the copy too, so the advisor plays One-Two Punch before the Twin Strike it doubles, after Inflame. Playing Echo Form itself is still valued as "not modeled" (its later turns aren't scored).
+- **Dominate:** gains Strength per Vulnerable on its target, counted after its own Vulnerable. Played first, its Vulnerable also boosts the Bash after it.
+- **Checked, already right:** Strength adds to each hit of multi-hit cards (Twin Strike, Sword Boomerang, Fight Me!); negative Strength floors at 0 per hit; Fight Me! gives the enemy +1 Strength on its next attack; Strength doesn't touch potion damage, orbs or Osty; Weak 25% / Vulnerable 50% multiply after Strength. Brand goes last on purpose when its exhaust would cost a real card.
+- Test 188 (Duplicator, Echo Form, One-Two Punch, Dominate). Replay: 669 turns, mean error 2.3.
+- **Map label fix:** with 4 or more paths, the next step showed the game's internal column number ("column 4"), which doesn't match what you see. It now names the step by its place among the paths you can take ("3rd from left"; left / middle / right for 2-3 paths), with a dot row of the paths on screen, ours filled: ○ ○ ● ○.
+
+## v18 (2026-10-21): overlay redesign, game icons
+- **New look, toned to the game:** warm dark panel, parchment text, bronze trim and gold section titles. Your character's colour is the energy accent. Fonts are Windows system fonts only (Constantia serif for names and numbers, Segoe UI for small print). The header always reads "Advisor · unofficial", so it never looks like the game's own UI.
+- **Layout, top to bottom:**
+  - "Autopilot stopped" banner, only when that happens.
+  - Header: F8 autopilot pill and the F7 indicator.
+  - Screen chip with your stats: HP bar with block, energy, turn, stars/orbs/Osty; gold and deck size outside fights.
+  - The advice:
+    - Combat: numbered plan, one card-type colour bar per card, target with its intent icon, `?` on unmodeled plays, then DMG / BLOCK / HP / LETHAL chips.
+    - Pick screens: ranked rows with icons and score bars. The best is first, and a "dilutes" warning shows in red.
+- **F7 = show more / less.** Compact by default: alternatives, pile counts, boss tip, potions, relic count and "not modeled" notes are behind F7. Compact shows a "⚠ N notes" count.
+- **Game names:** cards, relics and potions show their English titles from the game's text (`DefendNecrobinder` shows as "Defend").
+- **Icons (`advisor/icons.py`) come from your own install:** relics, potions, powers, energy (per character), intents, orbs, map rooms, HP, gold, deck, star.
+  - They are read from `SlayTheSpire2.pck` (Godot textures: WebP/PNG, or BC7/DXT GPU formats decoded with Pillow; atlas sprites cropped by their `.tres` region).
+  - Coverage on v0.107.1: 296/298 relics, 62/63 potions, all 238 powers, all 33 UI icons. Run `python advisor/icons.py` to check.
+  - **Missing icons** (e.g. beta-only relics when the release is installed) are fetched once in the background from `slaythespire.wiki.gg` (`StS2_<Name>.png`).
+    - Only that host and https; the file must be a real PNG/WebP under 512 KB.
+    - At most one try per day per icon.
+  - **Until an icon exists,** a drawn stand-in shows instead: a bronze disc with the first letter. Nothing appears as a blank box.
+  - `advisor/icon_cache/` holds the game's art from your copy and the wiki. **Keep it local: never share or upload it.**
+- **Demo mode for design checks:** set `STS2_DEMO=advisor/recordings/<day>.jsonl` to replay recorded fights without the game. `STS2_POS=+x+y` places the window, and `STS2_EXPANDED=1` starts expanded.
+- Advice logic is unchanged. Tests pass on both builds.
+
 ## v17c (2026-10-15): discard / exhaust picks inside a card
 - **Cards that make you discard or exhaust from hand are now planned** (Acrobatics, Survivor, Dagger Throw, True Grit, Burning Pact, Brand, Scavenge), read from their ops.
   - The solver picks the card to give up the way you would: Curse/Status first, the most harmful first (Burn's turn-end damage, Regret). For a discard, Sly cards come next, since they get played for free. Then the card worth least next turn.

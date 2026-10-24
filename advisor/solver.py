@@ -7,7 +7,6 @@ import re
 from dataclasses import dataclass
 
 from archetypes import card_text, expand_power
-from deck import exchange_rate
 from enemies import predict
 from relics import (GAMEDATA, NO_PLAYS, Plays, Relics, after_play, block_mult, dmg_add, dmg_mult,
                     end_turn, x_bonus)
@@ -18,9 +17,17 @@ UNKNOWN_VALUE = 2  # flat credit for effects we don't model (draw, exhaust, most
 # HP matters more as it gets low: below LOW_HP_FRACTION of max, each HP lost costs up to
 # (1 + LOW_HP_WEIGHT)x more, so a low-HP character blocks/heals instead of trading.
 LOW_HP_FRACTION, LOW_HP_WEIGHT = 0.5, 3
-# Tempo: enemies scale the longer a fight runs, so damage dealt is worth the future hits it saves:
-# value per damage = W_HP * enemy damage per turn / our deck's damage per turn, clamped.
-TEMPO_MIN, TEMPO_MAX, PRESSURE_FLOOR, DPT_FLOOR = 0.5, 1.5, 6, 5
+# Tempo: damage is worth the HP a shorter fight saves. Each point removes 1/(our damage per turn) of a fight turn,
+# and each enemy turn costs what our usual next hand can't block (mean over the forecast, so scaling enemies count).
+# Blocking real hits beats damage that removes no turn. DMG_FLOOR: an enemy turn's hit when nothing is known about it
+# (no AI table, no attack intent now): every enemy attacks eventually. DMG_MIN keeps attacking above idling.
+# VPD_CAP: a damage point counts as at most this much HP saved: damage that doesn't remove a whole enemy turn is
+# partly wasted (kills are valued on their own: W_KILL, future_left). Lowest in hallways: block there, chip less.
+DMG_FLOOR, DMG_MIN, DPT_FLOOR = 6, 0.5, 5
+VPD_CAP = {"Monster": 0.5, "Elite": 0.8, "Boss": 0.8}  # hallway 0.3 halves chip trades but deals 6% less damage
+# HP is worth most in hallway fights (lost HP turns later rest sites from Smith into Rest and weakens the elite/boss
+# fights) and least in a boss fight (the act ends). Multiplies W_HP for HP lost, future hits and potion cost.
+HP_WEIGHT = {"Monster": 1.5, "Elite": 1.25, "Boss": 0.75}
 # Score charged per potion (W_HP=2, so 40 = "worth ~20 HP"): saved in hallway fights for later
 # encounters, spent on bosses. Full slots halve it (an unused potion blocks new drops). Below
 # POTION_FREE_HP of max HP the cost scales to the minimum: drink rather than die.
@@ -31,6 +38,8 @@ EFFECTS = {"Damage", "Block", "StrengthPower", "DexterityPower", "VulnerablePowe
            "Energy", "HpLoss", "PoisonPower", "DoomPower", "Summon", "OstyDamage", "Stars",
            "EnemyStrength", "StrengthLoss"} | HEAL
 MODELED = EFFECTS | {"Repeat"}
+# Spite hits Repeat times only if you lost HP this turn. ponytail: only HP lost inside the plan counts (Bloodletting,
+# Hemokinesis...); HP lost earlier this turn isn't in the state, so a replan after it counts 1 hit (under, not over).
 # Character mechanics (mechanics.md). Poison ticks at the enemy's turn start (can kill before it attacks), then
 # keeps ticking 1 less each turn (that future damage counts POISON_FUTURE). Doom kills at the end of the enemy
 # turn when HP <= Doom (it still attacks). Osty soaks unblocked attack damage; its HP is worth OSTY_HP of ours.
@@ -407,10 +416,12 @@ PLAYER_POWERS = COST_POWERS | {"SurroundedPower", "TaintedPower", "StrengthPower
 # Barricade / Blur: Block isn't cleared, so what's left after the enemy turn counts next turn.
 BUFFS = ("PlatingPower", "BufferPower", "IntangiblePower", "ThornsPower", "FlameBarrierPower", "RagePower",
          "AfterimagePower", "FeelNoPainPower", "JuggernautPower", "EnvenomPower", "VigorPower", "BarricadePower",
-         "BlurPower")
+         "BlurPower",
+         # this turn's extra plays: Duplicator (next card), One-Two Punch (next Attacks), Burst (next Skills)
+         "DuplicationPower", "OneTwoPunchPower", "BurstPower")
 PLAYER_POWERS |= set(BUFFS)
 EFFECTS |= set(BUFFS)
-MODELED |= set(BUFFS)
+MODELED |= set(BUFFS) | {"StrengthPerVulnerable"}  # Dominate: Strength per Vulnerable on its target
 
 
 def bget(buffs, name):
@@ -435,7 +446,7 @@ def card_buffs(card):
         return {}, set()
     out = {k: v[k] for k in BUFFS if v.get(k)}
     used = set(out)
-    own = card["name"] + "Power"
+    own = {"Duplicator": "DuplicationPower"}.get(card["name"], card["name"] + "Power")
     if own in BUFFS and own not in out:
         key = next((k for k in ("Power", "DamageBack", card["name"]) if v.get(k)), None)
         out[own] = v[key] if key else 1
@@ -461,7 +472,7 @@ def potion_actions(state):
         made = potion_cards(p["name"], state)
         if made:
             rest -= {"Cards"}
-        if not (rest & EFFECTS or pm or made) or not rest <= MODELED:
+        if not (rest & EFFECTS or pm or made or p["name"] == "Duplicator") or not rest <= MODELED:  # Duplicator: no vars
             continue
         if d["target"] != "Self" and "StrengthPower" in v:
             continue  # enemy Strength loss isn't modeled
@@ -503,30 +514,26 @@ def danger(hp, max_hp):
     return 1 + LOW_HP_WEIGHT * max(0, LOW_HP_FRACTION - frac) / LOW_HP_FRACTION
 
 
-def deck_dpt(state):
-    """Our deck's rough damage per turn: damage per energy times max energy."""
+def deck_dpt(state, key="Damage", floor=DPT_FLOOR):
+    """Our deck's rough damage (or Block) per turn: amount per energy times max energy."""
     deck = [c for c in (state.get("deck") or state["hand"]) if c["type"] in ("Attack", "Skill", "Power")]
-    dmg = sum(c["vars"].get("Damage", 0) * max(c["vars"].get("Repeat", 1), 1) for c in deck)
+    amt = sum(c["vars"].get(key, 0) * (max(c["vars"].get("Repeat", 1), 1) if key == "Damage" else 1) for c in deck)
     energy = sum(max(c["cost"], 1) for c in deck) or 1
-    return max(DPT_FLOOR, dmg / energy * state.get("max_energy", state.get("energy") or 3))
-
-
-def tempo(state, pressure):
-    """Score per point of enemy HP removed: the future hits a faster kill saves."""
-    return min(TEMPO_MAX, max(TEMPO_MIN, W_HP * max(pressure, PRESSURE_FLOOR) / deck_dpt(state)))
+    return max(floor, amt / energy * state.get("max_energy", state.get("energy") or 3))
 
 
 def hit(e, n):
     """Deal n damage to enemy row e = [hp, block, vuln, weak, skittish, shell_left, slippery, intangible].
-    Block absorbs first; Slippery and Intangible turn a damaging hit into 1; Hardened Shell caps HP lost
-    per turn. Returns the HP actually lost."""
+    Intangible turns a hit into 1 before Block; Block absorbs; Slippery turns HP lost into 1; Hardened Shell caps
+    HP lost per turn. A negative hit (Strength below 0) deals 0. Returns the HP actually lost."""
+    n = max(0, n)
+    if n >= 1 and e[7] > 0:
+        n = 1
     absorbed = min(e[1], n)
     e[1] -= absorbed
     lost = n - absorbed
     if lost >= 1 and e[6] > 0:
         lost, e[6] = 1, e[6] - 1
-    if lost >= 1 and e[7] > 0:
-        lost = 1
     if e[5] >= 0:
         lost = min(lost, e[5])
         e[5] -= lost
@@ -565,6 +572,7 @@ def solve(state, top=3, kept=()):
                   key=lambda c: -(end_dmg(c) + end_loss(c) + HAND * (c["name"] == "Regret")))
     normality = any(c["name"] == "Normality" for c in state["hand"])
     enthralled = sum(c["name"] == "Enthralled" for c in state["hand"])
+    smoggy = amount(me["powers"], "SmoggyPower")  # ponytail: Skills played before this replan aren't counted
     def add(c, n=1):
         k = (c["type"] == "Potion", c["name"], c["upgraded"], c["cost"], c.get("affliction"), tuple(sorted(c["vars"].items())))
         if k not in keys:
@@ -598,6 +606,14 @@ def solve(state, top=3, kept=()):
                                     + x["vars"].get("Block", 0)))
             makes[g] = makes.get(g, []) + [(add(x, 0), 1) for x in ok[:f["count"]]]
     moves = [pile_moves(c) if pile_known else (0, None) for c, _ in groups]
+    # A draw that takes the whole draw pile is certain (Drum of Battle with 2 cards left): those cards join the hand
+    # this turn as count-0 groups, so the plan can play them; they no longer count as expected draws. Not when a
+    # drawn card draws too (Soul drawing Soul would loop). ponytail: two such draw cards both get the pile.
+    for g, (c, _) in enumerate(list(groups)):
+        if pile_known and 0 < len(piles["Draw"]) <= moves[g][0] and not any(x["vars"].get("Cards") for x in piles["Draw"]):
+            makes[g] = makes.get(g, []) + [(add(x, 0), 1) for x in piles["Draw"]]
+            moves[g] = (0, moves[g][1])
+    moves += [(0, None)] * (len(groups) - len(moves))
     deck_names = {c["name"] for c in state.get("deck") or state["hand"]}  # Exhaust only costs cards that come back
 
     # state: energy, group counts, enemies (hp, block, vuln, weak, skittish, shell left (-1 = none),
@@ -626,6 +642,7 @@ def solve(state, top=3, kept=()):
         tuple(sorted((p["name"], p["amount"]) for p in me["powers"] if p["name"] in BUFFS and p["amount"])),
     )
     focus = amount(me["powers"], "FocusPower")
+    echo = amount(me["powers"], "EchoFormPower")  # first N cards each turn are played twice (already in play only)
     slots = state.get("orb_slots", 0)
     slowed = [pw(f, "SlowPower") > 0 for f in foes]
     hive = [pw(f, "PersonalHivePower") for f in foes]
@@ -736,14 +753,16 @@ def solve(state, top=3, kept=()):
     sandpit = max((pw(f, "SandpitPower") for f in foes), default=0)
     escape_groups = [g for g, (c, _) in enumerate(groups) if c["name"] == ESCAPE]
 
-    # Damage is worth what the full-fight sim's best pilot pays for it in HP (deck.exchange_rate); fallback: tempo
     # Ironclad's Burning Blood / Black Blood heal after a won fight; only the part that would overflow max HP
-    # makes damage free (at 80/80 a 3 hit costs nothing; at 70/80 it does). Everyone else pays full price.
+    # makes damage free (at 80/80 a 3 hit costs nothing; at 70/80 it does), and only what the rest of the fight
+    # won't take anyway (set below, once the expected hits are known). Everyone else pays full price.
     after_heal = sum(GAMEDATA["relics"].get(r["name"], {}).get("vars", {}).get("Heal", 0)
                      for r in state.get("relics", []) if r["name"] in POST_FIGHT_HEAL)
     free_hp = max(0, min(after_heal, me["hp"] + after_heal - me["max_hp"]))
-    lam = exchange_rate(state)
-    value_per_damage = W_HP * lam if lam is not None else tempo(state, incoming(start[2]))
+    hp_w = W_HP * HP_WEIGHT.get(fight_type(state), 1)  # HP lost now / to the enemies left; future-turn credits
+    # (draws, retained cards, Dexterity, Plating, kept exhaust cards) use fut_w: expected, not certain, so never
+    # above W_HP, but no dearer than this fight's HP (a boss's Impervious saved for later saves cheap HP)
+    fut_w = min(hp_w, W_HP)
     turns_left = sum(f["creature"]["hp"] for f in foes) / deck_dpt(state)
     # A played card comes back only after the draw pile runs out (reshuffle).
     left = turns_left - 1 - (len(state["draw"]) / HAND if pile_known else 0)
@@ -761,7 +780,7 @@ def solve(state, top=3, kept=()):
             c = s[3]
             if c["type"] == "Potion":
                 continue  # ponytail: potion Strength isn't valued past this turn
-            for key, per in (("StrengthPower", atk_hits * value_per_damage), ("DexterityPower", blk_cards * W_HP * 0.5)):
+            for key, per in (("StrengthPower", atk_hits * value_per_damage), ("DexterityPower", blk_cards * fut_w * 0.5)):
                 sign, when = (1, "now") if c.get("ops") else timing(c["name"], key)
                 n = sign * c["vars"].get(key, 0)
                 if when == "now" and (c["type"] == "Power" or c["target"] not in ("AnyAlly", "AllAllies")):
@@ -769,12 +788,12 @@ def solve(state, top=3, kept=()):
                 elif when == "turn":  # +n at the start of each later turn: n, 2n, 3n...
                     out += n * per * buff_turns * (buff_turns + 1) / 2
             plating = card_buffs(c)[0].get("PlatingPower", 0)  # Plating keeps giving Block: n-1, n-2... later turns
-            out += W_HP * 0.5 * sum(max(0, plating - k) for k in range(1, round(buff_turns) + 1))
+            out += fut_w * 0.5 * sum(max(0, plating - k) for k in range(1, round(buff_turns) + 1))
         return FUTURE_DISCOUNT * out
 
     def worth(c):  # rough value of one play of a card: its damage + half its Block, in score
         v = c["vars"]
-        return value_per_damage * v.get("Damage", 0) * max(v.get("Repeat", 1), 1) + W_HP * 0.5 * v.get("Block", 0)
+        return value_per_damage * v.get("Damage", 0) * max(v.get("Repeat", 1), 1) + fut_w * 0.5 * v.get("Block", 0)
 
     def exhausts(c):
         return "Exhaust" in keywords(c) or (c["type"] == "Skill" and "CorruptionPower" in mine)
@@ -785,22 +804,32 @@ def solve(state, top=3, kept=()):
     # Threat looks further ahead than the HP math (up to the fight's expected length): an enemy that scales
     # (Ritual, Enlarge, Territorial...) keeps hitting harder, so its damage now is worth more.
     t_turns = min(THREAT_TURNS_MAX, max(FUTURE_TURNS, math.ceil(turns_left)))
-    scaled = [sum(t["dmg"] * THREAT_DISCOUNT ** k for k, t in enumerate(predict(f, state.get("ascension", 0), t_turns)))
-              for f in foes]
+    scaled = [sum(t["dmg"] * THREAT_DISCOUNT ** k for k, t in enumerate(fc))
+              for fc in (predict(f, state.get("ascension", 0), t_turns) for f in foes)]
     threat = [n + fu + lo + GOLD_LOOT_HP * pw(f, "ThieveryPower")
               for n, fu, lo, f in zip(incoming_each(start[2]), scaled, loot, foes)]
-    mean_threat = sum(threat) / max(len(threat), 1)
+    # Focus fire (Smith's rule): damage counts by threat per HP left, so the scaler / nearly dead enemy is
+    # finished first instead of chipping everyone. Damage into Block (Skittish) still counts 0.
+    ratio = [t / max(f["creature"]["hp"] + f["creature"]["block"], 1) for t, f in zip(threat, foes)]
+    mean_threat = sum(ratio) / max(len(ratio), 1)
     weight = [0 if f["creature"]["hp"] >= UNKILLABLE else min(THREAT_MAX, max(THREAT_MIN, t / mean_threat))
-              if mean_threat else 1 for t, f in zip(threat, foes)]
+              if mean_threat else 1 for t, f in zip(ratio, foes)]
     # Potions get cheaper when THIS turn's hits would leave us low. A big hit predicted for next turn
     # is a reason to keep the potion for that turn, not to spend it now.
-    pot_cost = potion_cost(state, me["hp"] + me["block"] - incoming(start[2]))
-    blocks = next_blocks(state, start[5]) if pile_known else [0]
+    pot_cost = potion_cost(state, me["hp"] + me["block"] - incoming(start[2])) * HP_WEIGHT.get(fight_type(state), 1)
+    # next hand's Block: sampled from the draw pile, else (pile unknown) what the deck blocks per turn on average
+    blocks = next_blocks(state, start[5]) if pile_known else [deck_dpt(state, "Block", 0)]
 
     def exposure(dmg, extra=0):
         """Expected unblocked damage next turn: dmg minus what a likely next hand blocks (+ cards we put on top)."""
         return sum(max(0, dmg - b - extra) for b in blocks) / len(blocks)
     gap = exposure(sum(next_turn))
+    # per enemy and turn: its forecast hit, or (no AI table) what it intends now, every turn (nothing known: DMG_FLOOR)
+    long = [[t["dmg"] for t in fc] or [now or DMG_FLOOR] * t_turns
+            for fc, now in zip((predict(f, state.get("ascension", 0), t_turns) for f in foes), incoming_each(start[2]))]
+    unblocked = sum(exposure(sum(fc[k] for fc in long if len(fc) > k)) for k in range(t_turns)) / t_turns
+    value_per_damage = hp_w * min(VPD_CAP.get(fight_type(state), 0.8), max(unblocked, DMG_MIN) / deck_dpt(state))
+    free_hp = max(0, free_hp - unblocked * max(0.0, turns_left - 1))  # the heal's spare room is shared by all turns
 
     def worth_next(c, vuln=False):
         """A card's value next turn: Block only up to the damage next hand can't block (~0 before a quiet
@@ -808,7 +837,7 @@ def solve(state, top=3, kept=()):
         v = c["vars"]
         block = max(0, v["Block"] + start[5]) if "Block" in v else 0
         return (value_per_damage * v.get("Damage", 0) * max(v.get("Repeat", 1), 1) * (1.5 if vuln else 1)
-                + W_HP * min(block, gap))
+                + fut_w * min(block, gap))
     # Draw cards: each draw is worth the mean draw-pile card we can still afford (junk = 0); empty -> reshuffle.
     pool = (state.get("draw") or state.get("discard") or []) if pile_known else []
     pool = [(c["cost"], 0 if junk(c) else worth(c)) for c in pool]
@@ -864,13 +893,13 @@ def solve(state, top=3, kept=()):
                 acc = mine.get("AccuracyPower", 0) if card["name"] == "Shiv" else 0  # Accuracy: Shivs hit harder
                 vigor = bget(buffs, "VigorPower") if attack else 0  # Vigor: added to the next Attack's hits, then gone
                 buffs = badd(buffs, "VigorPower", -vigor)
-                base = ((v["Damage"] + acc + strength + vigor + dmg_add(card, R)) * (0.75 if weak else 1)
-                        * dmg_mult(card, R, plays))
+                base = ((v["Damage"] + acc + (strength if attack else 0) + vigor + dmg_add(card, R))
+                        * (0.75 if weak and attack else 1) * dmg_mult(card, R, plays))  # Str/Weak: Attacks only
             for i in targets:
                 slow = 1 + 0.1 * (before + plays.cards) if slowed[i] and not potion else 1  # Bygone Effigy
                 mult = 1 if potion else halved[i] * shrink
-                per = min(math.floor(base * (1.5 if en[i][2] > 0 else 1) * slow * mult), hard_cap[i])
-                n_hits = max(v.get("Repeat", 1), 1) * times
+                per = min(math.floor(base * (1.5 if en[i][2] > 0 and attack else 1) * slow * mult), hard_cap[i])
+                n_hits = max(v.get("Repeat", 1) if card["name"] != "Spite" or hp < me["hp"] else 1, 1) * times
                 hits = [hit(en[i], per) for _ in range(n_hits)] if share == 1 else [hit(en[i], per * n_hits * share)]
                 if thorns[i] and not potion:  # Thorns: our block soaks it first
                     back = thorns[i] * n_hits * share
@@ -882,8 +911,12 @@ def solve(state, top=3, kept=()):
                     en[i][4] = 0
                 if not potion:  # Personal Hive (Entomancer): each attack hit that lands adds Dazed
                     en[i][8] += hive[i] * sum(1 for h in hits if h)
-                if attack:  # Envenom: Poison per unblocked hit (ponytail: Artifact not checked)
-                    en[i][10] += bget(buffs, "EnvenomPower") * sum(1 for h in hits if h)
+                if attack and bget(buffs, "EnvenomPower"):  # Envenom: Poison per unblocked hit; Artifact blocks each
+                    for _ in range(sum(1 for h in hits if h)):
+                        if en[i][9] > 0:
+                            en[i][9] -= 1
+                        else:
+                            en[i][10] += bget(buffs, "EnvenomPower")
         if "OstyDamage" in v and osty > 0:  # Osty attacks: no player Strength/Weak
             for i in targets:
                 hit(en[i], math.floor(v["OstyDamage"] * (1.5 if en[i][2] > 0 else 1)))
@@ -916,7 +949,11 @@ def solve(state, top=3, kept=()):
                 strength += now("StrengthPower")
                 dex += now("DexterityPower")
             for i in targets:  # enemy Strength this turn: Fight Me! gives it, Piercing Wail / Dark Shackles take it
-                en[i][12] += v.get("EnemyStrength", 0) - v.get("StrengthLoss", 0)  # ponytail: Artifact ignored here
+                if v.get("StrengthLoss") and en[i][9] > 0:  # Artifact blocks the Strength loss (a debuff)
+                    en[i][9] -= 1
+                    en[i][12] += v.get("EnemyStrength", 0)
+                else:
+                    en[i][12] += v.get("EnemyStrength", 0) - v.get("StrengthLoss", 0)
             for i in targets:
                 for slot, key in ((2, "VulnerablePower"), (3, "WeakPower"), (10, "PoisonPower"), (11, "DoomPower")):
                     if v.get(key):
@@ -926,6 +963,8 @@ def solve(state, top=3, kept=()):
                             en[i][slot] += v[key] * max(v.get("Repeat", 1), 1) * times // max(len(targets), 1)                                 if card["target"] == "RandomEnemy" else v[key] * times
                         else:
                             en[i][slot] += v[key]
+            if v.get("StrengthPerVulnerable") and targets:  # Dominate: after its own Vulnerable lands
+                strength += v["StrengthPerVulnerable"] * en[targets[0]][2]
         energy -= cost
         for mg, n in makes.get(g, ()):  # made/fetched cards land in hand, playable later this turn
             counts = counts[:mg] + (counts[mg] + n * times,) + counts[mg + 1:]
@@ -1021,8 +1060,14 @@ def solve(state, top=3, kept=()):
                 block += ORB_PASSIVE["Frost"] + focus
         poison_future = 0
         for e in en:  # poison ticks at the enemy's turn start: a kill here means no attack
-            if e[0] > 0 and e[10] > 0:
-                e[0] -= min(e[0], e[10])
+            if e[0] > 0 and e[10] > 0:  # HP loss: Block doesn't stop it; Intangible / Slippery / Hardened Shell do
+                tick = 1 if e[7] > 0 else e[10]
+                if e[6] > 0:
+                    tick, e[6] = 1, e[6] - 1
+                if e[5] >= 0:
+                    tick = min(tick, e[5])
+                    e[5] -= tick
+                e[0] -= min(e[0], tick)
                 poison_future += min(e[0], e[10] * (e[10] - 1) // 2)
         if leaders and all(e[0] == 0 or m for e, m in zip(en, minion)):
             for e in en:
@@ -1088,31 +1133,35 @@ def solve(state, top=3, kept=()):
                        - hit_next + exposure(hit_next, carried))
         future_left -= sum(n for n, a, ob in zip(next_turn, alive, off_balance) if a and ob and blocked_all)
         pool_e = sum(max(c, 1) for c, w in pool if c >= 0)
-        retained += (W_HP * sum(x for x, k in zip(loot, killed) if k)
+        retained += (hp_w * sum(x for x, k in zip(loot, killed) if k)
                      + (tears * sum(w for c, w in pool if c >= 0) / pool_e if tears and energy >= 1 and pool_e else 0))
         projected = min(hp_after, me["hp"]) - exposure(hit_next, top_block + carried)
         unknown = sum(1 for s in steps if not s[2])
         score = (W_WIN * win + W_KILL * kills + value_per_damage * weighted
-                 - W_HP * max(0, net_loss - free_hp) * danger(projected, me["max_hp"])
-                 - W_HP * FUTURE_WEIGHT * future_left * (not win)
+                 - hp_w * max(0, net_loss - free_hp) * danger(projected, me["max_hp"])
+                 - hp_w * FUTURE_WEIGHT * future_left * (not win)
                  + UNKNOWN_VALUE * unknown - W_DEATH * (hp_after <= 0) - pot_cost * pots
                  + (SANDPIT_VALUE * escapes / max(sand_left, 1) if sandpit else 0)
                  - DAZED_COST * sum(e[8] for e in en)
-                 + value_per_damage * POISON_FUTURE * poison_future - W_HP * OSTY_HP * soaked
+                 + value_per_damage * POISON_FUTURE * poison_future - hp_w * OSTY_HP * soaked
                  - ETHEREAL_LOSS * ethereal - exhaust_cost - plays.lost + retained + (0 if win else lasting(steps))
                  + sum(ORB_HELD.get(n, 0) + (value_per_damage * FUTURE_WEIGHT * ((v or 6) + ORB_PASSIVE["Dark"] + focus)
                                              if n == "Dark" else 0) for n, v in orbs))
         return Plan(list(steps), damage, block - start[3], net_loss, kills, win, score, energy)
 
     def allowed(card, plays, steps):
-        """Play limits: Sloth cap, Smog (unplayable), Ringing (only as the first card of the turn),
+        """Play limits: Sloth cap, Smog (after a Smog card or with Smoggy: no more Skills this turn), Ringing (only as
+        the first card of the turn),
         Bound (one per turn; ponytail: earlier Bound plays this turn aren't read)."""
         aff = card.get("affliction")
         if normality and before + plays.cards >= 3:  # Normality in hand: max 3 cards this turn
             return False
         if card["name"] != "Enthralled" and enthralled > sum(s[3]["name"] == "Enthralled" for s in steps):
             return False  # Enthralled in hand must be played before anything else
-        return (plays.cards < cap and aff != "Smog" and not (aff == "Ringing" and before + plays.cards)
+        if card["type"] == "Skill" and (any(s[3].get("affliction") == "Smog" for s in steps)
+                                        or (smoggy and plays.skills >= 1)):
+            return False
+        return (plays.cards < cap and not (aff == "Ringing" and before + plays.cards)
                 and not (aff == "Bound" and any(s[3].get("affliction") == "Bound" for s in steps)))
 
     plans, seen = [], set()
@@ -1124,7 +1173,8 @@ def solve(state, top=3, kept=()):
         seen.add(key)
         plans.append(evaluate(st, steps))
         energy, counts, en = st[0], st[1], st[2]
-        for g, (card, _) in enumerate(groups):
+        for g in order:
+            card = groups[g][0]
             if counts[g] == 0 or (cost_of(card, st[6]) > energy and not card["x_cost"]) or (card["x_cost"] and energy == 0):
                 continue
             if card["type"] != "Potion" and star_cost(card) > st[11]:
@@ -1145,10 +1195,21 @@ def solve(state, top=3, kept=()):
             targets = [i for i, e in enumerate(en) if e[0] > 0] if card["target"] == "AnyEnemy" else [None]
             for t in targets:
                 s2 = play(card, t, (st[0], nxt) + st[2:], g)
+                if not potion:  # played an extra time: Strength / Vulnerable gained so far count again
+                    extra = next((n for n, ok in (("DuplicationPower", True), ("OneTwoPunchPower", card["type"] == "Attack"),
+                                                  ("BurstPower", card["type"] == "Skill")) if ok and bget(st[12], n)), None)
+                    if extra or echo > before + st[6].cards:
+                        paid = st[0] if card["x_cost"] else cost_of(card, st[6])  # the copy is free (same X)
+                        buffs2 = badd(s2[12], extra, -1) if extra else s2[12]
+                        s2 = play(card, t, (s2[0] + paid,) + s2[1:12] + (buffs2,), g)
                 dfs(s2, steps + [(label, names[t] if t is not None else None, modeled, card,
                                   foes[t].get("combat_id") if t is not None else None,
                                   "potion" if potion else "card")])
 
+    # Strength sources are tried first, then Vulnerable: of two orders reaching the same state the first is kept,
+    # so a Strength Potion / Bash that wins either way comes before the attacks (more damage if a replan falls short).
+    order = sorted(range(len(groups)), key=lambda g: (groups[g][0]["vars"].get("StrengthPower", 0) <= 0,
+                                                      groups[g][0]["vars"].get("VulnerablePower", 0) <= 0))
     dfs(start, [])
     # Equal scores: spend the energy (a harmless extra Defend beats ending the turn early; not once the fight is
     # won), then the shorter plan.
