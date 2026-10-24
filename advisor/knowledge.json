@@ -1,0 +1,3489 @@
+{
+ "archetypes": {},
+ "cards": {
+  "Abrasive": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Accelerant": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Accuracy": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Acrobatics": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "AdaptiveStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Adrenaline": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Afterimage": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Afterlife": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Aggression": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Alignment": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "AllForOne": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Anger": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Anticipate": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Armaments": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Arsenal": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "AshenStrike": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Assassinate": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "AstralPulse": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Backflip": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Backstab": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BallLightning": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BansheesCry": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Barrage": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Barricade": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "BattleTrance": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BeaconOfHope": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BeamCell": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "BeatIntoShape": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Begone": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BelieveInYou": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BigBang": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BlackHole": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "BladeDance": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BladeOfInk": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BlightStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "BloodWall": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Bloodletting": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Bludgeon": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Blur": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BodySlam": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Bombardment": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "BoneShards": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BoostAway": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BootSequence": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BorrowedTime": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BouncingFlask": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Brand": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Break": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Breakthrough": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "BubbleBubble": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Buffer": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BulkUp": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BulletTime": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Bully": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Bulwark": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BundleOfJoy": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BurningPact": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Burst": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Bury": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Calcify": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "CalculatedGamble": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "CallOfTheVoid": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Capacitor": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "CaptureSpirit": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Cascade": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "CelestialMight": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Chaos": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Charge": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "ChargeBattery": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ChildOfTheStars": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Chill": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Cinder": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Claw": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Cleanse": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "CloakAndDagger": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "CloakOfStars": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ColdSnap": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "CollisionCourse": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Colossus": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Comet": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Compact": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "CompileDriver": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Conflagration": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Conqueror": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "ConsumingShadow": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Convergence": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Coolant": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Coolheaded": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Coordinate": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "CorrosiveWave": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Corruption": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "CosmicIndifference": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Countdown": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "CrashLanding": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "CreativeAi": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "CrescentSpear": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "CrimsonMantle": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Cruelty": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "CrushUnder": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DaggerSpray": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DaggerThrow": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "DanseMacabre": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "DarkEmbrace": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Darkness": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Dash": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "DeadlyPoison": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "DeathMarch": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Deathbringer": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "DeathsDoor": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Debilitate": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DecisionsDecisions": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Defile": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Deflect": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Defragment": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Defy": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Delay": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Demesne": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "DemonForm": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "DemonicShield": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Devastate": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "DevourLife": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Dirge": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Dismantle": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DodgeAndRoll": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Dominate": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "DoubleEnergy": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DrainPower": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Dredge": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DrumOfBattle": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "DyingStar": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "EchoForm": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "EchoingSlash": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Eidolon": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "EndOfDays": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "EnergySurge": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "EnfeeblingTouch": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Envenom": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Eradicate": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "EscapePlan": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "EvilEye": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "ExpectAFight": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Expertise": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Expose": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "FanOfKnives": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Fear": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Feed": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "FeelNoPain": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Feral": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Fetch": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "FiendFire": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "FightMe": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "FightThrough": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Finisher": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "FlakCannon": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "FlameBarrier": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Flanking": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Flatten": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Flechettes": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "FlickFlack": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "FocusedStrike": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Footwork": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "ForegoneConclusion": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "ForgottenRitual": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Friendship": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Ftl": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Furnace": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Fusion": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "GammaBlast": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "GangUp": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "GatherLight": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Genesis": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "GeneticAlgorithm": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Glacier": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Glasswork": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Glimmer": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "GlimpseBeyond": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Glitterstream": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Glow": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "GoForTheEyes": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "GrandFinale": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "GraveWarden": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Graveblast": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Guards": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "GuidingStar": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "GunkUp": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Hailstorm": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HammerTime": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HandTrick": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Hang": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Haunt": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Havoc": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Haze": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Headbutt": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HeavenlyDrill": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Hegemony": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "HeirloomHammer": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "HelixDrill": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Hellraiser": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Hemokinesis": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HiddenCache": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "HiddenDaggers": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "HighFive": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Hologram": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Hotfix": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "HowlFromBeyond": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "HuddleUp": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Hyperbeam": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "IAmInvincible": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "IceLance": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Ignition": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Impervious": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "InfernalBlade": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Inferno": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "InfiniteBlades": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Inflame": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Intercept": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Invoke": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "IronWave": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Iteration": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Juggernaut": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Juggling": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "KinglyKick": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "KinglyPunch": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "KnifeTrap": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Knockdown": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "KnockoutBlow": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "KnowThyPlace": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Largesse": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "LeadingStrike": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Leap": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LegSweep": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "LegionOfBone": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Lethality": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Lift": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LightningRod": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Loop": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "LunarBlast": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "MachineLearning": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "MakeItSo": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Malaise": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Mangle": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "ManifestAuthority": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "MasterPlanner": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Melancholy": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "MementoMori": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "MeteorShower": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "MeteorStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Mimic": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Mirage": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Misery": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Modded": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "MoltenFist": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "MomentumStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "MonarchsGaze": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Monologue": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "MultiCast": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Murder": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "NecroMastery": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "NegativePulse": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Neurosurge": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "NeutronAegis": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Nightmare": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "NoEscape": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "NoxiousFumes": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Null": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Oblivion": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Offering": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "OneTwoPunch": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Orbit": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Outbreak": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Overclock": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PactsEnd": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Pagestorm": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PaleBlueDot": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Parry": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Parse": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "ParticleWall": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Patter": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "PerfectedStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "PhantomBlades": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PhotonCut": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "PiercingWail": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Pillage": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "PillarOfCreation": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Pinpoint": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "PoisonedStab": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Poke": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "PommelStrike": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Pounce": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "PreciseCut": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Predator": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Prepared": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PrimalForce": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Prophesize": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "PullAggro": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "PullFromBelow": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Putrefy": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Pyre": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Quasar": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Radiate": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Rage": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Rainbow": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Rally": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Rampage": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Rattle": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Reanimate": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Reap": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "ReaperForm": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Reave": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Reboot": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "RefineBlade": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Reflect": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Reflex": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Refract": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Resonance": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Ricochet": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "RightHandHand": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "RocketPunch": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "RoyalGamble": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Royalties": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Rupture": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Sacrifice": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Scavenge": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Scourge": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Scrape": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "SculptingStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Seance": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SecondWind": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SeekingEdge": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SentryMode": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "SerpentForm": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SetupStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SevenStars": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Severance": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "ShadowShield": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ShadowStep": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Shadowmeld": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SharedFate": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Shatter": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "ShiningStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Shroud": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "ShrugItOff": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SicEm": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SignalBoost": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Skewer": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Skim": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SleightOfFlesh": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Slice": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Smokestack": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Snakebite": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Snap": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Sneaky": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SolarStrike": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SoulStorm": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Sow": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "SpectrumShift": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Speedster": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Spinner": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SpiritOfAsh": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Spite": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "SpoilsOfBattle": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Spur": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Squeeze": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Stampede": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Stardust": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Stoke": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Stomp": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "StoneArmor": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Storm": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "StormOfSteel": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Strangle": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Subroutine": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SuckerPunch": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SummonForth": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Sunder": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Supercritical": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Supermassive": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "SweepingBeam": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "SwordBoomerang": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SwordSage": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Synchronize": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Synthesis": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Tactician": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "TagTeam": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Tank": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Taunt": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "TearAsunder": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Tempest": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Terraforming": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "TeslaCoil": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "TheHunt": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "TheScythe": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "TheSealedThrone": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "TheSmith": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Thrash": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Thunder": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Thunderclap": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "TimesUp": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "ToolsOfTheTrade": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Tracking": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Transfigure": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "TrashToTreasure": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Tremble": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "TrueGrit": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Turbo": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "TwinStrike": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Tyranny": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Undeath": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Unmovable": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Unrelenting": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Untouchable": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "UpMySleeve": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Uppercut": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Uproar": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Veilpiercer": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Vicious": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "VoidForm": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Voltaic": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "WellLaidPlans": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Whirlwind": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "WhiteNoise": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Wisp": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "WroughtInWar": {
+   "src": "mobalytics",
+   "tier": "C"
+  }
+ },
+ "encounters": {
+  "AeonglassBoss": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 42,
+    "n": 1,
+    "p90": 42,
+    "src": "your run history",
+    "turns": 11
+   }
+  },
+  "AxebotsNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.6,
+    "n": 5,
+    "p90": 3,
+    "src": "your run history",
+    "turns": 6
+   }
+  },
+  "BattlewornDummyEventEncounter": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 0.1,
+    "n": 10,
+    "p90": 0,
+    "src": "your run history",
+    "turns": 2.8
+   }
+  },
+  "BattlewornDummyEventV2Encounter": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 1,
+    "n": 1,
+    "p90": 1,
+    "src": "your run history",
+    "turns": 3
+   }
+  },
+  "BowlbugsNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 16.8,
+    "n": 14,
+    "p90": 27,
+    "src": "your run history",
+    "turns": 4.1
+   }
+  },
+  "BowlbugsWeak": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 8.6,
+    "n": 36,
+    "p90": 17,
+    "src": "your run history",
+    "turns": 3.8
+   }
+  },
+  "BygoneEffigyElite": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 13,
+    "n": 28,
+    "p90": 31,
+    "src": "your run history",
+    "turns": 5.2
+   }
+  },
+  "ByrdonisElite": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 11.9,
+    "n": 30,
+    "p90": 31,
+    "src": "your run history",
+    "turns": 4.8
+   }
+  },
+  "CeremonialBeastBoss": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 17.5,
+    "n": 17,
+    "p90": 32,
+    "src": "your run history",
+    "turns": 10.2
+   }
+  },
+  "ChompersNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 10.5,
+    "n": 13,
+    "p90": 19,
+    "src": "your run history",
+    "turns": 6.2
+   }
+  },
+  "ConstructMenagerieNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 6.9,
+    "n": 7,
+    "p90": 10,
+    "src": "your run history",
+    "turns": 4.6
+   }
+  },
+  "CorpseSlugsNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 9.8,
+    "n": 9,
+    "p90": 14,
+    "src": "your run history",
+    "turns": 4.6
+   }
+  },
+  "CorpseSlugsWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.8,
+    "n": 29,
+    "p90": 10,
+    "src": "your run history",
+    "turns": 4.0
+   }
+  },
+  "CubexConstructNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.8,
+    "n": 9,
+    "p90": 15,
+    "src": "your run history",
+    "turns": 4
+   }
+  },
+  "CultistsNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 12.6,
+    "n": 9,
+    "p90": 19,
+    "src": "your run history",
+    "turns": 5.3
+   }
+  },
+  "DecimillipedeElite": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 20.6,
+    "n": 34,
+    "p90": 46,
+    "src": "your run history",
+    "turns": 4.6
+   }
+  },
+  "DenseVegetationEventEncounter": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5,
+    "n": 1,
+    "p90": 5,
+    "src": "your run history",
+    "turns": 5
+   }
+  },
+  "DevotedSculptorWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 8.9,
+    "n": 27,
+    "p90": 14,
+    "src": "your run history",
+    "turns": 4.6
+   }
+  },
+  "DoormakerBoss": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 27.7,
+    "n": 16,
+    "p90": 46,
+    "src": "your run history",
+    "turns": 11.6
+   }
+  },
+  "EntomancerElite": {
+   "dmg": {
+    "deaths": 3,
+    "mean": 17.7,
+    "n": 38,
+    "p90": 46,
+    "src": "your run history",
+    "turns": 5.9
+   }
+  },
+  "ExoskeletonsNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 7.4,
+    "n": 12,
+    "p90": 13,
+    "src": "your run history",
+    "turns": 4.2
+   }
+  },
+  "ExoskeletonsWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5.2,
+    "n": 33,
+    "p90": 11,
+    "src": "your run history",
+    "turns": 4.2
+   }
+  },
+  "FabricatorNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 9,
+    "n": 5,
+    "p90": 0,
+    "src": "your run history",
+    "turns": 4.8
+   }
+  },
+  "FlyconidNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 8.2,
+    "n": 8,
+    "p90": 14,
+    "src": "your run history",
+    "turns": 4.4
+   }
+  },
+  "FogmogNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 4.4,
+    "n": 5,
+    "p90": 8,
+    "src": "your run history",
+    "turns": 5.2
+   }
+  },
+  "FossilStalkerNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 9.6,
+    "n": 10,
+    "p90": 22,
+    "src": "your run history",
+    "turns": 3.9
+   }
+  },
+  "FrogKnightNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 0,
+    "n": 5,
+    "p90": 0,
+    "src": "your run history",
+    "turns": 5.6
+   }
+  },
+  "FuzzyWurmCrawlerWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 1.4,
+    "n": 38,
+    "p90": 6,
+    "src": "your run history",
+    "turns": 4.4
+   }
+  },
+  "GlobeHeadNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 2.8,
+    "n": 4,
+    "p90": 2,
+    "src": "your run history",
+    "turns": 4.5
+   }
+  },
+  "GremlinMercNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 4,
+    "n": 6,
+    "p90": 8,
+    "src": "your run history",
+    "turns": 5.3
+   }
+  },
+  "HauntedShipNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 9.1,
+    "n": 7,
+    "p90": 13,
+    "src": "your run history",
+    "turns": 3.7
+   }
+  },
+  "HunterKillerNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 8.5,
+    "n": 21,
+    "p90": 17,
+    "src": "your run history",
+    "turns": 5.0
+   }
+  },
+  "InfestedPrismsElite": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 13.7,
+    "n": 35,
+    "p90": 26,
+    "src": "your run history",
+    "turns": 6.5
+   }
+  },
+  "InkletsNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.2,
+    "n": 8,
+    "p90": 6,
+    "src": "your run history",
+    "turns": 4.5
+   }
+  },
+  "KaiserCrabBoss": {
+   "dmg": {
+    "deaths": 3,
+    "mean": 24.5,
+    "n": 18,
+    "p90": 42,
+    "src": "your run history",
+    "turns": 9.9
+   }
+  },
+  "KnightsElite": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 20.3,
+    "n": 18,
+    "p90": 40,
+    "src": "your run history",
+    "turns": 5.4
+   }
+  },
+  "KnowledgeDemonBoss": {
+   "dmg": {
+    "deaths": 8,
+    "mean": 31.4,
+    "n": 18,
+    "p90": 63,
+    "src": "your run history",
+    "turns": 9.7
+   }
+  },
+  "LagavulinMatriarchBoss": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 25.8,
+    "n": 11,
+    "p90": 55,
+    "src": "your run history",
+    "turns": 11.1
+   }
+  },
+  "LivingFogNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 8.1,
+    "n": 9,
+    "p90": 13,
+    "src": "your run history",
+    "turns": 5.6
+   }
+  },
+  "LouseProgenitorNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.9,
+    "n": 14,
+    "p90": 8,
+    "src": "your run history",
+    "turns": 5.9
+   }
+  },
+  "MawlerNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5.4,
+    "n": 8,
+    "p90": 10,
+    "src": "your run history",
+    "turns": 5.4
+   }
+  },
+  "MechaKnightElite": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 24.8,
+    "n": 18,
+    "p90": 41,
+    "src": "your run history",
+    "turns": 8.1
+   }
+  },
+  "MysteriousKnightEventEncounter": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 1.5,
+    "n": 2,
+    "p90": 0,
+    "src": "your run history",
+    "turns": 5.5
+   }
+  },
+  "MytesNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 11.5,
+    "n": 16,
+    "p90": 25,
+    "src": "your run history",
+    "turns": 5.4
+   }
+  },
+  "NibbitsNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 12.9,
+    "n": 7,
+    "p90": 29,
+    "src": "your run history",
+    "turns": 6.1
+   }
+  },
+  "NibbitsWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.4,
+    "n": 27,
+    "p90": 9,
+    "src": "your run history",
+    "turns": 4.2
+   }
+  },
+  "OvergrowthCrawlers": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5.7,
+    "n": 3,
+    "p90": 0,
+    "src": "your run history",
+    "turns": 5.7
+   }
+  },
+  "OvicopterNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 13.3,
+    "n": 11,
+    "p90": 34,
+    "src": "your run history",
+    "turns": 6.1
+   }
+  },
+  "OwlMagistrateNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 5.3,
+    "n": 7,
+    "p90": 7,
+    "src": "your run history",
+    "turns": 4.6
+   }
+  },
+  "PhantasmalGardenersElite": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 22.8,
+    "n": 27,
+    "p90": 50,
+    "src": "your run history",
+    "turns": 6.7
+   }
+  },
+  "PhrogParasiteElite": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 19.5,
+    "n": 27,
+    "p90": 41,
+    "src": "your run history",
+    "turns": 8.1
+   }
+  },
+  "PunchConstructNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 9.8,
+    "n": 10,
+    "p90": 18,
+    "src": "your run history",
+    "turns": 5.2
+   }
+  },
+  "PunchOffEventEncounter": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 41,
+    "n": 1,
+    "p90": 41,
+    "src": "your run history",
+    "turns": 7
+   }
+  },
+  "QueenBoss": {
+   "dmg": {
+    "deaths": 4,
+    "mean": 35.1,
+    "n": 14,
+    "p90": 59,
+    "src": "your run history",
+    "turns": 10.1
+   }
+  },
+  "RubyRaidersNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 14.9,
+    "n": 11,
+    "p90": 23,
+    "src": "your run history",
+    "turns": 4.8
+   }
+  },
+  "ScrollsOfBitingNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 2.4,
+    "n": 5,
+    "p90": 1,
+    "src": "your run history",
+    "turns": 3
+   }
+  },
+  "ScrollsOfBitingWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 4.4,
+    "n": 25,
+    "p90": 10,
+    "src": "your run history",
+    "turns": 3.3
+   }
+  },
+  "SeapunkNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 2.5,
+    "n": 2,
+    "p90": 0,
+    "src": "your run history",
+    "turns": 3.5
+   }
+  },
+  "SeapunkWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.2,
+    "n": 29,
+    "p90": 8,
+    "src": "your run history",
+    "turns": 3.6
+   }
+  },
+  "SewerClamNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5.4,
+    "n": 7,
+    "p90": 13,
+    "src": "your run history",
+    "turns": 5.1
+   }
+  },
+  "ShrinkerBeetleWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 1.2,
+    "n": 42,
+    "p90": 4,
+    "src": "your run history",
+    "turns": 3.7
+   }
+  },
+  "SkulkingColonyElite": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 14.7,
+    "n": 26,
+    "p90": 30,
+    "src": "your run history",
+    "turns": 6.1
+   }
+  },
+  "SlimedBerserkerNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 6.7,
+    "n": 6,
+    "p90": 13,
+    "src": "your run history",
+    "turns": 6.3
+   }
+  },
+  "SlimesNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 7.1,
+    "n": 8,
+    "p90": 11,
+    "src": "your run history",
+    "turns": 5.5
+   }
+  },
+  "SlimesWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 2.7,
+    "n": 34,
+    "p90": 7,
+    "src": "your run history",
+    "turns": 4.7
+   }
+  },
+  "SlitheringStranglerNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 7.5,
+    "n": 6,
+    "p90": 11,
+    "src": "your run history",
+    "turns": 5
+   }
+  },
+  "SludgeSpinnerWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3.4,
+    "n": 30,
+    "p90": 9,
+    "src": "your run history",
+    "turns": 3.6
+   }
+  },
+  "SlumberingBeetleNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 9.5,
+    "n": 6,
+    "p90": 7,
+    "src": "your run history",
+    "turns": 7
+   }
+  },
+  "SnappingJaxfruitNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 4.7,
+    "n": 6,
+    "p90": 8,
+    "src": "your run history",
+    "turns": 4.5
+   }
+  },
+  "SoulFyshBoss": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 25,
+    "n": 12,
+    "p90": 37,
+    "src": "your run history",
+    "turns": 9.8
+   }
+  },
+  "SoulNexusElite": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 22.9,
+    "n": 20,
+    "p90": 52,
+    "src": "your run history",
+    "turns": 5.5
+   }
+  },
+  "SpinyToadNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 9.5,
+    "n": 10,
+    "p90": 20,
+    "src": "your run history",
+    "turns": 5.6
+   }
+  },
+  "TerrorEelElite": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 21.8,
+    "n": 17,
+    "p90": 33,
+    "src": "your run history",
+    "turns": 6.6
+   }
+  },
+  "TestSubjectBoss": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 45,
+    "n": 3,
+    "p90": 46,
+    "src": "your run history",
+    "turns": 10.3
+   }
+  },
+  "TheInsatiableBoss": {
+   "dmg": {
+    "deaths": 4,
+    "mean": 16,
+    "n": 18,
+    "p90": 35,
+    "src": "your run history",
+    "turns": 8.9
+   }
+  },
+  "TheKinBoss": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 24.8,
+    "n": 12,
+    "p90": 43,
+    "src": "your run history",
+    "turns": 9.8
+   }
+  },
+  "TheLostAndForgottenNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 2.7,
+    "n": 7,
+    "p90": 3,
+    "src": "your run history",
+    "turns": 3.4
+   }
+  },
+  "TheObscuraNormal": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 11.9,
+    "n": 14,
+    "p90": 20,
+    "src": "your run history",
+    "turns": 5.5
+   }
+  },
+  "ThievingHopperWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 10.2,
+    "n": 34,
+    "p90": 21,
+    "src": "your run history",
+    "turns": 4.2
+   }
+  },
+  "ToadpolesNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 2,
+    "n": 2,
+    "p90": 2,
+    "src": "your run history",
+    "turns": 4
+   }
+  },
+  "ToadpolesWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 4.9,
+    "n": 32,
+    "p90": 14,
+    "src": "your run history",
+    "turns": 3.7
+   }
+  },
+  "TunnelerNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 4.8,
+    "n": 4,
+    "p90": 4,
+    "src": "your run history",
+    "turns": 6.5
+   }
+  },
+  "TunnelerWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5.5,
+    "n": 30,
+    "p90": 11,
+    "src": "your run history",
+    "turns": 5.1
+   }
+  },
+  "TurretOperatorWeak": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 5.6,
+    "n": 25,
+    "p90": 14,
+    "src": "your run history",
+    "turns": 3.4
+   }
+  },
+  "TwoTailedRatsNormal": {
+   "dmg": {
+    "deaths": 0,
+    "mean": 3,
+    "n": 9,
+    "p90": 7,
+    "src": "your run history",
+    "turns": 3.4
+   }
+  },
+  "VantomBoss": {
+   "dmg": {
+    "deaths": 3,
+    "mean": 29.4,
+    "n": 13,
+    "p90": 55,
+    "src": "your run history",
+    "turns": 11.8
+   }
+  },
+  "VineShamblerNormal": {
+   "dmg": {
+    "deaths": 1,
+    "mean": 2.1,
+    "n": 9,
+    "p90": 3,
+    "src": "your run history",
+    "turns": 4.6
+   }
+  },
+  "WaterfallGiantBoss": {
+   "dmg": {
+    "deaths": 2,
+    "mean": 21.6,
+    "n": 11,
+    "p90": 46,
+    "src": "your run history",
+    "turns": 10.2
+   }
+  }
+ },
+ "events": {},
+ "monsters": {},
+ "potions": {
+  "Ashwater": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "AttackPotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "BeetleJuice": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "BlessingOfTheForge": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "BlockPotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "BloodPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "BoneBrew": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "BottledPotential": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "ColorlessPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "CosmicConcoction": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "CunningPotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "CureAll": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "DexterityPotion": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "DistilledChaos": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "DropletOfPrecognition": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "Duplicator": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "EnergyPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "EntropicBrew": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "EssenceOfDarkness": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "ExplosiveAmpoule": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "FairyInABottle": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "FirePotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "FlexPotion": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "FocusPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "Fortifier": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "FruitJuice": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "FyshOil": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "GamblersBrew": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "GhostInAJar": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "GigantificationPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "GlowwaterPotion": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "HeartOfIron": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "KingsCourage": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "LiquidBronze": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "LiquidMemories": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "LuckyTonic": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "MazalethsGift": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "OrobicAcid": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "PoisonPotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "PotOfGhouls": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "PotionOfBinding": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "PotionOfCapacity": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "PotionOfDoom": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "PotionShapedRock": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "PowderedDemise": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "PowerPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "RadiantTincture": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "RegenPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "ShacklingPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "ShipInABottle": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "SkillPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "SneckoOil": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "SoldiersStew": {
+   "src": "mobalytics",
+   "tier": "Niche"
+  },
+  "SpeedPotion": {
+   "src": "mobalytics",
+   "tier": "Mediocre"
+  },
+  "StableSerum": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "StarPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "StrengthPotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "SwiftPotion": {
+   "src": "mobalytics",
+   "tier": "Good Late"
+  },
+  "TouchOfInsanity": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  },
+  "VulnerablePotion": {
+   "src": "mobalytics",
+   "tier": "Good Early"
+  },
+  "WeakPotion": {
+   "src": "mobalytics",
+   "tier": "Good Always"
+  }
+ },
+ "relics": {
+  "Akabeko": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "AmethystAubergine": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Anchor": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "ArtOfWar": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "BagOfMarbles": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "BagOfPreparation": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "BeatingRemnant": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Bellows": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BeltBuckle": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "BigHat": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BigMushroom": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "BingBong": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "BloodVial": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "BoneFlute": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BoneTea": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "BookOfFiveRings": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BookRepairKnife": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Bookmark": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "BowlerHat": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Bread": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Brimstone": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "BronzeScales": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "BurningSticks": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Byrdpip": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Candelabra": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "CaptainsWheel": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Cauldron": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "CentennialPuzzle": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Chandelier": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "CharonsAshes": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ChemicalX": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "CloakClasp": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "DarkstonePeriapt": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "DataDisk": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "DaughterOfTheWind": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "DemonTongue": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "DingyRug": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "DollysMirror": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DragonFruit": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "DreamCatcher": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "EmberTea": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "EmotionChip": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "EternalFeather": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "FencingManual": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "FestivePopper": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ForgottenSoul": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "FragrantMushroom": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "FresnelLens": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "FrozenEgg": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "FuneraryMask": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "GalacticDust": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "GamblingChip": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "GamePiece": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "GhostSeed": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Girya": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "GnarledHammer": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "GoldPlatedCables": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Gorget": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "GremlinHorn": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HandDrill": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "HappyFlower": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HelicalDart": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "HistoryCourse": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "HornCleat": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "IceCream": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "IntimidatingHelmet": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "IvoryTile": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "JossPaper": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "JuzuBracelet": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "Kifuda": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Kunai": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Kusarigama": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Lantern": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LastingCandy": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LavaLamp": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "LeesWaffle": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LetterOpener": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LizardTail": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "LostWisp": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LuckyFysh": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "LunarPastry": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Mango": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "MawBank": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "MealTicket": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "MeatOnTheBone": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "MembershipCard": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "MercuryHourglass": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Metronome": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "MiniRegent": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "MiniatureCannon": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "MiniatureTent": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "MoltenEgg": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "MrStruggles": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "MummifiedHand": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "MysticLighter": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "NinjaScroll": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Nunchaku": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "OddlySmoothStone": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "OldCoin": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Orichalcum": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "OrnamentalFan": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Orrery": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Pantograph": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "PaperKrane": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PaperPhrog": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ParryingShield": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Pear": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "PenNib": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Pendulum": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Permafrost": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "PetrifiedToad": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Planisphere": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Pocketwatch": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PollinousCore": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PotionBelt": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "PowerCell": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "PrayerWheel": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "PunchDagger": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "RainbowRing": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "RazorTooth": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "RedMask": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "RedSkull": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "RegalPillow": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Regalite": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "ReptileTrinket": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "RingingTriangle": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "RippleBasin": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "RoyalPoison": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "RoyalStamp": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "RuinedHelmet": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "RunicCapacitor": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "ScreamingFlagon": {
+   "src": "mobalytics",
+   "tier": "D"
+  },
+  "SelfFormingClay": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "Shovel": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "Shuriken": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "SlingOfCourage": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "SneckoSkull": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "SparklingRouge": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "StoneCalendar": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "StoneCracker": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Strawberry": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "StrikeDummy": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "SturdyClamp": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "SwordOfStone": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "TheAbacus": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "TheBoot": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "TheCourier": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Tingsha": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "TinyMailbox": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "ToughBandages": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "ToxicEgg": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "TungstenRod": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "TuningFork": {
+   "src": "mobalytics",
+   "tier": "S"
+  },
+  "UnsettlingLamp": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Vajra": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "Vambrace": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "VenerableTeaSet": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "VexingPuzzlebox": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "VitruvianMinion": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "WarPaint": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "Whetstone": {
+   "src": "mobalytics",
+   "tier": "B"
+  },
+  "WhiteBeastStatue": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "WhiteStar": {
+   "src": "mobalytics",
+   "tier": "A"
+  },
+  "WingCharm": {
+   "src": "mobalytics",
+   "tier": "C"
+  },
+  "WongosMysteryTicket": {
+   "src": "mobalytics",
+   "tier": "B"
+  }
+ }
+}
