@@ -87,30 +87,8 @@ C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readercheck\Sts2Reader.deps.jso
 C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readercheck\Sts2Reader.runtimeconfig.json
 C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readercheck\Sts2Reader.dll
 C:\Users\Yutti Chylong\AppData\Local\Temp\claude\readercheck\Sts2Reader.pdb
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Sts2Reader.exe
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Sts2Reader.deps.json
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Sts2Reader.runtimeconfig.json
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Sts2Reader.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Sts2Reader.pdb
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Diagnostics.NETCore.Client.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Diagnostics.Runtime.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Configuration.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Configuration.Binder.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Logging.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Options.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\bin\Release\net10.0\Microsoft.Extensions.Primitives.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.csproj.AssemblyReference.cache
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.AssemblyInfoInputs.cache
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.AssemblyInfo.cs
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.csproj.CoreCompileInputs.cache
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.csproj.Up2Date
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\refint\Sts2Reader.dll
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.pdb
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\Sts2Reader.genruntimeconfig.cache
-C:\Users\Yutti Chylong\Documents\3 - Game Creation\sts2-advisor Dev\sts2-advisor v6\sts2-advisor\reader\obj\Release\net10.0\ref\Sts2Reader.dll
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Documents-3---Game-Creation-sts2-advisor-Dev\09af5e7e-4bbf-40f4-b89d-fb663eebea6f\scratchpad\readerbuild\Sts2Reader.exe
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Documents-3---Game-Creation-sts2-advisor-Dev\09af5e7e-4bbf-40f4-b89d-fb663eebea6f\scratchpad\readerbuild\Sts2Reader.deps.json
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Documents-3---Game-Creation-sts2-advisor-Dev\09af5e7e-4bbf-40f4-b89d-fb663eebea6f\scratchpad\readerbuild\Sts2Reader.runtimeconfig.json
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Documents-3---Game-Creation-sts2-advisor-Dev\09af5e7e-4bbf-40f4-b89d-fb663eebea6f\scratchpad\readerbuild\Sts2Reader.dll
+C:\Users\Yutti Chylong\AppData\Local\Temp\claude\C--Users-Yutti-Chylong-Documents-3---Game-Creation-sts2-advisor-Dev\09af5e7e-4bbf-40f4-b89d-fb663eebea6f\scratchpad\readerbuild\Sts2Reader.pdb

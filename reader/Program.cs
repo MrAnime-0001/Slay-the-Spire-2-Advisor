@@ -10,6 +10,7 @@ string[] CardTypes = ["None", "Attack", "Skill", "Power", "Status", "Curse", "Qu
 string[] TargetTypes = ["None", "Self", "AnyEnemy", "AllEnemies", "RandomEnemy", "AnyPlayer", "AnyAlly", "AllAllies", "TargetedNoCreature", "Osty"];
 string[] Phases = ["None", "Start", "AutoPrePlay", "Play", "AutoPostPlay", "End"];
 string[] MapTypes = ["Unassigned", "Unknown", "Shop", "Treasure", "RestSite", "Monster", "Elite", "Boss", "Ancient"];
+string[] RoomTypeNames = ["Unassigned", "Monster", "Elite", "Boss", "Treasure", "Shop", "Event", "RestSite", "Map"];
 string[] Rarities =["None", "Basic", "Common", "Uncommon", "Rare", "Ancient", "Event", "Token", "Status", "Curse", "Quest"];
 string last = "";
 var singletons = new Dictionary<string, ulong>();
@@ -96,8 +97,10 @@ object Snapshot(ClrRuntime rt)
                      potions = Potions(player), relics = Relics(player),
                      potion_slots = Items(F(player, "_potionSlots")).Count(), gold = I(player, "_gold"),
                      act = I(run, "_currentActIndex"), ascension = I(run, "AscensionLevel"),
+                     players = players.Count, // co-op: the game scales enemy HP / block by this
                      seed = Safe("seed", () => Str(F(run, "Rng"), "StringSeed")), // run id: same run across advisor restarts
                      map = Safe("map", () => Map(run)), shop = Safe("shop", () => Shop(run)),
+                     rooms = Safe("rooms", () => Rooms(run)),
                      act_name = Safe("act_name", () => Items(F(run, "Acts")).ElementAtOrDefault(I(run, "_currentActIndex")) is { IsNull: false } a ? Name(a) : null),
                      map_open = Safe<bool?>("map_open", () => MapOpen(rt)), choose_card = choose,
                      @event = Safe("event", () => Event(runMgr, run)), ui = Safe("ui", () => Ui(rt, run)),
@@ -139,7 +142,11 @@ object Snapshot(ClrRuntime rt)
         holding = Safe("holding", () => Holding(rt)), // a card is picked up / being aimed (Esc puts it back)
         choose_card = choose, // "choose a card" screen: Knowledge Demon curse, Attack/Skill potions...
         ascension = I(run, "AscensionLevel"), // enemy numbers switch at A8 (HP) / A9 (damage)
+        gold = I(player, "_gold"), // event rules (Tea Master: 150+) when replaying recorded fights
         seed = Safe("seed", () => Str(F(run, "Rng"), "StringSeed")), // run id (recordings, run history)
+        rooms = Safe("rooms", () => Rooms(run)), // boss HP value: is this the run's last fight?
+        party = Safe<int?>("party", () => players.Count(p => I(F(p, "Creature"), "_currentHp") > 0)), // co-op: living players
+        players = players.Count, // co-op: all players (the game scales enemy HP / block by this)
         cards_played = CardsPlayed(cm, cs), // this turn, for Sloth / Ringing / Slow
         // Read from the game's combat history, so an advisor restart mid-turn still knows them.
         my_cards_played = Safe<int?>("my_cards_played", () => ThisRound(cm, cs) // multiplayer: yours only (Velvet Choker, Scarf)
@@ -212,7 +219,9 @@ object? HandSelect(ClrRuntime rt, ulong combat)
             return new { mode = mode == 3 ? "upgrade" : "select", prompt = key,
                          min = prefs.ReadField<int>("<MinSelect>k__BackingField"),
                          max = prefs.ReadField<int>("<MaxSelect>k__BackingField"),
-                         selected = F(hand, "_selectedCards").ReadField<int>("_size") };
+                         selected = F(hand, "_selectedCards").ReadField<int>("_size"),
+                         // which cards are picked: the autopilot checks a number key took the card it meant
+                         selected_names = Items(F(hand, "_selectedCards")).Select(Name).ToArray() };
         }
         return null;
     }
@@ -284,6 +293,68 @@ object? Map(ClrObject run)
         return new { current, start = At(start), boss = boss.IsNull ? null : At(boss), nodes };
     }
     catch { return null; } // optional: never fail the snapshot over the map
+}
+
+// The act's pre-rolled rooms (ActModel._rooms, RoomSet; same in v0.107.1 and v0.111.0): its boss(es), and the queues
+// the next hallway fight / elite / event are taken from (list[visited % count]). A "?" node rolls its room type on
+// entry, so next_event is the event IF it turns out to be one.
+object? Rooms(ClrObject run)
+{
+    var act = Items(F(run, "Acts")).ElementAtOrDefault(I(run, "_currentActIndex"));
+    if (act.IsNull) return null;
+    var rooms = F(act, "_rooms");
+    string? Next(string list, string visited)
+    {
+        var l = Items(F(rooms, list)).ToList();
+        return l.Count == 0 ? null : Name(l[I(rooms, visited) % l.Count]);
+    }
+    string? Opt(ClrObject o) => o.IsNull ? null : Name(o);
+    return new
+    {
+        boss = Opt(F(rooms, "_boss")),
+        second_boss = Opt(rooms.ReadObjectField("<SecondBoss>k__BackingField")), // A10, final act
+        bosses_visited = I(rooms, "bossEncountersVisited"),
+        next_fight = Next("normalEncounters", "normalEncountersVisited"),
+        next_elite = Next("eliteEncounters", "eliteEncountersVisited"),
+        next_event = Next("events", "eventsVisited"),
+        elites = Items(F(rooms, "eliteEncounters")).Select(Name).ToArray(),
+        elites_visited = I(rooms, "eliteEncountersVisited"),
+        fights = Items(F(rooms, "normalEncounters")).Select(Name).ToArray(),
+        fights_visited = I(rooms, "normalEncountersVisited"),
+        events = Items(F(rooms, "events")).Select(Name).ToArray(),
+        events_visited = I(rooms, "eventsVisited"),
+        // events already seen this run (RunState._visitedEventIds, ModelId.Entry like ROOM_FULL_OF_CHEESE): skipped
+        events_seen = HashItems(F(run, "_visitedEventIds")).Select(m => m.ReadStringField("<Entry>k__BackingField")).ToArray(),
+        unknown = Safe("unknown", () => UnknownOdds(run)),
+    };
+}
+
+// What "?" rooms roll into (RunState.Odds.UnknownMapPoint, UnknownMapPointOdds.Roll): its own RNG stream
+// (MegaRandom = xoshiro256**, state _s0.._s3; same in both builds) and the current / base odds per room type, in the
+// dictionaries' order (the roll walks them in that order). The advisor replays the rolls along each path (pathing.py).
+object UnknownOdds(ClrObject run)
+{
+    var odds = F(F(run, "<Odds>k__BackingField"), "<UnknownMapPoint>k__BackingField");
+    var rnd = F(F(odds, "_rng"), "_random");
+    List<object[]> D(string name)
+    {
+        var d = F(odds, name);
+        var entries = d.ReadObjectField("_entries");
+        var o = new List<object[]>();
+        for (int i = 0; !entries.IsNull && i < d.ReadField<int>("_count"); i++)
+        {
+            var e = entries.AsArray().GetStructValue(i);
+            if (e.ReadField<int>("next") >= -1) // < -1: a freed slot
+                o.Add([RoomTypeNames.ElementAtOrDefault(e.ReadField<int>("key")) ?? "?", e.ReadField<float>("value")]);
+        }
+        return o;
+    }
+    return new
+    {
+        state = new[] { "_s0", "_s1", "_s2", "_s3" }.Select(s => rnd.ReadField<ulong>(s).ToString()).ToArray(),
+        odds = D("_nonEventOdds"),
+        base_odds = D("_baseOdds"),
+    };
 }
 
 IEnumerable<ClrObject> HashItems(ClrObject set)
@@ -535,7 +606,11 @@ object? CardGrid(ClrRuntime rt)
         // matched through the holders' CardModels like ChooseCard (nothing behind the overlay counts).
         string[] piles = ["None", "Draw", "Hand", "Discard", "Exhaust", "Play", "Deck"];
         var pileObj = TryField(top, "_pile")?.ReadObject(top.Address, false) ?? default;
-        var models = Items(F(top, "_cards")).Select(c => c.Address).ToList();
+        var list = Items(F(top, "_cards")).ToList();
+        // NCombatPileCardSelectScreen (Dredge, Hologram...) never fills _cards: its cards are the pile's.
+        // ponytail: a pile screen with a filter shows fewer; a card it hides just isn't found by the autopilot.
+        if (list.Count == 0 && !pileObj.IsNull) list = Items(F(pileObj, "_cards")).ToList();
+        var models = list.Select(c => c.Address).ToList();
         int? hovered = null;
         int matched = 0;
         foreach (var h in Instances(rt, "MegaCrit.Sts2.Core.Nodes.Cards.Holders.NGridCardHolder", force: false).Where(Live))
@@ -547,7 +622,20 @@ object? CardGrid(ClrRuntime rt)
             if (B(h, "_isHovered")) hovered = idx;
         }
         if (matched < models.Count) Instances(rt, "MegaCrit.Sts2.Core.Nodes.Cards.Holders.NGridCardHolder", force: true);
-        return new { screen = Name(top), prompt, min, max, cards = Items(F(top, "_cards")).Select(Card).ToArray(),
+        // Scroll state (NCardGrid): _targetDrag = scroll offset (0 top, -40 per wheel notch down), row pitch =
+        // card height + 40 padding, _cards = display order (sorted). The autopilot scrolls straight to a card's row
+        // from wherever the grid is (also after you scrolled it yourself).
+        var grid = F(top, "_grid");
+        float? scroll = null, rowH = null;
+        int[]? order = null;
+        if (!grid.IsNull)
+        {
+            scroll = TryField(grid, "_targetDrag")?.Read<float>(grid.Address, false);
+            var size = TryField(grid, "_cardSize")?.ReadStruct(grid.Address, false);
+            if (size is { } sz) rowH = sz.ReadField<float>("Y") + 40f;
+            order = Items(F(grid, "_cards")).Select(c => models.IndexOf(c.Address)).ToArray();
+        }
+        return new { screen = Name(top), prompt, min, max, cards = list.Select(Card).ToArray(), scroll, row_h = rowH, order,
                      pile = pileObj.IsNull ? null : piles.ElementAtOrDefault(I(pileObj, "Type")), hovered };
     }
     catch { return null; }
@@ -631,6 +719,8 @@ object Creature(ClrObject c) => new
     powers = Items(F(c, "_powers")).Select(p => new { name = Name(p), amount = I(p, "_amount"),
                                                        played = TryField(p, "_cardsPlayedThisTurn")?.Read<int>(p.Address, false), // Sloth
                                                        facing = TryField(p, "_facing")?.Read<int>(p.Address, false), // Surrounded: 0 Right, 1 Left
+                                                       // Swipe (thieves): the card it took, back only if the thief dies
+                                                       stolen = TryField(p, "_stolenCard")?.ReadObject(p.Address, false) is { IsNull: false } sc ? Card(sc) : null,
                                                        data = PowerData(p) }).ToArray(),
 };
 

@@ -15,10 +15,11 @@ import threading
 import urllib.parse
 import urllib.request
 
-from relics import GAME_DIR
+from relics import GAME_DIR, GAMEDATA
 
 CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon_cache")
 WIKI = "https://slaythespire.wiki.gg"  # the only host fetched from
+UA = {"User-Agent": "sts2-advisor/1.0 (personal overlay; icon cache)"}  # wiki.gg throttles anonymous clients
 MAX_BYTES, TIMEOUT = 512 * 1024, 5
 # Monster intents (the reader's kind, e.g. SingleAttackIntent) -> pack icon (images/packed/intents/<name>/ frames,
 # or intent_<name>.png for death_blow / hidden)
@@ -111,6 +112,25 @@ class Pack:
         return self.texture(name)
 
 
+# Elite / boss art for route rows (kind "encounter", name = encounter id like ByrdonisElite). Bosses: the game's map
+# icon (images/map/placeholder/<boss>_icon.png; Ceremonial Beast, Queen and The Insatiable only have animated ones).
+# Everything else: the wiki's monster portrait, StS2_<first monster>.png, or the one named here.
+WIKI_ENCOUNTER = {"DecimillipedeElite": "Decimillipede", "KnightsElite": "Spectral Knight",
+                  "KaiserCrabBoss": "Kaiser Crab", "TheKinBoss": "Kin Priest"}
+# Pets (kind "monster"): the pack only has their animation atlas, so the wiki portrait.
+WIKI_MONSTER = {"Osty": "Osty_Idle.webp"}
+
+
+def wiki_title(kind, name):
+    """The wiki file name for an icon: StS2_<this>(.png unless it has its own extension)."""
+    if kind == "monster":
+        return WIKI_MONSTER.get(name, name)
+    if kind != "encounter":
+        return name
+    monsters = GAMEDATA.get("encounters", {}).get(name, {}).get("monsters") or [name]
+    return WIKI_ENCOUNTER.get(name) or re.sub(r"(?<=[a-z])(?=[A-Z])", " ", monsters[0])
+
+
 def pack_paths(kind, name):
     """Where an icon may live in the pack, best first (kind: relic, potion, power, energy, character, orb, intent,
     room, ui). Beta-only relics sit outside the atlas (images/relics/beta/)."""
@@ -124,6 +144,8 @@ def pack_paths(kind, name):
         return [pack_path(kind, name), f"images/powers/{s}.png", f"images/powers/beta/{s}.png"]
     if kind == "intent":  # attack, buff, debuff, defend, ...: the first animation frame
         return [f"images/packed/intents/{name}/*", f"images/packed/intents/intent_{name}.png"]
+    if kind == "encounter":
+        return [f"images/map/placeholder/{s}_icon.png"] if name.endswith("Boss") else []
     return [p] if (p := pack_path(kind, name)) else []
 
 
@@ -157,15 +179,16 @@ def _web(kind, name):
     from PIL import Image
     key, today = f"{kind}/{name}", datetime.date.today().isoformat()
     try:
+        t = wiki_title(kind, name)
         api = (f"{WIKI}/api.php?action=query&format=json&prop=imageinfo&iiprop=url&titles="
-               + urllib.parse.quote(f"File:StS2_{name}.png"))
-        with urllib.request.urlopen(api, timeout=TIMEOUT) as r:
+               + urllib.parse.quote(f"File:StS2_{t}" + ("" if "." in t else ".png")))
+        with urllib.request.urlopen(urllib.request.Request(api, headers=UA), timeout=TIMEOUT) as r:
             pages = json.loads(r.read(MAX_BYTES))["query"]["pages"]
         url = next((p["imageinfo"][0]["url"] for p in pages.values() if p.get("imageinfo")), None)
         if not url or urllib.parse.urlparse(url).scheme != "https" or not (
                 urllib.parse.urlparse(url).hostname or "").endswith("wiki.gg"):
             raise LookupError("no image")
-        with urllib.request.urlopen(url, timeout=TIMEOUT) as r:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=TIMEOUT) as r:
             data = r.read(MAX_BYTES + 1)
         if len(data) > MAX_BYTES:
             raise ValueError("too big")
@@ -206,7 +229,7 @@ def get(kind, name, online=True):
     cached = os.path.join(CACHE, kind, name + ".png")
     if img is None and os.path.exists(cached):
         img = Image.open(cached).convert("RGBA")
-    if img is None and online and kind in ("relic", "potion", "power") and key not in _fetching \
+    if img is None and online and kind in ("relic", "potion", "power", "encounter", "monster") and key not in _fetching \
             and _missing().get(key) != datetime.date.today().isoformat():
         _fetching.add(key)
         threading.Thread(target=_web, args=(kind, name), daemon=True).start()
@@ -214,6 +237,35 @@ def get(kind, name, online=True):
     if img is not None or key not in _fetching:
         _mem[key] = img
     return img
+
+
+_slots = {}
+
+
+def slot_x(encounter):
+    """{slot name: x} where each named enemy slot stands on screen, from the fight's scene in the pack
+    (scenes/encounters/<encounter>.tscn Marker2D positions; NCombatRoom.PositionCreaturesWithSlots). {} when the
+    fight has no slots: then the game lines enemies up left to right in list order (PositionEnemies)."""
+    global _pack
+    if encounter not in _slots:
+        out = {}
+        try:
+            if _pack is None:
+                _pack = Pack()
+            text = _pack.read(f"scenes/encounters/{snake(encounter)}.tscn").decode("utf-8", "replace")
+            for m in re.finditer(r'\[node name="([^"]+)" type="Marker2D"[^\]]*\]\s*position = Vector2\(([-\d.]+)', text):
+                out[m.group(1)] = float(m.group(2))
+        except Exception:
+            pass  # no scene / not readable: list order
+        _slots[encounter] = out
+    return _slots[encounter]
+
+
+def screen_order(state):
+    """Living enemies' combat_ids, left to right as on screen."""
+    foes = state.get("enemies", [])
+    xs = slot_x(state.get("encounter") or "")
+    return [f.get("combat_id") for _, f in sorted(enumerate(foes), key=lambda p: xs.get(p[1].get("slot"), 1e6 + p[0]))]
 
 
 def fit(img, size):

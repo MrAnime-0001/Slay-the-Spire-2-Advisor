@@ -8,12 +8,12 @@ from itertools import combinations
 from pathing import (CARD_REWARD, GOLD_LEFT, HEAL_FRACTION, HP_VALUE, RELIC, SHOP_PER_100, UPGRADE, best_routes,
                      fight_costs, should_rest)
 from enemies import predict
-from relics import GAMEDATA, KNOWLEDGE, Relics, dmg_add
+from relics import COMMUNITY, GAMEDATA, KNOWLEDGE, Relics, dmg_add
 from archetypes import ARCHETYPES, commitment, expand_power, snake, synergy
-from deck import hp_lost, slot_cost
+from deck import encounter, hp_lost, known_boss, known_foes, slot_cost
 from runplan import WIKI, card_fit, character, plan, relic_fit
 from solver import (ENGINES, ORB_PASSIVE, channels, creates, deck_dpt, engine_powers, from_ops, gd_card,
-                    keywords, solve, toss_key)
+                    SOLVE_SECONDS, keywords, solve, toss_key)
 from archetypes import card_text
 
 
@@ -26,9 +26,14 @@ def pile_fetch(prompt):
     return (GAMEDATA["cards"].get(name) or GAMEDATA["potions"].get(name) or {}).get("fetch")
 
 
-def on_top_score(state, hand, card):
+# A pick screen solves once per candidate card: its whole search shares this budget, so a 7-card hand or a 20-card
+# discard pile answers in ~3 s instead of stalling the autopilot.
+PICK_SECONDS = 3.0
+
+
+def on_top_score(state, hand, card, seconds=SOLVE_SECONDS):
     """Best plan score for the rest of this turn with `card` put on top of the draw pile (next hand)."""
-    return solve({**state, "hand": hand, "hand_select": None, "card_grid": None}, kept=[card])[0].score
+    return solve({**state, "hand": hand, "hand_select": None, "card_grid": None}, kept=[card], seconds=seconds)[0].score
 
 # Value per point of each card var. Tune these.
 VAR_VALUE = {"Damage": 1, "Block": 0.9, "VulnerablePower": 4, "WeakPower": 3,
@@ -108,10 +113,38 @@ def learned(kind, name, state):
     """Score nudge from past runs for this character, or 0."""
     ch = LEARNED.get("chars", {}).get(character(state) or "", {}) if state else {}
     lift = ch.get(kind, {}).get(name, {}).get("lift", 0)
+    # + the community's skill-adjusted lift for this character (tools/community.py): ~2M runs vs your ~100
+    lift += COMMUNITY.get("chars", {}).get(character(state) or "", {}).get(kind, {}).get(name, 0) if state else 0
     return max(-LEARN_CAP, min(LEARN_CAP, LEARN_WEIGHT * lift))
 
 
 POWER_TURNS = 4  # an average fight runs ~5 turns; a Power played early works for the rest
+POWER_TURNS_RANGE = (2, 8)
+ACT_FIGHTS = {"Monster": 8, "Elite": 2.5, "Boss": 1}  # fights per act by kind (A1 Swarming Elites: more elites)
+
+
+def power_turns(state):
+    """B4: turns a Power works per fight in this act: the mean fight length (Spire Codex turns, per kind over the
+    act's pool, known boss in place of the boss pool) weighted by fights per act x HP lost there, minus the turn it's
+    played. Long elite/boss fights are where setup pays and where HP is lost. POWER_TURNS without data."""
+    act = GAMEDATA.get("acts", {}).get((state or {}).get("act_name")) or {}
+    enc = COMMUNITY.get("encounters", {})
+    kinds = {k: [e for e in act.get("encounters", []) if GAMEDATA["encounters"].get(e, {}).get("class") == k]
+             for k in ("Monster", "Elite")}
+    kinds["Boss"] = list(known_boss(state)) or act.get("bosses", [])
+    elites, fights = known_foes(state)  # B11: the pre-rolled fights ahead, when the reader has them
+    kinds["Elite"], kinds["Monster"] = list(elites) or kinds["Elite"], list(fights) or kinds["Monster"]
+    num = den = 0
+    for k, names in kinds.items():
+        rows = [enc[e] for e in names if (enc.get(e) or {}).get("dmg") and enc[e].get("turns")]
+        if rows:
+            dmg = sum(r["dmg"] for r in rows) / len(rows)
+            num += ACT_FIGHTS[k] * dmg * (sum(r["turns"] for r in rows) / len(rows) - 1)
+            den += ACT_FIGHTS[k] * dmg
+    if not den:
+        return POWER_TURNS
+    turns = num / den
+    return max(POWER_TURNS_RANGE[0], min(POWER_TURNS_RANGE[1], turns))
 ORB_SLOTS = 3
 
 
@@ -190,7 +223,7 @@ def rate(card, deck, relics=(), state=None, raw=False):
     modeled = set(v) <= set(VAR_VALUE) | {"Repeat"} and bool(v)
     engine, known = engine_value(card, deck)
     if known:  # its every-turn output replaces the printed numbers it was read from
-        value = (value if card["type"] != "Power" else 0) + engine * POWER_TURNS
+        value = (value if card["type"] != "Power" else 0) + engine * power_turns(state)
         modeled = True
     if not modeled:
         value += UNKNOWN_VALUE
@@ -227,10 +260,15 @@ def rate(card, deck, relics=(), state=None, raw=False):
         score = min(score, sim)  # the deck fights worse with it: the tier list can't overrule the draw odds
     if fit is not None:  # after the tier blend: the plan's off-build penalty isn't diluted by a card's tier
         score += fit
+    if "Forge" in v:
+        score -= FORGE_OVER * max(0, sum("Forge" in c["vars"] for c in deck) + 1 - FORGE_SHARE * (len(deck) + 1))
     return round(score, 1), modeled, None if saved is None else round(saved, 1)
 
 
 LATE_SKIP, LATE_DECK = 3, 25
+# B4: Forge cards (Regent) feed one Sovereign Blade: past ~15% of the deck (2-3 in 20 cards) each more one adds less
+# than the energy it takes to play the Blade (research: Forge density cap). FORGE_OVER per card over the share.
+FORGE_SHARE, FORGE_OVER = 0.15, 2
 COMMIT_SKIP = 2  # a committed deck needs a better card to take one (more Skips): + COMMIT_SKIP x commitment
 
 
@@ -238,6 +276,9 @@ def pick(cards, deck, relics=(), state=None):
     """(best name or "Skip", [(name, score, modeled, HP saved, reason)])."""
     p = plan({**state, "deck": list(deck), "relics": list(relics)}) if state is not None else None
     rated = [(c["name"], *rate(c, deck, relics, state), card_fit(c, p, deck)[1] if p else "") for c in cards]
+    hope = upgrade_hope(cards, deck, relics, state) if state is not None else {}
+    rated = [(r[0], r[1] + hope[r[0]], *r[2:-1], "; ".join(x for x in (r[-1], f"smith ahead +{hope[r[0]]:.0f}") if x))
+             if r[0] in hope else r for r in rated]
     best = max(rated, key=lambda r: r[1], default=None)
     # A7 Scarcity halves rare odds: good cards come less often, so the bar to take one drops a little
     bar = SKIP_BELOW - (SCARCITY_SKIP if (state or {}).get("ascension", 0) >= 7 else 0)
@@ -246,6 +287,35 @@ def pick(cards, deck, relics=(), state=None):
     # 4 of 6 late rewards the advisor wanted to take)
     bar += LATE_SKIP if p and p["act"] >= 2 and (p["committed"] or len(deck) >= LATE_DECK) else 0
     return (best[0] if best and best[1] >= bar else "Skip"), rated
+
+
+# B11: a reward card counts what its upgrade adds when a smith this act would pick it. Smiths ahead = rest sites on
+# the best route (minus the next one when HP says heal there); the card earns the margin over the upgrade those
+# smiths would make anyway (the n-th best in the deck now), damped by UPGRADE_HOPE (routes and HP change).
+# ponytail: later acts' smiths, Armaments-style in-combat upgrades and Whetstone-like relics aren't counted.
+UPGRADE_HOPE = 0.6
+
+
+def upgrade_hope(cards, deck, relics, state):
+    """{offered card name: score bonus for being upgraded at a smith ahead this act}."""
+    route = (best_routes(state, top=1) or [None])[0] if state.get("map") else None
+    if route is None:
+        return {}
+    p = state["player"]
+    smiths = (route.rolled or route.types).count("RestSite") - bool(should_rest(p["hp"], p["max_hp"], route.types,
+                                                                              fight_costs(state)))
+    offered = [c for c in cards if not c["upgraded"] and c["name"] in UPGRADES]
+    if smiths <= 0 or not offered:
+        return {}
+    have = sorted((upgrade_gain(c, deck, UPGRADES, relics, state) for c in {c["name"]: c for c in deck
+                   if not c["upgraded"] and c["name"] in UPGRADES}.values()), reverse=True)
+    bar = have[smiths - 1] if len(have) >= smiths else 0  # the upgrade the last smith would make without the card
+    out = {}
+    for c in offered:
+        g = upgrade_gain(c, list(deck) + [c], UPGRADES, relics, state)
+        if g > bar:
+            out[c["name"]] = round(UPGRADE_HOPE * (g - bar), 1)
+    return out
 
 
 # --- rest site ---
@@ -316,8 +386,17 @@ def rest_advice(state, upgrades=UPGRADES):
 
 # --- in-combat hand picks (Armaments, True Grit, discard effects...) ---
 BAD_PICKS = {"TO_EXHAUST", "TO_DISCARD", "TO_REMOVE", "TO_TRANSFORM"}
-# ponytail: eligible cards are guessed (upgrade: upgradable cards; else the whole hand). Card filters like
-# "exhaust a Skill" aren't read, so autopilot stops if a pick doesn't register.
+
+
+# The game hides hand cards its pick filter rejects and numbers only the shown ones (NPlayerHand.ActiveHolders), so
+# number keys must index the shown cards. Filters from the decompiled CardSelectCmd.FromHand callers; upgrade picks
+# show IsUpgradable cards.
+HAND_FILTERS = {
+    "SNAP.selectionScreenPrompt": lambda c: "Retain" not in keywords(c),
+    "DUAL_WIELD.selectionScreenPrompt": lambda c: c["type"] in ("Attack", "Power"),
+    "HAND_TRICK.selectionScreenPrompt": lambda c: c["type"] == "Skill" and "Sly" not in keywords(c),
+    "HEIRLOOM_HAMMER.selectionScreenPrompt": lambda c: GAMEDATA["cards"].get(c["name"], {}).get("pool") == "Colorless",
+}
 
 
 def hand_pick(state, upgrades=UPGRADES):
@@ -325,7 +404,9 @@ def hand_pick(state, upgrades=UPGRADES):
     row; names). Upgrade: biggest gain. Exhaust/discard: Curse/Status, then weakest. Else: strongest."""
     sel, hand, deck, relics = state["hand_select"], state["hand"], state.get("deck", []), state.get("relics", [])
     upgrade = sel["mode"] == "upgrade"
-    pool = [c for c in hand if not upgrade or (not c["upgraded"] and c["name"] in upgrades)]
+    shown = [c for c in hand if not c["upgraded"] and c["type"] not in ("Status", "Curse")] if upgrade else         [c for c in hand if HAND_FILTERS.get(sel["prompt"], lambda c: True)(c)]
+    at = [k for k, c in enumerate(shown) if not upgrade or c["name"] in upgrades]  # pool card i = shown card at[i]
+    pool = [shown[k] for k in at]
     junk = lambda c: c["type"] in ("Curse", "Status")
     if upgrade:
         order = sorted(range(len(pool)), key=lambda i: -upgrade_gain(pool[i], deck, upgrades, relics, state))
@@ -333,7 +414,8 @@ def hand_pick(state, upgrades=UPGRADES):
     elif (f := pile_fetch(sel["prompt"])) and f["to"] == "Draw":
         # hand -> top of draw (Thinking Ahead, Glimmer, Photon Cut): keep the card worth more next turn than now
         # (the Defend on a quiet turn before a big hit; the big attack this turn can't afford).
-        order = sorted(range(len(pool)), key=lambda i: -on_top_score(state, pool[:i] + pool[i + 1:], pool[i]))
+        order = sorted(range(len(pool)), key=lambda i: -on_top_score(state, pool[:i] + pool[i + 1:], pool[i],
+                                                                        PICK_SECONDS / len(pool)))
         n = sel["max"]
     elif sel["prompt"] in BAD_PICKS:
         # same order the solver plans with (solver.toss_key): junk, then Sly (discarded = played free), then weakest
@@ -344,8 +426,8 @@ def hand_pick(state, upgrades=UPGRADES):
     else:
         order = sorted(range(len(pool)), key=lambda i: -rate(pool[i], deck, relics)[0])
         n = max(sel["min"], min(sel["max"], 1))
-    chosen = sorted(order[:max(0, n - sel["selected"])], reverse=True)
-    return [i + 1 for i in chosen], [pool[i]["name"] for i in chosen]
+    chosen = sorted(order[:max(0, n - sel["selected"])], key=lambda i: -at[i])  # keys count the shown cards
+    return [at[i] + 1 for i in chosen], [pool[i]["name"] for i in chosen]
 
 
 def pile_pick(state):
@@ -356,9 +438,9 @@ def pile_pick(state):
     cards, f = grid["cards"], pile_fetch(grid.get("prompt"))
     rest = {**state, "hand_select": None, "card_grid": None}
     if f and f["to"] == "Hand":
-        key = lambda c: -solve({**rest, "hand": state["hand"] + [c]})[0].score
+        key = lambda c: -solve({**rest, "hand": state["hand"] + [c]}, seconds=PICK_SECONDS / len(cards))[0].score
     elif f and f["to"] == "Draw":
-        key = lambda c: -on_top_score(state, state["hand"], c)
+        key = lambda c: -on_top_score(state, state["hand"], c, PICK_SECONDS / len(cards))
     else:
         key = lambda c: toss_key(c, False, lambda x: rate(x, state.get("deck", []), state.get("relics", []))[0])
     n = max(grid["min"], min(grid["max"], len(cards)))
@@ -446,7 +528,41 @@ def potion_value(name, state):
     built = commitment(state.get("deck", []), state.get("relics", []))
     fit = max((v for b, v in built.items() if text and re.search(ARCHETYPES[b.split(":")[0]][b.split(":")[1]][0], text)),
               default=0)
-    return value + POTION_FIT * fit
+    return value + POTION_FIT * fit + foe_fit(name, state)
+
+
+# B11: a potion is worth more when the fights it helps with are the ones coming. Kinds by the potion's own numbers:
+# area (hits all enemies) helps vs groups; defense helps vs fights that hit harder than the act's usual; scaling
+# (lasting buffs, poison) helps vs fights with more HP (longer). The next elites + the boss (reader queues) are
+# compared with the act's elite/boss pool, so the tier value stays the average case.
+POTION_KINDS = {"defense": {"Block", "BufferPower", "DexterityPower", "IntangiblePower", "PlatingPower", "RegenPower",
+                            "HealPercent", "WeakPower", "DamageDecrease"},
+                "scaling": {"StrengthPower", "FocusPower", "RitualPower", "PoisonPower", "DoomPower"}}
+FOE_FIT, FOE_FIT_CAP = 3, 2
+
+
+def foe_fit(name, state):
+    """Potion value change for the known elites + boss ahead vs the act's usual ones (0 when the queue is unknown)."""
+    pot = GAMEDATA["potions"].get(name) or {}
+    kinds = [k for k, vs in POTION_KINDS.items() if vs & set(pot.get("vars", {}))]
+    kinds += ["area"] if pot.get("target") == "AllEnemies" else []
+    elites, _ = known_foes(state)
+    ahead = list(elites) + list(known_boss(state))
+    act = GAMEDATA.get("acts", {}).get(state.get("act_name")) or {}
+    pool = act.get("bosses", []) + [e for e in act.get("encounters", [])
+                                    if GAMEDATA["encounters"].get(e, {}).get("class") == "Elite"]
+    if not kinds or not ahead or not pool:
+        return 0
+    asc = state.get("ascension", 0)
+    stats = lambda names: [(hp, sum(inc) / max(len(inc), 1), multi) for hp, inc, multi, _ in
+                           (encounter(e, asc) for e in names) if hp]
+    now, usual = stats(ahead), stats(pool)
+    if not now or not usual:
+        return 0
+    mean = lambda xs, i: sum(x[i] for x in xs) / len(xs)
+    rel = lambda i: mean(now, i) / max(mean(usual, i), 1) - 1  # +0.3 = 30% more than usual
+    fit = {"defense": rel(1), "scaling": rel(0), "area": mean(now, 2) - mean(usual, 2)}
+    return round(max(-FOE_FIT_CAP, min(FOE_FIT_CAP, FOE_FIT * sum(fit[k] for k in kinds) / len(kinds))), 1)
 
 
 SWAP_MARGIN = 1.5  # a new potion replaces the worst held one only when worth this much more

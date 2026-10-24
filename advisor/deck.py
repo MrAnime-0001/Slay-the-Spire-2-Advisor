@@ -71,21 +71,27 @@ def encounter(name, asc):
 
 
 @lru_cache(maxsize=64)
-def threats(act_name, asc):
-    """[(weight, HP, incoming, multi)]: boss pool, elite pool, hallway pool (HALLWAY weight; bosses listed first)."""
+def threats(act_name, asc, boss=(), foes=((), ()), mp=(1, 1)):
+    """[(weight, HP, incoming, multi)]: boss pool, elite pool, hallway pool (HALLWAY weight; bosses listed first).
+    boss: the act's known boss(es) (reader `rooms`, B2); the whole boss pool when unknown.
+    foes: (next elites, next hallway fights) from the pre-rolled queues (B11); the act's pools when unknown.
+    mp: co-op HP factor per player (fights, bosses), see mp_share."""
     act = GAMEDATA.get("acts", {}).get(act_name)
     if not act:
         return FALLBACK
     enc = GAMEDATA["encounters"]
     bosses = [e for e in act.get("bosses", []) if e in enc]
+    bosses = [e for e in boss if e in bosses] or bosses
     elites = [e for e in act.get("encounters", []) if enc.get(e, {}).get("class") == "Elite"]
     hallway = [e for e in act.get("encounters", []) if enc.get(e, {}).get("class") == "Monster"]
+    elites = [e for e in foes[0] if e in elites] or elites  # repeats weigh more: two Byrdonis ahead = twice the weight
+    hallway = [e for e in foes[1] if e in hallway] or hallway
     out = []
-    for pool, w in ((bosses, (1 - HALLWAY) / 2), (elites, (1 - HALLWAY) / 2), (hallway, HALLWAY)):
+    for pool, w, f in ((bosses, (1 - HALLWAY) / 2, mp[1]), (elites, (1 - HALLWAY) / 2, mp[0]), (hallway, HALLWAY, mp[0])):
         for e in pool:
             hp, incs, multi, statuses = encounter(e, asc)
             if hp:
-                out.append((w / len(pool), hp, incs, multi, statuses))
+                out.append((w / len(pool), hp * f, incs, multi, statuses))
     return out or FALLBACK
 
 
@@ -230,19 +236,47 @@ def fight(opts, hp, incs, multi, perm_str, perm_dex):
     return tied[len(tied) // 2]
 
 @lru_cache(maxsize=4096)
-def _hp_lost(keys, act_name, asc, energy):
+def _hp_lost(keys, act_name, asc, energy, boss=(), foes=((), ()), mp=(1, 1)):
     opts = hands(keys, energy)
     eff = [effect(k) for k in keys]
     perm_str = sum(e[9] for e in eff if e)
     perm_dex = sum(e[10] for e in eff if e)
     return sum(w * fight(hands(keys + (STATUS_KEY,) * st, energy) if st else opts, hp, inc, multi, perm_str, perm_dex)[1]
-               for w, hp, inc, multi, st in threats(act_name, asc))
+               for w, hp, inc, multi, st in threats(act_name, asc, boss, foes, mp))
 
 
 def hp_lost(deck, state):
     """Expected HP lost per act boss/elite fight with this deck (weighted over the act's pools)."""
     return _hp_lost(tuple(card_key(c) for c in deck), state.get("act_name"), state.get("ascension", 0),
-                    state.get("max_energy", 3))
+                    state.get("max_energy", 3), known_boss(state), known_foes(state), mp_share(state))
+
+
+def mp_share(state):
+    """(fights, bosses) enemy HP factor each deck faces in co-op: the game gives enemies players x 1.1 / 1.2 / 1.2
+    HP by act, 1.3 for the act 3 boss (Creature.ScaleHpForMultiplayer, on top of ascension HP); split over the party,
+    each deck faces that factor. (1, 1) solo. ponytail: assumes teammates' decks deal about what ours does."""
+    if ((state or {}).get("players") or 1) <= 1:
+        return (1, 1)
+    f = (1.1, 1.2, 1.2)[min(state.get("act") or 0, 2)]
+    return (f, 1.3 if (state.get("act") or 0) >= 2 else f)
+
+
+def known_boss(state):
+    """The current act's boss(es) from the reader's pre-rolled rooms (A10: both final bosses), else ()."""
+    r = (state or {}).get("rooms") or {}
+    return tuple(b for b in (r.get("boss"), r.get("second_boss")) if b)
+
+
+# B11: how far ahead the pre-rolled queues count: about the rest of an act's elites / hallway fights.
+ELITES_AHEAD, FIGHTS_AHEAD = 3, 5
+
+
+def known_foes(state):
+    """(next elites, next hallway fights) from the reader's pre-rolled queues (in order, wrapping like the game's
+    room lists), else ((), ()). Card, shop and relic ratings then weigh the fights actually coming."""
+    r = (state or {}).get("rooms") or {}
+    nxt = lambda q, k, n: tuple(r[q][(r.get(k, 0) + i) % len(r[q])] for i in range(n)) if r.get(q) else ()
+    return nxt("elites", "elites_visited", ELITES_AHEAD), nxt("fights", "fights_visited", FIGHTS_AHEAD)
 
 
 def profile(state):
@@ -255,7 +289,7 @@ def profile(state):
     opts = hands(keys, energy)
     eff = [effect(k) for k in keys]
     perm = (sum(e[9] for e in eff if e), sum(e[10] for e in eff if e))
-    bosses = [t for t in threats(state.get("act_name"), asc) if t[0] > 0][:3]
+    bosses = [t for t in threats(state.get("act_name"), asc, known_boss(state), mp=mp_share(state)) if t[0] > 0][:3]
     hp = sum(t[1] for t in bosses) / max(len(bosses), 1)
     inc = sum(sum(t[2]) / len(t[2]) for t in bosses) / max(len(bosses), 1)
     turns, lost, dpt, bpt, _ = fight(opts, hp, bosses[0][2] if bosses else (inc,), any(t[3] for t in bosses), *perm)

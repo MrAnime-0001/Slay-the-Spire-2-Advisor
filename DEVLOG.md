@@ -15,6 +15,209 @@ Version history is kept here and in `.planning/*.md`. The code itself is not und
 
 ---
 
+## Autopilot + reader (2026-10-25): pile cards found from the grid's scroll position
+- **Reader `card_grid`**, from `NCardGrid`, for any grid screen:
+  - `scroll`: `_targetDrag`, 0 at the top, −40 per wheel notch.
+  - `row_h`: `_cardSize.Y` + 40 padding.
+  - `order`: the display order, from the grid's sorted `_cards`.
+- **`autoplay.grid_point`** computes the card's screen spot:
+  - Column c at x = 375 + 280c; row r at y = 402 + row_h·r + scroll (1920×1080 UI units, measured live).
+  - If the row is off screen, it scrolls exactly enough notches from wherever the grid is, including after you
+    scrolled it, re-reads the scroll (the game clamps at the ends), then points.
+  - The sweep and the page-by-page scrolls remain the fallback.
+- **Checked live:** from scroll −480 it scrolled to the bottom limit (−870) and hovered Hyperbeam at (1495, 664).
+  Test 296.
+
+## Autopilot (2026-10-25): big pile screens (Droplet of Precognition, 20-card draw pile)
+- **Scroll:** `wheel` now sends one event per notch. The game scrolls one step per wheel event however large, so
+  "5 notches" in one event was a single step and the bottom row was never reached.
+  - Checked live: after 5 notches the bottom row hovers (Hyperbeam #13).
+- **Duplicates:** with two copies of the pick (Hyperbeam #3 and #13), hovering either copy now counts. Before,
+  only the first copy's index did, and the sweep kept missing. Test 295.
+- Checked live: hover detection on `NCombatPileCardSelectScreen` works (card 0 Barrage).
+
+## Autopilot (2026-10-25): card potion pick screen
+- **What happened:** after drinking the Attack Potion, the next card play started before the Choose a Card screen
+  opened. Its cleanup Esc then opened the pause menu, and the Flak Cannon pick couldn't find the card.
+- **Fix:** after a potion that makes cards (`makes`), the autopilot waits up to 1.5 s for its pick screen (0.6 s
+  for other potions).
+- **Fix:** `drop` never presses Esc while a pick screen is up.
+
+## Autopilot (2026-10-25): potions in extra slots
+- **"couldn't find AttackPotion in the potion bar"** with 9 slots (relic slots): the potion sat in slot 7 at ~50%
+  of the width, and the sweep stopped at 45%.
+- **Fix:** each slot's spot is tried first (`POTION_X0 + POTION_DX * slot`; measured live 534 / 906 / 968 /
+  1030 px for slots 0 / 6 / 7 / 8). The sweep now reaches 70%. Learned spots still come first. Test 294.
+
+## Event prediction check (2026-10-25)
+- **Live check against the save's history: 4 of 4 events right.**
+  - Act 1: Jungle Maze Adventure. Act 2: Amalgamator, then Field of Man-Sized Holes.
+  - The earlier run: Tea Master, which needed its 150-gold rule.
+- **Gold decides several picks.** In act 2 a 283-gold shop just before the `?` left 32 gold, so the game skipped
+  Fake Merchant (100+) and Tea Master (150+). The rules give the same answer with 32 gold.
+- The act's ancient (Orobas) takes the first queue slot, and the reader's live counter already includes it.
+- **Reader:** combat state now has `gold`, so recorded fights can replay event rules.
+- **Fix:** the Fake Merchant co-op check uses `players`; `party` exists only in fights.
+
+## Thieves (2026-10-25): stolen card value, Flutter stun
+- **Reader: Swipe's stolen card** (`SwipePower._stolenCard` as power field `stolen`). Live: a Thieving Hopper
+  holding Iteration.
+- **Stolen card value** (`solver.card_loot_hp`): rated like the card picker rates it for this deck (build fit,
+  synergies), scaled from `CARD_LOOT_HP` = 13 HP at a rating of 10, range 0.15–3×. Before it was a flat 13.
+  - A key build card is worth fighting for; a stolen Strike isn't. Iteration in that deck: 9.8 HP. Test 293.
+- **Flutter stun** (`FlutterPower.cs`): attacks on the Hopper deal half until Flutter runs out. Each Attack hit
+  that gets past its Block counts it down; at 0 the Hopper is stunned, skips its move (Escape included) and stops
+  halving.
+  - Enemy slot [14] tracks the countdown, and the stun check uses it (like Shriek / Plow).
+  - When the Hopper is escaping this turn, a stun counts half its loot as kept (`STUN_KEEP`). Test 292.
+
+## Co-op scaling (2026-10-25)
+- **The game's rules** (decomp: `Creature.ScaleHpForMultiplayer`, `MultiplayerScalingModel`), on top of ascension:
+  - Enemy HP = players × 1.1 (act 1) / 1.2 (act 2) / 1.2 (act 3) / 1.3 (act 3 boss).
+  - Enemy move block ×2 with 2 players; with 3+, × players × the same factor.
+  - Some enemy powers scale (Artifact, Curl Up, Plating, Hardened Shell, Regen, Slippery, Skittish...).
+  - Attack damage does not scale.
+- **Reader `players`** (all players, in and out of combat; `party` stays = living players).
+- **Out of combat** (`deck.mp_share`): card / shop / relic / potion ratings face enemy HP × the act factor, the
+  share of the party's total. Assumes teammates deal about what you do. Test 291.
+- **In combat:** fight length (`turns_left`: Power / buff value, threat lookahead) and the Sandpit race use the
+  whole party's damage against the scaled HP. Live HP / block / powers were already read from the game.
+- Not changed: route HP-loss estimates (community stats are mostly solo); enemy block isn't forecast at all.
+
+## Solver (2026-10-25): card potions show no made-up cards
+- **Card-making potions** (Attack / Skill / Power / Colorless Potion, Orobic Acid, Cosmic Concoction) still value
+  a stand-in card from your pool when deciding to drink.
+- **The plan now shows only the potion step.** The stand-in's plays are dropped from the steps (`stand_in` flag,
+  filtered in `solve`). Before, a step like "Adaptive Strike" looked like a card you would get.
+- The plan is redone once the real cards are offered.
+- The plan's DMG / BLOCK totals still include the stand-in's estimate.
+
+## Picks (2026-10-25): potions judged against the fights ahead
+- **`picker.foe_fit`**, added to `potion_value`: it applies to shop potions, reward swaps and the autopilot's
+  potion pickups.
+- **How it rates:** it compares the next elites + the boss (reader queues) with the act's usual elites and bosses.
+  - Defense potions (Block, Weak, Dexterity, Intangible, heal...) gain when those fights hit harder.
+  - Scaling potions (Strength, Focus, Poison...) gain when they have more HP.
+  - Area potions gain when they are groups.
+- Range ±2 on the tier scale. Example: Block Potion +1.3 before Byrdonis, −1.2 before Bygone Effigy; Explosive
+  Ampoule +1.2 before Phrog Parasite. Test 290.
+
+## Picks + reader (2026-10-25): known foes, upgrade hope, pile screens
+- **B11 known foes:** card, shop and relic ratings now weigh the fights actually coming, not the whole act pool.
+  - `deck.known_foes` takes the next 3 elites and the next 5 hallway fights from the pre-rolled queues.
+  - `deck.threats(..., foes)` and `picker.power_turns` use them. The boss was already known (B2). Test 289.
+- **B11 upgrade hope** (`picker.upgrade_hope`, `UPGRADE_HOPE = 0.6`): a reward card earns credit when a smith
+  ahead would pick it.
+  - Smiths ahead = rest sites on the best route, minus the next one when HP says heal.
+  - The credit is the margin over the upgrade those smiths would make anyway. The pick row shows
+    "smith ahead +N".
+  - Later acts' smiths are not counted.
+- **Reader: pile pick screens list their cards.** `NCombatPileCardSelectScreen` (Dredge, Hologram and any card,
+  potion or relic that opens a combat pile) never fills `_cards`. The cards now come from `_pile._cards`. Before,
+  the overlay showed no names and the autopilot waited.
+- **Autopilot scrolls big piles:** the sweep covers 3 card rows; after a miss it scrolls down a page at a time
+  (`GRID_SCROLLS`), then back up.
+
+## Autopilot + solver (2026-10-25): no more stalls on pick screens
+- **Solver time cap** (`solver.SOLVE_SECONDS = 1.5`): the plan search stops at the cap and keeps the best plan
+  found so far. A Regent turn (9 cards, 4 Exoskeletons, potions) took minutes before and froze the overlay.
+- **Pick screens share one budget** (`picker.PICK_SECONDS = 3`). These are Glimmer / Photon Cut / Thinking Ahead
+  (top of draw), and Hologram / Dredge / Headbutt-style pile picks. They solve once per candidate card and used to
+  take 6 s+ on a 7-card hand. Cards, potions and relics all use these same screens.
+- **Hand picks with a game filter** (`picker.HAND_FILTERS`): the game hides cards the filter rejects and numbers only
+  the shown ones.
+  - Covered: Snap (no Retain), Dual Wield (Attack/Power), Hand Trick (Skill, not Sly), Heirloom Hammer
+    (colorless), upgrade picks (upgradable only).
+  - Before: a hidden Retain card made Snap's key point past the row ("card pick didn't register"). Test 288.
+- **Reader `hand_select.selected_names`** (`NPlayerHand._selectedCards`). For a one-card pick, the autopilot
+  checks the key took the card it meant. If not, it tries the other keys; the game swaps a one-card selection on
+  each key. This covers any filter not in the table.
+
+## Overlay (2026-10-25): pet icons, "?" badge on rolled rooms
+- **Pets show their portrait next to their HP** (Osty). The pack only has Osty's animation atlas, so the icon is the
+  wiki's `StS2_Osty_Idle.webp` (`icons.WIKI_MONSTER`, new kind `"monster"`), cached in `icon_cache/monster/`.
+  `_web` now takes a wiki file name that carries its own extension.
+- **Route rows: a "?" that rolls a fight, shop or chest shows that room with a small "?" in the bottom-right corner**
+  (`overlay.photo(..., badge=)`, `overlay.named` adds the map type to each room). Plain rooms have no badge.
+- Live check: the event prediction from the state before floor 6 gives `RoomFullOfCheese`, the event the game rolled.
+
+## Overlay + reader (2026-10-25): which enemy, seen events
+- **Plan rows mark the target on screen like the map's path dots** (`Flatten -> Shrinker Beetle ○●○`). This shows
+  only with 2+ enemies, and the dots replace the `#2` suffix.
+  - Order is left to right as drawn. Fights with named slots use the scene's Marker2D x, read from the pack
+    (`scenes/encounters/<encounter>.tscn`, `icons.slot_x`). Others use the game's lineup (list order,
+    `NCombatRoom.PositionEnemies`).
+  - Test 287.
+- **Reader `rooms.events_seen`** (`RunState._visitedEventIds`): the event prediction now also skips events already
+  seen this run, like the game. Test 286.
+
+## Overlay (2026-10-25): elite and boss art on every route
+- Route rows show the elite / boss each path meets (from the pre-rolled queues) as its picture instead of the generic
+  map icon. The boss sits at the end; at A10 both final bosses are shown.
+- The other first steps now get their own smaller icon rows (direction, HP at the boss), in place of text lines.
+- `icons.py` kind `encounter`:
+  - Bosses use the game's map icons (`images/map/placeholder/<boss>_icon.png`; 9 of 12).
+  - Everything else uses the wiki portrait `StS2_<first monster>.png`. Knights uses Spectral Knight, The Kin uses Kin
+    Priest. The portraits are cached in `icon_cache/encounter` (local; all 24 fetched).
+  - The wiki throttled bare requests (HTTP 429), so requests now send a User-Agent.
+- Test 285.
+
+## Research B1-B8 + B10 seed reader (2026-10-25): known boss, community stats, "?" rooms predicted
+Plan and data snapshot: `.planning/research-improvements.md` (from the user's NotebookLM research, Spire Codex stats,
+CombatSolver / bottled_ai). User decisions: read everything the game pre-rolls; community stats via a fetch tool;
+multi-turn lookahead later.
+- **Reader** (both builds, compiles; restart `run.bat` once):
+  - `rooms`: the act's boss / second boss (A10), the hallway-fight, elite and event queues with visited counts
+    (`ActModel._rooms`, RoomSet), and `rooms.unknown`: the "?" room RNG state (MegaRandom `_s0.._s3`) and odds.
+  - `party`: living players (co-op).
+- **B1 boss HP relief** (`solver.hp_weight`, idea from CombatSolver's `ActEndingBossPolicy`):
+  - Act 1/2 boss: 0.75 (0.9 from A2, since the Ancient then heals only 80% of missing HP).
+  - The run's last boss: 0.5 (HP left has no value beyond surviving).
+  - A10's first final boss: priced like an elite (its HP carries into the second).
+- **B2 known boss:**
+  - The deck sim (`deck.threats`) prices the act's actual boss, not the pool average.
+  - The map view shows an "ahead" line: boss with community death % and average HP lost, next elite / fight / event.
+- **B3 `tools/community.py`** (`python -I`, untrusted JSON) writes `advisor/community.json`, kept local:
+  - 89 encounters: death rate, HP lost, turns, overall and per character.
+  - Skill-adjusted card/relic lift per character.
+  - Pathing prices each fight by your history, else the community's number for your character.
+  - Elites are priced in the game's queue order.
+  - The picker adds the community lift to your own runs' lift (same cap).
+  - Refresh after patches.
+- **B4 picker:**
+  - Powers count `power_turns` (act fights x HP at stake x real fight length; ~4.2-5.3 instead of a flat 4).
+  - Forge cards lose 2 per card over 15% of the deck.
+- **B5/B6 pathing and rest:**
+  - Elite gold is now 40.
+  - HP walking into the boss counts only up to the boss's bad case.
+  - No rest when over half the heal would be wasted.
+- **B7 co-op:** enemy Vulnerable is worth our damage x living players.
+- **B8 audit:** every elite/boss power is already modelled.
+- **B10 seed reader** (user request, after searchthespire.app):
+  - `pathing.UnknownRolls` replays the game's own "?" roll (xoshiro256** + `UnknownMapPointOdds.Roll`, float32).
+    It matched the decompiled C# on 40 rolls with blacklists.
+  - Each route knows what its "?" rooms become: fight, event, shop or chest. Rules applied: no shop after a shop or
+    before only shops; Juzu Bracelet means no fights.
+  - The overlay names every room on the best route (`route: Nibbits > ?→Abyssal Baths > ...`).
+  - Golden Compass / Lantern Key turn the replay off: their all-event rule isn't replayed.
+  - Route search is 0.3 s on a 15-row map.
+  - Not predicted: chest relics, shop stock, card rewards. These come from shared streams that depend on every
+    earlier choice.
+- **NotebookLM errors found and not implemented:**
+  - Spot Weakness and Catalyst are Slay the Spire 1 cards.
+  - A2 is the Ancient heal, not rest sites.
+  - Lagavulin Matriarch's debuff comes about turn 7, not turn 4.
+  - Knowledge Demon doesn't punish card count.
+- Tests 274-283 on both builds; test 250 moved to 30/80 HP (B1 semantics).
+- **Live check (2026-10-25, Act 1):**
+  - Predicted elite Byrdonis: correct.
+  - The first "?" was an event, as predicted, and the RNG state after the roll matched the replay exactly.
+  - The event's name was wrong: the game skipped 4 events whose IsAllowed failed (act, gold, HP rules).
+  - Fix: `pathing.EVENT_ALLOWED` (all 36 IsAllowed rules, same in both builds; relic/enchantment/pet conditions are
+    treated as allowed) and `next_events()`. The snapshot now predicts Room Full of Cheese, which is what the game gave.
+    Test 284.
+  - Fixed an old overlay crash when the reader sends `pets: null`.
+
 ## Overlay + autopilot + solver (2026-10-25): auto-update, late pick screens, Sandpit race
 - **Auto-update:** the overlay watches its own source (`advisor/*.py` except tests, `reader/*.cs*`).
   - Restart happens once files are quiet for 15 s (`UPDATE_QUIET`), every `.py` compiles, and autopilot isn't running.

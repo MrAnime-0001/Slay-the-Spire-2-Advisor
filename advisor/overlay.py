@@ -18,17 +18,17 @@ import winsound
 
 import autoplay  # first: sets DPI awareness before any window exists
 import icons
-from pathing import DEATH, best_routes, direction
+from pathing import DEATH, best_routes, direction, next_events, route_names
 from runplan import describe as describe_plan, plan, relic_fit
 from deck import profile
 from picker import choose_card, deck_pick, event_advice, hand_pick, pick, pile_pick, potion_swap, relic_value, rest_advice, shop_advice
-from relics import GAMEDATA, KNOWLEDGE, Relics
+from relics import COMMUNITY, GAMEDATA, KNOWLEDGE, Relics
 from solver import fight_type, held_energy_reason, next_turn_unblocked, solve, unmodeled_player_powers, unmodeled_powers
 
 READER = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                       "..", "reader", "bin", "Release", "net10.0", "Sts2Reader.exe")
 latest = {"line": None, "err": ""}
-ROOM = {"Monster": "M", "Elite": "E", "Unknown": "?", "Shop": "$", "Treasure": "T", "RestSite": "R", "Ancient": "A"}
+ROOM = {"Monster": "M", "Elite": "E", "Unknown": "?", "Event": "?", "Shop": "$", "Treasure": "T", "RestSite": "R", "Ancient": "A"}
 
 # --- look: toned to the game (warm dark panel, parchment text, bronze/gold trim), drawn with system fonts only.
 # It is a third-party tool: the header always says "by Yutti" (its maker); game icons come from your own install (icons.py).
@@ -176,21 +176,36 @@ def title(kind, name):
 _photos = {}
 
 
-def photo(kind, name, size=ICON):
-    """Tk image for an icon, or None while it isn't available (the caller draws a stand-in)."""
-    key = (kind, name, size)
+def photo(kind, name, size=ICON, badge=None):
+    """Tk image for an icon, or None while it isn't available (the caller draws a stand-in). badge: a room type whose
+    map icon sits small in the bottom-right corner (a "?" that rolls a fight shows the fight with a "?" on it)."""
+    key = (kind, name, size, badge)
     if key not in _photos:
         from PIL import ImageTk
         img = icons.get(kind, name)
         if img is None:
             return None  # maybe still downloading: ask again next draw
-        _photos[key] = ImageTk.PhotoImage(icons.fit(img, size))
+        img = icons.fit(img, size)
+        if badge and (b := icons.get("room", badge)) is not None:
+            b = icons.fit(b, size // 2)
+            img.alpha_composite(b, (size - b.width, size - b.height))
+        _photos[key] = ImageTk.PhotoImage(img)
     return _photos[key]
 
 
-def icon(parent, kind, name, color=TRIM, size=ICON, letter=None):
+def route_row(r, rooms, tail, state, size=18, color=TRIM):
+    """A route as icons: the elite / boss it meets (pre-rolled queues) as their art, other rooms as map icons."""
+    label(r, tail, F_SMALL, MUTED).pack(side="right")  # first: a long route clips its icons, never the HP
+    second = (state.get("rooms") or {}).get("second_boss")  # A10: both final bosses at the end
+    for t, name, orig in rooms + ([("Boss", second, "Boss")] if second and rooms and rooms[-1][0] == "Boss" else []):
+        kind, art = ("encounter", name) if t in ("Elite", "Boss") and name else ("room", t)
+        icon(r, kind, art, color, size, ROOM.get(t, t[:1]), badge="Unknown" if orig == "Unknown" != t else None
+             ).pack(side="left", padx=(0, 2 if size > 14 else 1))
+
+
+def icon(parent, kind, name, color=TRIM, size=ICON, letter=None, badge=None):
     """The icon, or a drawn stand-in (a bronze-rimmed disc with the first letter), so nothing shows as missing."""
-    img = photo(kind, name, size)
+    img = photo(kind, name, size, badge)
     if img is not None:
         return tk.Label(parent, image=img, bg=parent["bg"], bd=0)
     c = tk.Canvas(parent, width=size, height=size, bg=parent["bg"], highlightthickness=0)
@@ -249,10 +264,14 @@ def lines(parent, texts, fg=MUTED, font=F_BODY):
 def steps_view(state, plan):
     out = []
     by_id = {f.get("combat_id"): f for f in state.get("enemies", [])}
+    order = icons.screen_order(state)
     for i, (name, tgt, ok, c, cid, kind) in enumerate(plan.steps, 1):
         foe = by_id.get(cid) if cid is not None else None
         intent = ((foe or {}).get("intents") or [{}])[0].get("kind") or ""
-        out.append({"n": i, "name": name, "card": c, "kind": kind, "target": tgt, "ok": ok,
+        # which one on screen, like the map's path dots: ○●○ (only with 2+ enemies; replaces the "#2" suffix)
+        pos = "".join("●" if x == cid else "○" for x in order) if len(order) > 1 and cid in order else ""
+        out.append({"n": i, "name": name, "card": c, "kind": kind, "ok": ok, "pos": pos,
+                    "target": re.sub(r" #\d+$", "", tgt) if tgt and pos else tgt,
                     "intent": icons.intent_icon(intent) if intent else None})
     return out
 
@@ -303,6 +322,8 @@ def step_rows(parent, steps):
             if s["intent"]:
                 icon(r, "intent", s["intent"], MUTED, 14).pack(side="left", padx=(0, 3))
             label(r, title("", s["target"]), F_BODY, MUTED).pack(side="left")
+            if s.get("pos"):
+                label(r, s["pos"], F_SMALL, TRIM_HI).pack(side="left", padx=(5, 0))
         if not s["ok"]:
             chip(r, "?", BG, WARN).pack(side="right")  # the solver doesn't model this play's effect
 
@@ -346,7 +367,7 @@ def combat_stats(state):
         ch = character(state)
         label(r, f"{state['energy']}/{state['max_energy']}", F_NAME, TEXT).pack(side="right")
         icon(r, "energy", ch or "colorless", ACCENT.get(ch, TRIM_HI), 18, "E").pack(side="right", padx=(0, 2))
-        pets = [f"{pet['name']} {pet['creature']['hp']} HP" for pet in state.get("pets") or []]
+        pets = state.get("pets") or []
         if state.get("stars") or state.get("orbs") or pets:
             r = row(f, (0, 1))
             if state.get("stars"):
@@ -354,8 +375,9 @@ def combat_stats(state):
                 label(r, f"{state['stars']}", F_SMALL, TEXT).pack(side="left", padx=(2, 10))
             for o in reversed(state.get("orbs") or []):  # oldest (evoked first) on the right, like the game
                 icon(r, "orb", o["name"], STEEL, 16, o["name"][:1]).pack(side="left", padx=(0, 2))
-            if pets:
-                label(r, "  ·  ".join(pets), F_SMALL, MUTED).pack(side="right")
+            for pet in reversed(pets):  # packed from the right: first pet leftmost
+                label(r, f"{pet['creature']['hp']} HP", F_SMALL, MUTED).pack(side="right", padx=(2, 0))
+                icon(r, "monster", pet["name"], MUTED, 18, pet["name"][:1]).pack(side="right", padx=(8, 0))
     return draw
 
 
@@ -423,6 +445,39 @@ def boss_tip(state):
     return tips and (tips.get((state.get("character") or "").lower()) or tips.get("general"))
 
 
+def ahead_line(state):
+    """B2: what the act has rolled ahead (reader `rooms`): boss(es) with community death rate / HP lost, the next
+    elite, hallway fight and "?" event (if that node turns out to be an event)."""
+    r = state.get("rooms") or {}
+    foe = lambda e: re.sub(r"(?<=[a-z])(?=[A-Z])", " ", re.sub(r"(Boss|Elite|Normal|Weak)$", "", e))
+
+    def boss(e):
+        c = COMMUNITY.get("encounters", {}).get(e) or {}
+        return foe(e) + (f" (~{c['dmg']:.0f} HP, {c['death']:.0%} deaths)" if c.get("dmg") else "")
+    parts = ["boss " + " then ".join(boss(b) for b in (r.get("boss"), r.get("second_boss")) if b)] if r.get("boss") else []
+    parts += [f"{k} {foe(r[f'next_{k}'])}" for k in ("elite", "fight") if r.get(f"next_{k}")]
+    if (ev := next_events(state, 1)):
+        parts.append("? event " + title("events", ev[0]))
+    return "ahead: " + " · ".join(parts) if parts else ""
+
+
+def named(state, route):
+    """[(room type, name, type on the map)]: the map type tells a "?" that rolls a fight from a plain fight."""
+    return [(t, name, orig) for (t, name), orig in zip(route_names(state, route), route.types)]
+
+
+def route_line(state, route):
+    """B10: the best route's rooms by name, "?" rooms as what they roll into (seed reader)."""
+    if not route.rolled:
+        return ""
+    foe = lambda e: re.sub(r"(?<=[a-z])(?=[A-Z])", " ", re.sub(r"(Boss|Elite|Normal|Weak)$", "", e))
+    parts = []
+    for (t, name), orig in zip(route_names(state, route), route.types):
+        label_ = (title("events", name) if t == "Event" else foe(name)) if name else title("", t)
+        parts.append(("?→" if orig == "Unknown" else "") + label_)
+    return "route: " + " › ".join(parts[:8])
+
+
 def deck_lines(state):
     """What the deck does per turn vs the act boss, and the run plan (target build, commitment, gaps)."""
     return [profile(state), describe_plan(plan(state))]
@@ -475,9 +530,11 @@ def view_of(state, line):
         best = routes[0]
         return {"stats": run_stats(state, f"map · act {state['act'] + 1}"), "title": "next",
                 "head": f"{title('', best.types[0])}  ({direction(state, best.coords[0])})",
-                "route": (best.types, f"HP at boss ~{best.hp}"),
-                "more": [f"alt: {r.types[0]} ({direction(state, r.coords[0])})  HP at boss ~{r.hp}"
-                         + ("  DIES" if r.score == DEATH else f"  score {r.score - best.score:+.0f}") for r in routes[1:]]}
+                "route": (named(state, best), f"HP at boss ~{best.hp}"),
+                # the other first steps, each with its route's rooms (elites / boss as their art)
+                "alt_routes": [(named(state, r), f"{direction(state, r.coords[0]).split()[0]} ~{r.hp}"
+                                + (" DIES" if r.score == DEATH else "")) for r in routes[1:]],
+                "more": [x for x in [ahead_line(state), route_line(state, best)] if x]}
     if state["status"] != "combat":
         text = {"waiting_for_game": "waiting for game", "no_run": "no run in progress",
                 "game_over": "run over"}.get(state["status"], "not in combat")
@@ -518,10 +575,9 @@ def draw(v, state):
               wraplength=WIDTH - 2 * PAD).pack(fill="x")
     if "route" in v:
         r = row(primary, (2, 1))
-        types, tail = v["route"]
-        for t in types:
-            icon(r, "room", t, TRIM, 18, ROOM.get(t, t[:1])).pack(side="left", padx=(0, 2))
-        label(r, tail, F_SMALL, MUTED).pack(side="right")
+        route_row(r, *v["route"], state)
+        for rooms, tail in v.get("alt_routes", []):
+            route_row(row(primary, (1, 1)), rooms, tail, state, size=13, color=MUTED)
     if "steps" in v:
         step_rows(primary, v["steps"])
         outcome_chips(primary, v["outcome"])

@@ -1625,9 +1625,10 @@ print("all P5 event checks passed")
 from pathing import simulate, deck_factor, DECK_CLAMP
 OG = {"act": 0, "act_name": "Overgrowth", "ascension": 0, "max_energy": 3}
 c = fight_costs(OG)
-gap = lambda pots: (simulate(["Elite", "RestSite", "Boss"], 40, 80, 0, c, 0, pots).score
-                    - simulate(["Monster", "RestSite", "Boss"], 40, 80, 0, c, 0, pots).score)
-# 250. At 40/80 HP, two potions make the elite route relatively better (its bad case is softened).
+gap = lambda pots: (simulate(["Elite", "RestSite", "Boss"], 30, 80, 0, c, 0, pots).score
+                    - simulate(["Monster", "RestSite", "Boss"], 30, 80, 0, c, 0, pots).score)
+# 250. At 30/80 HP, two potions make the elite route relatively better (its bad case is softened). (At 40/80 the
+# elite is safe either way and HP above the boss's bad case no longer scores: B1.)
 assert gap(2) > gap(0)
 # 251. A stronger deck makes fights cheaper (deck sim, relative to your recorded costs, clamped).
 IC = [real_card("StrikeIronclad")] * 5 + [real_card("DefendIronclad")] * 4 + [real_card("Bash")]
@@ -1908,3 +1909,208 @@ assert [s[0] for s in solve(pit(300))[0].steps] == ["Strike"]
 _sv.SANDPIT_RACE = old
 assert [s[0] for s in solve(pit(40))[0].steps] == ["Strike"]
 print("all Sandpit race checks passed")
+
+# 274. B1 boss HP relief: an Act 1 boss (Ancient heals after it; 80% from A2), the run's last boss (HP left is worth
+# nothing), A10's first of two final bosses (HP carries into the second), old reader without rooms (unchanged).
+from solver import hp_weight, HP_WEIGHT, FINAL_BOSS_HP, A2_BOSS_HP
+bs = lambda enc, asc=0, rooms=None: {"encounter": enc, "ascension": asc, **({"rooms": rooms} if rooms is not None else {})}
+assert hp_weight(bs("VantomBoss")) == HP_WEIGHT["Boss"] and hp_weight(bs("VantomBoss", 2)) == A2_BOSS_HP
+assert hp_weight(bs("AeonglassBoss", 0, {"second_boss": None, "bosses_visited": 0})) == FINAL_BOSS_HP
+assert hp_weight(bs("AeonglassBoss", 10, {"second_boss": "QueenBoss", "bosses_visited": 0})) == HP_WEIGHT["Elite"]
+assert hp_weight(bs("QueenBoss", 10, {"second_boss": "QueenBoss", "bosses_visited": 1})) == FINAL_BOSS_HP
+assert hp_weight(bs("AeonglassBoss")) == HP_WEIGHT["Boss"] and hp_weight(bs("TerrorEelElite")) == HP_WEIGHT["Elite"]
+print("all boss HP relief checks passed")
+
+# 275. B2: a known act boss replaces the boss pool in the deck sim (picks prepare for that boss).
+from deck import threats
+pool, known = threats("Overgrowth", 0), threats("Overgrowth", 0, ("VantomBoss",))
+assert len([t for t in known if t[0] == known[0][0]]) == 1 and len(known) < len(pool)
+assert threats("Overgrowth", 0, ("NotABoss",)) == pool  # unknown name: the pool, as before
+# 276. B2/B3: routes price the known boss and the elites in the game's order; unknown history -> community average.
+import pathing as _pa
+_pa.COMMUNITY = {"encounters": {"VantomBoss": {"dmg": 50, "by_char": {"Ironclad": {"dmg": 60}}},
+                                "TerrorEelElite": {"dmg": 30}, "ByrdonisElite": {"dmg": 25}}}
+saved_k = _pa.KNOWLEDGE["encounters"]
+_pa.KNOWLEDGE["encounters"] = {}
+st = {**OG, "character": "Ironclad", "rooms": {"boss": "VantomBoss", "second_boss": None,
+                                               "elites": ["ByrdonisElite", "TerrorEelElite"], "elites_visited": 1}}
+c2 = _pa.fight_costs(st)
+assert c2["Boss"] == (60, 90) and [e[0] for e in c2["Elites"]] == [30, 25], c2
+r = simulate(["Elite", "Elite", "Boss"], 80, 80, 0, c2)
+assert r.hp == 80 - 30 - 25
+_pa.KNOWLEDGE["encounters"], _pa.COMMUNITY = saved_k, {}
+# 277. B6: no rest when most of the heal would go past max HP, even with the boss next.
+from pathing import should_rest
+hard = {"Boss": (50, 80)}  # old rule: rest under 1.2 x 80
+assert should_rest(72, 80, ["Boss"], hard) is None and should_rest(60, 80, ["Boss"], hard)
+# 278. Community lift (tools/community.py) adds to your own history's lift, same cap.
+_pk.COMMUNITY = {"chars": {"Defect": {"cards": {"Zap": 0.05}}}}
+assert _pk.learned("cards", "Zap", {"character": "Defect"}) == _pk.LEARN_WEIGHT * 0.05
+_pk.COMMUNITY = {}
+print("all B2/B3 checks passed")
+
+# 279. B4: a Power's turns follow how long the act's fights last (fights per act x HP lost), not a flat 4.
+_pk.COMMUNITY = {"encounters": {e: {"dmg": 10, "turns": 3} for e in GD["acts"]["Glory"]["encounters"]}}
+_pk.COMMUNITY["encounters"]["AeonglassBoss"] = {"dmg": 70, "turns": 10}
+short, long_ = _pk.power_turns({"act_name": "Glory"}), _pk.power_turns({"act_name": "Glory", "rooms": {"boss": "AeonglassBoss"}})
+assert short < long_ and _pk.power_turns({"act_name": "Nowhere"}) == _pk.POWER_TURNS, (short, long_)
+_pk.COMMUNITY = {}
+# 280. B4: Forge cards past ~15% of the deck lose value (one Sovereign Blade to feed).
+RB = real_card("RefineBlade")
+REG = [real_card("StrikeRegent")] * 8 + [real_card("DefendRegent")] * 8
+few, many = _pk.rate(RB, REG + [RB]), _pk.rate(RB, REG + [RB] * 4)
+assert many[0] < few[0] - 1, (few, many)
+print("all B4 checks passed")
+
+# 281. B7 co-op: Vulnerable on an enemy boosts every living player's attacks (reader `party`).
+VU = card("VulnOnly", 1, "Skill", "AnyEnemy", VulnerablePower=2)
+team = lambda n: solve({**fight([VU], [boss(200, [])]), "max_energy": 3, "deck": [STRIKE] * 5,
+                        **({"party": n} if n else {})})[0].score
+assert team(3) > team(2) > team(1) == team(None)
+print("all B7 co-op checks passed")
+
+# 282. B10 seed reader: "?" rooms replay the game's own roll (xoshiro256** MegaRandom + UnknownMapPointOdds.Roll,
+# float32). Reference: the decompiled C# run on seed 123456789 (40 rolls, Shop blacklisted every 7th from the 4th).
+from pathing import UnknownRolls, resolve_unknowns
+U0 = {"state": "2466975172287755897,8832083440362974766,3534771765162737125,9592110948284743397".split(","),
+      "odds": [["Monster", 0.1], ["Elite", -1], ["Treasure", 0.02], ["Shop", 0.03]],
+      "base_odds": [["Monster", 0.1], ["Elite", -1], ["Treasure", 0.02], ["Shop", 0.03]]}
+REF = ("Event,Event,Monster,Event,Event,Shop,Monster,Event,Monster,Treasure,Event,Shop,Monster,Treasure,Event,Event,"
+       "Treasure,Event,Shop,Monster,Event,Monster,Event,Shop,Event,Monster,Event,Event,Event,Event,Treasure,Monster,"
+       "Event,Monster,Treasure,Shop,Event,Monster,Event,Treasure").split(",")
+ur = UnknownRolls(U0, {})
+assert [ur.roll({"Shop"} if i % 7 == 3 else ()) for i in range(40)] == REF
+# Along a path: the 3rd "?" is a fight; a "?" right after a shop can't be a shop; Juzu Bracelet: no fights.
+rolls = UnknownRolls(U0, {})
+assert resolve_unknowns(["Unknown", "Monster", "Unknown", "Unknown"], rolls) == ["Event", "Monster", "Event", "Monster"]
+assert resolve_unknowns(["Unknown"], rolls) == ["Event"]  # the path copy didn't consume the real stream
+assert "Monster" not in resolve_unknowns(["Unknown"] * 10, UnknownRolls(U0, {"relics": [{"name": "JuzuBracelet"}]}))
+assert UnknownRolls.make({"rooms": {"unknown": U0}, "relics": [{"name": "GoldenCompass"}]}) is None
+print("all B10 seed reader checks passed")
+# 283. B10: the route names its rooms from the act's queues; a "?" that rolls a fight takes the next hallway fight.
+from pathing import Route, route_names
+R10 = {"rooms": {"fights": ["A", "B", "C"], "fights_visited": 1, "elites": ["E1", "E2"], "elites_visited": 1,
+                 "events": ["V1", "V2"], "events_visited": 0}}
+rt = Route(None, ["Monster", "Unknown", "Elite", "Unknown"], 0, 0, 0, ["Monster", "Monster", "Elite", "Event"])
+assert route_names(R10, rt) == [("Monster", "B"), ("Monster", "C"), ("Elite", "E2"), ("Event", "V1")]
+print("all B10 route name checks passed")
+# 284. B10 live check (2026-10-25, Act 1, 66/66 HP): the game skipped Welcome to Wongos (Act 2 only), Ranwid (not Act
+# 1), Potion Courier (not Act 1), Unrest Site (HP over 70%) and gave Room Full of Cheese. The queue follows IsAllowed.
+from pathing import next_events
+live = {"act": 0, "gold": 99, "player": {"hp": 66, "max_hp": 66}, "potions": [], "deck": [],
+        "rooms": {"events": ["Symbiote", "WelcomeToWongos", "RanwidTheElder", "PotionCourier", "UnrestSite",
+                             "RoomFullOfCheese", "TeaMaster", "FakeMerchant"], "events_visited": 1}}
+assert next_events(live, 1) == ["RoomFullOfCheese"]
+assert next_events({**live, "player": {"hp": 40, "max_hp": 66}}, 1) == ["UnrestSite"]  # hurt: Unrest Site is allowed
+print("all B10 event queue checks passed")
+# 285. Route art: the boss node is named from the reader (its icon), and every elite / boss has art (pack or cache).
+rtb = Route(None, ["Elite", "Boss"], 0, 0, 0, ["Elite", "Boss"])
+assert route_names({"rooms": {**R10["rooms"], "boss": "TheKinBoss"}}, rtb) == [("Elite", "E2"), ("Boss", "TheKinBoss")]
+import icons as _ic
+assert _ic.wiki_title("encounter", "KnightsElite") == "Spectral Knight" and _ic.wiki_title("encounter", "TerrorEelElite") == "Terror Eel"
+assert _ic.pack_paths("encounter", "VantomBoss") == ["images/map/placeholder/vantom_boss_icon.png"]
+print("all route art checks passed")
+# 286. Events already seen this run (reader `events_seen`, ModelId entries) are skipped like the game does.
+seen_q = {**live["rooms"], "events": live["rooms"]["events"] + ["TrashHeap"], "events_seen": ["ROOM_FULL_OF_CHEESE"]}
+assert next_events({**live, "rooms": seen_q}, 1) == ["TrashHeap"]
+print("all seen-event checks passed")
+# 287. Enemy position dots: left-to-right screen order. Slotted fights use the scene's Marker2D x (Exoskeletons: first <
+# second < third, whatever order the reader lists them); unslotted fights keep the game's list order.
+from icons import screen_order, slot_x
+exo = {"encounter": "ExoskeletonsWeak", "enemies": [{"combat_id": 3, "slot": "third"}, {"combat_id": 1, "slot": "first"},
+                                                     {"combat_id": 2, "slot": "second"}]}
+assert screen_order(exo) == ([1, 2, 3] if slot_x("ExoskeletonsWeak") else [3, 1, 2])
+assert screen_order({"encounter": "NibbitsWeak", "enemies": [{"combat_id": 5}, {"combat_id": 4}]}) == [5, 4]
+print("all position dot checks passed")
+# 288. Hand picks with a game filter (Snap: no Retain cards) number only the shown cards: a hidden Retain card before
+# the pick must not shift its key (it pointed past the row and the pick never registered).
+from picker import hand_pick
+from solver import gd_card
+_c = lambda n, kw=None: {**gd_card(n), "keywords": kw if kw is not None else gd_card(n).get("keywords", [])}
+snap = {"hand": [_c("DefendNecrobinder"), _c("Dazed"), _c("Snap", ["Retain"]), _c("Unleash"), _c("Parse")],
+        "hand_select": {"mode": "select", "prompt": "SNAP.selectionScreenPrompt", "min": 1, "max": 1, "selected": 0},
+        "deck": [], "relics": []}
+_k, _n = hand_pick(snap)
+_shown = [c["name"] for c in snap["hand"] if "Retain" not in c["keywords"]]
+assert len(_k) == 1 and _shown[_k[0] - 1] == _n[0], (_k, _n)
+print("all hand filter checks passed")
+# 289. Known foes (B11): the pre-rolled elite / hallway queues replace the act pools in deck ratings, in order and
+# wrapping like the game's lists; unknown names fall back to the pools.
+from deck import known_foes, threats
+_r = {"rooms": {"elites": ["E1", "E2"], "elites_visited": 1, "fights": ["F1", "F2", "F3"], "fights_visited": 2}}
+assert known_foes(_r) == (("E2", "E1", "E2"), ("F3", "F1", "F2", "F3", "F1"))
+assert known_foes({}) == ((), ())
+_els = [e for e in GAMEDATA["acts"]["Overgrowth"]["encounters"] if GAMEDATA["encounters"][e]["class"] == "Elite"]
+_one = threats("Overgrowth", 0, (), ((_els[0],) * 3, ()))
+assert _one != threats("Overgrowth", 0) and threats("Overgrowth", 0, (), (("Nope",), ())) == threats("Overgrowth", 0)
+print("all known foe checks passed")
+# 290. Potions vs the known fights ahead (B11): defense potions gain before a hard-hitting elite (Byrdonis), area
+# potions before a group (Phrog Parasite); nothing changes when the queue is unknown.
+from picker import foe_fit
+_st = lambda el: {"act_name": "Overgrowth", "ascension": 0,
+                  "rooms": {"elites": [el], "elites_visited": 0, "boss": GAMEDATA["acts"]["Overgrowth"]["bosses"][0]}}
+assert foe_fit("BlockPotion", _st("ByrdonisElite")) > 0 > foe_fit("BlockPotion", _st("BygoneEffigyElite"))
+assert foe_fit("ExplosiveAmpoule", _st("PhrogParasiteElite")) > 0 > foe_fit("ExplosiveAmpoule", _st("ByrdonisElite"))
+assert foe_fit("BlockPotion", {"act_name": "Overgrowth"}) == 0
+print("all potion foe checks passed")
+# 291. Co-op: enemy HP is players x 1.1 / 1.2 / 1.2 (1.3 act 3 boss) on top of ascension; each deck faces that factor.
+from deck import mp_share
+assert mp_share({"players": 1}) == (1, 1) and mp_share({}) == (1, 1)
+assert mp_share({"players": 2, "act": 0}) == (1.1, 1.1) and mp_share({"players": 3, "act": 2}) == (1.2, 1.3)
+_solo, _duo = threats("Overgrowth", 8), threats("Overgrowth", 8, mp=(1.1, 1.1))
+assert all(abs(d[1] - 1.1 * s[1]) < 1e-6 and d[2] == s[2] for s, d in zip(_solo, _duo))  # HP scales, hits don't
+print("all co-op scaling checks passed")
+# 292. Flutter (Thieving Hopper): every unblocked Attack hit counts it down; at 0 the Hopper is stunned and skips its
+# move (its 20 hit here). Flutter 2: two Strikes stun it, no damage taken; Flutter 3: not stunned, the hit lands.
+_fl = lambda n: fight([STRIKE, STRIKE], [boss(100, [("FlutterPower", n)], now=20)], energy=2)
+_two = next(p for p in solve(_fl(2), top=5) if len(p.steps) == 2)
+assert _two.hp_loss == 0 and _two.damage == 6, _two
+assert next(p for p in solve(_fl(3), top=5) if len(p.steps) == 2).hp_loss > 0
+# 293. A stolen card is worth what the card picker rates it for this deck: a key card over a Strike.
+from solver import card_loot_hp, gd_card
+_thief = lambda c: {"creature": {"powers": [{"name": "SwipePower", "amount": 1, "stolen": gd_card(c)}]}}
+_deck = {"deck": [gd_card("StrikeIronclad")] * 5 + [gd_card("DefendIronclad")] * 4 + [gd_card("Bash")], "relics": []}
+assert card_loot_hp(_thief("StrikeIronclad"), _deck) < card_loot_hp(_thief("DemonForm"), _deck)
+assert card_loot_hp({"creature": {"powers": []}}, _deck) == 0
+print("all thief checks passed")
+# 294. Potion bar: slot n's first guess is where the game draws it (9 slots: Attack Potion in slot 7 at ~968 px of
+# 1920), and the sweep reaches past 9 slots.
+import autoplay as _ap
+assert abs((_ap.POTION_X0 + _ap.POTION_DX * 7) * 1920 - 967) < 10
+assert max(x for x, _ in _ap.POTION_SWEEP) * 1920 > _ap.POTION_X0 * 1920 + 9 * _ap.POTION_DX * 1920
+print("all potion bar checks passed")
+# 295. Pile screen with two copies of the pick (two Hyperbeams): hovering either copy counts; the second one here.
+import threading as _th
+_saved = (_ap.find_game, _ap.user32, _ap.click, _ap.time.sleep)
+_pos, _clicked = {"x": 0, "y": 0}, []
+_ap.find_game = lambda: (0, 0, 0, 1920, 1080)
+_ap.user32 = type("U", (), {"SetCursorPos": staticmethod(lambda x, y: _pos.update(x=x, y=y)),
+                            "SetForegroundWindow": staticmethod(lambda h: None)})()
+_ap.click = lambda: _clicked.append(dict(_pos))
+_ap.time.sleep = lambda t: None
+_ap.grid_spots.clear()
+_cards = [{"name": "A"}, {"name": "H"}, {"name": "A"}, {"name": "H"}]
+
+
+def _dup_screen():
+    if _clicked:
+        return {"card_grid": None}
+    hov = 3 if 700 < _pos["x"] < 800 and 500 < _pos["y"] < 600 else None  # only the second H is under the mouse
+    return {"card_grid": {"cards": _cards, "hovered": hov, "pile": "Draw", "min": 1, "max": 1}}
+
+
+assert _ap.pick_from_pile(_dup_screen, _th.Event(), lambda m: None, lambda s: ["H"]) is None and len(_clicked) == 1
+_ap.find_game, _ap.user32, _ap.click, _ap.time.sleep = _saved
+print("all duplicate pile card checks passed")
+# 296. Pile card position from the reader's grid state (live numbers: order, scroll -480, row pitch 377.6): the 20th
+# card (row 3, column 4) is below the screen, so the grid scrolls first; then the point is computed from the new scroll.
+_g = {"order": list(range(20)), "scroll": -480, "row_h": 377.6, "cards": [{"name": "x"}] * 20}
+_wheels, _st = [], {"card_grid": dict(_g)}
+_saved_wheel, _saved_sleep = _ap.wheel, _ap.time.sleep
+_ap.wheel = lambda n: (_wheels.append(n), _st["card_grid"].update(scroll=max(-870.4, _g["scroll"] + 40 * n)))
+_ap.time.sleep = lambda t: None
+_pts = _ap.grid_point({19}, lambda: _st, lambda x, y: None)
+_ap.wheel, _ap.time.sleep = _saved_wheel, _saved_sleep
+assert _wheels == [-13] and round(_pts[0][0] * 1920) == 1495 and round(_pts[0][1] * 1080) == 664, (_wheels, _pts)
+assert _ap.grid_point({0}, lambda: {"card_grid": {"cards": []}}, None) == []  # old reader: sweep only
+print("all grid scroll checks passed")

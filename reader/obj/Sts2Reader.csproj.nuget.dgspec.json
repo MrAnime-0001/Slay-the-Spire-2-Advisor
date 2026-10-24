@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor v6\\sts2-advisor\\reader\\Sts2Reader.csproj": {}
+    "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor\\reader\\Sts2Reader.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor v6\\sts2-advisor\\reader\\Sts2Reader.csproj": {
+    "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor\\reader\\Sts2Reader.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor v6\\sts2-advisor\\reader\\Sts2Reader.csproj",
+        "projectUniqueName": "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor\\reader\\Sts2Reader.csproj",
         "projectName": "Sts2Reader",
-        "projectPath": "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor v6\\sts2-advisor\\reader\\Sts2Reader.csproj",
+        "projectPath": "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor\\reader\\Sts2Reader.csproj",
         "packagesPath": "C:\\Users\\Yutti Chylong\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor v6\\sts2-advisor\\reader\\obj\\",
+        "outputPath": "C:\\Users\\Yutti Chylong\\Documents\\3 - Game Creation\\sts2-advisor Dev\\sts2-advisor\\reader\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Yutti Chylong\\AppData\\Roaming\\NuGet\\NuGet.Config",

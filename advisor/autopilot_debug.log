@@ -3650,13 +3650,1292 @@ potions = [{'slot': 0, 'name': 'WeakPotion'}, {'slot': 1, 'name': 'GamblersBrew'
 02:15:26 ending turn
 02:15:26 turn 4: waiting for your turn
 02:15:29 stopped: you died (turn 3)
-03:01:02 turn 1: waiting for your turn
-03:01:03 playing DefendNecrobinder
-03:01:04 playing StrikeNecrobinder -> TwigSlimeS (combat_id=1)
-03:01:05   aimed at combat_id=1 at (0.6, 0.6)
-03:01:06 playing StrikeNecrobinder -> TwigSlimeS (combat_id=1)
-03:01:06   aimed at combat_id=1 at (0.6, 0.6)
-03:01:07 ending turn
-03:01:07 turn 2: waiting for your turn
-03:01:12 playing StrikeNecrobinder -> LeafSlimeS (combat_id=3)
-03:01:12 stopped: combat over after 2 turns
+03:33:34 turn 1: waiting for your turn
+03:33:35 playing DefendNecrobinder
+03:33:36 playing Unleash -> FuzzyWurmCrawler (combat_id=1)
+03:33:38   aimed at combat_id=1 at (0.7, 0.6)
+03:33:38 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:33:39   aimed at combat_id=1 at (0.7, 0.6)
+03:33:39 ending turn
+03:33:40 turn 2: waiting for your turn
+03:33:43 playing DefendNecrobinder
+03:33:44 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:33:44   aimed at combat_id=1 at (0.7, 0.6)
+03:33:45 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:33:45   aimed at combat_id=1 at (0.7, 0.6)
+03:33:46 ending turn
+03:33:46 turn 3: waiting for your turn
+03:33:50 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:33:51   aimed at combat_id=1 at (0.7, 0.6)
+03:33:51 playing DefendNecrobinder
+03:33:52 playing DefendNecrobinder
+03:33:53 ending turn
+03:33:53 turn 4: waiting for your turn
+03:33:57 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:33:57   aimed at combat_id=1 at (0.7, 0.6)
+03:33:58 playing DefendNecrobinder
+03:33:59 playing DefendNecrobinder
+03:34:00 ending turn
+03:34:00 turn 5: waiting for your turn
+03:34:04 playing Unleash -> FuzzyWurmCrawler (combat_id=1)
+03:34:04   aimed at combat_id=1 at (0.7, 0.6)
+03:34:05 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:34:05   aimed at combat_id=1 at (0.7, 0.6)
+03:34:06 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=1)
+03:34:07   aimed at combat_id=1 at (0.7, 0.6)
+03:34:08 stopped: combat over after 5 turns
+03:35:11 turn 1: waiting for your turn
+03:35:12 playing Bodyguard
+03:35:12 playing DefendNecrobinder
+03:35:13 playing Volley
+03:35:14 ending turn
+03:35:14 turn 2: waiting for your turn
+03:35:17 playing NegativePulse
+03:35:18 playing DefendNecrobinder
+03:35:19 playing StrikeNecrobinder -> Nibbit (combat_id=1)
+03:35:21   aimed at combat_id=1 at (0.7, 0.6)
+03:35:21 ending turn
+03:35:21 turn 3: waiting for your turn
+03:35:26 playing Reap -> Nibbit (combat_id=1)
+03:35:26   aimed at combat_id=1 at (0.7, 0.6)
+03:35:27 ending turn
+03:35:27 turn 4: waiting for your turn
+03:35:31 stopped: combat over after 3 turns
+03:37:51 turn 1: waiting for your turn
+03:37:52 playing DefendNecrobinder
+03:37:53 playing Lethality
+03:37:54 playing DefendNecrobinder
+03:37:55 ending turn
+03:37:55 turn 2: waiting for your turn
+03:37:59 playing StrikeNecrobinder -> Byrdonis (combat_id=1)
+03:38:00   aimed at combat_id=1 at (0.6, 0.6)
+03:38:00 playing DefendNecrobinder
+03:38:01 playing DefendNecrobinder
+03:38:02 ending turn
+03:38:02 turn 3: waiting for your turn
+03:38:06 playing NegativePulse
+03:38:07 playing Bodyguard
+03:38:08 playing Volley
+03:38:09 ending turn
+03:38:09 turn 4: waiting for your turn
+03:38:13 playing DefendNecrobinder
+03:38:14 playing Bodyguard
+03:38:15 playing DefendNecrobinder
+03:38:16 ending turn
+03:38:16 turn 5: waiting for your turn
+03:38:20 playing StrikeNecrobinder -> Byrdonis (combat_id=1)
+03:38:20   aimed at combat_id=1 at (0.6, 0.6)
+03:38:21 playing NegativePulse
+03:38:22 playing StrikeNecrobinder -> Byrdonis (combat_id=1)
+03:38:22   aimed at combat_id=1 at (0.6, 0.6)
+03:38:23 ending turn
+03:38:23 turn 6: waiting for your turn
+03:38:28 playing Volley
+03:38:29 stopped: combat over after 6 turns
+03:45:56 turn 1: waiting for your turn
+03:45:57 playing Volley
+03:45:58 ending turn
+03:45:58 turn 2: waiting for your turn
+03:46:04 playing Bodyguard
+03:46:05 playing DefendNecrobinder
+03:46:06 playing StrikeNecrobinder -> LeafSlimeS (combat_id=1)
+03:46:07   aimed at combat_id=1 at (0.6, 0.6)
+03:46:08 ending turn
+03:46:08 turn 3: waiting for your turn
+03:46:11 playing Reap -> LeafSlimeM (combat_id=2)
+03:46:13   aimed at combat_id=2 at (0.75, 0.6)
+03:46:15 stopped: combat over after 3 turns
+03:51:02 turn 1: waiting for your turn
+03:51:03 playing Flatten -> ShrinkerBeetle (combat_id=1)
+03:51:04   aimed at combat_id=1 at (0.6, 0.6)
+03:51:05 playing Lethality
+03:51:06 ending turn
+03:51:06 turn 2: waiting for your turn
+03:51:11 playing Reap -> ShrinkerBeetle (combat_id=1)
+03:51:11   aimed at combat_id=1 at (0.6, 0.6)
+03:51:12 ending turn
+03:51:13 turn 3: waiting for your turn
+03:51:16 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=2)
+03:51:18   aimed at combat_id=2 at (0.8, 0.6)
+03:51:18 playing DefendNecrobinder
+03:51:19 playing DefendNecrobinder
+03:51:20 ending turn
+03:51:20 turn 4: waiting for your turn
+03:51:25 playing DefendNecrobinder
+03:51:25 playing DefendNecrobinder
+03:51:26 playing Volley
+03:51:27 ending turn
+03:51:27 turn 5: waiting for your turn
+03:51:30 playing DefendNecrobinder
+03:51:31 playing Unleash -> FuzzyWurmCrawler (combat_id=2)
+03:51:32   aimed at combat_id=2 at (0.8, 0.6)
+03:51:32 playing StrikeNecrobinder -> FuzzyWurmCrawler (combat_id=2)
+03:51:33   aimed at combat_id=2 at (0.8, 0.6)
+03:51:33 ending turn
+03:51:34 turn 6: waiting for your turn
+03:51:37 playing Flatten -> FuzzyWurmCrawler (combat_id=2)
+03:51:38   aimed at combat_id=2 at (0.8, 0.6)
+03:51:39 stopped: combat over after 6 turns
+03:52:14 turn 1: waiting for your turn
+03:52:15 playing Volley
+03:52:16 ending turn
+03:52:16 turn 2: waiting for your turn
+03:52:20 playing DefendNecrobinder
+03:52:21 playing Lethality
+03:52:22 playing Bodyguard
+03:52:23 ending turn
+03:52:23 turn 3: waiting for your turn
+03:52:27 playing Reap -> PhrogParasite (combat_id=1)
+03:52:29   aimed at combat_id=1 at (0.6, 0.6)
+03:52:30 ending turn
+03:52:30 turn 4: waiting for your turn
+03:52:36 drinking FlexPotion
+03:52:39 playing StrikeNecrobinder -> Wriggler #1 (combat_id=3)
+03:52:41   aimed at combat_id=3 at (0.5, 0.6)
+03:52:41 playing DefendNecrobinder
+03:52:42 playing StrikeNecrobinder -> Wriggler #1 (combat_id=3)
+03:52:43   aimed at combat_id=3 at (0.5, 0.6)
+03:52:43 ending turn
+03:52:44 turn 5: waiting for your turn
+03:52:52 playing StrikeNecrobinder -> Wriggler #3 (combat_id=6)
+03:52:54   aimed at combat_id=6 at (0.85, 0.6)
+03:52:55 playing DefendNecrobinder
+03:52:55 playing DefendNecrobinder
+03:52:56 ending turn
+03:52:56 turn 6: waiting for your turn
+03:53:02 playing NegativePulse
+03:53:03 playing Snap -> Wriggler #2 (combat_id=5)
+03:53:05   aimed at combat_id=5 at (0.75, 0.6)
+03:53:06 picking Unleash (SNAP.selectionScreenPrompt)
+03:53:07 playing Volley
+03:53:10 Volley didn't play, retrying
+03:53:12 Volley didn't play, retrying
+03:53:12 stopped: Volley didn't play
+03:53:26 turn 1: waiting for your turn
+03:53:28 ending turn
+03:53:28 turn 2: waiting for your turn
+03:53:35 playing Reap -> Wriggler #1 (combat_id=4)
+03:53:36   aimed at combat_id=4 at (0.65, 0.6)
+03:53:37 ending turn
+03:53:37 turn 3: waiting for your turn
+03:53:41 playing Flatten -> Wriggler (combat_id=6)
+03:53:42 stopped: cancelled
+03:53:51 turn 1: waiting for your turn
+03:53:52 playing Flatten -> Wriggler (combat_id=6)
+03:53:54   aimed at combat_id=6 at (0.85, 0.6)
+03:53:55 stopped: combat over after 1 turns
+04:04:17 turn 1: waiting for your turn
+04:04:18 playing NegativePulse
+04:04:19 playing Snap -> Nibbit #2 (combat_id=2)
+04:04:21   aimed at combat_id=2 at (0.75, 0.6)
+04:04:21 picking Parse (SNAP.selectionScreenPrompt)
+04:04:25 stopped: card pick didn't register - pick it yourself
+04:05:24 turn 1: waiting for your turn
+04:05:25 picking Parse (SNAP.selectionScreenPrompt)
+04:05:28 stopped: card pick didn't register - pick it yourself
+04:05:29 turn 1: waiting for your turn
+04:05:30 picking Parse (SNAP.selectionScreenPrompt)
+04:05:34 stopped: card pick didn't register - pick it yourself
+04:10:31 turn 1: waiting for your turn
+04:10:32 picking Parse (SNAP.selectionScreenPrompt)
+04:10:33 playing Unleash -> Nibbit #2 (combat_id=2)
+04:10:35   aimed at combat_id=2 at (0.75, 0.6)
+04:10:35 drinking EnergyPotion
+04:10:40 playing Parse
+04:10:40 playing DefendNecrobinder
+04:10:41 ending turn
+04:10:41 turn 2: waiting for your turn
+04:10:46 playing DefendNecrobinder
+04:10:47 playing StrikeNecrobinder -> Nibbit #2 (combat_id=2)
+04:10:47   aimed at combat_id=2 at (0.75, 0.6)
+04:10:48 playing DefendNecrobinder
+04:10:49 ending turn
+04:10:49 turn 3: waiting for your turn
+04:10:53 playing Spur
+04:10:54 playing Lethality
+04:10:55 playing Bodyguard
+04:10:56 ending with 0 energy; not worth playing: Volley
+04:10:56 ending turn
+04:10:57 turn 4: waiting for your turn
+04:11:02 playing Volley
+04:11:03 ending turn
+04:11:03 turn 5: waiting for your turn
+04:11:07 playing Reap -> Nibbit (combat_id=1)
+04:11:08   aimed at combat_id=1 at (0.6, 0.6)
+04:11:10 stopped: combat over after 5 turns
+04:11:21 turn 1: waiting for your turn
+04:11:22 playing Lethality
+04:11:23 playing Flatten -> CubexConstruct (combat_id=1)
+04:11:25   aimed at combat_id=1 at (0.75, 0.6)
+04:11:26 ending turn
+04:11:26 turn 2: waiting for your turn
+04:11:30 playing StrikeNecrobinder -> CubexConstruct (combat_id=1)
+04:11:31   aimed at combat_id=1 at (0.75, 0.6)
+04:11:31 playing DefendNecrobinder
+04:11:32 playing Snap -> CubexConstruct (combat_id=1)
+04:11:33   aimed at combat_id=1 at (0.75, 0.6)
+04:11:33 picking StrikeNecrobinder (SNAP.selectionScreenPrompt)
+04:11:34 ending turn
+04:11:34 turn 3: waiting for your turn
+04:11:39 playing Parse
+04:11:39 playing Spur
+04:11:40 playing NegativePulse
+04:11:42 ending with 0 energy; not worth playing: Volley
+04:11:42 ending turn
+04:11:42 turn 4: waiting for your turn
+04:11:48 playing Reap -> CubexConstruct (combat_id=1)
+04:11:48   aimed at combat_id=1 at (0.75, 0.6)
+04:11:49 stopped: combat over after 4 turns
+04:14:28 turn 1: waiting for your turn
+04:14:29 playing DefendNecrobinder
+04:14:30 playing Volley
+04:14:31 ending turn
+04:14:31 turn 2: waiting for your turn
+04:14:37 playing StrikeNecrobinder -> KinFollower #1 (combat_id=1)
+04:14:38   aimed at combat_id=1 at (0.5, 0.6)
+04:14:39 playing Wisp
+04:14:39 playing DefendNecrobinder
+04:14:40 playing NegativePulse
+04:14:41 playing DefendNecrobinder
+04:14:42 ending turn
+04:14:42 turn 3: waiting for your turn
+04:14:49 playing Bodyguard
+04:14:49 playing Flatten -> KinFollower #1 (combat_id=1)
+04:14:50   aimed at combat_id=1 at (0.5, 0.6)
+04:14:51 ending turn
+04:14:51 turn 4: waiting for your turn
+04:14:58 playing Reap -> KinFollower #1 (combat_id=1)
+04:14:58   aimed at combat_id=1 at (0.5, 0.6)
+04:14:59 ending turn
+04:14:59 turn 5: waiting for your turn
+04:15:05 playing Spur
+04:15:06 playing DefendNecrobinder
+04:15:06 playing NegativePulse
+04:15:08 ending with 0 energy; not worth playing: Volley
+04:15:08 ending turn
+04:15:08 turn 6: waiting for your turn
+04:15:13 playing DefendNecrobinder
+04:15:14 playing Dredge
+04:15:15 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+
+=== 2026-10-25 04:19:31 couldn't find pile card B (#1)
+window (hwnd, left, top, w, h) = (0, 0, 0, 1920, 1080)
+enemies = []
+potions = None
+(0.140,0.300) enemy=None slot=None use=None popup=None
+(0.200,0.300) enemy=None slot=None use=None popup=None
+(0.260,0.300) enemy=None slot=None use=None popup=None
+(0.320,0.300) enemy=None slot=None use=None popup=None
+(0.380,0.300) enemy=None slot=None use=None popup=None
+(0.440,0.300) enemy=None slot=None use=None popup=None
+(0.500,0.300) enemy=None slot=None use=None popup=None
+(0.560,0.300) enemy=None slot=None use=None popup=None
+(0.620,0.300) enemy=None slot=None use=None popup=None
+(0.680,0.300) enemy=None slot=None use=None popup=None
+(0.740,0.300) enemy=None slot=None use=None popup=None
+(0.800,0.300) enemy=None slot=None use=None popup=None
+(0.860,0.300) enemy=None slot=None use=None popup=None
+(0.140,0.650) enemy=None slot=None use=None popup=None
+(0.200,0.650) enemy=None slot=None use=None popup=None
+(0.260,0.650) enemy=None slot=None use=None popup=None
+(0.320,0.650) enemy=None slot=None use=None popup=None
+(0.380,0.650) enemy=None slot=None use=None popup=None
+(0.440,0.650) enemy=None slot=None use=None popup=None
+(0.500,0.650) enemy=None slot=None use=None popup=None
+(0.560,0.650) enemy=None slot=None use=None popup=None
+(0.620,0.650) enemy=None slot=None use=None popup=None
+(0.680,0.650) enemy=None slot=None use=None popup=None
+(0.740,0.650) enemy=None slot=None use=None popup=None
+(0.800,0.650) enemy=None slot=None use=None popup=None
+(0.860,0.650) enemy=None slot=None use=None popup=None
+(0.140,0.880) enemy=None slot=None use=None popup=None
+(0.200,0.880) enemy=None slot=None use=None popup=None
+(0.260,0.880) enemy=None slot=None use=None popup=None
+(0.320,0.880) enemy=None slot=None use=None popup=None
+(0.380,0.880) enemy=None slot=None use=None popup=None
+(0.440,0.880) enemy=None slot=None use=None popup=None
+(0.500,0.880) enemy=None slot=None use=None popup=None
+(0.560,0.880) enemy=None slot=None use=None popup=None
+(0.620,0.880) enemy=None slot=None use=None popup=None
+(0.680,0.880) enemy=None slot=None use=None popup=None
+(0.740,0.880) enemy=None slot=None use=None popup=None
+(0.800,0.880) enemy=None slot=None use=None popup=None
+(0.860,0.880) enemy=None slot=None use=None popup=None
+(0.140,0.450) enemy=None slot=None use=None popup=None
+(0.200,0.450) enemy=None slot=None use=None popup=None
+(0.260,0.450) enemy=None slot=None use=None popup=None
+(0.320,0.450) enemy=None slot=None use=None popup=None
+(0.380,0.450) enemy=None slot=None use=None popup=None
+(0.440,0.450) enemy=None slot=None use=None popup=None
+(0.500,0.450) enemy=None slot=None use=None popup=None
+(0.560,0.450) enemy=None slot=None use=None popup=None
+(0.620,0.450) enemy=None slot=None use=None popup=None
+(0.680,0.450) enemy=None slot=None use=None popup=None
+(0.740,0.450) enemy=None slot=None use=None popup=None
+(0.800,0.450) enemy=None slot=None use=None popup=None
+(0.860,0.450) enemy=None slot=None use=None popup=None
+
+=== 2026-10-25 04:19:34 couldn't find pile card B (#1)
+window (hwnd, left, top, w, h) = (0, 0, 0, 1920, 1080)
+enemies = []
+potions = None
+(0.140,0.300) enemy=None slot=None use=None popup=None
+(0.200,0.300) enemy=None slot=None use=None popup=None
+(0.260,0.300) enemy=None slot=None use=None popup=None
+(0.320,0.300) enemy=None slot=None use=None popup=None
+(0.380,0.300) enemy=None slot=None use=None popup=None
+(0.440,0.300) enemy=None slot=None use=None popup=None
+(0.500,0.300) enemy=None slot=None use=None popup=None
+(0.560,0.300) enemy=None slot=None use=None popup=None
+(0.620,0.300) enemy=None slot=None use=None popup=None
+(0.680,0.300) enemy=None slot=None use=None popup=None
+(0.740,0.300) enemy=None slot=None use=None popup=None
+(0.800,0.300) enemy=None slot=None use=None popup=None
+(0.860,0.300) enemy=None slot=None use=None popup=None
+(0.140,0.650) enemy=None slot=None use=None popup=None
+(0.200,0.650) enemy=None slot=None use=None popup=None
+(0.260,0.650) enemy=None slot=None use=None popup=None
+(0.320,0.650) enemy=None slot=None use=None popup=None
+(0.380,0.650) enemy=None slot=None use=None popup=None
+(0.440,0.650) enemy=None slot=None use=None popup=None
+(0.500,0.650) enemy=None slot=None use=None popup=None
+(0.560,0.650) enemy=None slot=None use=None popup=None
+(0.620,0.650) enemy=None slot=None use=None popup=None
+(0.680,0.650) enemy=None slot=None use=None popup=None
+(0.740,0.650) enemy=None slot=None use=None popup=None
+(0.800,0.650) enemy=None slot=None use=None popup=None
+(0.860,0.650) enemy=None slot=None use=None popup=None
+(0.140,0.880) enemy=None slot=None use=None popup=None
+(0.200,0.880) enemy=None slot=None use=None popup=None
+(0.260,0.880) enemy=None slot=None use=None popup=None
+(0.320,0.880) enemy=None slot=None use=None popup=None
+(0.380,0.880) enemy=None slot=None use=None popup=None
+(0.440,0.880) enemy=None slot=None use=None popup=None
+(0.500,0.880) enemy=None slot=None use=None popup=None
+(0.560,0.880) enemy=None slot=None use=None popup=None
+(0.620,0.880) enemy=None slot=None use=None popup=None
+(0.680,0.880) enemy=None slot=None use=None popup=None
+(0.740,0.880) enemy=None slot=None use=None popup=None
+(0.800,0.880) enemy=None slot=None use=None popup=None
+(0.860,0.880) enemy=None slot=None use=None popup=None
+(0.140,0.450) enemy=None slot=None use=None popup=None
+(0.200,0.450) enemy=None slot=None use=None popup=None
+(0.260,0.450) enemy=None slot=None use=None popup=None
+(0.320,0.450) enemy=None slot=None use=None popup=None
+(0.380,0.450) enemy=None slot=None use=None popup=None
+(0.440,0.450) enemy=None slot=None use=None popup=None
+(0.500,0.450) enemy=None slot=None use=None popup=None
+(0.560,0.450) enemy=None slot=None use=None popup=None
+(0.620,0.450) enemy=None slot=None use=None popup=None
+(0.680,0.450) enemy=None slot=None use=None popup=None
+(0.740,0.450) enemy=None slot=None use=None popup=None
+(0.800,0.450) enemy=None slot=None use=None popup=None
+(0.860,0.450) enemy=None slot=None use=None popup=None
+
+=== 2026-10-25 04:19:41 couldn't find pile card B (#1)
+window (hwnd, left, top, w, h) = (0, 0, 0, 1920, 1080)
+enemies = []
+potions = None
+(0.140,0.300) enemy=None slot=None use=None popup=None
+(0.200,0.300) enemy=None slot=None use=None popup=None
+(0.260,0.300) enemy=None slot=None use=None popup=None
+(0.320,0.300) enemy=None slot=None use=None popup=None
+(0.380,0.300) enemy=None slot=None use=None popup=None
+(0.440,0.300) enemy=None slot=None use=None popup=None
+(0.500,0.300) enemy=None slot=None use=None popup=None
+(0.560,0.300) enemy=None slot=None use=None popup=None
+(0.620,0.300) enemy=None slot=None use=None popup=None
+(0.680,0.300) enemy=None slot=None use=None popup=None
+(0.740,0.300) enemy=None slot=None use=None popup=None
+(0.800,0.300) enemy=None slot=None use=None popup=None
+(0.860,0.300) enemy=None slot=None use=None popup=None
+(0.140,0.650) enemy=None slot=None use=None popup=None
+(0.200,0.650) enemy=None slot=None use=None popup=None
+(0.260,0.650) enemy=None slot=None use=None popup=None
+(0.320,0.650) enemy=None slot=None use=None popup=None
+(0.380,0.650) enemy=None slot=None use=None popup=None
+(0.440,0.650) enemy=None slot=None use=None popup=None
+(0.500,0.650) enemy=None slot=None use=None popup=None
+(0.560,0.650) enemy=None slot=None use=None popup=None
+(0.620,0.650) enemy=None slot=None use=None popup=None
+(0.680,0.650) enemy=None slot=None use=None popup=None
+(0.740,0.650) enemy=None slot=None use=None popup=None
+(0.800,0.650) enemy=None slot=None use=None popup=None
+(0.860,0.650) enemy=None slot=None use=None popup=None
+(0.140,0.880) enemy=None slot=None use=None popup=None
+(0.200,0.880) enemy=None slot=None use=None popup=None
+(0.260,0.880) enemy=None slot=None use=None popup=None
+(0.320,0.880) enemy=None slot=None use=None popup=None
+(0.380,0.880) enemy=None slot=None use=None popup=None
+(0.440,0.880) enemy=None slot=None use=None popup=None
+(0.500,0.880) enemy=None slot=None use=None popup=None
+(0.560,0.880) enemy=None slot=None use=None popup=None
+(0.620,0.880) enemy=None slot=None use=None popup=None
+(0.680,0.880) enemy=None slot=None use=None popup=None
+(0.740,0.880) enemy=None slot=None use=None popup=None
+(0.800,0.880) enemy=None slot=None use=None popup=None
+(0.860,0.880) enemy=None slot=None use=None popup=None
+(0.140,0.450) enemy=None slot=None use=None popup=None
+(0.200,0.450) enemy=None slot=None use=None popup=None
+(0.260,0.450) enemy=None slot=None use=None popup=None
+(0.320,0.450) enemy=None slot=None use=None popup=None
+(0.380,0.450) enemy=None slot=None use=None popup=None
+(0.440,0.450) enemy=None slot=None use=None popup=None
+(0.500,0.450) enemy=None slot=None use=None popup=None
+(0.560,0.450) enemy=None slot=None use=None popup=None
+(0.620,0.450) enemy=None slot=None use=None popup=None
+(0.680,0.450) enemy=None slot=None use=None popup=None
+(0.740,0.450) enemy=None slot=None use=None popup=None
+(0.800,0.450) enemy=None slot=None use=None popup=None
+(0.860,0.450) enemy=None slot=None use=None popup=None
+04:20:15 stopped: pile pick still open after 5 min
+04:21:17 turn 1: waiting for your turn
+04:21:18 picking Spur from the discard pile
+04:21:21 picking Reap from the discard pile
+04:21:22 picking Bodyguard from the discard pile
+04:21:27 playing Spur
+04:21:28 ending turn
+04:21:29 turn 2: waiting for your turn
+04:21:33 stopped: you died (turn 1)
+04:24:09 turn 1: waiting for your turn
+04:24:10 playing DefendDefect
+04:24:10 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:12   aimed at combat_id=1 at (0.7, 0.6)
+04:24:13 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:13   aimed at combat_id=1 at (0.7, 0.6)
+04:24:14 ending turn
+04:24:14 turn 2: waiting for your turn
+04:24:17 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:18   aimed at combat_id=1 at (0.7, 0.6)
+04:24:18 playing Iteration
+04:24:20 playing Dualcast
+04:24:21 ending turn
+04:24:21 turn 3: waiting for your turn
+04:24:25 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:25   aimed at combat_id=1 at (0.7, 0.6)
+04:24:26 playing DefendDefect
+04:24:27 playing DefendDefect
+04:24:28 ending turn
+04:24:28 turn 4: waiting for your turn
+04:24:32 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:32   aimed at combat_id=1 at (0.7, 0.6)
+04:24:33 playing DefendDefect
+04:24:33 playing DefendDefect
+04:24:34 ending turn
+04:24:34 turn 5: waiting for your turn
+04:24:38 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:40   aimed at combat_id=1 at (0.7, 0.6)
+04:24:41 playing StrikeDefect -> FuzzyWurmCrawler (combat_id=1)
+04:24:41   aimed at combat_id=1 at (0.7, 0.6)
+04:24:42 stopped: combat over after 5 turns
+04:25:13 turn 1: waiting for your turn
+04:25:13 playing StrikeDefect -> Nibbit (combat_id=1)
+04:25:15   aimed at combat_id=1 at (0.7, 0.6)
+04:25:16 playing DefendDefect
+04:25:16 playing DefendDefect
+04:25:17 ending turn
+04:25:18 turn 2: waiting for your turn
+04:25:21 playing DefendDefect
+04:25:22 playing Null -> Nibbit (combat_id=1)
+04:25:22   aimed at combat_id=1 at (0.7, 0.6)
+04:25:23 ending turn
+04:25:23 turn 3: waiting for your turn
+04:25:28 playing Dualcast
+04:25:29 playing Null -> Nibbit (combat_id=1)
+04:25:29   aimed at combat_id=1 at (0.7, 0.6)
+04:25:30 stopped: combat over after 3 turns
+04:25:42 turn 1: waiting for your turn
+04:25:43 playing StrikeDefect -> ShrinkerBeetle (combat_id=1)
+04:25:45   aimed at combat_id=1 at (0.7, 0.6)
+04:25:46 playing StrikeDefect -> ShrinkerBeetle (combat_id=1)
+04:25:46   aimed at combat_id=1 at (0.7, 0.6)
+04:25:47 playing Overclock
+04:25:48 playing Iteration
+04:25:49 ending turn
+04:25:49 turn 2: waiting for your turn
+04:25:53 playing DefendDefect
+04:25:54 playing DefendDefect
+04:25:54 playing StrikeDefect -> ShrinkerBeetle (combat_id=1)
+04:25:55   aimed at combat_id=1 at (0.7, 0.6)
+04:25:56 ending turn
+04:25:56 turn 3: waiting for your turn
+04:26:00 playing Overclock
+04:26:01 playing DefendDefect
+04:26:02 playing DefendDefect
+04:26:03 playing Dualcast
+04:26:04 stopped: combat over after 3 turns
+04:26:36 turn 1: waiting for your turn
+04:26:36 playing GunkUp -> PhrogParasite (combat_id=1)
+04:26:38   aimed at combat_id=1 at (0.6, 0.6)
+04:26:39 playing Overclock
+04:26:40 playing StrikeDefect -> PhrogParasite (combat_id=1)
+04:26:41   aimed at combat_id=1 at (0.6, 0.6)
+04:26:41 playing StrikeDefect -> PhrogParasite (combat_id=1)
+04:26:42   aimed at combat_id=1 at (0.6, 0.6)
+04:26:43 ending turn
+04:26:43 turn 2: waiting for your turn
+04:26:47 playing DefendDefect
+04:26:48 playing ShadowShield
+04:26:49 drinking EnergyPotion
+04:26:52 playing Null -> PhrogParasite (combat_id=1)
+04:26:53   aimed at combat_id=1 at (0.6, 0.6)
+04:26:54 ending turn
+04:26:54 turn 3: waiting for your turn
+04:26:59 playing StrikeDefect -> PhrogParasite (combat_id=1)
+04:27:00   aimed at combat_id=1 at (0.6, 0.6)
+04:27:00 playing FlakCannon
+04:27:04 ending turn
+04:27:04 turn 4: waiting for your turn
+04:27:09 playing GunkUp -> Wriggler #3 (combat_id=4)
+04:27:11   aimed at combat_id=4 at (0.75, 0.6)
+04:27:12 playing DefendDefect
+04:27:13 playing StrikeDefect -> Wriggler #3 (combat_id=4)
+04:27:14   aimed at combat_id=4 at (0.75, 0.6)
+04:27:15 ending with 0 energy; not worth playing: Overclock
+04:27:15 ending turn
+04:27:15 turn 5: waiting for your turn
+04:27:22 playing DefendDefect
+04:27:23 playing Null -> Wriggler #2 (combat_id=3)
+04:27:24   aimed at combat_id=3 at (0.65, 0.6)
+04:27:25 ending turn
+04:27:25 turn 6: waiting for your turn
+04:27:31 playing DefendDefect
+04:27:32 playing Overclock
+04:27:33 playing ShadowShield
+04:27:34 stopped: combat over after 6 turns
+04:27:56 turn 1: waiting for your turn
+04:27:57 playing StrikeDefect -> LeafSlimeS #2 (combat_id=2)
+04:27:59   aimed at combat_id=2 at (0.7, 0.6)
+04:27:59 playing StrikeDefect -> LeafSlimeS #2 (combat_id=2)
+04:28:00   aimed at combat_id=2 at (0.7, 0.6)
+04:28:00 playing Smokestack+
+04:28:01 ending turn
+04:28:02 turn 2: waiting for your turn
+04:28:07 playing Overclock
+04:28:09 playing ShadowShield
+04:28:10 playing StrikeDefect -> LeafSlimeS (combat_id=1)
+04:28:11   aimed at combat_id=1 at (0.6, 0.6)
+04:28:12 ending turn
+04:28:12 turn 3: waiting for your turn
+04:28:17 playing DefendDefect
+04:28:17 playing GunkUp -> SlitheringStrangler (combat_id=3)
+04:28:20   aimed at combat_id=3 at (0.85, 0.6)
+04:28:21 playing StrikeDefect -> SlitheringStrangler (combat_id=3)
+04:28:22   aimed at combat_id=3 at (0.85, 0.6)
+04:28:22 ending turn
+04:28:23 turn 4: waiting for your turn
+04:28:27 playing Null -> SlitheringStrangler (combat_id=3)
+04:28:27   aimed at combat_id=3 at (0.85, 0.6)
+04:28:28 playing Iteration
+04:28:29 drinking AttackPotion
+04:28:30 choosing Sunder
+04:28:32 playing Sunder -> SlitheringStrangler (combat_id=3)
+04:28:32   aimed at combat_id=3 at (0.85, 0.6)
+04:28:33 stopped: combat over after 4 turns
+04:34:54 turn 1: waiting for your turn
+04:34:55 playing StrikeDefect -> Fogmog (combat_id=1)
+04:34:57   aimed at combat_id=1 at (0.75, 0.6)
+04:34:58 playing StrikeDefect -> Fogmog (combat_id=1)
+04:34:58   aimed at combat_id=1 at (0.75, 0.6)
+04:34:59 playing GunkUp -> Fogmog (combat_id=1)
+04:34:59   aimed at combat_id=1 at (0.75, 0.6)
+04:35:01 ending turn
+04:35:01 turn 2: waiting for your turn
+04:35:05 playing DefendDefect
+04:35:05 playing StrikeDefect -> Fogmog (combat_id=1)
+04:35:06   aimed at combat_id=1 at (0.75, 0.6)
+04:35:07 playing Barrage -> Fogmog (combat_id=1)
+04:35:07   aimed at combat_id=1 at (0.75, 0.6)
+04:35:08 ending turn
+04:35:08 turn 3: waiting for your turn
+04:35:14 playing Null -> Fogmog (combat_id=1)
+04:35:14   aimed at combat_id=1 at (0.75, 0.6)
+04:35:15 playing DefendDefect
+04:35:16 ending turn
+04:35:16 turn 4: waiting for your turn
+04:35:22 playing ShadowShield
+04:35:23 playing StrikeDefect -> Fogmog (combat_id=1)
+04:35:23   aimed at combat_id=1 at (0.75, 0.6)
+04:35:25 ending with 0 energy; not worth playing: Overclock
+04:35:25 ending turn
+04:35:25 turn 5: waiting for your turn
+04:35:31 playing DefendDefect
+04:35:32 playing Null -> Fogmog (combat_id=1)
+04:35:32   aimed at combat_id=1 at (0.75, 0.6)
+04:35:33 ending turn
+04:35:33 turn 6: waiting for your turn
+04:35:38 playing GunkUp -> Fogmog (combat_id=1)
+04:35:39   aimed at combat_id=1 at (0.75, 0.6)
+04:35:40 stopped: combat over after 6 turns
+04:36:01 turn 1: waiting for your turn
+04:36:02 playing StrikeDefect -> VineShambler (combat_id=1)
+04:36:03   aimed at combat_id=1 at (0.65, 0.6)
+04:36:04 playing StrikeDefect -> VineShambler (combat_id=1)
+04:36:04   aimed at combat_id=1 at (0.65, 0.6)
+04:36:05 playing FightThrough
+04:36:06 ending turn
+04:36:06 turn 2: waiting for your turn
+04:36:10 drinking VulnerablePotion -> VineShambler
+04:36:14 playing Null -> VineShambler (combat_id=1)
+04:36:15   aimed at combat_id=1 at (0.65, 0.6)
+04:36:16 playing StrikeDefect -> VineShambler (combat_id=1)
+04:36:16   aimed at combat_id=1 at (0.65, 0.6)
+04:36:17 drinking FirePotion -> VineShambler
+04:36:21 ending with 0 energy; not worth playing: Overclock
+04:36:21 ending turn
+04:36:21 turn 3: waiting for your turn
+04:36:22 stopped: combat over after 2 turns
+04:36:36 turn 1: waiting for your turn
+04:36:37 playing Barrage -> AssassinRubyRaider (combat_id=1)
+04:36:38   aimed at combat_id=1 at (0.55, 0.6)
+04:36:39 playing StrikeDefect -> AssassinRubyRaider (combat_id=1)
+04:36:40   aimed at combat_id=1 at (0.55, 0.6)
+04:36:40 playing GunkUp -> AssassinRubyRaider (combat_id=1)
+04:36:41   aimed at combat_id=1 at (0.55, 0.6)
+04:36:42 ending turn
+04:36:42 turn 2: waiting for your turn
+04:36:47 playing ShadowShield
+04:36:48 playing Smokestack+
+04:36:49 ending turn
+04:36:49 turn 3: waiting for your turn
+04:36:55 playing Null -> TrackerRubyRaider (combat_id=3)
+04:36:57   aimed at combat_id=3 at (0.85, 0.6)
+04:36:58 playing Overclock
+04:36:59 playing StrikeDefect -> TrackerRubyRaider (combat_id=3)
+04:37:00   aimed at combat_id=3 at (0.85, 0.6)
+04:37:00 ending turn
+04:37:01 turn 4: waiting for your turn
+04:37:06 playing GunkUp -> CrossbowRubyRaider (combat_id=2)
+04:37:08   aimed at combat_id=2 at (0.7, 0.6)
+04:37:09 stopped: combat over after 4 turns
+04:37:19 turn 1: waiting for your turn
+04:37:20 playing Null -> Byrdonis (combat_id=1)
+04:37:22   aimed at combat_id=1 at (0.6, 0.6)
+04:37:22 playing FightThrough
+04:37:23 ending turn
+04:37:23 turn 2: waiting for your turn
+04:37:28 playing StrikeDefect -> Byrdonis (combat_id=1)
+04:37:28   aimed at combat_id=1 at (0.6, 0.6)
+04:37:29 playing DefendDefect
+04:37:29 playing Smokestack+
+04:37:31 ending turn
+04:37:31 turn 3: waiting for your turn
+04:37:36 playing DefendDefect
+04:37:36 playing GunkUp -> Byrdonis (combat_id=1)
+04:37:37   aimed at combat_id=1 at (0.6, 0.6)
+04:37:38 playing Barrage -> Byrdonis (combat_id=1)
+04:37:39   aimed at combat_id=1 at (0.6, 0.6)
+04:37:39 drinking ShipInABottle
+04:37:41 ending turn
+04:37:41 turn 4: waiting for your turn
+04:37:45 playing Hyperbeam
+04:37:47 playing Barrage -> Byrdonis (combat_id=1)
+04:37:47   aimed at combat_id=1 at (0.6, 0.6)
+04:37:48 stopped: combat over after 4 turns
+04:38:05 turn 1: waiting for your turn
+04:38:06 drinking StrengthPotion
+04:38:08 drinking VulnerablePotion -> KinFollower #1
+04:38:10 playing GunkUp -> KinFollower #1 (combat_id=1)
+04:38:11   aimed at combat_id=1 at (0.5, 0.6)
+04:38:12 playing Hyperbeam
+04:38:14 ending turn
+04:38:14 turn 2: waiting for your turn
+04:38:20 playing Barrage -> KinFollower (combat_id=2)
+04:38:22   aimed at combat_id=2 at (0.7, 0.6)
+04:38:22 playing StrikeDefect -> KinFollower (combat_id=2)
+04:38:23   aimed at combat_id=2 at (0.7, 0.6)
+04:38:23 playing Barrage -> KinFollower (combat_id=2)
+04:38:24   aimed at combat_id=2 at (0.7, 0.6)
+04:38:24 drinking LiquidBronze
+04:38:26 ending turn
+04:38:26 turn 3: waiting for your turn
+04:38:32 playing StrikeDefect -> KinFollower (combat_id=2)
+04:38:32   aimed at combat_id=2 at (0.7, 0.6)
+04:38:33 playing Overclock
+04:38:34 playing DefendDefect
+04:38:35 playing DefendDefect
+04:38:36 ending turn
+04:38:36 turn 4: waiting for your turn
+04:38:42 playing FightThrough
+04:38:43 playing StrikeDefect -> KinPriest (combat_id=3)
+04:38:45   aimed at combat_id=3 at (0.85, 0.6)
+04:38:46 playing Smokestack+
+04:38:47 ending turn
+04:38:47 turn 5: waiting for your turn
+04:38:51 playing GunkUp -> KinPriest (combat_id=3)
+04:38:52   aimed at combat_id=3 at (0.85, 0.6)
+04:38:53 playing Overclock
+04:38:55 playing Barrage -> KinPriest (combat_id=3)
+04:38:55   aimed at combat_id=3 at (0.85, 0.6)
+04:38:56 playing Barrage -> KinPriest (combat_id=3)
+04:38:56   aimed at combat_id=3 at (0.85, 0.6)
+04:38:57 ending turn
+04:38:57 turn 6: waiting for your turn
+04:39:02 playing DefendDefect
+04:39:02 playing Hyperbeam
+04:39:04 ending turn
+04:39:04 turn 7: waiting for your turn
+04:39:10 playing DefendDefect
+04:39:10 playing Null -> KinPriest (combat_id=3)
+04:39:11   aimed at combat_id=3 at (0.85, 0.6)
+04:39:12 ending turn
+04:39:12 turn 8: waiting for your turn
+04:39:18 playing StrikeDefect -> KinPriest (combat_id=3)
+04:39:19   aimed at combat_id=3 at (0.85, 0.6)
+04:39:19 playing Barrage -> KinPriest (combat_id=3)
+04:39:20   aimed at combat_id=3 at (0.85, 0.6)
+04:39:20 playing Overclock
+04:39:22 playing Slimed
+04:39:22 ending turn
+04:39:23 turn 9: waiting for your turn
+04:39:27 playing FlakCannon
+04:39:30 stopped: combat over after 9 turns
+04:39:59 turn 1: waiting for your turn
+04:40:00 playing Overclock
+04:40:02 playing StrikeDefect -> Tunneler (combat_id=1)
+04:40:03   aimed at combat_id=1 at (0.7, 0.6)
+04:40:04 playing DefendDefect
+04:40:05 playing Barrage -> Tunneler (combat_id=1)
+04:40:05   aimed at combat_id=1 at (0.7, 0.6)
+04:40:06 ending turn
+04:40:06 turn 2: waiting for your turn
+04:40:10 playing Smokestack+
+04:40:11 playing Hyperbeam
+04:40:13 ending turn
+04:40:13 turn 3: waiting for your turn
+04:40:17 playing ShadowShield
+04:40:18 playing FightThrough
+04:40:19 ending turn
+04:40:19 turn 4: waiting for your turn
+04:40:24 playing Hyperbeam
+04:40:26 playing StrikeDefect -> Tunneler (combat_id=1)
+04:40:27   aimed at combat_id=1 at (0.7, 0.6)
+04:40:27 drinking FirePotion -> Tunneler
+04:40:33 ending turn
+04:40:33 turn 5: waiting for your turn
+04:40:39 playing Fusion
+04:40:40 playing Hyperbeam
+04:40:41 stopped: combat over after 5 turns
+04:41:05 turn 1: waiting for your turn
+04:41:06 playing Hyperbeam
+04:41:08 playing DefendDefect
+04:41:09 ending turn
+04:41:09 turn 2: waiting for your turn
+04:41:14 playing Barrage -> ThievingHopper (combat_id=1)
+04:41:16   aimed at combat_id=1 at (0.7, 0.6)
+04:41:16 playing Barrage -> ThievingHopper (combat_id=1)
+04:41:17   aimed at combat_id=1 at (0.7, 0.6)
+04:41:17 playing GunkUp -> ThievingHopper (combat_id=1)
+04:41:18   aimed at combat_id=1 at (0.7, 0.6)
+04:41:19 ending turn
+04:41:19 turn 3: waiting for your turn
+04:41:24 playing DefendDefect
+04:41:25 playing Overclock
+04:41:26 playing DefendDefect
+04:41:27 playing FightThrough
+04:41:28 stopped: cancelled
+04:47:10 turn 1: waiting for your turn
+04:47:11 ending turn
+04:47:11 turn 2: waiting for your turn
+04:47:15 playing ChargeBattery
+04:47:16 playing ShadowShield
+04:47:17 ending turn
+04:47:17 turn 3: waiting for your turn
+04:47:23 playing StrikeDefect -> ThievingHopper (combat_id=1)
+04:47:25   aimed at combat_id=1 at (0.7, 0.6)
+04:47:25 playing Barrage -> ThievingHopper (combat_id=1)
+04:47:26   aimed at combat_id=1 at (0.7, 0.6)
+04:47:26 playing DefendDefect
+04:47:27 playing Darkness
+04:47:28 ending turn
+04:47:28 turn 4: waiting for your turn
+04:47:33 stopped: combat over after 3 turns
+04:49:40 turn 1: waiting for your turn
+04:49:41 playing GunkUp -> SpinyToad (combat_id=1)
+04:49:42   aimed at combat_id=1 at (0.65, 0.6)
+04:49:44 playing DefendDefect
+04:49:44 playing Fusion
+04:49:45 ending turn
+04:49:45 turn 2: waiting for your turn
+04:49:46 stopped: cancelled
+04:52:44 turn 1: waiting for your turn
+04:52:45 playing Hyperbeam
+04:52:47 playing ChargeBattery
+04:52:48 playing DefendDefect
+04:52:49 ending turn
+04:52:49 turn 2: waiting for your turn
+04:52:55 playing Darkness
+04:52:56 playing Barrage -> SpinyToad (combat_id=1)
+04:52:58   aimed at combat_id=1 at (0.65, 0.6)
+04:52:58 playing Hyperbeam
+04:53:00 playing ColdSnap -> SpinyToad (combat_id=1)
+04:53:01   aimed at combat_id=1 at (0.65, 0.6)
+04:53:01 drinking BlockPotion
+04:53:05 drinking WeakPotion -> SpinyToad
+04:53:10 ending with 0 energy; not worth playing: Overclock
+04:53:10 ending turn
+04:53:10 turn 3: waiting for your turn
+04:53:14 playing ShadowShield
+04:53:15 playing FlakCannon
+04:53:16 drinking AttackPotion
+
+=== 2026-10-25 04:53:30 couldn't find potion slot 7 (AttackPotion)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('SpinyToad', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 7, 'name': 'AttackPotion'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.200,0.035) enemy=None slot=None use=False popup=False
+(0.210,0.035) enemy=None slot=None use=False popup=False
+(0.220,0.035) enemy=None slot=None use=False popup=False
+(0.230,0.035) enemy=None slot=None use=False popup=False
+(0.240,0.035) enemy=None slot=None use=False popup=False
+(0.250,0.035) enemy=None slot=None use=False popup=False
+(0.260,0.035) enemy=None slot=None use=False popup=False
+(0.270,0.035) enemy=None slot=0 use=False popup=False
+(0.280,0.035) enemy=None slot=0 use=False popup=False
+(0.290,0.035) enemy=None slot=0 use=False popup=False
+(0.300,0.035) enemy=None slot=None use=False popup=False
+(0.310,0.035) enemy=None slot=None use=False popup=False
+(0.320,0.035) enemy=None slot=None use=False popup=False
+(0.330,0.035) enemy=None slot=None use=False popup=False
+(0.340,0.035) enemy=None slot=None use=False popup=False
+(0.350,0.035) enemy=None slot=None use=False popup=False
+(0.360,0.035) enemy=None slot=None use=False popup=False
+(0.370,0.035) enemy=None slot=None use=False popup=False
+(0.380,0.035) enemy=None slot=None use=False popup=False
+(0.390,0.035) enemy=None slot=None use=False popup=False
+(0.400,0.035) enemy=None slot=None use=False popup=False
+(0.410,0.035) enemy=None slot=None use=False popup=False
+(0.420,0.035) enemy=None slot=None use=False popup=False
+(0.430,0.035) enemy=None slot=None use=False popup=False
+(0.440,0.035) enemy=None slot=None use=False popup=False
+(0.450,0.035) enemy=None slot=None use=False popup=False
+(0.200,0.050) enemy=None slot=None use=False popup=False
+(0.210,0.050) enemy=None slot=None use=False popup=False
+(0.220,0.050) enemy=None slot=None use=False popup=False
+(0.230,0.050) enemy=None slot=None use=False popup=False
+(0.240,0.050) enemy=None slot=None use=False popup=False
+(0.250,0.050) enemy=None slot=None use=False popup=False
+(0.260,0.050) enemy=None slot=None use=False popup=False
+(0.270,0.050) enemy=None slot=0 use=False popup=False
+(0.280,0.050) enemy=None slot=0 use=False popup=False
+(0.290,0.050) enemy=None slot=0 use=False popup=False
+(0.300,0.050) enemy=None slot=None use=False popup=False
+(0.310,0.050) enemy=None slot=None use=False popup=False
+(0.320,0.050) enemy=None slot=None use=False popup=False
+(0.330,0.050) enemy=None slot=None use=False popup=False
+(0.340,0.050) enemy=None slot=None use=False popup=False
+(0.350,0.050) enemy=None slot=None use=False popup=False
+(0.360,0.050) enemy=None slot=None use=False popup=False
+(0.370,0.050) enemy=None slot=None use=False popup=False
+(0.380,0.050) enemy=None slot=None use=False popup=False
+(0.390,0.050) enemy=None slot=None use=False popup=False
+(0.400,0.050) enemy=None slot=None use=False popup=False
+(0.410,0.050) enemy=None slot=None use=False popup=False
+(0.420,0.050) enemy=None slot=None use=False popup=False
+(0.430,0.050) enemy=None slot=None use=False popup=False
+(0.440,0.050) enemy=None slot=None use=False popup=False
+(0.450,0.050) enemy=None slot=None use=False popup=False
+(0.200,0.025) enemy=None slot=None use=False popup=False
+(0.210,0.025) enemy=None slot=None use=False popup=False
+(0.220,0.025) enemy=None slot=None use=False popup=False
+(0.230,0.025) enemy=None slot=None use=False popup=False
+(0.240,0.025) enemy=None slot=None use=False popup=False
+(0.250,0.025) enemy=None slot=None use=False popup=False
+(0.260,0.025) enemy=None slot=None use=False popup=False
+(0.270,0.025) enemy=None slot=0 use=False popup=False
+(0.280,0.025) enemy=None slot=0 use=False popup=False
+(0.290,0.025) enemy=None slot=0 use=False popup=False
+(0.300,0.025) enemy=None slot=None use=False popup=False
+(0.310,0.025) enemy=None slot=None use=False popup=False
+(0.320,0.025) enemy=None slot=None use=False popup=False
+(0.330,0.025) enemy=None slot=None use=False popup=False
+(0.340,0.025) enemy=None slot=None use=False popup=False
+(0.350,0.025) enemy=None slot=None use=False popup=False
+(0.360,0.025) enemy=None slot=None use=False popup=False
+(0.370,0.025) enemy=None slot=None use=False popup=False
+(0.380,0.025) enemy=None slot=None use=False popup=False
+(0.390,0.025) enemy=None slot=None use=False popup=False
+(0.400,0.025) enemy=None slot=None use=False popup=False
+(0.410,0.025) enemy=None slot=None use=False popup=False
+(0.420,0.025) enemy=None slot=None use=False popup=False
+(0.430,0.025) enemy=None slot=None use=False popup=False
+(0.440,0.025) enemy=None slot=None use=False popup=False
+(0.450,0.025) enemy=None slot=None use=False popup=False
+04:53:30 stopped: couldn't find AttackPotion in the potion bar
+04:55:21 turn 1: waiting for your turn
+04:55:22 drinking AttackPotion
+04:55:24 playing StrikeDefect -> SpinyToad (combat_id=1)
+04:55:25 choosing FlakCannon
+
+=== 2026-10-25 04:55:29 couldn't find choice card FlakCannon (#1)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('SpinyToad', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.500,0.450) enemy=None slot=None use=False popup=False
+(0.470,0.450) enemy=None slot=None use=False popup=False
+(0.530,0.450) enemy=None slot=None use=False popup=False
+(0.500,0.400) enemy=None slot=None use=False popup=False
+(0.470,0.400) enemy=None slot=None use=False popup=False
+(0.530,0.400) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.470,0.500) enemy=None slot=None use=False popup=False
+(0.530,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.550) enemy=None slot=None use=False popup=False
+(0.470,0.550) enemy=None slot=None use=False popup=False
+(0.530,0.550) enemy=None slot=None use=False popup=False
+(0.500,0.350) enemy=None slot=None use=False popup=False
+(0.470,0.350) enemy=None slot=None use=False popup=False
+(0.530,0.350) enemy=None slot=None use=False popup=False
+(0.500,0.600) enemy=None slot=None use=False popup=False
+(0.470,0.600) enemy=None slot=None use=False popup=False
+(0.530,0.600) enemy=None slot=None use=False popup=False
+04:55:29 CHOOSE A CARD YOURSELF (see overlay) - autopilot waits
+04:55:29 playing StrikeDefect -> SpinyToad (combat_id=1)
+04:55:37 stopped: cancelled
+04:57:21 turn 1: waiting for your turn
+04:57:22 playing StrikeDefect -> SpinyToad (combat_id=1)
+04:57:23   aimed at combat_id=1 at (0.65, 0.6)
+04:57:24 playing StrikeDefect -> SpinyToad (combat_id=1)
+04:57:24   aimed at combat_id=1 at (0.65, 0.6)
+04:57:25 playing Smokestack+
+04:57:26 ending turn
+04:57:27 turn 2: waiting for your turn
+04:57:32 playing FightThrough
+04:57:33 stopped: combat over after 2 turns
+04:57:48 turn 1: waiting for your turn
+04:57:49 playing Hyperbeam
+04:57:50 playing Barrage -> TheObscura (combat_id=1)
+04:57:52   aimed at combat_id=1 at (0.75, 0.6)
+04:57:53 ending turn
+04:57:53 turn 2: waiting for your turn
+04:57:58 playing FightThrough
+04:57:58 playing UltimateDefend
+04:57:59 playing StrikeDefect -> Parafright (combat_id=2)
+04:58:00   aimed at combat_id=2 at (0.55, 0.6)
+04:58:01 ending turn
+04:58:01 turn 3: waiting for your turn
+04:58:06 playing StrikeDefect -> TheObscura (combat_id=1)
+04:58:06   aimed at combat_id=1 at (0.75, 0.6)
+04:58:07 playing Hyperbeam
+04:58:09 ending turn
+04:58:09 turn 4: waiting for your turn
+04:58:14 playing Null -> Parafright (combat_id=2)
+04:58:15   aimed at combat_id=2 at (0.55, 0.6)
+04:58:15 playing GunkUp -> Parafright (combat_id=2)
+04:58:16   aimed at combat_id=2 at (0.55, 0.6)
+04:58:18 ending turn
+04:58:18 turn 5: waiting for your turn
+04:58:24 playing StrikeDefect -> Parafright (combat_id=2)
+04:58:24   aimed at combat_id=2 at (0.55, 0.6)
+04:58:25 playing StrikeDefect -> Parafright (combat_id=2)
+04:58:25   aimed at combat_id=2 at (0.55, 0.6)
+04:58:26 playing GunkUp -> Parafright (combat_id=2)
+04:58:26   aimed at combat_id=2 at (0.55, 0.6)
+04:58:28 ending with 0 energy; not worth playing: Overclock
+04:58:28 ending turn
+04:58:29 turn 6: waiting for your turn
+04:58:33 playing ShadowShield
+04:58:34 playing Darkness
+04:58:35 ending turn
+04:58:35 turn 7: waiting for your turn
+04:58:39 playing Null -> TheObscura (combat_id=1)
+04:58:40   aimed at combat_id=1 at (0.75, 0.6)
+04:58:41 playing Barrage -> TheObscura (combat_id=1)
+04:58:41   aimed at combat_id=1 at (0.75, 0.6)
+04:58:42 ending turn
+04:58:42 turn 8: waiting for your turn
+04:58:47 playing Hyperbeam
+04:58:49 playing Barrage -> TheObscura (combat_id=1)
+04:58:49   aimed at combat_id=1 at (0.75, 0.6)
+04:58:51 stopped: combat over after 8 turns
+04:59:09 turn 1: waiting for your turn
+04:59:10 playing UltimateDefend
+04:59:11 drinking DropletOfPrecognition
+04:59:14 picking Hyperbeam from the draw pile
+
+=== 2026-10-25 04:59:24 couldn't find pile card Hyperbeam (#3)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('LouseProgenitor', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.140,0.300) enemy=None slot=None use=False popup=False
+(0.200,0.300) enemy=None slot=None use=False popup=False
+(0.260,0.300) enemy=None slot=None use=False popup=False
+(0.320,0.300) enemy=None slot=None use=False popup=False
+(0.380,0.300) enemy=None slot=None use=False popup=False
+(0.440,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.560,0.300) enemy=None slot=None use=False popup=False
+(0.620,0.300) enemy=None slot=None use=False popup=False
+(0.680,0.300) enemy=None slot=None use=False popup=False
+(0.740,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.860,0.300) enemy=None slot=None use=False popup=False
+(0.140,0.650) enemy=None slot=None use=False popup=False
+(0.200,0.650) enemy=None slot=None use=False popup=False
+(0.260,0.650) enemy=None slot=None use=False popup=False
+(0.320,0.650) enemy=None slot=None use=False popup=False
+(0.380,0.650) enemy=None slot=None use=False popup=False
+(0.440,0.650) enemy=None slot=None use=False popup=False
+(0.500,0.650) enemy=None slot=None use=False popup=False
+(0.560,0.650) enemy=None slot=None use=False popup=False
+(0.620,0.650) enemy=None slot=None use=False popup=False
+(0.680,0.650) enemy=None slot=None use=False popup=False
+(0.740,0.650) enemy=None slot=None use=False popup=False
+(0.800,0.650) enemy=None slot=None use=False popup=False
+(0.860,0.650) enemy=None slot=None use=False popup=False
+(0.140,0.900) enemy=None slot=None use=False popup=False
+(0.200,0.900) enemy=None slot=None use=False popup=False
+(0.260,0.900) enemy=None slot=None use=False popup=False
+(0.320,0.900) enemy=None slot=None use=False popup=False
+(0.380,0.900) enemy=None slot=None use=False popup=False
+(0.440,0.900) enemy=None slot=None use=False popup=False
+(0.500,0.900) enemy=None slot=None use=False popup=False
+(0.560,0.900) enemy=None slot=None use=False popup=False
+(0.620,0.900) enemy=None slot=None use=False popup=False
+(0.680,0.900) enemy=None slot=None use=False popup=False
+(0.740,0.900) enemy=None slot=None use=False popup=False
+(0.800,0.900) enemy=None slot=None use=False popup=False
+(0.860,0.900) enemy=None slot=None use=False popup=False
+(0.140,0.500) enemy=None slot=None use=False popup=False
+(0.200,0.500) enemy=None slot=None use=False popup=False
+(0.260,0.500) enemy=None slot=None use=False popup=False
+(0.320,0.500) enemy=None slot=None use=False popup=False
+(0.380,0.500) enemy=None slot=None use=False popup=False
+(0.440,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.560,0.500) enemy=None slot=None use=False popup=False
+(0.620,0.500) enemy=None slot=None use=False popup=False
+(0.680,0.500) enemy=None slot=None use=False popup=False
+(0.740,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=None slot=None use=False popup=False
+(0.860,0.500) enemy=None slot=None use=False popup=False
+
+=== 2026-10-25 04:59:34 couldn't find pile card Hyperbeam (#3)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('LouseProgenitor', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.140,0.300) enemy=None slot=None use=False popup=False
+(0.200,0.300) enemy=None slot=None use=False popup=False
+(0.260,0.300) enemy=None slot=None use=False popup=False
+(0.320,0.300) enemy=None slot=None use=False popup=False
+(0.380,0.300) enemy=None slot=None use=False popup=False
+(0.440,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.560,0.300) enemy=None slot=None use=False popup=False
+(0.620,0.300) enemy=None slot=None use=False popup=False
+(0.680,0.300) enemy=None slot=None use=False popup=False
+(0.740,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.860,0.300) enemy=None slot=None use=False popup=False
+(0.140,0.650) enemy=None slot=None use=False popup=False
+(0.200,0.650) enemy=None slot=None use=False popup=False
+(0.260,0.650) enemy=None slot=None use=False popup=False
+(0.320,0.650) enemy=None slot=None use=False popup=False
+(0.380,0.650) enemy=None slot=None use=False popup=False
+(0.440,0.650) enemy=None slot=None use=False popup=False
+(0.500,0.650) enemy=None slot=None use=False popup=False
+(0.560,0.650) enemy=None slot=None use=False popup=False
+(0.620,0.650) enemy=None slot=None use=False popup=False
+(0.680,0.650) enemy=None slot=None use=False popup=False
+(0.740,0.650) enemy=None slot=None use=False popup=False
+(0.800,0.650) enemy=None slot=None use=False popup=False
+(0.860,0.650) enemy=None slot=None use=False popup=False
+(0.140,0.900) enemy=None slot=None use=False popup=False
+(0.200,0.900) enemy=None slot=None use=False popup=False
+(0.260,0.900) enemy=None slot=None use=False popup=False
+(0.320,0.900) enemy=None slot=None use=False popup=False
+(0.380,0.900) enemy=None slot=None use=False popup=False
+(0.440,0.900) enemy=None slot=None use=False popup=False
+(0.500,0.900) enemy=None slot=None use=False popup=False
+(0.560,0.900) enemy=None slot=None use=False popup=False
+(0.620,0.900) enemy=None slot=None use=False popup=False
+(0.680,0.900) enemy=None slot=None use=False popup=False
+(0.740,0.900) enemy=None slot=None use=False popup=False
+(0.800,0.900) enemy=None slot=None use=False popup=False
+(0.860,0.900) enemy=None slot=None use=False popup=False
+(0.140,0.500) enemy=None slot=None use=False popup=False
+(0.200,0.500) enemy=None slot=None use=False popup=False
+(0.260,0.500) enemy=None slot=None use=False popup=False
+(0.320,0.500) enemy=None slot=None use=False popup=False
+(0.380,0.500) enemy=None slot=None use=False popup=False
+(0.440,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.560,0.500) enemy=None slot=None use=False popup=False
+(0.620,0.500) enemy=None slot=None use=False popup=False
+(0.680,0.500) enemy=None slot=None use=False popup=False
+(0.740,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=None slot=None use=False popup=False
+(0.860,0.500) enemy=None slot=None use=False popup=False
+
+=== 2026-10-25 04:59:44 couldn't find pile card Hyperbeam (#3)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('LouseProgenitor', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.140,0.300) enemy=None slot=None use=False popup=False
+(0.200,0.300) enemy=None slot=None use=False popup=False
+(0.260,0.300) enemy=None slot=None use=False popup=False
+(0.320,0.300) enemy=None slot=None use=False popup=False
+(0.380,0.300) enemy=None slot=None use=False popup=False
+(0.440,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.560,0.300) enemy=None slot=None use=False popup=False
+(0.620,0.300) enemy=None slot=None use=False popup=False
+(0.680,0.300) enemy=None slot=None use=False popup=False
+(0.740,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.860,0.300) enemy=None slot=None use=False popup=False
+(0.140,0.650) enemy=None slot=None use=False popup=False
+(0.200,0.650) enemy=None slot=None use=False popup=False
+(0.260,0.650) enemy=None slot=None use=False popup=False
+(0.320,0.650) enemy=None slot=None use=False popup=False
+(0.380,0.650) enemy=None slot=None use=False popup=False
+(0.440,0.650) enemy=None slot=None use=False popup=False
+(0.500,0.650) enemy=None slot=None use=False popup=False
+(0.560,0.650) enemy=None slot=None use=False popup=False
+(0.620,0.650) enemy=None slot=None use=False popup=False
+(0.680,0.650) enemy=None slot=None use=False popup=False
+(0.740,0.650) enemy=None slot=None use=False popup=False
+(0.800,0.650) enemy=None slot=None use=False popup=False
+(0.860,0.650) enemy=None slot=None use=False popup=False
+(0.140,0.900) enemy=None slot=None use=False popup=False
+(0.200,0.900) enemy=None slot=None use=False popup=False
+(0.260,0.900) enemy=None slot=None use=False popup=False
+(0.320,0.900) enemy=None slot=None use=False popup=False
+(0.380,0.900) enemy=None slot=None use=False popup=False
+(0.440,0.900) enemy=None slot=None use=False popup=False
+(0.500,0.900) enemy=None slot=None use=False popup=False
+(0.560,0.900) enemy=None slot=None use=False popup=False
+(0.620,0.900) enemy=None slot=None use=False popup=False
+(0.680,0.900) enemy=None slot=None use=False popup=False
+(0.740,0.900) enemy=None slot=None use=False popup=False
+(0.800,0.900) enemy=None slot=None use=False popup=False
+(0.860,0.900) enemy=None slot=None use=False popup=False
+(0.140,0.500) enemy=None slot=None use=False popup=False
+(0.200,0.500) enemy=None slot=None use=False popup=False
+(0.260,0.500) enemy=None slot=None use=False popup=False
+(0.320,0.500) enemy=None slot=None use=False popup=False
+(0.380,0.500) enemy=None slot=None use=False popup=False
+(0.440,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.560,0.500) enemy=None slot=None use=False popup=False
+(0.620,0.500) enemy=None slot=None use=False popup=False
+(0.680,0.500) enemy=None slot=None use=False popup=False
+(0.740,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=None slot=None use=False popup=False
+(0.860,0.500) enemy=None slot=None use=False popup=False
+
+=== 2026-10-25 04:59:54 couldn't find pile card Hyperbeam (#3)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('LouseProgenitor', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.140,0.300) enemy=None slot=None use=False popup=False
+(0.200,0.300) enemy=None slot=None use=False popup=False
+(0.260,0.300) enemy=None slot=None use=False popup=False
+(0.320,0.300) enemy=None slot=None use=False popup=False
+(0.380,0.300) enemy=None slot=None use=False popup=False
+(0.440,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.560,0.300) enemy=None slot=None use=False popup=False
+(0.620,0.300) enemy=None slot=None use=False popup=False
+(0.680,0.300) enemy=None slot=None use=False popup=False
+(0.740,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.860,0.300) enemy=None slot=None use=False popup=False
+(0.140,0.650) enemy=None slot=None use=False popup=False
+(0.200,0.650) enemy=None slot=None use=False popup=False
+(0.260,0.650) enemy=None slot=None use=False popup=False
+(0.320,0.650) enemy=None slot=None use=False popup=False
+(0.380,0.650) enemy=None slot=None use=False popup=False
+(0.440,0.650) enemy=None slot=None use=False popup=False
+(0.500,0.650) enemy=None slot=None use=False popup=False
+(0.560,0.650) enemy=None slot=None use=False popup=False
+(0.620,0.650) enemy=None slot=None use=False popup=False
+(0.680,0.650) enemy=None slot=None use=False popup=False
+(0.740,0.650) enemy=None slot=None use=False popup=False
+(0.800,0.650) enemy=None slot=None use=False popup=False
+(0.860,0.650) enemy=None slot=None use=False popup=False
+(0.140,0.900) enemy=None slot=None use=False popup=False
+(0.200,0.900) enemy=None slot=None use=False popup=False
+(0.260,0.900) enemy=None slot=None use=False popup=False
+(0.320,0.900) enemy=None slot=None use=False popup=False
+(0.380,0.900) enemy=None slot=None use=False popup=False
+(0.440,0.900) enemy=None slot=None use=False popup=False
+(0.500,0.900) enemy=None slot=None use=False popup=False
+(0.560,0.900) enemy=None slot=None use=False popup=False
+(0.620,0.900) enemy=None slot=None use=False popup=False
+(0.680,0.900) enemy=None slot=None use=False popup=False
+(0.740,0.900) enemy=None slot=None use=False popup=False
+(0.800,0.900) enemy=None slot=None use=False popup=False
+(0.860,0.900) enemy=None slot=None use=False popup=False
+(0.140,0.500) enemy=None slot=None use=False popup=False
+(0.200,0.500) enemy=None slot=None use=False popup=False
+(0.260,0.500) enemy=None slot=None use=False popup=False
+(0.320,0.500) enemy=None slot=None use=False popup=False
+(0.380,0.500) enemy=None slot=None use=False popup=False
+(0.440,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.560,0.500) enemy=None slot=None use=False popup=False
+(0.620,0.500) enemy=None slot=None use=False popup=False
+(0.680,0.500) enemy=None slot=None use=False popup=False
+(0.740,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=None slot=None use=False popup=False
+(0.860,0.500) enemy=None slot=None use=False popup=False
+
+=== 2026-10-25 05:00:04 couldn't find pile card Hyperbeam (#3)
+window (hwnd, left, top, w, h) = (14617190, 0, 0, 1922, 1080)
+enemies = [('LouseProgenitor', 1)]
+potions = [{'slot': 0, 'name': 'Fortifier'}, {'slot': 6, 'name': 'Clarity'}, {'slot': 8, 'name': 'FocusPotion'}]
+(0.140,0.300) enemy=None slot=None use=False popup=False
+(0.200,0.300) enemy=None slot=None use=False popup=False
+(0.260,0.300) enemy=None slot=None use=False popup=False
+(0.320,0.300) enemy=None slot=None use=False popup=False
+(0.380,0.300) enemy=None slot=None use=False popup=False
+(0.440,0.300) enemy=None slot=None use=False popup=False
+(0.500,0.300) enemy=None slot=None use=False popup=False
+(0.560,0.300) enemy=None slot=None use=False popup=False
+(0.620,0.300) enemy=None slot=None use=False popup=False
+(0.680,0.300) enemy=None slot=None use=False popup=False
+(0.740,0.300) enemy=None slot=None use=False popup=False
+(0.800,0.300) enemy=None slot=None use=False popup=False
+(0.860,0.300) enemy=None slot=None use=False popup=False
+(0.140,0.650) enemy=None slot=None use=False popup=False
+(0.200,0.650) enemy=None slot=None use=False popup=False
+(0.260,0.650) enemy=None slot=None use=False popup=False
+(0.320,0.650) enemy=None slot=None use=False popup=False
+(0.380,0.650) enemy=None slot=None use=False popup=False
+(0.440,0.650) enemy=None slot=None use=False popup=False
+(0.500,0.650) enemy=None slot=None use=False popup=False
+(0.560,0.650) enemy=None slot=None use=False popup=False
+(0.620,0.650) enemy=None slot=None use=False popup=False
+(0.680,0.650) enemy=None slot=None use=False popup=False
+(0.740,0.650) enemy=None slot=None use=False popup=False
+(0.800,0.650) enemy=None slot=None use=False popup=False
+(0.860,0.650) enemy=None slot=None use=False popup=False
+(0.140,0.900) enemy=None slot=None use=False popup=False
+(0.200,0.900) enemy=None slot=None use=False popup=False
+(0.260,0.900) enemy=None slot=None use=False popup=False
+(0.320,0.900) enemy=None slot=None use=False popup=False
+(0.380,0.900) enemy=None slot=None use=False popup=False
+(0.440,0.900) enemy=None slot=None use=False popup=False
+(0.500,0.900) enemy=None slot=None use=False popup=False
+(0.560,0.900) enemy=None slot=None use=False popup=False
+(0.620,0.900) enemy=None slot=None use=False popup=False
+(0.680,0.900) enemy=None slot=None use=False popup=False
+(0.740,0.900) enemy=None slot=None use=False popup=False
+(0.800,0.900) enemy=None slot=None use=False popup=False
+(0.860,0.900) enemy=None slot=None use=False popup=False
+(0.140,0.500) enemy=None slot=None use=False popup=False
+(0.200,0.500) enemy=None slot=None use=False popup=False
+(0.260,0.500) enemy=None slot=None use=False popup=False
+(0.320,0.500) enemy=None slot=None use=False popup=False
+(0.380,0.500) enemy=None slot=None use=False popup=False
+(0.440,0.500) enemy=None slot=None use=False popup=False
+(0.500,0.500) enemy=None slot=None use=False popup=False
+(0.560,0.500) enemy=None slot=None use=False popup=False
+(0.620,0.500) enemy=None slot=None use=False popup=False
+(0.680,0.500) enemy=None slot=None use=False popup=False
+(0.740,0.500) enemy=None slot=None use=False popup=False
+(0.800,0.500) enemy=None slot=None use=False popup=False
+(0.860,0.500) enemy=None slot=None use=False popup=False
+05:00:04 PICK FROM THE PILE YOURSELF (see overlay) - autopilot waits
+05:05:04 stopped: pile pick still open after 5 min

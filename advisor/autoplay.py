@@ -19,7 +19,7 @@ except (AttributeError, OSError):
 
 VK_F8, VK_F9, WM_HOTKEY, MOD_NOREPEAT = 0x77, 0x78, 0x0312, 0x4000
 KEYEVENTF_SCANCODE, KEYEVENTF_KEYUP = 0x0008, 0x0002
-MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP = 0x0002, 0x0004
+MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_WHEEL = 0x0002, 0x0004, 0x0800
 SCAN_ESC, SCAN_E = 0x01, 0x12  # E = end turn (game default binding)
 SCAN_DIGIT = {d: 0x02 + (d - 1) % 10 for d in range(1, 11)}  # keys 1..9 -> 0x02..0x0A, 10th card ('0') -> 0x0B
 STEP_DELAY = 0.18   # seconds per sweep step: one game frame + one reader poll (100 ms)
@@ -30,7 +30,9 @@ SWEEP += [(fx / 100, fy / 100) for fy in (60, 50, 68, 40, 30) for fx in range(5,
 # ponytail: fixed sweep grid; a monster outside it fails with "couldn't find". Add rows if one does.
 UNTARGETED_CLICK = (0.5, 0.4)
 # Potion bar sits in the top bar, left of center (~27-35% across in 1920x1057 screenshots).
-POTION_SWEEP = [(fx / 100, fy / 1000) for fy in (35, 50, 25) for fx in range(20, 46)]
+POTION_SWEEP = [(fx / 100, fy / 1000) for fy in (35, 50, 25) for fx in range(20, 71)]  # relics add slots (9+)
+# Where slot n usually sits (1920x1080, top bar): first slot ~27.8% across, ~3.2% per slot. Tried before the sweep.
+POTION_X0, POTION_DX, POTION_Y = 0.278, 0.0323, 0.035
 # The potion popup opens under its slot; Use is the first button. Searched relative to the slot.
 USE_OFFSETS = [(dx / 100, dy / 100) for dy in range(4, 24, 2) for dx in (0, -2, 2)]
 DEBUG_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "autopilot_debug.log")
@@ -65,6 +67,14 @@ def tap(scan):
     _send(key(0))
     time.sleep(0.03)
     _send(key(KEYEVENTF_KEYUP))
+
+
+def wheel(ticks):
+    """Mouse wheel at the cursor: negative scrolls down. One event per notch: the game scrolls one step per event,
+    whatever its size."""
+    for _ in range(abs(ticks)):
+        _send(INPUT(0, _INPUTUNION(mi=MOUSEINPUT(0, 0, (120 if ticks > 0 else -120) & 0xFFFFFFFF, MOUSEEVENTF_WHEEL, 0, 0))))
+        time.sleep(0.03)
 
 
 def click():
@@ -289,7 +299,14 @@ def wait_pile(get_state, cancel, log):
 # Pick-from-pile screen (NCombatPileCardSelectScreen): a grid whose columns depend on the window, so sweep the
 # grid area; every card seen under the mouse is remembered by index, so later picks go straight to it.
 # ponytail: piles taller than the screen need scrolling; a card below the fold falls back to wait_pile.
-GRID_SWEEP = [(fx / 100, fy / 100) for fy in (30, 50, 70, 40, 60, 25) for fx in range(14, 87, 4)]
+GRID_SWEEP = [(fx / 100, fy / 100) for fy in (30, 65, 90, 50) for fx in range(14, 87, 6)]  # rows at 15-46%, 50-80%, 85%+ of the screen; cards ~12% wide
+# Big piles scroll: after a full sweep misses, scroll down a page at a time, then back to the top.
+GRID_SCROLLS = (0, -5, -5, -5, 20)
+# Where pile card n is, from the reader's grid state (display order, scroll offset, row pitch), in the game's
+# 1920x1080 UI units (measured live): column c at x = 375 + 280c, row r at y = 402 + row_h * r + scroll; one wheel
+# notch = 40 units (ScrollHelper). Off screen, the grid is scrolled to put the row mid-screen first.
+GRID_COLS, GRID_X0, GRID_DX, GRID_Y0, NOTCH = 5, 375, 280, 402, 40
+GRID_VIEW = (170, 940)  # card centres inside this band are clickable
 grid_spots = {}  # card index on the pile screen -> where it was last hovered
 
 
@@ -316,19 +333,30 @@ def pick_from_pile(get_state, cancel, log, pick_for):
         g = get_state().get("card_grid")
         if not g:
             break  # closed itself at max picks
-        idx = next((i for i, c in enumerate(g["cards"]) if c["name"] == name and i not in taken), None)
+        copies = {i for i, c in enumerate(g["cards"]) if c["name"] == name and i not in taken}  # any copy will do
+        idx = min(copies, default=None)
         if idx is None:
             return wait_pile(get_state, cancel, log)
         log(f"picking {name} from the {(g.get('pile') or 'pile').lower()} pile")
-        on_it = lambda st: (st.get("card_grid") or {}).get("hovered") == idx
-        pts = ([grid_spots[idx]] if idx in grid_spots else []) + GRID_SWEEP
-        spot = seek(pts, at, on_it, get_state, cancel, f"pile card {name} (#{idx})", game, learn=learn)
+        aimed = grid_point(copies, get_state, at)
+        on_it = lambda st: (st.get("card_grid") or {}).get("hovered") in copies
+        spot = None
+        for ticks in GRID_SCROLLS:
+            if ticks:
+                at(0.5, 0.5)
+                wheel(ticks)
+                grid_spots.clear()  # learned spots moved with the scroll
+                time.sleep(0.4)
+            pts = (aimed if not ticks else []) + [grid_spots[i] for i in sorted(copies) if i in grid_spots] + GRID_SWEEP
+            spot = seek(pts, at, on_it, get_state, cancel, f"pile card {name} (#{idx})", game, learn=learn)
+            if spot or cancel.is_set() or not get_state().get("card_grid"):
+                break
         if spot:
             time.sleep(STEP_DELAY)  # re-read: a lagging reader could report the previous point
         if not spot or not on_it(get_state()):
             return None if cancel.is_set() else wait_pile(get_state, cancel, log)
+        taken.add(get_state()["card_grid"]["hovered"])
         click()
-        taken.add(idx)
         time.sleep(0.35)
     if get_state().get("card_grid"):
         tap(SCAN_E)
@@ -336,6 +364,26 @@ def pick_from_pile(get_state, cancel, log, pick_for):
         return None if cancel.is_set() else wait_pile(get_state, cancel, log)
     time.sleep(0.5)
     return None
+
+
+def grid_point(copies, get_state, at):
+    """[screen point] of the first listed copy, from the reader's scroll state (scrolling it into view), else []."""
+    g = get_state().get("card_grid") or {}
+    order = g.get("order") or []
+    pos = next((order.index(i) for i in sorted(copies) if i in order), None)
+    if pos is None or g.get("scroll") is None or not g.get("row_h"):
+        return []  # older reader / deck screens without the fields: the sweep finds it
+    r, c = divmod(pos, GRID_COLS)
+    y = GRID_Y0 + g["row_h"] * r + g["scroll"]
+    if not GRID_VIEW[0] <= y <= GRID_VIEW[1]:
+        at(0.5, 0.5)
+        wheel(round((540 - y) / NOTCH))  # + = up
+        time.sleep(0.5)
+        grid_spots.clear()
+        g = get_state().get("card_grid") or g
+        y = GRID_Y0 + g["row_h"] * r + (g.get("scroll") or 0)
+    x = GRID_X0 + GRID_DX * c
+    return [(x / 1920, y / 1080), ((x + 30) / 1920, (y - 40) / 1080)]
 
 
 def pick_cards(s, get_state, pick_for, cancel, log):
@@ -351,6 +399,17 @@ def pick_cards(s, get_state, pick_for, cancel, log):
         if k in SCAN_DIGIT:
             tap(SCAN_DIGIT[k])
             time.sleep(0.25)
+    sel = s["hand_select"]
+    if names and sel["max"] == 1 and "selected_names" in sel:
+        # A pick filter we don't know hides cards, so the key may point elsewhere (or past the row). With one pick
+        # the game swaps the selection on each key, so try the other keys until the reader shows our card picked.
+        took = lambda: names[0] in ((get_state().get("hand_select") or {}).get("selected_names") or [names[0]])
+        if not wait_until(took, 0.8, cancel):
+            for k in [k for k in range(keys[0] - 1, 0, -1)] + list(range(keys[0] + 1, len(s["hand"]) + 1)):
+                log(f"  key {keys[0]} missed {names[0]}, trying {k}")
+                tap(SCAN_DIGIT[k])
+                if wait_until(took, 0.8, cancel):
+                    break
     if get_state().get("hand_select"):
         tap(SCAN_E)
     if not wait_until(lambda: not get_state().get("hand_select"), 3, cancel):
@@ -420,7 +479,9 @@ def play_potion(step, s, get_state, cancel, log):
         if ui(st).get("hovered_slot") is not None:
             potion_positions[ui(st)["hovered_slot"]] = point
 
-    tries = ([potion_positions[slot]] if slot in potion_positions else []) + POTION_SWEEP
+    guess = POTION_X0 + POTION_DX * slot
+    tries = (([potion_positions[slot]] if slot in potion_positions else [])
+             + [(guess + d, POTION_Y) for d in (0, -0.008, 0.008)] + POTION_SWEEP)
     spot = seek(tries, at, lambda st: ui(st).get("hovered_slot") == slot, get_state, cancel,
                 f"potion slot {slot} ({pot['name']})", game, learn)
     if not spot:
@@ -445,6 +506,9 @@ def play_potion(step, s, get_state, cancel, log):
     if not wait_until(lambda: [p["name"] for p in get_state().get("potions", [])] != before, 2.0, cancel):
         drop(get_state)
         return None if cancel.is_set() or get_state().get("status") != "combat" else f"{pot['name']} didn't get used"
+    # Its pick screen (Attack Potion's Choose a Card, Liquid Memories' pile) opens a moment after the potion leaves
+    # the bar: wait for it, so the next card play doesn't start under it (that Esc opened the pause menu).
+    wait_until(lambda: picking(get_state()), 1.5 if pot.get("makes") else 0.6, cancel)
     time.sleep(0.35)
     return None
 
@@ -463,7 +527,8 @@ def drop(get_state):
     """Esc puts a held card back, but with nothing held (or outside our turn) it opens the pause menu instead, so
     it's pressed only when the reader confirms a held card. Unknown (None: hand node not found) = no Esc; the next
     card key picks up that card instead (a failed unplayable card is never held, and Esc then paused the game)."""
-    if get_state().get("holding"):
+    st = get_state()
+    if st.get("holding") and not picking(st):  # Esc on a pick screen opens the pause menu
         tap(SCAN_ESC)
 
 

@@ -1,72 +1,16 @@
 {
-"runs": 101,
+"runs": 102,
 "chars": {
 "Ironclad": {
 "runs": 40,
 "wins": 11,
 "cards": {
-"Uppercut": {
-"decks": 11,
-"won": 1,
-"offered": 24,
-"taken": 10,
-"lift": -0.096
-},
-"ShrugItOff": {
-"decks": 21,
-"won": 10,
-"offered": 49,
-"taken": 28,
-"lift": 0.136
-},
-"DemonForm": {
-"decks": 3,
-"won": 1,
-"offered": 7,
-"taken": 4,
-"lift": 0.013
-},
-"DefendIronclad": {
-"decks": 38,
-"won": 9,
-"offered": 0,
-"taken": 0,
-"lift": -0.03
-},
-"IronWave": {
-"decks": 12,
-"won": 4,
-"offered": 43,
-"taken": 12,
-"lift": 0.032
-},
-"Cinder": {
-"decks": 4,
-"won": 0,
-"offered": 37,
-"taken": 5,
-"lift": -0.079
-},
-"Whirlwind": {
-"decks": 7,
-"won": 1,
-"offered": 17,
-"taken": 8,
-"lift": -0.054
-},
-"Inflame": {
-"decks": 8,
-"won": 2,
-"offered": 23,
-"taken": 6,
-"lift": -0.011
-},
-"Production": {
-"decks": 1,
-"won": 0,
-"offered": 1,
-"taken": 0,
-"lift": -0.025
+"BloodWall": {
+"decks": 15,
+"won": 3,
+"offered": 39,
+"taken": 14,
+"lift": -0.045
 },
 "StrikeIronclad": {
 "decks": 38,
@@ -75,20 +19,6 @@
 "taken": 0,
 "lift": -0.03
 },
-"ByrdSwoop": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
-"BloodWall": {
-"decks": 15,
-"won": 3,
-"offered": 39,
-"taken": 14,
-"lift": -0.045
-},
 "SetupStrike": {
 "decks": 8,
 "won": 1,
@@ -96,9 +26,79 @@
 "taken": 6,
 "lift": -0.067
 },
+"DemonForm": {
+"decks": 3,
+"won": 1,
+"offered": 7,
+"taken": 4,
+"lift": 0.013
+},
 "Bash": {
 "decks": 37,
 "won": 9,
+"offered": 0,
+"taken": 0,
+"lift": -0.025
+},
+"ShrugItOff": {
+"decks": 21,
+"won": 10,
+"offered": 49,
+"taken": 28,
+"lift": 0.136
+},
+"Whirlwind": {
+"decks": 7,
+"won": 1,
+"offered": 17,
+"taken": 8,
+"lift": -0.054
+},
+"DefendIronclad": {
+"decks": 38,
+"won": 9,
+"offered": 0,
+"taken": 0,
+"lift": -0.03
+},
+"Inflame": {
+"decks": 8,
+"won": 2,
+"offered": 23,
+"taken": 6,
+"lift": -0.011
+},
+"Uppercut": {
+"decks": 11,
+"won": 1,
+"offered": 24,
+"taken": 10,
+"lift": -0.096
+},
+"Cinder": {
+"decks": 4,
+"won": 0,
+"offered": 37,
+"taken": 5,
+"lift": -0.079
+},
+"IronWave": {
+"decks": 12,
+"won": 4,
+"offered": 43,
+"taken": 12,
+"lift": 0.032
+},
+"Production": {
+"decks": 1,
+"won": 0,
+"offered": 1,
+"taken": 0,
+"lift": -0.025
+},
+"ByrdSwoop": {
+"decks": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.025
@@ -271,12 +271,47 @@
 "taken": 0,
 "lift": 0.0
 },
+"Bludgeon": {
+"decks": 4,
+"won": 0,
+"offered": 17,
+"taken": 3,
+"lift": -0.079
+},
+"TwinStrike": {
+"decks": 13,
+"won": 5,
+"offered": 51,
+"taken": 10,
+"lift": 0.062
+},
+"Rupture": {
+"decks": 5,
+"won": 1,
+"offered": 22,
+"taken": 4,
+"lift": -0.025
+},
 "Pyre": {
 "decks": 7,
 "won": 4,
 "offered": 9,
 "taken": 7,
 "lift": 0.122
+},
+"Cruelty": {
+"decks": 6,
+"won": 3,
+"offered": 10,
+"taken": 4,
+"lift": 0.084
+},
+"Hellraiser": {
+"decks": 6,
+"won": 5,
+"offered": 9,
+"taken": 5,
+"lift": 0.209
 },
 "FlameBarrier": {
 "decks": 10,
@@ -291,41 +326,6 @@
 "offered": 48,
 "taken": 11,
 "lift": 0.133
-},
-"Hellraiser": {
-"decks": 6,
-"won": 5,
-"offered": 9,
-"taken": 5,
-"lift": 0.209
-},
-"Cruelty": {
-"decks": 6,
-"won": 3,
-"offered": 10,
-"taken": 4,
-"lift": 0.084
-},
-"Rupture": {
-"decks": 5,
-"won": 1,
-"offered": 22,
-"taken": 4,
-"lift": -0.025
-},
-"Bludgeon": {
-"decks": 4,
-"won": 0,
-"offered": 17,
-"taken": 3,
-"lift": -0.079
-},
-"TwinStrike": {
-"decks": 13,
-"won": 5,
-"offered": 51,
-"taken": 10,
-"lift": 0.062
 },
 "Taunt": {
 "decks": 13,
@@ -502,12 +502,12 @@
 "taken": 0,
 "lift": 0.0
 },
-"Impervious": {
-"decks": 9,
-"won": 3,
-"offered": 13,
-"taken": 8,
-"lift": 0.028
+"DemonicShield": {
+"decks": 8,
+"won": 5,
+"offered": 23,
+"taken": 7,
+"lift": 0.156
 },
 "Unmovable": {
 "decks": 4,
@@ -516,12 +516,12 @@
 "taken": 3,
 "lift": 0.136
 },
-"DemonicShield": {
-"decks": 8,
-"won": 5,
-"offered": 23,
-"taken": 7,
-"lift": 0.156
+"Impervious": {
+"decks": 9,
+"won": 3,
+"offered": 13,
+"taken": 8,
+"lift": 0.028
 },
 "FiendFire": {
 "decks": 1,
@@ -929,7 +929,7 @@
 "taken": 0,
 "lift": 0.0
 },
-"Chaos": {
+"ColdSnap": {
 "decks": 1,
 "won": 1,
 "offered": 1,
@@ -950,7 +950,7 @@
 "taken": 0,
 "lift": 0.121
 },
-"ColdSnap": {
+"Chaos": {
 "decks": 1,
 "won": 1,
 "offered": 1,
@@ -999,7 +999,7 @@
 "taken": 0,
 "lift": 0.0
 },
-"Leap": {
+"TrashToTreasure": {
 "decks": 1,
 "won": 1,
 "offered": 1,
@@ -1013,7 +1013,7 @@
 "taken": 1,
 "lift": 0.066
 },
-"TrashToTreasure": {
+"Leap": {
 "decks": 1,
 "won": 1,
 "offered": 1,
@@ -1104,19 +1104,19 @@
 "taken": 0,
 "lift": -0.063
 },
-"AscendersBane": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.064
-},
 "Debt": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.066
+},
+"AscendersBane": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.064
 },
 "Finesse": {
 "decks": 0,
@@ -1167,6 +1167,13 @@
 "taken": 0,
 "lift": 0.0
 },
+"Regret": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
 "MadScience": {
 "decks": 2,
 "won": 2,
@@ -1174,7 +1181,7 @@
 "taken": 0,
 "lift": 0.121
 },
-"Regret": {
+"UltimateDefend": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -1186,13 +1193,6 @@
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.066
-},
-"UltimateDefend": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
 "lift": 0.066
 },
 "ReaperForm": {
@@ -1314,14 +1314,7 @@
 "taken": 0,
 "lift": 0.0
 },
-"PiercingWail": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
-"WellLaidPlans": {
+"Sidestep": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -1335,7 +1328,7 @@
 "taken": 1,
 "lift": -0.025
 },
-"NoxiousFumes": {
+"WellLaidPlans": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -1349,7 +1342,14 @@
 "taken": 0,
 "lift": -0.025
 },
-"Sidestep": {
+"PiercingWail": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.025
+},
+"NoxiousFumes": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -1379,20 +1379,6 @@
 }
 },
 "relics": {
-"Gorget": {
-"decks": 6,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.022
-},
-"BurningBlood": {
-"decks": 37,
-"won": 11,
-"offered": 0,
-"taken": 0,
-"lift": 0.018
-},
 "Byrdpip": {
 "decks": 1,
 "won": 0,
@@ -1407,84 +1393,14 @@
 "taken": 0,
 "lift": -0.046
 },
-"BlackBlood": {
-"decks": 3,
-"won": 0,
+"BurningBlood": {
+"decks": 37,
+"won": 11,
 "offered": 0,
 "taken": 0,
-"lift": -0.063
+"lift": 0.018
 },
-"CentennialPuzzle": {
-"decks": 7,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.063
-},
-"SwordOfStone": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.063
-},
-"OrnamentalFan": {
-"decks": 5,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
-"MeatCleaver": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
-"TheCourier": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.09
-},
-"LostCoffer": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.063
-},
-"BagOfPreparation": {
-"decks": 8,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": -0.011
-},
-"MealTicket": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.007
-},
-"BingBong": {
-"decks": 2,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.046
-},
-"TouchOfOrobas": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.063
-},
-"BloodVial": {
+"Gorget": {
 "decks": 6,
 "won": 2,
 "offered": 0,
@@ -1498,40 +1414,89 @@
 "taken": 0,
 "lift": 0.042
 },
-"VenerableTeaSet": {
-"decks": 5,
+"BlackBlood": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.063
+},
+"BingBong": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.046
+},
+"BloodVial": {
+"decks": 6,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.022
+},
+"CentennialPuzzle": {
+"decks": 7,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.108
+"lift": 0.063
 },
-"BronzeScales": {
-"decks": 5,
-"won": 4,
+"LostCoffer": {
+"decks": 3,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.175
+"lift": -0.063
 },
-"OldCoin": {
-"decks": 2,
+"MealTicket": {
+"decks": 4,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.037
+"lift": -0.007
 },
-"SparklingRouge": {
+"SwordOfStone": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.063
+},
+"TheCourier": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.09
+},
+"TouchOfOrobas": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.063
+},
+"MeatCleaver": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.025
+},
+"OrnamentalFan": {
 "decks": 5,
-"won": 3,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.108
+"lift": -0.025
 },
-"Strawberry": {
-"decks": 4,
-"won": 4,
+"BagOfPreparation": {
+"decks": 8,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.207
+"lift": -0.011
 },
 "RazorTooth": {
 "decks": 2,
@@ -1540,26 +1505,19 @@
 "taken": 0,
 "lift": 0.037
 },
-"LavaRock": {
-"decks": 1,
+"OldCoin": {
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.066
+"lift": 0.037
 },
-"StrikeDummy": {
-"decks": 6,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.147
-},
-"MusicBox": {
-"decks": 1,
+"RedMask": {
+"decks": 5,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.066
+"lift": -0.025
 },
 "GremlinHorn": {
 "decks": 1,
@@ -1582,12 +1540,26 @@
 "taken": 0,
 "lift": 0.066
 },
-"SturdyClamp": {
-"decks": 1,
-"won": 1,
+"Strawberry": {
+"decks": 4,
+"won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.066
+"lift": 0.207
+},
+"BronzeScales": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.175
+},
+"SparklingRouge": {
+"decks": 5,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.108
 },
 "BowlerHat": {
 "decks": 3,
@@ -1596,19 +1568,40 @@
 "taken": 0,
 "lift": 0.167
 },
-"RedMask": {
-"decks": 5,
+"MusicBox": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.025
+"lift": 0.066
 },
-"PaperPhrog": {
-"decks": 2,
-"won": 2,
+"SturdyClamp": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.121
+"lift": 0.066
+},
+"VenerableTeaSet": {
+"decks": 5,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.108
+},
+"StrikeDummy": {
+"decks": 6,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.147
+},
+"LavaRock": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
 },
 "LastingCandy": {
 "decks": 4,
@@ -1617,19 +1610,12 @@
 "taken": 0,
 "lift": 0.064
 },
-"StoneHumidifier": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.037
-},
-"RedSkull": {
-"decks": 6,
+"ParryingShield": {
+"decks": 7,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.147
+"lift": 0.122
 },
 "WarPaint": {
 "decks": 5,
@@ -1638,7 +1624,56 @@
 "taken": 0,
 "lift": -0.025
 },
+"StoneHumidifier": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.037
+},
+"ThrowingAxe": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
 "FakeBloodVial": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"HappyFlower": {
+"decks": 6,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.147
+},
+"FakeMango": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"HornCleat": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.175
+},
+"RedSkull": {
+"decks": 6,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.147
+},
+"FrozenEgg": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -1652,40 +1687,12 @@
 "taken": 0,
 "lift": 0.108
 },
-"ParryingShield": {
-"decks": 7,
-"won": 4,
+"PaperPhrog": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.122
-},
-"HappyFlower": {
-"decks": 6,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.147
-},
-"HornCleat": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.175
-},
-"FakeMango": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
-"FrozenEgg": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
+"lift": 0.121
 },
 "PaelsLegion": {
 "decks": 1,
@@ -1701,35 +1708,21 @@
 "taken": 0,
 "lift": 0.042
 },
-"ThrowingAxe": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
-"PotionBelt": {
-"decks": 6,
+"Kusarigama": {
+"decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.022
+"lift": 0.09
 },
-"Candelabra": {
-"decks": 1,
+"PetrifiedToad": {
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.066
+"lift": 0.037
 },
-"Pendulum": {
-"decks": 9,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.08
-},
-"RadiantPearl": {
+"Candelabra": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -1743,35 +1736,28 @@
 "taken": 0,
 "lift": 0.121
 },
-"GoldenPearl": {
-"decks": 4,
-"won": 2,
+"RegalPillow": {
+"decks": 5,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.064
-},
-"LordsParasol": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
-"MiniatureTent": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.013
-},
-"Kusarigama": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.09
+"lift": 0.108
 },
 "StoneCracker": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.037
+},
+"Pendulum": {
+"decks": 9,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.08
+},
+"PrayerWheel": {
 "decks": 2,
 "won": 1,
 "offered": 0,
@@ -1792,19 +1778,40 @@
 "taken": 0,
 "lift": 0.147
 },
-"RegalPillow": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.108
-},
-"PetrifiedToad": {
-"decks": 2,
+"MiniatureTent": {
+"decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.037
+"lift": 0.013
+},
+"LordsParasol": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"RingingTriangle": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"RadiantPearl": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"GoldenPearl": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.064
 },
 "TheAbacus": {
 "decks": 1,
@@ -1813,19 +1820,12 @@
 "taken": 0,
 "lift": 0.066
 },
-"PrayerWheel": {
-"decks": 2,
-"won": 1,
+"PotionBelt": {
+"decks": 6,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.037
-},
-"RingingTriangle": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
+"lift": 0.022
 },
 "LuckyFysh": {
 "decks": 1,
@@ -1841,14 +1841,14 @@
 "taken": 0,
 "lift": -0.025
 },
-"BoneTea": {
-"decks": 1,
-"won": 0,
+"RippleBasin": {
+"decks": 3,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.025
+"lift": 0.09
 },
-"Driftwood": {
+"BoneTea": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -1869,12 +1869,12 @@
 "taken": 0,
 "lift": -0.025
 },
-"RippleBasin": {
-"decks": 3,
-"won": 2,
+"Driftwood": {
+"decks": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.09
+"lift": -0.025
 },
 "MercuryHourglass": {
 "decks": 2,
@@ -1890,14 +1890,14 @@
 "taken": 0,
 "lift": -0.046
 },
-"ElectricShrymp": {
+"SmallCapsule": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.046
 },
-"SmallCapsule": {
+"ElectricShrymp": {
 "decks": 2,
 "won": 0,
 "offered": 0,
@@ -1918,20 +1918,6 @@
 "taken": 0,
 "lift": -0.025
 },
-"Brimstone": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
-"FragrantMushroom": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.09
-},
 "LeadPaperweight": {
 "decks": 3,
 "won": 1,
@@ -1946,12 +1932,19 @@
 "taken": 0,
 "lift": -0.025
 },
-"LargeCapsule": {
-"decks": 2,
-"won": 1,
+"FragrantMushroom": {
+"decks": 3,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.037
+"lift": 0.09
+},
+"Brimstone": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.025
 },
 "AmethystAubergine": {
 "decks": 2,
@@ -1959,6 +1952,13 @@
 "offered": 0,
 "taken": 0,
 "lift": -0.046
+},
+"LargeCapsule": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.037
 },
 "LetterOpener": {
 "decks": 1,
@@ -1974,13 +1974,6 @@
 "taken": 0,
 "lift": 0.084
 },
-"BeautifulBracelet": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
 "Pomander": {
 "decks": 4,
 "won": 0,
@@ -1988,12 +1981,12 @@
 "taken": 0,
 "lift": -0.079
 },
-"NewLeaf": {
-"decks": 4,
-"won": 2,
+"BeautifulBracelet": {
+"decks": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.064
+"lift": -0.025
 },
 "Vambrace": {
 "decks": 2,
@@ -2002,7 +1995,14 @@
 "taken": 0,
 "lift": 0.037
 },
-"IntimidatingHelmet": {
+"NewLeaf": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.064
+},
+"TungstenRod": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2016,7 +2016,14 @@
 "taken": 0,
 "lift": 0.121
 },
-"TungstenRod": {
+"VeryHotCocoa": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.175
+},
+"VexingPuzzlebox": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2030,47 +2037,19 @@
 "taken": 0,
 "lift": 0.066
 },
-"VexingPuzzlebox": {
+"IntimidatingHelmet": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.066
 },
-"VeryHotCocoa": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.175
-},
-"HandDrill": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.121
-},
-"Shovel": {
+"Pocketwatch": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.066
-},
-"NutritiousSoup": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
-"Permafrost": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.09
 },
 "TanxsWhistle": {
 "decks": 2,
@@ -2079,7 +2058,28 @@
 "taken": 0,
 "lift": 0.121
 },
-"Pocketwatch": {
+"Permafrost": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.09
+},
+"HandDrill": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.121
+},
+"NutritiousSoup": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"Shovel": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2092,6 +2092,13 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.037
+},
+"ArcaneScroll": {
+"decks": 4,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.007
 },
 "Shuriken": {
 "decks": 2,
@@ -2106,13 +2113,6 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.121
-},
-"ArcaneScroll": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.007
 },
 "YummyCookie": {
 "decks": 3,
@@ -2142,6 +2142,13 @@
 "taken": 0,
 "lift": 0.121
 },
+"BookOfFiveRings": {
+"decks": 5,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.042
+},
 "PandorasBox": {
 "decks": 1,
 "won": 1,
@@ -2149,12 +2156,12 @@
 "taken": 0,
 "lift": 0.066
 },
-"BookOfFiveRings": {
-"decks": 5,
-"won": 2,
+"DollysMirror": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.042
+"lift": 0.066
 },
 "Akabeko": {
 "decks": 2,
@@ -2163,13 +2170,6 @@
 "taken": 0,
 "lift": 0.121
 },
-"DiamondDiadem": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
 "TinyMailbox": {
 "decks": 1,
 "won": 1,
@@ -2177,7 +2177,7 @@
 "taken": 0,
 "lift": 0.066
 },
-"HeftyTablet": {
+"DiamondDiadem": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2191,7 +2191,7 @@
 "taken": 0,
 "lift": 0.042
 },
-"DollysMirror": {
+"HeftyTablet": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2205,19 +2205,19 @@
 "taken": 0,
 "lift": -0.025
 },
-"MassiveScroll": {
-"decks": 2,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.046
-},
 "GamblingChip": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.025
+},
+"MassiveScroll": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.046
 },
 "PaelsWing": {
 "decks": 1,
@@ -2226,19 +2226,19 @@
 "taken": 0,
 "lift": -0.025
 },
-"WingedBoots": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.063
-},
 "Chandelier": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.037
+},
+"WingedBoots": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.063
 },
 "MiniatureCannon": {
 "decks": 2,
@@ -2247,21 +2247,14 @@
 "taken": 0,
 "lift": -0.046
 },
-"TuningFork": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
-"ReptileTrinket": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
 "RunicPyramid": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.025
+},
+"TuningFork": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -2275,33 +2268,19 @@
 "taken": 0,
 "lift": -0.025
 },
-"SwordOfJade": {
+"ReptileTrinket": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.025
 },
-"CaptainsWheel": {
+"SwordOfJade": {
 "decks": 1,
-"won": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.066
-},
-"Sai": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
-"DaughterOfTheWind": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
+"lift": -0.025
 },
 "FresnelLens": {
 "decks": 1,
@@ -2317,7 +2296,21 @@
 "taken": 0,
 "lift": 0.066
 },
-"RoyalPoison": {
+"Sai": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"CaptainsWheel": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"DaughterOfTheWind": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2331,7 +2324,7 @@
 "taken": 0,
 "lift": 0.066
 },
-"BlessedAntler": {
+"RoyalPoison": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2339,6 +2332,13 @@
 "lift": 0.066
 },
 "RainbowRing": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"BlessedAntler": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2394,14 +2394,14 @@
 "taken": 0,
 "lift": -0.025
 },
-"IronClub": {
+"PaelsEye": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.066
 },
-"PaelsEye": {
+"IronClub": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -2429,13 +2429,6 @@
 "taken": 0,
 "lift": -0.046
 },
-"RuinedHelmet": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
-},
 "SandCastle": {
 "decks": 1,
 "won": 0,
@@ -2444,6 +2437,13 @@
 "lift": -0.025
 },
 "IceCream": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.025
+},
+"RuinedHelmet": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -2464,54 +2464,12 @@
 "runs": 33,
 "wins": 12,
 "cards": {
-"PiercingWail": {
-"decks": 18,
-"won": 8,
-"offered": 39,
-"taken": 19,
-"lift": 0.052
-},
-"Backflip": {
-"decks": 14,
-"won": 6,
-"offered": 49,
-"taken": 15,
-"lift": 0.038
-},
-"DaggerSpray": {
-"decks": 7,
-"won": 3,
-"offered": 42,
-"taken": 7,
-"lift": 0.027
-},
-"Anticipate": {
-"decks": 5,
-"won": 3,
-"offered": 41,
+"Slice": {
+"decks": 6,
+"won": 4,
+"offered": 44,
 "taken": 6,
-"lift": 0.079
-},
-"Assassinate": {
-"decks": 3,
-"won": 0,
-"offered": 6,
-"taken": 3,
-"lift": -0.084
-},
-"InfiniteBlades": {
-"decks": 9,
-"won": 3,
-"offered": 25,
-"taken": 12,
-"lift": -0.014
-},
-"Neutralize": {
-"decks": 30,
-"won": 10,
-"offered": 0,
-"taken": 0,
-"lift": -0.023
+"lift": 0.114
 },
 "Afterimage": {
 "decks": 5,
@@ -2520,19 +2478,19 @@
 "taken": 5,
 "lift": 0.079
 },
-"Survivor": {
-"decks": 32,
-"won": 11,
-"offered": 0,
-"taken": 0,
-"lift": -0.015
-},
-"Slice": {
-"decks": 6,
-"won": 4,
-"offered": 44,
+"Backstab": {
+"decks": 9,
+"won": 5,
+"offered": 16,
 "taken": 6,
-"lift": 0.114
+"lift": 0.091
+},
+"InfiniteBlades": {
+"decks": 9,
+"won": 3,
+"offered": 25,
+"taken": 12,
+"lift": -0.014
 },
 "CloakAndDagger": {
 "decks": 15,
@@ -2541,19 +2499,12 @@
 "taken": 16,
 "lift": 0.102
 },
-"LeadingStrike": {
-"decks": 13,
-"won": 7,
-"offered": 38,
-"taken": 14,
-"lift": 0.099
-},
-"StrikeSilent": {
-"decks": 32,
-"won": 11,
-"offered": 0,
-"taken": 0,
-"lift": -0.015
+"Pounce": {
+"decks": 7,
+"won": 2,
+"offered": 17,
+"taken": 6,
+"lift": -0.032
 },
 "Deflect": {
 "decks": 7,
@@ -2562,19 +2513,33 @@
 "taken": 9,
 "lift": 0.144
 },
-"DodgeAndRoll": {
-"decks": 8,
-"won": 3,
-"offered": 40,
-"taken": 8,
-"lift": 0.005
+"Assassinate": {
+"decks": 3,
+"won": 0,
+"offered": 6,
+"taken": 3,
+"lift": -0.084
 },
-"Untouchable": {
-"decks": 9,
+"Survivor": {
+"decks": 32,
+"won": 11,
+"offered": 0,
+"taken": 0,
+"lift": -0.015
+},
+"DaggerSpray": {
+"decks": 7,
 "won": 3,
-"offered": 28,
-"taken": 9,
-"lift": -0.014
+"offered": 42,
+"taken": 7,
+"lift": 0.027
+},
+"StrikeSilent": {
+"decks": 32,
+"won": 11,
+"offered": 0,
+"taken": 0,
+"lift": -0.015
 },
 "DefendSilent": {
 "decks": 32,
@@ -2583,19 +2548,54 @@
 "taken": 0,
 "lift": -0.015
 },
-"Pounce": {
-"decks": 7,
-"won": 2,
-"offered": 17,
+"Anticipate": {
+"decks": 5,
+"won": 3,
+"offered": 41,
 "taken": 6,
-"lift": -0.032
+"lift": 0.079
 },
-"Backstab": {
+"Backflip": {
+"decks": 14,
+"won": 6,
+"offered": 49,
+"taken": 15,
+"lift": 0.038
+},
+"LeadingStrike": {
+"decks": 13,
+"won": 7,
+"offered": 38,
+"taken": 14,
+"lift": 0.099
+},
+"DodgeAndRoll": {
+"decks": 8,
+"won": 3,
+"offered": 40,
+"taken": 8,
+"lift": 0.005
+},
+"Neutralize": {
+"decks": 30,
+"won": 10,
+"offered": 0,
+"taken": 0,
+"lift": -0.023
+},
+"PiercingWail": {
+"decks": 18,
+"won": 8,
+"offered": 39,
+"taken": 19,
+"lift": 0.052
+},
+"Untouchable": {
 "decks": 9,
-"won": 5,
-"offered": 16,
-"taken": 6,
-"lift": 0.091
+"won": 3,
+"offered": 28,
+"taken": 9,
+"lift": -0.014
 },
 "EscapePlan": {
 "decks": 7,
@@ -2737,27 +2737,6 @@
 "taken": 12,
 "lift": 0.018
 },
-"BouncingFlask": {
-"decks": 8,
-"won": 2,
-"offered": 16,
-"taken": 9,
-"lift": -0.051
-},
-"GrandFinale": {
-"decks": 1,
-"won": 0,
-"offered": 10,
-"taken": 2,
-"lift": -0.033
-},
-"Dash": {
-"decks": 3,
-"won": 1,
-"offered": 10,
-"taken": 2,
-"lift": -0.007
-},
 "Accuracy": {
 "decks": 9,
 "won": 5,
@@ -2772,12 +2751,12 @@
 "taken": 4,
 "lift": 0.07
 },
-"DeadlyPoison": {
-"decks": 10,
-"won": 4,
-"offered": 48,
-"taken": 13,
-"lift": 0.018
+"Dash": {
+"decks": 3,
+"won": 1,
+"offered": 10,
+"taken": 2,
+"lift": -0.007
 },
 "PoisonedStab": {
 "decks": 8,
@@ -2785,6 +2764,27 @@
 "offered": 42,
 "taken": 6,
 "lift": -0.106
+},
+"DeadlyPoison": {
+"decks": 10,
+"won": 4,
+"offered": 48,
+"taken": 13,
+"lift": 0.018
+},
+"GrandFinale": {
+"decks": 1,
+"won": 0,
+"offered": 10,
+"taken": 2,
+"lift": -0.033
+},
+"BouncingFlask": {
+"decks": 8,
+"won": 2,
+"offered": 16,
+"taken": 9,
+"lift": -0.051
 },
 "Speedster": {
 "decks": 5,
@@ -2877,26 +2877,26 @@
 "taken": 5,
 "lift": 0.039
 },
-"BulletTime": {
-"decks": 3,
-"won": 0,
-"offered": 12,
-"taken": 3,
-"lift": -0.084
-},
-"NoxiousFumes": {
-"decks": 9,
-"won": 2,
-"offered": 19,
-"taken": 9,
-"lift": -0.067
-},
 "BubbleBubble": {
 "decks": 3,
 "won": 2,
 "offered": 12,
 "taken": 2,
 "lift": 0.07
+},
+"LegSweep": {
+"decks": 8,
+"won": 4,
+"offered": 14,
+"taken": 8,
+"lift": 0.061
+},
+"BulletTime": {
+"decks": 3,
+"won": 0,
+"offered": 12,
+"taken": 3,
+"lift": -0.084
 },
 "Relax": {
 "decks": 1,
@@ -2905,12 +2905,12 @@
 "taken": 0,
 "lift": -0.033
 },
-"LegSweep": {
-"decks": 8,
-"won": 4,
-"offered": 14,
-"taken": 8,
-"lift": 0.061
+"NoxiousFumes": {
+"decks": 9,
+"won": 2,
+"offered": 19,
+"taken": 9,
+"lift": -0.067
 },
 "HuddleUp": {
 "decks": 1,
@@ -2954,19 +2954,19 @@
 "taken": 0,
 "lift": 0.0
 },
-"Abrasive": {
-"decks": 5,
-"won": 2,
-"offered": 8,
-"taken": 4,
-"lift": 0.012
-},
 "ToolsOfTheTrade": {
 "decks": 5,
 "won": 3,
 "offered": 11,
 "taken": 6,
 "lift": 0.079
+},
+"Abrasive": {
+"decks": 5,
+"won": 2,
+"offered": 8,
+"taken": 4,
+"lift": 0.012
 },
 "Expertise": {
 "decks": 0,
@@ -3066,13 +3066,6 @@
 "taken": 5,
 "lift": 0.114
 },
-"Rampage": {
-"decks": 1,
-"won": 1,
-"offered": 1,
-"taken": 1,
-"lift": 0.058
-},
 "Pyre": {
 "decks": 1,
 "won": 1,
@@ -3081,6 +3074,20 @@
 "lift": 0.058
 },
 "JackOfAllTrades": {
+"decks": 1,
+"won": 1,
+"offered": 2,
+"taken": 1,
+"lift": 0.058
+},
+"Rampage": {
+"decks": 1,
+"won": 1,
+"offered": 1,
+"taken": 1,
+"lift": 0.058
+},
+"Rally": {
 "decks": 1,
 "won": 1,
 "offered": 2,
@@ -3098,13 +3105,6 @@
 "decks": 1,
 "won": 1,
 "offered": 1,
-"taken": 1,
-"lift": 0.058
-},
-"Rally": {
-"decks": 1,
-"won": 1,
-"offered": 2,
 "taken": 1,
 "lift": 0.058
 },
@@ -3283,19 +3283,19 @@
 "taken": 0,
 "lift": 0.0
 },
-"Prolong": {
-"decks": 1,
-"won": 0,
-"offered": 1,
-"taken": 0,
-"lift": -0.033
-},
 "Reflex": {
 "decks": 2,
 "won": 0,
 "offered": 7,
 "taken": 2,
 "lift": -0.061
+},
+"Prolong": {
+"decks": 1,
+"won": 0,
+"offered": 1,
+"taken": 0,
+"lift": -0.033
 },
 "TheGambit": {
 "decks": 0,
@@ -3311,18 +3311,18 @@
 "taken": 0,
 "lift": 0.0
 },
-"BladeOfInk": {
-"decks": 2,
-"won": 1,
-"offered": 5,
-"taken": 3,
-"lift": 0.023
-},
 "WraithForm": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
+"lift": 0.023
+},
+"BladeOfInk": {
+"decks": 2,
+"won": 1,
+"offered": 5,
+"taken": 3,
 "lift": 0.023
 },
 "SecretTechnique": {
@@ -3353,19 +3353,19 @@
 "taken": 1,
 "lift": -0.033
 },
-"AscendersBane": {
-"decks": 5,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.012
-},
 "HandTrick": {
 "decks": 1,
 "won": 1,
 "offered": 8,
 "taken": 2,
 "lift": 0.058
+},
+"AscendersBane": {
+"decks": 5,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.012
 },
 "ByrdSwoop": {
 "decks": 2,
@@ -3437,13 +3437,6 @@
 "taken": 0,
 "lift": 0.0
 },
-"Lift": {
-"decks": 2,
-"won": 2,
-"offered": 3,
-"taken": 1,
-"lift": 0.106
-},
 "FanOfKnives": {
 "decks": 3,
 "won": 2,
@@ -3457,6 +3450,13 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.058
+},
+"Lift": {
+"decks": 2,
+"won": 2,
+"offered": 3,
+"taken": 1,
+"lift": 0.106
 },
 "MasterPlanner": {
 "decks": 2,
@@ -3493,6 +3493,13 @@
 "taken": 0,
 "lift": 0.058
 },
+"BrightestFlame": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
 "Barricade": {
 "decks": 1,
 "won": 1,
@@ -3512,13 +3519,6 @@
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.058
-},
-"BrightestFlame": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
 "lift": 0.058
 },
 "Unmovable": {
@@ -3642,13 +3642,6 @@
 }
 },
 "relics": {
-"BronzeScales": {
-"decks": 9,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.091
-},
 "Bellows": {
 "decks": 3,
 "won": 1,
@@ -3656,47 +3649,12 @@
 "taken": 0,
 "lift": -0.007
 },
-"CaptainsWheel": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"AmethystAubergine": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"StrikeDummy": {
-"decks": 11,
-"won": 6,
-"offered": 0,
-"taken": 0,
-"lift": 0.095
-},
-"LostCoffer": {
-"decks": 2,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.061
-},
 "CloakClasp": {
 "decks": 4,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": -0.032
-},
-"Pear": {
-"decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.11
 },
 "RingOfTheSnake": {
 "decks": 29,
@@ -3712,12 +3670,54 @@
 "taken": 0,
 "lift": 0.023
 },
-"Akabeko": {
-"decks": 3,
+"LostCoffer": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.061
+},
+"AmethystAubergine": {
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.007
+"lift": 0.023
+},
+"BronzeScales": {
+"decks": 9,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.091
+},
+"StrikeDummy": {
+"decks": 11,
+"won": 6,
+"offered": 0,
+"taken": 0,
+"lift": 0.095
+},
+"Pear": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.11
+},
+"CaptainsWheel": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.023
+},
+"OddlySmoothStone": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
 },
 "UnceasingTop": {
 "decks": 3,
@@ -3726,33 +3726,12 @@
 "taken": 0,
 "lift": 0.07
 },
-"LastingCandy": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.033
-},
 "Vajra": {
 "decks": 9,
 "won": 6,
 "offered": 0,
 "taken": 0,
 "lift": 0.144
-},
-"OrnamentalFan": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.007
-},
-"PaelsFlesh": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.079
 },
 "MembershipCard": {
 "decks": 2,
@@ -3768,13 +3747,6 @@
 "taken": 0,
 "lift": 0.012
 },
-"Lantern": {
-"decks": 7,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.086
-},
 "BagOfMarbles": {
 "decks": 7,
 "won": 5,
@@ -3782,7 +3754,35 @@
 "taken": 0,
 "lift": 0.144
 },
-"OddlySmoothStone": {
+"PaelsFlesh": {
+"decks": 5,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.079
+},
+"Lantern": {
+"decks": 7,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.086
+},
+"Akabeko": {
+"decks": 3,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.007
+},
+"OrnamentalFan": {
+"decks": 3,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.007
+},
+"LastingCandy": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -3796,40 +3796,12 @@
 "taken": 0,
 "lift": 0.023
 },
-"MoltenEgg": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.033
-},
 "Whetstone": {
 "decks": 10,
 "won": 5,
 "offered": 0,
 "taken": 0,
 "lift": 0.068
-},
-"Permafrost": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.07
-},
-"Shuriken": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"Vambrace": {
-"decks": 2,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.061
 },
 "NutritiousOyster": {
 "decks": 2,
@@ -3838,19 +3810,12 @@
 "taken": 0,
 "lift": -0.061
 },
-"MealTicket": {
-"decks": 4,
-"won": 0,
+"Permafrost": {
+"decks": 3,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.104
-},
-"RegalPillow": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.145
+"lift": 0.07
 },
 "LizardTail": {
 "decks": 2,
@@ -3859,26 +3824,40 @@
 "taken": 0,
 "lift": 0.023
 },
-"PaelsTooth": {
+"MoltenEgg": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.033
 },
-"BagOfPreparation": {
-"decks": 9,
-"won": 7,
+"Shuriken": {
+"decks": 2,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.196
+"lift": 0.023
 },
-"SmallCapsule": {
+"MealTicket": {
+"decks": 4,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.104
+},
+"Vambrace": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.061
+},
+"RegalPillow": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.145
 },
 "Pantograph": {
 "decks": 5,
@@ -3887,12 +3866,26 @@
 "taken": 0,
 "lift": 0.079
 },
-"SwordOfStone": {
+"SmallCapsule": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.061
+},
+"BagOfPreparation": {
+"decks": 9,
+"won": 7,
+"offered": 0,
+"taken": 0,
+"lift": 0.196
+},
+"PaelsTooth": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
 },
 "PaelsHorn": {
 "decks": 1,
@@ -3901,13 +3894,6 @@
 "taken": 0,
 "lift": -0.033
 },
-"MummifiedHand": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
 "BoomingConch": {
 "decks": 3,
 "won": 0,
@@ -3915,26 +3901,19 @@
 "taken": 0,
 "lift": -0.084
 },
-"VenerableTeaSet": {
-"decks": 3,
+"SwordOfStone": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.061
+},
+"MummifiedHand": {
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.007
-},
-"StoneHumidifier": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.106
-},
-"WarPaint": {
-"decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.11
+"lift": 0.023
 },
 "Candelabra": {
 "decks": 4,
@@ -3950,33 +3929,19 @@
 "taken": 0,
 "lift": 0.283
 },
-"Orichalcum": {
-"decks": 6,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.051
-},
-"PaelsGrowth": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"CentennialPuzzle": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.145
-},
-"LetterOpener": {
+"WarPaint": {
 "decks": 4,
 "won": 3,
 "offered": 0,
 "taken": 0,
 "lift": 0.11
+},
+"StoneHumidifier": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.106
 },
 "ThrowingAxe": {
 "decks": 1,
@@ -3985,6 +3950,41 @@
 "taken": 0,
 "lift": 0.058
 },
+"Orichalcum": {
+"decks": 6,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.051
+},
+"CentennialPuzzle": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.145
+},
+"PaelsGrowth": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
+"VenerableTeaSet": {
+"decks": 3,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.007
+},
+"LetterOpener": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.11
+},
 "RingingTriangle": {
 "decks": 2,
 "won": 1,
@@ -3992,12 +3992,26 @@
 "taken": 0,
 "lift": 0.023
 },
+"PetrifiedToad": {
+"decks": 3,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.007
+},
 "SwordOfJade": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
 "lift": 0.106
+},
+"FurCoat": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
 },
 "BloodVial": {
 "decks": 8,
@@ -4013,28 +4027,28 @@
 "taken": 0,
 "lift": 0.058
 },
-"FurCoat": {
+"SignetRing": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.058
 },
-"PetrifiedToad": {
+"PenNib": {
 "decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": -0.007
+},
+"LeadPaperweight": {
+"decks": 4,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.032
 },
 "ArtOfWar": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.007
-},
-"PenNib": {
 "decks": 3,
 "won": 1,
 "offered": 0,
@@ -4048,26 +4062,19 @@
 "taken": 0,
 "lift": -0.007
 },
-"SignetRing": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"LeadPaperweight": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.032
-},
 "TheAbacus": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
 "lift": 0.106
+},
+"RazorTooth": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
 },
 "BrilliantScarf": {
 "decks": 2,
@@ -4083,20 +4090,6 @@
 "taken": 0,
 "lift": 0.058
 },
-"FakeVenerableTeaSet": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"RazorTooth": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
 "Chandelier": {
 "decks": 3,
 "won": 3,
@@ -4104,12 +4097,12 @@
 "taken": 0,
 "lift": 0.147
 },
-"FakeMango": {
-"decks": 1,
-"won": 1,
+"Gorget": {
+"decks": 6,
+"won": 6,
 "offered": 0,
 "taken": 0,
-"lift": 0.058
+"lift": 0.239
 },
 "StoneCracker": {
 "decks": 1,
@@ -4125,6 +4118,13 @@
 "taken": 0,
 "lift": 0.106
 },
+"FakeVenerableTeaSet": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
 "Anchor": {
 "decks": 9,
 "won": 5,
@@ -4132,19 +4132,12 @@
 "taken": 0,
 "lift": 0.091
 },
-"Gorget": {
-"decks": 6,
-"won": 6,
+"FakeMango": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.239
-},
-"FestivePopper": {
-"decks": 3,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.147
+"lift": 0.058
 },
 "FakeLeesWaffle": {
 "decks": 1,
@@ -4153,14 +4146,21 @@
 "taken": 0,
 "lift": 0.058
 },
-"BlessedAntler": {
-"decks": 1,
-"won": 0,
+"FestivePopper": {
+"decks": 3,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": -0.033
+"lift": 0.147
 },
 "RingOfTheDrake": {
+"decks": 4,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.032
+},
+"TouchOfOrobas": {
 "decks": 4,
 "won": 1,
 "offered": 0,
@@ -4174,13 +4174,6 @@
 "taken": 0,
 "lift": -0.084
 },
-"TouchOfOrobas": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.032
-},
 "JossPaper": {
 "decks": 7,
 "won": 3,
@@ -4188,12 +4181,12 @@
 "taken": 0,
 "lift": 0.027
 },
-"MassiveScroll": {
-"decks": 3,
-"won": 2,
+"BlessedAntler": {
+"decks": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.07
+"lift": -0.033
 },
 "PaperKrane": {
 "decks": 1,
@@ -4202,12 +4195,12 @@
 "taken": 0,
 "lift": -0.033
 },
-"HistoryCourse": {
-"decks": 1,
-"won": 1,
+"MassiveScroll": {
+"decks": 3,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.058
+"lift": 0.07
 },
 "TungstenRod": {
 "decks": 2,
@@ -4216,14 +4209,14 @@
 "taken": 0,
 "lift": 0.106
 },
-"DustyTome": {
-"decks": 2,
+"ArcaneScroll": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.023
+"lift": 0.058
 },
-"ArcaneScroll": {
+"HistoryCourse": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -4236,6 +4229,13 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.106
+},
+"DustyTome": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.023
 },
 "Kusarigama": {
 "decks": 2,
@@ -4258,13 +4258,6 @@
 "taken": 0,
 "lift": 0.023
 },
-"GoldenPearl": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
 "HappyFlower": {
 "decks": 7,
 "won": 4,
@@ -4279,7 +4272,21 @@
 "taken": 0,
 "lift": 0.023
 },
+"GoldenPearl": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
 "PaelsEye": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
+},
+"MiniatureTent": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -4293,33 +4300,12 @@
 "taken": 0,
 "lift": -0.084
 },
-"MiniatureTent": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.033
-},
-"ElectricShrymp": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.033
-},
-"NeowsTalisman": {
+"RedMask": {
 "decks": 2,
-"won": 0,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.061
-},
-"TwistedFunnel": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.033
+"lift": 0.023
 },
 "GnarledHammer": {
 "decks": 1,
@@ -4335,26 +4321,40 @@
 "taken": 0,
 "lift": 0.023
 },
-"RedMask": {
+"NeowsTalisman": {
 "decks": 2,
-"won": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.023
+"lift": -0.061
 },
-"RoyalPoison": {
+"TwistedFunnel": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
+},
+"ElectricShrymp": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
+},
+"GamblingChip": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.058
 },
-"SparklingRouge": {
-"decks": 2,
+"ChoicesParadox": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.023
+"lift": 0.058
 },
 "MrStruggles": {
 "decks": 2,
@@ -4370,21 +4370,21 @@
 "taken": 0,
 "lift": 0.058
 },
+"SparklingRouge": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.023
+},
+"RoyalPoison": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
 "Shovel": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"ChoicesParadox": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"GamblingChip": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -4405,19 +4405,19 @@
 "taken": 0,
 "lift": -0.061
 },
-"HeftyTablet": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.033
-},
 "FresnelLens": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.023
+},
+"HeftyTablet": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
 },
 "Pomander": {
 "decks": 1,
@@ -4426,13 +4426,6 @@
 "taken": 0,
 "lift": -0.033
 },
-"MeatOnTheBone": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
 "UnsettlingLamp": {
 "decks": 1,
 "won": 1,
@@ -4440,7 +4433,28 @@
 "taken": 0,
 "lift": 0.058
 },
+"MeatOnTheBone": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
+"ArchaicTooth": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.023
+},
 "WhiteStar": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
+"WhisperingEarring": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -4453,27 +4467,6 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.11
-},
-"ArchaicTooth": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"WhisperingEarring": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"LargeCapsule": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
 },
 "LuckyFysh": {
 "decks": 1,
@@ -4489,12 +4482,40 @@
 "taken": 0,
 "lift": -0.033
 },
+"LargeCapsule": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.023
+},
 "GremlinHorn": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
 "lift": 0.106
+},
+"NeowsTorment": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
+"IceCream": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
+"DaughterOfTheWind": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.023
 },
 "YummyCookie": {
 "decks": 2,
@@ -4510,21 +4531,7 @@
 "taken": 0,
 "lift": 0.058
 },
-"DaughterOfTheWind": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"IceCream": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"NeowsTorment": {
+"Storybook": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -4538,12 +4545,12 @@
 "taken": 0,
 "lift": 0.058
 },
-"Storybook": {
-"decks": 1,
-"won": 1,
+"BigMushroom": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.058
+"lift": 0.106
 },
 "SpikedGauntlets": {
 "decks": 1,
@@ -4551,13 +4558,6 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.058
-},
-"BigMushroom": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.106
 },
 "JuzuBracelet": {
 "decks": 1,
@@ -4567,20 +4567,6 @@
 "lift": 0.058
 },
 "IronClub": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"IntimidatingHelmet": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"NinjaScroll": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -4601,12 +4587,19 @@
 "taken": 0,
 "lift": 0.023
 },
-"LeesWaffle": {
+"NinjaScroll": {
 "decks": 1,
-"won": 0,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.033
+"lift": 0.058
+},
+"IntimidatingHelmet": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
 },
 "Nunchaku": {
 "decks": 2,
@@ -4614,6 +4607,13 @@
 "offered": 0,
 "taken": 0,
 "lift": -0.061
+},
+"LeesWaffle": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.033
 },
 "ParryingShield": {
 "decks": 1,
@@ -4650,61 +4650,12 @@
 "runs": 39,
 "wins": 16,
 "cards": {
-"WroughtInWar": {
-"decks": 10,
-"won": 3,
-"offered": 71,
-"taken": 13,
-"lift": -0.055
-},
-"Glimmer": {
-"decks": 5,
-"won": 1,
-"offered": 20,
-"taken": 4,
-"lift": -0.07
-},
-"Glow": {
-"decks": 16,
-"won": 8,
-"offered": 46,
-"taken": 18,
-"lift": 0.055
-},
 "Hegemony": {
 "decks": 2,
 "won": 1,
 "offered": 16,
 "taken": 2,
 "lift": 0.015
-},
-"Venerate": {
-"decks": 37,
-"won": 16,
-"offered": 0,
-"taken": 0,
-"lift": 0.017
-},
-"GatherLight": {
-"decks": 25,
-"won": 10,
-"offered": 67,
-"taken": 33,
-"lift": -0.007
-},
-"CelestialMight": {
-"decks": 3,
-"won": 0,
-"offered": 54,
-"taken": 3,
-"lift": -0.095
-},
-"GangUp": {
-"decks": 3,
-"won": 1,
-"offered": 3,
-"taken": 2,
-"lift": -0.018
 },
 "NeowsFury": {
 "decks": 2,
@@ -4713,12 +4664,12 @@
 "taken": 0,
 "lift": 0.015
 },
-"DefendRegent": {
-"decks": 37,
-"won": 16,
-"offered": 0,
-"taken": 0,
-"lift": 0.017
+"Glimmer": {
+"decks": 5,
+"won": 1,
+"offered": 20,
+"taken": 4,
+"lift": -0.07
 },
 "Exterminate": {
 "decks": 2,
@@ -4727,19 +4678,26 @@
 "taken": 0,
 "lift": -0.068
 },
-"StrikeRegent": {
+"DefendRegent": {
 "decks": 37,
-"won": 15,
+"won": 16,
 "offered": 0,
 "taken": 0,
-"lift": -0.004
+"lift": 0.017
 },
-"SummonForth": {
-"decks": 9,
-"won": 2,
-"offered": 20,
-"taken": 10,
-"lift": -0.089
+"FallingStar": {
+"decks": 34,
+"won": 13,
+"offered": 0,
+"taken": 0,
+"lift": -0.022
+},
+"WroughtInWar": {
+"decks": 10,
+"won": 3,
+"offered": 71,
+"taken": 13,
+"lift": -0.055
 },
 "AstralPulse": {
 "decks": 9,
@@ -4748,6 +4706,13 @@
 "taken": 10,
 "lift": 0.174
 },
+"Venerate": {
+"decks": 37,
+"won": 16,
+"offered": 0,
+"taken": 0,
+"lift": 0.017
+},
 "Glitterstream": {
 "decks": 11,
 "won": 3,
@@ -4755,12 +4720,47 @@
 "taken": 11,
 "lift": -0.072
 },
-"FallingStar": {
-"decks": 34,
-"won": 13,
+"SummonForth": {
+"decks": 9,
+"won": 2,
+"offered": 20,
+"taken": 10,
+"lift": -0.089
+},
+"GatherLight": {
+"decks": 25,
+"won": 10,
+"offered": 67,
+"taken": 33,
+"lift": -0.007
+},
+"Glow": {
+"decks": 16,
+"won": 8,
+"offered": 46,
+"taken": 18,
+"lift": 0.055
+},
+"CelestialMight": {
+"decks": 3,
+"won": 0,
+"offered": 54,
+"taken": 3,
+"lift": -0.095
+},
+"StrikeRegent": {
+"decks": 37,
+"won": 15,
 "offered": 0,
 "taken": 0,
-"lift": -0.022
+"lift": -0.004
+},
+"GangUp": {
+"decks": 3,
+"won": 1,
+"offered": 3,
+"taken": 2,
+"lift": -0.018
 },
 "PhotonCut": {
 "decks": 11,
@@ -4930,26 +4930,12 @@
 "taken": 0,
 "lift": 0.0
 },
-"Conqueror": {
-"decks": 5,
-"won": 2,
-"offered": 16,
-"taken": 5,
-"lift": -0.003
-},
-"Squash": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.095
-},
-"Alignment": {
-"decks": 4,
-"won": 1,
-"offered": 19,
-"taken": 5,
-"lift": -0.046
+"RefineBlade": {
+"decks": 16,
+"won": 3,
+"offered": 62,
+"taken": 16,
+"lift": -0.137
 },
 "HammerTime": {
 "decks": 5,
@@ -4958,6 +4944,20 @@
 "taken": 2,
 "lift": -0.003
 },
+"KnowThyPlace": {
+"decks": 22,
+"won": 9,
+"offered": 76,
+"taken": 19,
+"lift": -0.001
+},
+"Squash": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.095
+},
 "Convergence": {
 "decks": 7,
 "won": 3,
@@ -4965,19 +4965,19 @@
 "taken": 6,
 "lift": 0.008
 },
-"RefineBlade": {
-"decks": 16,
-"won": 3,
-"offered": 62,
-"taken": 16,
-"lift": -0.137
+"Conqueror": {
+"decks": 5,
+"won": 2,
+"offered": 16,
+"taken": 5,
+"lift": -0.003
 },
-"KnowThyPlace": {
-"decks": 22,
-"won": 9,
-"offered": 76,
-"taken": 19,
-"lift": -0.001
+"Alignment": {
+"decks": 4,
+"won": 1,
+"offered": 19,
+"taken": 5,
+"lift": -0.046
 },
 "SpectrumShift": {
 "decks": 1,
@@ -5007,6 +5007,13 @@
 "taken": 1,
 "lift": -0.037
 },
+"HiddenCache": {
+"decks": 24,
+"won": 14,
+"offered": 61,
+"taken": 22,
+"lift": 0.122
+},
 "Devastate": {
 "decks": 6,
 "won": 3,
@@ -5020,13 +5027,6 @@
 "offered": 28,
 "taken": 14,
 "lift": -0.072
-},
-"HiddenCache": {
-"decks": 24,
-"won": 14,
-"offered": 61,
-"taken": 22,
-"lift": 0.122
 },
 "SeekingEdge": {
 "decks": 7,
@@ -5063,26 +5063,12 @@
 "taken": 3,
 "lift": -0.037
 },
-"Guards": {
-"decks": 3,
-"won": 0,
-"offered": 17,
-"taken": 3,
-"lift": -0.095
-},
-"BeatIntoShape": {
-"decks": 3,
-"won": 1,
-"offered": 13,
-"taken": 3,
-"lift": -0.018
-},
-"MonarchsGaze": {
-"decks": 3,
+"DyingStar": {
+"decks": 4,
 "won": 2,
-"offered": 14,
-"taken": 2,
-"lift": 0.059
+"offered": 10,
+"taken": 3,
+"lift": 0.026
 },
 "SpoilsOfBattle": {
 "decks": 7,
@@ -5091,19 +5077,33 @@
 "taken": 11,
 "lift": 0.008
 },
+"MonarchsGaze": {
+"decks": 3,
+"won": 2,
+"offered": 14,
+"taken": 2,
+"lift": 0.059
+},
+"BeatIntoShape": {
+"decks": 3,
+"won": 1,
+"offered": 13,
+"taken": 3,
+"lift": -0.018
+},
+"Guards": {
+"decks": 3,
+"won": 0,
+"offered": 17,
+"taken": 3,
+"lift": -0.095
+},
 "ManifestAuthority": {
 "decks": 8,
 "won": 2,
 "offered": 28,
 "taken": 10,
 "lift": -0.071
-},
-"DyingStar": {
-"decks": 4,
-"won": 2,
-"offered": 10,
-"taken": 3,
-"lift": 0.026
 },
 "PaleBlueDot": {
 "decks": 0,
@@ -5217,19 +5217,19 @@
 "taken": 4,
 "lift": 0.026
 },
-"Comet": {
-"decks": 7,
-"won": 6,
-"offered": 13,
-"taken": 6,
-"lift": 0.184
-},
 "UltimateDefend": {
 "decks": 4,
 "won": 2,
 "offered": 4,
 "taken": 0,
 "lift": 0.026
+},
+"Comet": {
+"decks": 7,
+"won": 6,
+"offered": 13,
+"taken": 6,
+"lift": 0.184
 },
 "Charge": {
 "decks": 5,
@@ -5308,13 +5308,6 @@
 "taken": 0,
 "lift": 0.0
 },
-"HeavenlyDrill": {
-"decks": 2,
-"won": 1,
-"offered": 8,
-"taken": 1,
-"lift": 0.015
-},
 "Patter": {
 "decks": 8,
 "won": 4,
@@ -5328,6 +5321,13 @@
 "offered": 16,
 "taken": 2,
 "lift": 0.098
+},
+"HeavenlyDrill": {
+"decks": 2,
+"won": 1,
+"offered": 8,
+"taken": 1,
+"lift": 0.015
 },
 "Arsenal": {
 "decks": 3,
@@ -5406,12 +5406,12 @@
 "taken": 2,
 "lift": 0.098
 },
-"Clumsy": {
-"decks": 6,
-"won": 4,
+"Regret": {
+"decks": 3,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.096
+"lift": -0.018
 },
 "UltimateStrike": {
 "decks": 3,
@@ -5420,19 +5420,19 @@
 "taken": 0,
 "lift": 0.059
 },
-"Regret": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.018
-},
 "ByrdSwoop": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.037
+},
+"Clumsy": {
+"decks": 6,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.096
 },
 "Intercept": {
 "decks": 0,
@@ -5602,19 +5602,19 @@
 "taken": 0,
 "lift": 0.0
 },
-"AscendersBane": {
-"decks": 8,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.095
-},
 "Doubt": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.054
+},
+"AscendersBane": {
+"decks": 8,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.095
 },
 "BelieveInYou": {
 "decks": 1,
@@ -5707,14 +5707,14 @@
 "taken": 0,
 "lift": 0.0
 },
-"FeedingFrenzy": {
+"RipAndTear": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.037
 },
-"RipAndTear": {
+"FeedingFrenzy": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -5742,13 +5742,6 @@
 "taken": 0,
 "lift": 0.098
 },
-"Purity": {
-"decks": 1,
-"won": 1,
-"offered": 1,
-"taken": 1,
-"lift": 0.054
-},
 "Storm": {
 "decks": 1,
 "won": 1,
@@ -5757,6 +5750,13 @@
 "lift": 0.054
 },
 "Hologram": {
+"decks": 1,
+"won": 1,
+"offered": 1,
+"taken": 1,
+"lift": 0.054
+},
+"Purity": {
 "decks": 1,
 "won": 1,
 "offered": 1,
@@ -5856,12 +5856,12 @@
 }
 },
 "relics": {
-"BronzeScales": {
-"decks": 10,
-"won": 5,
+"DivineRight": {
+"decks": 37,
+"won": 14,
 "offered": 0,
 "taken": 0,
-"lift": 0.045
+"lift": -0.025
 },
 "BoneTea": {
 "decks": 3,
@@ -5870,33 +5870,12 @@
 "taken": 0,
 "lift": -0.095
 },
-"NutritiousSoup": {
-"decks": 3,
+"NeowsTorment": {
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.018
-},
-"OrnamentalFan": {
-"decks": 6,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": -0.029
-},
-"Girya": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.037
-},
-"DivineRight": {
-"decks": 37,
-"won": 14,
-"offered": 0,
-"taken": 0,
-"lift": -0.025
+"lift": 0.015
 },
 "Vambrace": {
 "decks": 1,
@@ -5905,13 +5884,6 @@
 "taken": 0,
 "lift": -0.037
 },
-"JuzuBracelet": {
-"decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
 "Strawberry": {
 "decks": 11,
 "won": 9,
@@ -5919,12 +5891,26 @@
 "taken": 0,
 "lift": 0.214
 },
-"NeowsTorment": {
-"decks": 2,
+"NutritiousSoup": {
+"decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.015
+"lift": -0.018
+},
+"BronzeScales": {
+"decks": 10,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.045
+},
+"OrnamentalFan": {
+"decks": 6,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": -0.029
 },
 "ParryingShield": {
 "decks": 6,
@@ -5933,6 +5919,27 @@
 "taken": 0,
 "lift": -0.029
 },
+"JuzuBracelet": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
+"Girya": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"Chandelier": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.059
+},
 "HappyFlower": {
 "decks": 8,
 "won": 4,
@@ -5940,26 +5947,12 @@
 "taken": 0,
 "lift": 0.04
 },
-"Shovel": {
-"decks": 2,
-"won": 0,
+"PenNib": {
+"decks": 5,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.068
-},
-"CaptainsWheel": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.037
-},
-"AmethystAubergine": {
-"decks": 7,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.008
+"lift": -0.003
 },
 "VeryHotCocoa": {
 "decks": 4,
@@ -5975,6 +5968,13 @@
 "taken": 0,
 "lift": 0.008
 },
+"AmethystAubergine": {
+"decks": 7,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.008
+},
 "RegalPillow": {
 "decks": 5,
 "won": 2,
@@ -5982,14 +5982,21 @@
 "taken": 0,
 "lift": -0.003
 },
-"PenNib": {
-"decks": 5,
-"won": 2,
+"Shovel": {
+"decks": 2,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.003
+"lift": -0.068
 },
-"Chandelier": {
+"CaptainsWheel": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"PollinousCore": {
 "decks": 3,
 "won": 2,
 "offered": 0,
@@ -6003,7 +6010,14 @@
 "taken": 0,
 "lift": -0.068
 },
-"PreciseScissors": {
+"Anchor": {
+"decks": 5,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.07
+},
+"RainbowRing": {
 "decks": 2,
 "won": 1,
 "offered": 0,
@@ -6017,20 +6031,6 @@
 "taken": 0,
 "lift": -0.018
 },
-"PollinousCore": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.059
-},
-"Anchor": {
-"decks": 5,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.07
-},
 "MealTicket": {
 "decks": 10,
 "won": 4,
@@ -6038,12 +6038,12 @@
 "taken": 0,
 "lift": -0.005
 },
-"BagOfPreparation": {
-"decks": 10,
-"won": 3,
+"PreciseScissors": {
+"decks": 2,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.055
+"lift": 0.015
 },
 "Pear": {
 "decks": 4,
@@ -6052,6 +6052,13 @@
 "taken": 0,
 "lift": 0.097
 },
+"BagOfPreparation": {
+"decks": 10,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": -0.055
+},
 "GoldenCompass": {
 "decks": 1,
 "won": 0,
@@ -6059,63 +6066,7 @@
 "taken": 0,
 "lift": -0.037
 },
-"RainbowRing": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
-"StoneHumidifier": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.037
-},
-"YummyCookie": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.026
-},
-"Candelabra": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.095
-},
-"Planisphere": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.037
-},
-"BloodVial": {
-"decks": 8,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.04
-},
 "RazorTooth": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
-"EternalFeather": {
-"decks": 5,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": -0.003
-},
-"DiamondDiadem": {
 "decks": 2,
 "won": 1,
 "offered": 0,
@@ -6136,13 +6087,6 @@
 "taken": 0,
 "lift": -0.036
 },
-"SturdyClamp": {
-"decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
 "RedMask": {
 "decks": 7,
 "won": 5,
@@ -6150,26 +6094,61 @@
 "taken": 0,
 "lift": 0.125
 },
-"HornCleat": {
+"Candelabra": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.095
+},
+"StoneHumidifier": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"BloodVial": {
+"decks": 8,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.04
+},
+"Planisphere": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"EternalFeather": {
+"decks": 5,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": -0.003
+},
+"DiamondDiadem": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
+},
+"SturdyClamp": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
+"YummyCookie": {
 "decks": 4,
 "won": 2,
 "offered": 0,
 "taken": 0,
 "lift": 0.026
-},
-"CentennialPuzzle": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.13
-},
-"Whetstone": {
-"decks": 10,
-"won": 6,
-"offered": 0,
-"taken": 0,
-"lift": 0.095
 },
 "DistinguishedCape": {
 "decks": 3,
@@ -6178,7 +6157,21 @@
 "taken": 0,
 "lift": 0.136
 },
-"StoneCracker": {
+"Whetstone": {
+"decks": 10,
+"won": 6,
+"offered": 0,
+"taken": 0,
+"lift": 0.095
+},
+"UnsettlingLamp": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
+},
+"CentennialPuzzle": {
 "decks": 5,
 "won": 4,
 "offered": 0,
@@ -6192,21 +6185,14 @@
 "taken": 0,
 "lift": 0.066
 },
-"WarPaint": {
-"decks": 8,
-"won": 6,
+"HornCleat": {
+"decks": 4,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.151
+"lift": 0.026
 },
 "Driftwood": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.054
-},
-"UnsettlingLamp": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -6220,12 +6206,26 @@
 "taken": 0,
 "lift": 0.059
 },
-"GnarledHammer": {
-"decks": 1,
-"won": 0,
+"StoneCracker": {
+"decks": 5,
+"won": 4,
 "offered": 0,
 "taken": 0,
-"lift": -0.037
+"lift": 0.13
+},
+"WarPaint": {
+"decks": 8,
+"won": 6,
+"offered": 0,
+"taken": 0,
+"lift": 0.151
+},
+"Vajra": {
+"decks": 7,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
 },
 "LoomingFruit": {
 "decks": 2,
@@ -6234,14 +6234,28 @@
 "taken": 0,
 "lift": 0.015
 },
-"PotionBelt": {
-"decks": 6,
-"won": 3,
+"NewLeaf": {
+"decks": 4,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.034
+"lift": -0.046
 },
-"EmberTea": {
+"OddlySmoothStone": {
+"decks": 7,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"RunicPyramid": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
+},
+"GnarledHammer": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -6255,68 +6269,19 @@
 "taken": 0,
 "lift": 0.121
 },
-"Vajra": {
-"decks": 7,
-"won": 4,
+"EmberTea": {
+"decks": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.066
+"lift": -0.037
 },
-"NewLeaf": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.046
-},
-"RunicPyramid": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
-"OddlySmoothStone": {
-"decks": 7,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.066
-},
-"ScrollBoxes": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
-"LastingCandy": {
-"decks": 4,
+"PotionBelt": {
+"decks": 6,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
-},
-"HistoryCourse": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.054
-},
-"Pendulum": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.13
-},
-"OrangeDough": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
+"lift": 0.034
 },
 "Pantograph": {
 "decks": 5,
@@ -6325,12 +6290,26 @@
 "taken": 0,
 "lift": 0.13
 },
-"SereTalon": {
+"HistoryCourse": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.054
+},
+"LastingCandy": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
+"Pendulum": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.13
 },
 "MiniatureCannon": {
 "decks": 2,
@@ -6339,19 +6318,33 @@
 "taken": 0,
 "lift": 0.098
 },
+"ScrollBoxes": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
+},
+"SereTalon": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
+},
+"OrangeDough": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
+},
 "FestivePopper": {
 "decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
 "lift": 0.059
-},
-"SwordOfStone": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.037
 },
 "CloakClasp": {
 "decks": 3,
@@ -6360,19 +6353,12 @@
 "taken": 0,
 "lift": 0.059
 },
-"ArtOfWar": {
-"decks": 3,
-"won": 2,
+"Orichalcum": {
+"decks": 4,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.059
-},
-"PaelsWing": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.095
+"lift": 0.097
 },
 "GamblingChip": {
 "decks": 1,
@@ -6388,6 +6374,20 @@
 "taken": 0,
 "lift": -0.037
 },
+"ArtOfWar": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.059
+},
+"SwordOfStone": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
 "Pomander": {
 "decks": 1,
 "won": 0,
@@ -6395,19 +6395,12 @@
 "taken": 0,
 "lift": -0.037
 },
-"Orichalcum": {
-"decks": 4,
-"won": 3,
+"PaelsWing": {
+"decks": 3,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
-},
-"VenerableTeaSet": {
-"decks": 6,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.034
+"lift": -0.095
 },
 "GremlinHorn": {
 "decks": 3,
@@ -6415,13 +6408,6 @@
 "offered": 0,
 "taken": 0,
 "lift": -0.018
-},
-"PaelsLegion": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.037
 },
 "LeadPaperweight": {
 "decks": 3,
@@ -6437,12 +6423,33 @@
 "taken": 0,
 "lift": -0.068
 },
-"DaughterOfTheWind": {
-"decks": 3,
-"won": 1,
+"VenerableTeaSet": {
+"decks": 6,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": -0.018
+"lift": 0.034
+},
+"PaelsLegion": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"Byrdpip": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"LuckyFysh": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.026
 },
 "GamePiece": {
 "decks": 2,
@@ -6450,13 +6457,6 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.015
-},
-"StrikeDummy": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.063
 },
 "DelicateFrond": {
 "decks": 1,
@@ -6472,19 +6472,19 @@
 "taken": 0,
 "lift": -0.018
 },
-"LuckyFysh": {
-"decks": 4,
-"won": 2,
+"DaughterOfTheWind": {
+"decks": 3,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.026
+"lift": -0.018
 },
-"Byrdpip": {
-"decks": 1,
-"won": 0,
+"StrikeDummy": {
+"decks": 5,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": -0.037
+"lift": 0.063
 },
 "GoldenPearl": {
 "decks": 4,
@@ -6500,19 +6500,19 @@
 "taken": 0,
 "lift": 0.063
 },
-"WhiteBeastStatue": {
+"NutritiousOyster": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.054
 },
-"ReptileTrinket": {
-"decks": 4,
-"won": 3,
+"BigMushroom": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
 "TinyMailbox": {
 "decks": 4,
@@ -6528,14 +6528,7 @@
 "taken": 0,
 "lift": 0.054
 },
-"BigMushroom": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.098
-},
-"NutritiousOyster": {
+"WhisperingEarring": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -6549,6 +6542,20 @@
 "taken": 0,
 "lift": 0.136
 },
+"WhiteBeastStatue": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
+},
+"ReptileTrinket": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
 "MercuryHourglass": {
 "decks": 4,
 "won": 1,
@@ -6556,12 +6563,12 @@
 "taken": 0,
 "lift": -0.046
 },
-"WhisperingEarring": {
-"decks": 1,
-"won": 1,
+"MoltenEgg": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.054
+"lift": 0.098
 },
 "TuningFork": {
 "decks": 5,
@@ -6577,12 +6584,12 @@
 "taken": 0,
 "lift": 0.015
 },
-"MoltenEgg": {
-"decks": 2,
-"won": 2,
+"FurCoat": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.098
+"lift": 0.054
 },
 "Kusarigama": {
 "decks": 1,
@@ -6591,12 +6598,12 @@
 "taken": 0,
 "lift": 0.054
 },
-"FurCoat": {
-"decks": 1,
+"ArcaneScroll": {
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.054
+"lift": 0.015
 },
 "Nunchaku": {
 "decks": 3,
@@ -6612,13 +6619,6 @@
 "taken": 0,
 "lift": 0.098
 },
-"ArcaneScroll": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
 "LunarPastry": {
 "decks": 2,
 "won": 2,
@@ -6633,13 +6633,6 @@
 "taken": 0,
 "lift": 0.098
 },
-"HeftyTablet": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
 "TouchOfOrobas": {
 "decks": 2,
 "won": 2,
@@ -6653,6 +6646,13 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.098
+},
+"HeftyTablet": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
 },
 "BrilliantScarf": {
 "decks": 1,
@@ -6675,6 +6675,13 @@
 "taken": 0,
 "lift": 0.054
 },
+"DollysMirror": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
+},
 "SwordOfJade": {
 "decks": 1,
 "won": 1,
@@ -6689,12 +6696,12 @@
 "taken": 0,
 "lift": 0.098
 },
-"DollysMirror": {
-"decks": 1,
-"won": 1,
+"BookOfFiveRings": {
+"decks": 5,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.054
+"lift": 0.063
 },
 "LeesWaffle": {
 "decks": 1,
@@ -6702,13 +6709,6 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.054
-},
-"BookOfFiveRings": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.063
 },
 "BowlerHat": {
 "decks": 3,
@@ -6745,6 +6745,27 @@
 "taken": 0,
 "lift": 0.054
 },
+"MembershipCard": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
+},
+"Akabeko": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.026
+},
+"JeweledMask": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
+},
 "SandCastle": {
 "decks": 1,
 "won": 1,
@@ -6759,12 +6780,12 @@
 "taken": 0,
 "lift": 0.054
 },
-"MembershipCard": {
-"decks": 1,
+"LetterOpener": {
+"decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.054
+"lift": -0.018
 },
 "BeatingRemnant": {
 "decks": 1,
@@ -6773,28 +6794,7 @@
 "taken": 0,
 "lift": 0.054
 },
-"Akabeko": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.026
-},
-"LetterOpener": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.018
-},
-"JeweledMask": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.054
-},
-"PandorasBox": {
+"PrayerWheel": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -6808,12 +6808,19 @@
 "taken": 0,
 "lift": -0.037
 },
-"PrayerWheel": {
+"PandorasBox": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.037
+},
+"TungstenRod": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
 },
 "Bread": {
 "decks": 1,
@@ -6829,26 +6836,12 @@
 "taken": 0,
 "lift": -0.068
 },
-"TungstenRod": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.015
-},
 "NeowsTalisman": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.068
-},
-"FencingManual": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.046
 },
 "LizardTail": {
 "decks": 1,
@@ -6857,19 +6850,19 @@
 "taken": 0,
 "lift": -0.037
 },
+"FencingManual": {
+"decks": 4,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.046
+},
 "PhialHolster": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.015
-},
-"Sai": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.054
 },
 "PetrifiedToad": {
 "decks": 1,
@@ -6885,14 +6878,14 @@
 "taken": 0,
 "lift": 0.054
 },
-"DingyRug": {
-"decks": 2,
-"won": 2,
+"Sai": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.098
+"lift": 0.054
 },
-"DustyTome": {
+"DingyRug": {
 "decks": 2,
 "won": 2,
 "offered": 0,
@@ -6906,6 +6899,13 @@
 "taken": 0,
 "lift": 0.054
 },
+"DustyTome": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.098
+},
 "Glitter": {
 "decks": 1,
 "won": 1,
@@ -6913,14 +6913,14 @@
 "taken": 0,
 "lift": 0.054
 },
-"Kaleidoscope": {
+"Crossbow": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.054
 },
-"Crossbow": {
+"Kaleidoscope": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -6976,47 +6976,12 @@
 "runs": 24,
 "wins": 10,
 "cards": {
-"BeamCell": {
-"decks": 10,
-"won": 4,
-"offered": 36,
-"taken": 9,
-"lift": -0.008
-},
 "FocusedStrike": {
 "decks": 8,
 "won": 4,
 "offered": 32,
 "taken": 8,
 "lift": 0.037
-},
-"Dualcast": {
-"decks": 19,
-"won": 7,
-"offered": 0,
-"taken": 0,
-"lift": -0.032
-},
-"Zap": {
-"decks": 23,
-"won": 10,
-"offered": 0,
-"taken": 0,
-"lift": 0.013
-},
-"DefendDefect": {
-"decks": 24,
-"won": 10,
-"offered": 0,
-"taken": 0,
-"lift": 0.0
-},
-"StrikeDefect": {
-"decks": 22,
-"won": 9,
-"offered": 0,
-"taken": 0,
-"lift": -0.005
 },
 "NeowsFury": {
 "decks": 1,
@@ -7025,26 +6990,12 @@
 "taken": 0,
 "lift": -0.038
 },
-"MultiCast": {
-"decks": 2,
-"won": 0,
-"offered": 9,
-"taken": 2,
-"lift": -0.069
-},
-"Ftl": {
-"decks": 1,
-"won": 0,
-"offered": 13,
-"taken": 1,
-"lift": -0.038
-},
-"Voltaic": {
-"decks": 4,
-"won": 1,
-"offered": 8,
-"taken": 3,
-"lift": -0.048
+"Zap": {
+"decks": 23,
+"won": 10,
+"offered": 0,
+"taken": 0,
+"lift": 0.013
 },
 "GoForTheEyes": {
 "decks": 11,
@@ -7053,40 +7004,19 @@
 "taken": 13,
 "lift": 0.02
 },
-"BallLightning": {
-"decks": 11,
-"won": 5,
-"offered": 40,
-"taken": 11,
-"lift": 0.02
-},
-"SweepingBeam": {
-"decks": 5,
-"won": 1,
-"offered": 36,
-"taken": 5,
-"lift": -0.072
-},
-"CompileDriver": {
-"decks": 5,
-"won": 0,
-"offered": 39,
-"taken": 4,
-"lift": -0.139
-},
-"Relax": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
 "ColdSnap": {
 "decks": 16,
 "won": 6,
 "offered": 44,
 "taken": 18,
 "lift": -0.026
+},
+"StrikeDefect": {
+"decks": 22,
+"won": 9,
+"offered": 0,
+"taken": 0,
+"lift": -0.005
 },
 "TeslaCoil": {
 "decks": 6,
@@ -7101,6 +7031,76 @@
 "offered": 5,
 "taken": 2,
 "lift": -0.019
+},
+"SweepingBeam": {
+"decks": 5,
+"won": 1,
+"offered": 36,
+"taken": 5,
+"lift": -0.072
+},
+"Dualcast": {
+"decks": 19,
+"won": 7,
+"offered": 0,
+"taken": 0,
+"lift": -0.032
+},
+"Voltaic": {
+"decks": 4,
+"won": 1,
+"offered": 8,
+"taken": 3,
+"lift": -0.048
+},
+"MultiCast": {
+"decks": 2,
+"won": 0,
+"offered": 9,
+"taken": 2,
+"lift": -0.069
+},
+"CompileDriver": {
+"decks": 5,
+"won": 0,
+"offered": 39,
+"taken": 4,
+"lift": -0.139
+},
+"Ftl": {
+"decks": 1,
+"won": 0,
+"offered": 13,
+"taken": 1,
+"lift": -0.038
+},
+"Relax": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
+"DefendDefect": {
+"decks": 24,
+"won": 10,
+"offered": 0,
+"taken": 0,
+"lift": 0.0
+},
+"BeamCell": {
+"decks": 10,
+"won": 4,
+"offered": 36,
+"taken": 9,
+"lift": -0.008
+},
+"BallLightning": {
+"decks": 11,
+"won": 5,
+"offered": 40,
+"taken": 11,
+"lift": 0.02
 },
 "Coolheaded": {
 "decks": 16,
@@ -7277,6 +7277,20 @@
 "taken": 4,
 "lift": 0.031
 },
+"Capacitor": {
+"decks": 9,
+"won": 4,
+"offered": 18,
+"taken": 8,
+"lift": 0.013
+},
+"Loop": {
+"decks": 11,
+"won": 5,
+"offered": 17,
+"taken": 5,
+"lift": 0.02
+},
 "ChargeBattery": {
 "decks": 7,
 "won": 3,
@@ -7291,13 +7305,6 @@
 "taken": 7,
 "lift": 0.094
 },
-"ShadowShield": {
-"decks": 9,
-"won": 2,
-"offered": 12,
-"taken": 8,
-"lift": -0.092
-},
 "Refract": {
 "decks": 3,
 "won": 1,
@@ -7305,19 +7312,12 @@
 "taken": 3,
 "lift": -0.019
 },
-"Capacitor": {
+"ShadowShield": {
 "decks": 9,
-"won": 4,
-"offered": 18,
+"won": 2,
+"offered": 12,
 "taken": 8,
-"lift": 0.013
-},
-"Loop": {
-"decks": 11,
-"won": 5,
-"offered": 17,
-"taken": 5,
-"lift": 0.02
+"lift": -0.092
 },
 "Coordinate": {
 "decks": 1,
@@ -7494,12 +7494,12 @@
 "taken": 4,
 "lift": -0.031
 },
-"DarkShackles": {
-"decks": 3,
-"won": 2,
-"offered": 1,
-"taken": 0,
-"lift": 0.058
+"Defragment": {
+"decks": 7,
+"won": 5,
+"offered": 10,
+"taken": 7,
+"lift": 0.123
 },
 "BootSequence": {
 "decks": 8,
@@ -7508,12 +7508,12 @@
 "taken": 10,
 "lift": 0.148
 },
-"Defragment": {
-"decks": 7,
-"won": 5,
-"offered": 10,
-"taken": 7,
-"lift": 0.123
+"DarkShackles": {
+"decks": 3,
+"won": 2,
+"offered": 1,
+"taken": 0,
+"lift": 0.058
 },
 "Quadcast": {
 "decks": 5,
@@ -7690,12 +7690,12 @@
 "taken": 0,
 "lift": 0.014
 },
-"Reboot": {
-"decks": 3,
-"won": 2,
-"offered": 5,
+"Modded": {
+"decks": 2,
+"won": 1,
+"offered": 8,
 "taken": 2,
-"lift": 0.058
+"lift": 0.014
 },
 "MadScience": {
 "decks": 3,
@@ -7711,12 +7711,12 @@
 "taken": 5,
 "lift": 0.031
 },
-"Modded": {
-"decks": 2,
-"won": 1,
-"offered": 8,
+"Reboot": {
+"decks": 3,
+"won": 2,
+"offered": 5,
 "taken": 2,
-"lift": 0.014
+"lift": 0.058
 },
 "EchoForm": {
 "decks": 4,
@@ -7837,19 +7837,19 @@
 "taken": 0,
 "lift": -0.038
 },
-"Clumsy": {
-"decks": 5,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": -0.006
-},
 "CurseOfTheBell": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.038
+},
+"Clumsy": {
+"decks": 5,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": -0.006
 },
 "FlakCannon": {
 "decks": 1,
@@ -7942,14 +7942,14 @@
 "taken": 0,
 "lift": 0.0
 },
-"GraveWarden": {
+"DeathsDoor": {
 "decks": 1,
 "won": 1,
 "offered": 1,
 "taken": 1,
 "lift": 0.053
 },
-"DeathsDoor": {
+"GraveWarden": {
 "decks": 1,
 "won": 1,
 "offered": 1,
@@ -8054,11 +8054,11 @@
 "taken": 0,
 "lift": 0.0
 },
-"Defile": {
+"Exterminate": {
 "decks": 1,
 "won": 0,
-"offered": 1,
-"taken": 1,
+"offered": 0,
+"taken": 0,
 "lift": -0.038
 },
 "UltimateStrike": {
@@ -8068,18 +8068,18 @@
 "taken": 0,
 "lift": -0.038
 },
-"GatherLight": {
+"Defile": {
 "decks": 1,
 "won": 0,
 "offered": 1,
 "taken": 1,
 "lift": -0.038
 },
-"Exterminate": {
+"GatherLight": {
 "decks": 1,
 "won": 0,
-"offered": 0,
-"taken": 0,
+"offered": 1,
+"taken": 1,
 "lift": -0.038
 },
 "Untouchable": {
@@ -8147,6 +8147,41 @@
 }
 },
 "relics": {
+"BloodVial": {
+"decks": 7,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.064
+},
+"PaelsHorn": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
+"PenNib": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
+"CrackedCore": {
+"decks": 22,
+"won": 10,
+"offered": 0,
+"taken": 0,
+"lift": 0.026
+},
+"NeowsTorment": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
 "SwordOfStone": {
 "decks": 1,
 "won": 0,
@@ -8161,35 +8196,49 @@
 "taken": 0,
 "lift": 0.014
 },
-"CrackedCore": {
-"decks": 22,
-"won": 10,
+"StoneCracker": {
+"decks": 4,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.026
+"lift": 0.024
 },
-"PaelsHorn": {
-"decks": 1,
-"won": 0,
+"Whetstone": {
+"decks": 5,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.006
 },
-"BloodVial": {
-"decks": 7,
+"PetrifiedToad": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.014
+},
+"CentennialPuzzle": {
+"decks": 5,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.064
+"lift": 0.128
 },
-"PenNib": {
+"ArtOfWar": {
+"decks": 4,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.119
+},
+"MassiveScroll": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
 "lift": -0.038
 },
-"NeowsTorment": {
+"DiamondDiadem": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -8203,40 +8252,12 @@
 "taken": 0,
 "lift": 0.156
 },
-"CentennialPuzzle": {
-"decks": 5,
-"won": 4,
+"MercuryHourglass": {
+"decks": 3,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.128
-},
-"DiamondDiadem": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"Whetstone": {
-"decks": 5,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": -0.006
-},
-"StoneCracker": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.024
-},
-"MassiveScroll": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
+"lift": -0.019
 },
 "YummyCookie": {
 "decks": 1,
@@ -8252,26 +8273,12 @@
 "taken": 0,
 "lift": -0.039
 },
-"ArtOfWar": {
-"decks": 4,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.119
-},
-"PetrifiedToad": {
-"decks": 2,
+"RazorTooth": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
-},
-"MercuryHourglass": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.019
+"lift": 0.053
 },
 "BrilliantScarf": {
 "decks": 4,
@@ -8280,49 +8287,14 @@
 "taken": 0,
 "lift": 0.024
 },
-"PotionBelt": {
-"decks": 6,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.094
-},
-"GnarledHammer": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"Pendulum": {
-"decks": 3,
+"Gorget": {
+"decks": 5,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.135
-},
-"MummifiedHand": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"RazorTooth": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
+"lift": 0.061
 },
 "BookOfFiveRings": {
-"decks": 4,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.167
-},
-"HappyFlower": {
 "decks": 4,
 "won": 4,
 "offered": 0,
@@ -8336,19 +8308,26 @@
 "taken": 0,
 "lift": 0.061
 },
-"Gorget": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.061
-},
-"JuzuBracelet": {
-"decks": 2,
+"MummifiedHand": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.053
+},
+"Pendulum": {
+"decks": 3,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.135
+},
+"HappyFlower": {
+"decks": 4,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.167
 },
 "LeadPaperweight": {
 "decks": 1,
@@ -8357,19 +8336,26 @@
 "taken": 0,
 "lift": 0.053
 },
-"VenerableTeaSet": {
-"decks": 7,
-"won": 5,
+"GnarledHammer": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.123
+"lift": 0.053
 },
-"TuningFork": {
-"decks": 4,
-"won": 2,
+"JuzuBracelet": {
+"decks": 2,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.024
+"lift": 0.014
+},
+"PotionBelt": {
+"decks": 6,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.094
 },
 "HistoryCourse": {
 "decks": 1,
@@ -8378,42 +8364,14 @@
 "taken": 0,
 "lift": 0.053
 },
-"Shuriken": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"BagOfPreparation": {
-"decks": 5,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.128
-},
-"RippleBasin": {
+"TuningFork": {
 "decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.095
-},
-"DataDisk": {
-"decks": 5,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.194
-},
-"StrikeDummy": {
-"decks": 6,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.031
+"lift": 0.024
 },
-"HornCleat": {
+"TheCourier": {
 "decks": 2,
 "won": 2,
 "offered": 0,
@@ -8427,12 +8385,12 @@
 "taken": 0,
 "lift": 0.053
 },
-"Permafrost": {
-"decks": 3,
-"won": 3,
+"Mango": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.135
+"lift": 0.053
 },
 "NewLeaf": {
 "decks": 1,
@@ -8441,13 +8399,6 @@
 "taken": 0,
 "lift": 0.053
 },
-"TheCourier": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
 "JeweledMask": {
 "decks": 2,
 "won": 2,
@@ -8455,21 +8406,84 @@
 "taken": 0,
 "lift": 0.097
 },
-"Mango": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"Pantograph": {
+"RippleBasin": {
 "decks": 4,
 "won": 3,
 "offered": 0,
 "taken": 0,
 "lift": 0.095
 },
+"Permafrost": {
+"decks": 3,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.135
+},
+"Shuriken": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.053
+},
+"DataDisk": {
+"decks": 5,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.194
+},
+"HornCleat": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
+"VenerableTeaSet": {
+"decks": 7,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.123
+},
+"StrikeDummy": {
+"decks": 6,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": -0.031
+},
+"BagOfPreparation": {
+"decks": 5,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.128
+},
 "Bellows": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
+"NutritiousOyster": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.053
+},
+"Anchor": {
+"decks": 3,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.135
+},
+"GamblingChip": {
 "decks": 2,
 "won": 2,
 "offered": 0,
@@ -8483,20 +8497,6 @@
 "taken": 0,
 "lift": 0.097
 },
-"Anchor": {
-"decks": 3,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.135
-},
-"NutritiousOyster": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
 "RainbowRing": {
 "decks": 2,
 "won": 1,
@@ -8504,49 +8504,14 @@
 "taken": 0,
 "lift": 0.014
 },
-"GamblingChip": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"PaelsFlesh": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"LeesWaffle": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"Vambrace": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.014
-},
-"Lantern": {
+"Pantograph": {
 "decks": 4,
 "won": 3,
 "offered": 0,
 "taken": 0,
 "lift": 0.095
 },
-"MealTicket": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
-},
-"MeatOnTheBone": {
+"PaelsFlesh": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -8574,12 +8539,19 @@
 "taken": 0,
 "lift": 0.058
 },
-"PreciseScissors": {
-"decks": 2,
+"MeatOnTheBone": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.053
+},
+"LeesWaffle": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
 },
 "JossPaper": {
 "decks": 1,
@@ -8595,6 +8567,27 @@
 "taken": 0,
 "lift": 0.014
 },
+"PreciseScissors": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.014
+},
+"MealTicket": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.058
+},
+"Vambrace": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.014
+},
 "BagOfMarbles": {
 "decks": 4,
 "won": 2,
@@ -8602,12 +8595,12 @@
 "taken": 0,
 "lift": 0.024
 },
-"Strawberry": {
-"decks": 7,
-"won": 2,
+"Lantern": {
+"decks": 4,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": -0.054
+"lift": 0.095
 },
 "LeafyPoultice": {
 "decks": 2,
@@ -8616,21 +8609,14 @@
 "taken": 0,
 "lift": -0.069
 },
+"Strawberry": {
+"decks": 7,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": -0.054
+},
 "ParryingShield": {
-"decks": 2,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.069
-},
-"Akabeko": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.096
-},
-"BoneTea": {
 "decks": 2,
 "won": 0,
 "offered": 0,
@@ -8643,6 +8629,20 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.014
+},
+"BoneTea": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.069
+},
+"Orichalcum": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.069
 },
 "LostCoffer": {
 "decks": 1,
@@ -8658,12 +8658,12 @@
 "taken": 0,
 "lift": -0.038
 },
-"Orichalcum": {
-"decks": 2,
+"Akabeko": {
+"decks": 3,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.069
+"lift": -0.096
 },
 "TouchOfOrobas": {
 "decks": 2,
@@ -8686,42 +8686,7 @@
 "taken": 0,
 "lift": -0.069
 },
-"ElectricShrymp": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"ToxicEgg": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"OrnamentalFan": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.024
-},
 "CloakClasp": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"FragrantMushroom": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.014
-},
-"LostWisp": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -8735,6 +8700,48 @@
 "taken": 0,
 "lift": -0.048
 },
+"LostWisp": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
+"OrnamentalFan": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.024
+},
+"FragrantMushroom": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.014
+},
+"ToxicEgg": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
+"ElectricShrymp": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
+"SparklingRouge": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
 "Kunai": {
 "decks": 2,
 "won": 0,
@@ -8743,13 +8750,6 @@
 "lift": -0.069
 },
 "CallingBell": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"SparklingRouge": {
 "decks": 1,
 "won": 0,
 "offered": 0,
@@ -8770,6 +8770,13 @@
 "taken": 0,
 "lift": -0.038
 },
+"ForgottenSoul": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
 "Pomander": {
 "decks": 4,
 "won": 0,
@@ -8783,27 +8790,6 @@
 "offered": 0,
 "taken": 0,
 "lift": -0.038
-},
-"ForgottenSoul": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"Bread": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
-"ReptileTrinket": {
-"decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.095
 },
 "PowerCell": {
 "decks": 2,
@@ -8819,6 +8805,13 @@
 "taken": 0,
 "lift": -0.038
 },
+"Bread": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
+},
 "SturdyClamp": {
 "decks": 2,
 "won": 1,
@@ -8826,19 +8819,19 @@
 "taken": 0,
 "lift": 0.014
 },
-"NeowsTalisman": {
+"ReptileTrinket": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.095
+},
+"PollinousCore": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.053
-},
-"Planisphere": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
 },
 "UnsettlingLamp": {
 "decks": 1,
@@ -8854,12 +8847,19 @@
 "taken": 0,
 "lift": 0.053
 },
-"PollinousCore": {
+"NeowsTalisman": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.053
+},
+"OddlySmoothStone": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
 },
 "Pocketwatch": {
 "decks": 2,
@@ -8868,7 +8868,7 @@
 "taken": 0,
 "lift": 0.097
 },
-"OddlySmoothStone": {
+"Planisphere": {
 "decks": 2,
 "won": 2,
 "offered": 0,
@@ -8903,13 +8903,6 @@
 "taken": 0,
 "lift": -0.038
 },
-"PaelsTooth": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
-},
 "MembershipCard": {
 "decks": 1,
 "won": 0,
@@ -8917,21 +8910,14 @@
 "taken": 0,
 "lift": -0.038
 },
-"SandCastle": {
+"PaelsTooth": {
 "decks": 1,
-"won": 1,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": -0.038
 },
 "Chandelier": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"HeftyTablet": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -8945,6 +8931,20 @@
 "taken": 0,
 "lift": 0.053
 },
+"SandCastle": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.053
+},
+"HeftyTablet": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.053
+},
 "WingCharm": {
 "decks": 1,
 "won": 1,
@@ -8952,14 +8952,14 @@
 "taken": 0,
 "lift": 0.053
 },
-"StoneCalendar": {
+"MiniatureCannon": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
 "lift": 0.053
 },
-"MiniatureCannon": {
+"StoneCalendar": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -8987,6 +8987,13 @@
 "taken": 0,
 "lift": 0.053
 },
+"PrayerWheel": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.053
+},
 "BoomingConch": {
 "decks": 1,
 "won": 1,
@@ -8994,12 +9001,19 @@
 "taken": 0,
 "lift": 0.053
 },
-"PrayerWheel": {
-"decks": 1,
-"won": 1,
+"PaelsTears": {
+"decks": 3,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.058
+},
+"Kaleidoscope": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.038
 },
 "Shovel": {
 "decks": 1,
@@ -9015,21 +9029,21 @@
 "taken": 0,
 "lift": 0.014
 },
-"Kaleidoscope": {
+"SmallCapsule": {
 "decks": 1,
-"won": 0,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"PaelsTears": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.058
+"lift": 0.053
 },
 "Sai": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.053
+},
+"AmethystAubergine": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -9043,14 +9057,7 @@
 "taken": 0,
 "lift": 0.097
 },
-"SmallCapsule": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"AmethystAubergine": {
+"RegalPillow": {
 "decks": 1,
 "won": 1,
 "offered": 0,
@@ -9070,174 +9077,167 @@
 "offered": 0,
 "taken": 0,
 "lift": 0.053
-},
-"RegalPillow": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
 }
 },
 "base": 0.417
 },
 "Necrobinder": {
-"runs": 55,
+"runs": 56,
 "wins": 23,
 "cards": {
-"DefendNecrobinder": {
-"decks": 53,
-"won": 23,
-"offered": 0,
-"taken": 0,
-"lift": 0.013
-},
-"BoneShards": {
-"decks": 6,
-"won": 0,
-"offered": 36,
-"taken": 4,
-"lift": -0.157
-},
 "Sow": {
 "decks": 17,
 "won": 8,
-"offered": 91,
+"offered": 93,
 "taken": 18,
-"lift": 0.033
-},
-"StrikeNecrobinder": {
-"decks": 49,
-"won": 21,
-"offered": 0,
-"taken": 0,
-"lift": 0.009
-},
-"GraveWarden": {
-"decks": 35,
-"won": 15,
-"offered": 84,
-"taken": 47,
-"lift": 0.008
-},
-"HighFive": {
-"decks": 8,
-"won": 3,
-"offered": 37,
-"taken": 9,
-"lift": -0.019
-},
-"Haunt": {
-"decks": 9,
-"won": 3,
-"offered": 38,
-"taken": 8,
-"lift": -0.04
+"lift": 0.038
 },
 "Neurosurge": {
 "decks": 6,
 "won": 3,
 "offered": 22,
 "taken": 7,
-"lift": 0.031
+"lift": 0.033
 },
 "Rattle": {
 "decks": 7,
 "won": 1,
 "offered": 44,
 "taken": 8,
-"lift": -0.113
+"lift": -0.11
 },
-"Protector": {
-"decks": 8,
-"won": 5,
+"Bodyguard": {
+"decks": 56,
+"won": 23,
 "offered": 0,
 "taken": 0,
-"lift": 0.092
-},
-"Lethality": {
-"decks": 12,
-"won": 5,
-"offered": 29,
-"taken": 12,
-"lift": -0.001
-},
-"Debilitate": {
-"decks": 11,
-"won": 7,
-"offered": 32,
-"taken": 12,
-"lift": 0.114
-},
-"Snap": {
-"decks": 21,
-"won": 8,
-"offered": 107,
-"taken": 24,
-"lift": -0.025
-},
-"Flatten": {
-"decks": 12,
-"won": 4,
-"offered": 76,
-"taken": 14,
-"lift": -0.046
-},
-"Invoke": {
-"decks": 25,
-"won": 11,
-"offered": 93,
-"taken": 23,
-"lift": 0.016
+"lift": 0.0
 },
 "SicEm": {
 "decks": 4,
 "won": 1,
 "offered": 29,
 "taken": 4,
-"lift": -0.048
+"lift": -0.046
 },
-"Bodyguard": {
-"decks": 55,
+"Protector": {
+"decks": 8,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.095
+},
+"Debilitate": {
+"decks": 11,
+"won": 7,
+"offered": 32,
+"taken": 12,
+"lift": 0.118
+},
+"Wisp": {
+"decks": 35,
+"won": 19,
+"offered": 97,
+"taken": 49,
+"lift": 0.103
+},
+"Snap": {
+"decks": 22,
+"won": 8,
+"offered": 108,
+"taken": 25,
+"lift": -0.032
+},
+"DefendNecrobinder": {
+"decks": 54,
 "won": 23,
 "offered": 0,
 "taken": 0,
-"lift": 0.0
+"lift": 0.013
 },
-"Wisp": {
-"decks": 34,
-"won": 19,
-"offered": 96,
-"taken": 48,
-"lift": 0.109
+"Flatten": {
+"decks": 13,
+"won": 4,
+"offered": 78,
+"taken": 15,
+"lift": -0.058
+},
+"BoneShards": {
+"decks": 6,
+"won": 0,
+"offered": 36,
+"taken": 4,
+"lift": -0.154
+},
+"HighFive": {
+"decks": 8,
+"won": 3,
+"offered": 37,
+"taken": 9,
+"lift": -0.016
+},
+"StrikeNecrobinder": {
+"decks": 50,
+"won": 21,
+"offered": 0,
+"taken": 0,
+"lift": 0.008
+},
+"Lethality": {
+"decks": 13,
+"won": 5,
+"offered": 30,
+"taken": 13,
+"lift": -0.015
+},
+"Invoke": {
+"decks": 25,
+"won": 11,
+"offered": 93,
+"taken": 23,
+"lift": 0.021
+},
+"GraveWarden": {
+"decks": 35,
+"won": 15,
+"offered": 85,
+"taken": 47,
+"lift": 0.014
+},
+"Haunt": {
+"decks": 9,
+"won": 3,
+"offered": 38,
+"taken": 8,
+"lift": -0.037
 },
 "Poke": {
 "decks": 18,
 "won": 9,
 "offered": 88,
 "taken": 22,
-"lift": 0.053
+"lift": 0.057
 },
 "Reap": {
-"decks": 8,
+"decks": 9,
 "won": 4,
-"offered": 81,
-"taken": 8,
-"lift": 0.036
+"offered": 83,
+"taken": 9,
+"lift": 0.016
 },
 "Pagestorm": {
 "decks": 9,
 "won": 3,
-"offered": 31,
+"offered": 32,
 "taken": 7,
-"lift": -0.04
+"lift": -0.037
 },
 "Severance": {
 "decks": 8,
 "won": 2,
 "offered": 43,
 "taken": 8,
-"lift": -0.075
+"lift": -0.071
 },
 "Melancholy": {
 "decks": 0,
@@ -9249,23 +9249,23 @@
 "DrainPower": {
 "decks": 12,
 "won": 4,
-"offered": 91,
+"offered": 92,
 "taken": 13,
-"lift": -0.046
+"lift": -0.042
 },
 "BorrowedTime": {
 "decks": 11,
 "won": 5,
 "offered": 27,
 "taken": 9,
-"lift": 0.019
+"lift": 0.023
 },
 "DanseMacabre": {
 "decks": 13,
 "won": 10,
 "offered": 40,
 "taken": 13,
-"lift": 0.198
+"lift": 0.203
 },
 "Equilibrium": {
 "decks": 0,
@@ -9286,161 +9286,161 @@
 "won": 2,
 "offered": 31,
 "taken": 3,
-"lift": 0.057
+"lift": 0.059
 },
 "Bury": {
 "decks": 3,
 "won": 2,
 "offered": 30,
 "taken": 2,
-"lift": 0.057
+"lift": 0.059
 },
 "SleightOfFlesh": {
 "decks": 6,
 "won": 5,
 "offered": 42,
 "taken": 7,
-"lift": 0.156
+"lift": 0.158
 },
 "NegativePulse": {
-"decks": 30,
+"decks": 31,
 "won": 16,
 "offered": 96,
 "taken": 45,
-"lift": 0.086
+"lift": 0.08
 },
 "Fear": {
 "decks": 8,
 "won": 5,
-"offered": 58,
+"offered": 60,
 "taken": 9,
-"lift": 0.092
+"lift": 0.095
 },
 "Dredge": {
-"decks": 4,
+"decks": 5,
 "won": 1,
-"offered": 33,
-"taken": 5,
-"lift": -0.048
+"offered": 34,
+"taken": 6,
+"lift": -0.07
 },
 "Putrefy": {
 "decks": 9,
 "won": 4,
 "offered": 39,
 "taken": 8,
-"lift": 0.012
+"lift": 0.016
 },
 "SpiritOfAsh": {
 "decks": 6,
 "won": 5,
 "offered": 13,
 "taken": 5,
-"lift": 0.156
+"lift": 0.158
 },
 "Eradicate": {
 "decks": 9,
 "won": 6,
 "offered": 16,
 "taken": 7,
-"lift": 0.118
+"lift": 0.121
 },
 "Defy": {
 "decks": 27,
 "won": 12,
-"offered": 88,
+"offered": 91,
 "taken": 27,
-"lift": 0.019
+"lift": 0.025
 },
 "BlightStrike": {
 "decks": 15,
 "won": 10,
-"offered": 81,
+"offered": 82,
 "taken": 15,
-"lift": 0.149
+"lift": 0.154
 },
 "Deathbringer": {
 "decks": 13,
 "won": 7,
 "offered": 34,
 "taken": 13,
-"lift": 0.068
+"lift": 0.072
 },
 "RightHandHand": {
 "decks": 9,
 "won": 3,
-"offered": 29,
+"offered": 30,
 "taken": 8,
-"lift": -0.04
+"lift": -0.037
 },
 "ReaperForm": {
 "decks": 3,
 "won": 3,
 "offered": 21,
 "taken": 3,
-"lift": 0.134
+"lift": 0.136
 },
 "Parse": {
-"decks": 8,
+"decks": 9,
 "won": 5,
-"offered": 25,
-"taken": 8,
-"lift": 0.092
+"offered": 26,
+"taken": 9,
+"lift": 0.069
 },
 "SoulStorm": {
 "decks": 9,
 "won": 3,
 "offered": 22,
 "taken": 9,
-"lift": -0.04
+"lift": -0.037
 },
 "DeathsDoor": {
 "decks": 6,
 "won": 2,
 "offered": 20,
 "taken": 6,
-"lift": -0.032
+"lift": -0.029
 },
 "Friendship": {
 "decks": 19,
 "won": 12,
 "offered": 46,
 "taken": 17,
-"lift": 0.14
+"lift": 0.145
 },
 "UltimateDefend": {
 "decks": 1,
 "won": 1,
 "offered": 3,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "Entropy": {
 "decks": 1,
 "won": 1,
 "offered": 9,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "Reave": {
 "decks": 14,
 "won": 7,
-"offered": 79,
+"offered": 80,
 "taken": 16,
-"lift": 0.048
+"lift": 0.052
 },
 "Graveblast": {
 "decks": 14,
 "won": 6,
 "offered": 76,
 "taken": 17,
-"lift": 0.006
+"lift": 0.01
 },
 "Seance": {
 "decks": 4,
 "won": 2,
 "offered": 18,
 "taken": 3,
-"lift": 0.023
+"lift": 0.026
 },
 "Catastrophe": {
 "decks": 0,
@@ -9450,102 +9450,102 @@
 "lift": 0.0
 },
 "Unleash": {
-"decks": 47,
+"decks": 48,
 "won": 18,
 "offered": 0,
 "taken": 0,
-"lift": -0.029
+"lift": -0.03
 },
 "Defile": {
 "decks": 17,
 "won": 5,
-"offered": 88,
+"offered": 89,
 "taken": 17,
-"lift": -0.078
+"lift": -0.073
 },
 "PullAggro": {
 "decks": 18,
 "won": 6,
 "offered": 81,
 "taken": 21,
-"lift": -0.055
+"lift": -0.05
 },
 "Scourge": {
 "decks": 23,
 "won": 12,
-"offered": 83,
+"offered": 85,
 "taken": 23,
-"lift": 0.072
+"lift": 0.077
 },
 "SentryMode": {
 "decks": 7,
 "won": 2,
 "offered": 24,
 "taken": 5,
-"lift": -0.055
+"lift": -0.051
 },
 "Undeath": {
 "decks": 11,
 "won": 7,
 "offered": 19,
 "taken": 11,
-"lift": 0.114
+"lift": 0.118
 },
 "Dirge": {
 "decks": 11,
 "won": 7,
 "offered": 31,
 "taken": 12,
-"lift": 0.114
+"lift": 0.118
 },
 "Shroud": {
 "decks": 14,
 "won": 10,
-"offered": 50,
+"offered": 51,
 "taken": 15,
-"lift": 0.173
+"lift": 0.177
 },
 "Squeeze": {
 "decks": 3,
 "won": 2,
 "offered": 24,
 "taken": 2,
-"lift": 0.057
+"lift": 0.059
 },
 "NoEscape": {
 "decks": 9,
 "won": 7,
 "offered": 27,
 "taken": 15,
-"lift": 0.17
+"lift": 0.174
 },
 "Countdown": {
 "decks": 14,
 "won": 8,
 "offered": 36,
 "taken": 16,
-"lift": 0.089
+"lift": 0.094
 },
 "EndOfDays": {
 "decks": 7,
 "won": 2,
 "offered": 15,
 "taken": 5,
-"lift": -0.055
+"lift": -0.051
 },
 "TimesUp": {
 "decks": 5,
 "won": 3,
 "offered": 16,
 "taken": 4,
-"lift": 0.061
+"lift": 0.063
 },
 "Cleanse": {
 "decks": 3,
 "won": 1,
-"offered": 37,
+"offered": 38,
 "taken": 2,
-"lift": -0.02
+"lift": -0.018
 },
 "Hang": {
 "decks": 0,
@@ -9557,105 +9557,105 @@
 "Misery": {
 "decks": 11,
 "won": 7,
-"offered": 22,
+"offered": 23,
 "taken": 12,
-"lift": 0.114
-},
-"EnfeeblingTouch": {
-"decks": 19,
-"won": 9,
-"offered": 37,
-"taken": 24,
-"lift": 0.036
-},
-"Panache": {
-"decks": 2,
-"won": 0,
-"offered": 5,
-"taken": 1,
-"lift": -0.07
-},
-"GlimpseBeyond": {
-"decks": 7,
-"won": 4,
-"offered": 18,
-"taken": 7,
-"lift": 0.063
-},
-"Delay": {
-"decks": 15,
-"won": 8,
-"offered": 32,
-"taken": 14,
-"lift": 0.069
-},
-"Demesne": {
-"decks": 11,
-"won": 6,
-"offered": 14,
-"taken": 11,
-"lift": 0.067
+"lift": 0.118
 },
 "Finesse": {
 "decks": 3,
 "won": 1,
 "offered": 3,
 "taken": 3,
-"lift": -0.02
+"lift": -0.018
+},
+"Delay": {
+"decks": 15,
+"won": 8,
+"offered": 32,
+"taken": 14,
+"lift": 0.074
+},
+"Panache": {
+"decks": 2,
+"won": 0,
+"offered": 5,
+"taken": 1,
+"lift": -0.068
+},
+"EnfeeblingTouch": {
+"decks": 19,
+"won": 9,
+"offered": 38,
+"taken": 24,
+"lift": 0.041
+},
+"Demesne": {
+"decks": 11,
+"won": 6,
+"offered": 14,
+"taken": 11,
+"lift": 0.071
+},
+"GlimpseBeyond": {
+"decks": 7,
+"won": 4,
+"offered": 18,
+"taken": 7,
+"lift": 0.066
 },
 "Automation": {
 "decks": 1,
 "won": 1,
 "offered": 4,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "Fetch": {
 "decks": 8,
 "won": 4,
 "offered": 43,
 "taken": 8,
-"lift": 0.036
+"lift": 0.04
 },
 "DeathMarch": {
 "decks": 2,
 "won": 1,
 "offered": 32,
 "taken": 3,
-"lift": 0.014
+"lift": 0.015
 },
 "LegionOfBone": {
 "decks": 7,
 "won": 6,
 "offered": 26,
 "taken": 6,
-"lift": 0.181
-},
-"TheBomb": {
-"decks": 1,
-"won": 0,
-"offered": 1,
-"taken": 0,
-"lift": -0.038
+"lift": 0.184
 },
 "SharedFate": {
 "decks": 6,
 "won": 3,
 "offered": 18,
 "taken": 4,
-"lift": 0.031
+"lift": 0.033
+},
+"TheBomb": {
+"decks": 1,
+"won": 0,
+"offered": 1,
+"taken": 0,
+"lift": -0.037
 },
 "UltimateStrike": {
 "decks": 2,
 "won": 1,
 "offered": 3,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "RollingBoulder": {
 "decks": 0,
 "won": 0,
-"offered": 3,
+"offered": 5,
 "taken": 0,
 "lift": 0.0
 },
@@ -9664,7 +9664,7 @@
 "won": 4,
 "offered": 21,
 "taken": 7,
-"lift": 0.093
+"lift": 0.096
 },
 "Eidolon": {
 "decks": 0,
@@ -9713,28 +9713,28 @@
 "won": 8,
 "offered": 33,
 "taken": 12,
-"lift": 0.089
+"lift": 0.094
 },
 "Volley": {
-"decks": 0,
+"decks": 1,
 "won": 0,
 "offered": 4,
 "taken": 0,
-"lift": 0.0
+"lift": -0.037
 },
 "SecretWeapon": {
 "decks": 1,
 "won": 1,
 "offered": 7,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "TheScythe": {
 "decks": 4,
 "won": 1,
-"offered": 19,
+"offered": 20,
 "taken": 3,
-"lift": -0.048
+"lift": -0.046
 },
 "PanicButton": {
 "decks": 0,
@@ -9755,28 +9755,28 @@
 "won": 1,
 "offered": 10,
 "taken": 2,
-"lift": 0.014
+"lift": 0.015
 },
 "Spur": {
-"decks": 4,
+"decks": 5,
 "won": 2,
-"offered": 22,
-"taken": 4,
-"lift": 0.023
+"offered": 23,
+"taken": 5,
+"lift": -0.004
 },
 "Sacrifice": {
 "decks": 2,
 "won": 1,
 "offered": 8,
 "taken": 2,
-"lift": 0.014
+"lift": 0.015
 },
 "Afterlife": {
 "decks": 8,
 "won": 4,
 "offered": 67,
 "taken": 8,
-"lift": 0.036
+"lift": 0.04
 },
 "DramaticEntrance": {
 "decks": 0,
@@ -9790,21 +9790,21 @@
 "won": 2,
 "offered": 4,
 "taken": 3,
-"lift": 0.057
+"lift": 0.059
 },
 "Oblivion": {
 "decks": 7,
 "won": 4,
 "offered": 10,
 "taken": 5,
-"lift": 0.063
+"lift": 0.066
 },
 "Calcify": {
 "decks": 1,
 "won": 0,
 "offered": 33,
 "taken": 2,
-"lift": -0.038
+"lift": -0.037
 },
 "Lift": {
 "decks": 0,
@@ -9818,49 +9818,49 @@
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.055
+"lift": -0.051
 },
 "Reanimate": {
 "decks": 6,
 "won": 5,
 "offered": 19,
 "taken": 6,
-"lift": 0.156
+"lift": 0.158
 },
 "Discovery": {
 "decks": 1,
 "won": 1,
 "offered": 2,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "BelieveInYou": {
 "decks": 4,
 "won": 2,
 "offered": 4,
 "taken": 2,
-"lift": 0.023
+"lift": 0.026
 },
 "Intercept": {
 "decks": 2,
 "won": 2,
 "offered": 5,
 "taken": 2,
-"lift": 0.097
+"lift": 0.098
 },
 "ToricToughness": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "NecroMastery": {
 "decks": 9,
 "won": 3,
 "offered": 18,
 "taken": 9,
-"lift": -0.04
+"lift": -0.037
 },
 "Prowess": {
 "decks": 0,
@@ -9888,7 +9888,7 @@
 "won": 2,
 "offered": 12,
 "taken": 1,
-"lift": 0.097
+"lift": 0.098
 },
 "LanternKey": {
 "decks": 0,
@@ -9900,51 +9900,51 @@
 "SculptingStrike": {
 "decks": 4,
 "won": 1,
-"offered": 44,
+"offered": 45,
 "taken": 4,
-"lift": -0.048
+"lift": -0.046
 },
 "BansheesCry": {
 "decks": 1,
 "won": 0,
-"offered": 17,
+"offered": 18,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "Veilpiercer": {
 "decks": 3,
 "won": 2,
 "offered": 22,
 "taken": 3,
-"lift": 0.057
-},
-"Enlightenment": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"Pyre": {
-"decks": 1,
-"won": 1,
-"offered": 1,
-"taken": 1,
-"lift": 0.053
+"lift": 0.059
 },
 "Regret": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
+},
+"Enlightenment": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.026
+},
+"Pyre": {
+"decks": 1,
+"won": 1,
+"offered": 1,
+"taken": 1,
+"lift": 0.054
 },
 "Prolong": {
 "decks": 2,
 "won": 2,
 "offered": 3,
 "taken": 1,
-"lift": 0.097
+"lift": 0.098
 },
 "IronWave": {
 "decks": 0,
@@ -10014,42 +10014,42 @@
 "won": 1,
 "offered": 4,
 "taken": 1,
-"lift": 0.053
-},
-"Shockwave": {
-"decks": 1,
-"won": 1,
-"offered": 4,
-"taken": 1,
-"lift": 0.053
-},
-"Anticipate": {
-"decks": 3,
-"won": 3,
-"offered": 3,
-"taken": 3,
-"lift": 0.134
-},
-"Malaise": {
-"decks": 1,
-"won": 1,
-"offered": 1,
-"taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "Backstab": {
 "decks": 1,
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
+},
+"Shockwave": {
+"decks": 1,
+"won": 1,
+"offered": 4,
+"taken": 1,
+"lift": 0.054
+},
+"Anticipate": {
+"decks": 3,
+"won": 3,
+"offered": 3,
+"taken": 3,
+"lift": 0.136
+},
+"Malaise": {
+"decks": 1,
+"won": 1,
+"offered": 1,
+"taken": 1,
+"lift": 0.054
 },
 "Acrobatics": {
 "decks": 1,
 "won": 1,
 "offered": 2,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "LeadingStrike": {
 "decks": 0,
@@ -10086,19 +10086,19 @@
 "taken": 0,
 "lift": 0.0
 },
-"Rage": {
-"decks": 1,
-"won": 1,
-"offered": 1,
-"taken": 1,
-"lift": 0.053
-},
 "Anger": {
 "decks": 1,
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
+},
+"Rage": {
+"decks": 1,
+"won": 1,
+"offered": 1,
+"taken": 1,
+"lift": 0.054
 },
 "Juggernaut": {
 "decks": 0,
@@ -10142,19 +10142,19 @@
 "taken": 0,
 "lift": 0.0
 },
-"Clumsy": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.048
-},
 "ByrdSwoop": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
+},
+"Clumsy": {
+"decks": 4,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.046
 },
 "Scrawl": {
 "decks": 0,
@@ -10203,14 +10203,14 @@
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "MadScience": {
 "decks": 8,
 "won": 5,
 "offered": 0,
 "taken": 0,
-"lift": 0.092
+"lift": 0.095
 },
 "TheGambit": {
 "decks": 0,
@@ -10245,7 +10245,7 @@
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "ThrummingHatchet": {
 "decks": 0,
@@ -10266,7 +10266,7 @@
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "DarkShackles": {
 "decks": 0,
@@ -10280,7 +10280,7 @@
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "HuddleUp": {
 "decks": 0,
@@ -10296,19 +10296,19 @@
 "taken": 0,
 "lift": 0.0
 },
-"AscendersBane": {
-"decks": 9,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.065
-},
 "Peck": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
+"lift": -0.068
+},
+"AscendersBane": {
+"decks": 9,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.069
 },
 "Alchemize": {
 "decks": 0,
@@ -10320,7 +10320,7 @@
 "Purity": {
 "decks": 0,
 "won": 0,
-"offered": 2,
+"offered": 3,
 "taken": 0,
 "lift": 0.0
 },
@@ -10329,7 +10329,7 @@
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "Fisticuffs": {
 "decks": 0,
@@ -10343,14 +10343,14 @@
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "FeedingFrenzy": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "BeaconOfHope": {
 "decks": 0,
@@ -10385,7 +10385,7 @@
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "Knockdown": {
 "decks": 0,
@@ -10399,21 +10399,21 @@
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
 "BallLightning": {
 "decks": 1,
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "Buffer": {
 "decks": 1,
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "FlakCannon": {
 "decks": 0,
@@ -10469,7 +10469,7 @@
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "DaggerThrow": {
 "decks": 0,
@@ -10513,26 +10513,26 @@
 "taken": 0,
 "lift": 0.0
 },
-"Apotheosis": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
 "SerpentForm": {
 "decks": 1,
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "LegSweep": {
 "decks": 1,
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
+},
+"Apotheosis": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
 },
 "StormOfSteel": {
 "decks": 0,
@@ -10574,21 +10574,21 @@
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
-},
-"NoxiousFumes": {
-"decks": 1,
-"won": 1,
-"offered": 1,
-"taken": 1,
-"lift": 0.053
+"lift": 0.054
 },
 "BrightestFlame": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
+},
+"NoxiousFumes": {
+"decks": 1,
+"won": 1,
+"offered": 1,
+"taken": 1,
+"lift": 0.054
 },
 "Prepared": {
 "decks": 0,
@@ -10625,40 +10625,40 @@
 "taken": 0,
 "lift": 0.0
 },
-"BeamCell": {
-"decks": 1,
-"won": 0,
-"offered": 1,
-"taken": 1,
-"lift": -0.038
-},
-"CrimsonMantle": {
-"decks": 1,
-"won": 0,
-"offered": 1,
-"taken": 1,
-"lift": -0.038
-},
-"KnowThyPlace": {
-"decks": 1,
-"won": 0,
-"offered": 1,
-"taken": 1,
-"lift": -0.038
-},
 "Greed": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "Headbutt": {
 "decks": 1,
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
+},
+"KnowThyPlace": {
+"decks": 1,
+"won": 0,
+"offered": 1,
+"taken": 1,
+"lift": -0.037
+},
+"BeamCell": {
+"decks": 1,
+"won": 0,
+"offered": 1,
+"taken": 1,
+"lift": -0.037
+},
+"CrimsonMantle": {
+"decks": 1,
+"won": 0,
+"offered": 1,
+"taken": 1,
+"lift": -0.037
 },
 "Footwork": {
 "decks": 0,
@@ -10735,7 +10735,7 @@
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "ThinkingAhead": {
 "decks": 0,
@@ -10744,1284 +10744,1305 @@
 "taken": 0,
 "lift": 0.0
 },
+"Soulbound": {
+"decks": 1,
+"won": 0,
+"offered": 2,
+"taken": 1,
+"lift": -0.037
+},
 "Salvo": {
 "decks": 1,
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "Cacophony": {
 "decks": 1,
 "won": 0,
 "offered": 1,
 "taken": 1,
-"lift": -0.038
-},
-"Soulbound": {
-"decks": 1,
-"won": 0,
-"offered": 2,
-"taken": 1,
-"lift": -0.038
+"lift": -0.037
 },
 "Underworld": {
 "decks": 1,
 "won": 1,
 "offered": 1,
 "taken": 1,
-"lift": 0.053
+"lift": 0.054
+},
+"Dowsing": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 }
 },
 "relics": {
-"HappyFlower": {
-"decks": 12,
-"won": 6,
-"offered": 0,
-"taken": 0,
-"lift": 0.045
-},
 "UnceasingTop": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
-},
-"BoundPhylactery": {
-"decks": 55,
-"won": 23,
-"offered": 0,
-"taken": 0,
-"lift": 0.0
-},
-"GremlinHorn": {
-"decks": 7,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.122
+"lift": 0.015
 },
 "StoneCracker": {
 "decks": 8,
 "won": 5,
 "offered": 0,
 "taken": 0,
-"lift": 0.092
-},
-"PenNib": {
-"decks": 6,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.094
-},
-"ArchaicTooth": {
-"decks": 8,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.092
-},
-"FrozenEgg": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.048
-},
-"Pear": {
-"decks": 11,
-"won": 6,
-"offered": 0,
-"taken": 0,
-"lift": 0.067
-},
-"Nunchaku": {
-"decks": 7,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.063
-},
-"Pomander": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.061
+"lift": 0.095
 },
 "Pantograph": {
 "decks": 8,
 "won": 5,
 "offered": 0,
 "taken": 0,
-"lift": 0.092
+"lift": 0.095
+},
+"HappyFlower": {
+"decks": 12,
+"won": 6,
+"offered": 0,
+"taken": 0,
+"lift": 0.049
+},
+"BoundPhylactery": {
+"decks": 56,
+"won": 23,
+"offered": 0,
+"taken": 0,
+"lift": 0.0
+},
+"PenNib": {
+"decks": 6,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.092
+},
+"GremlinHorn": {
+"decks": 7,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.125
+},
+"Nunchaku": {
+"decks": 7,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"ArchaicTooth": {
+"decks": 8,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.095
+},
+"FrozenEgg": {
+"decks": 4,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.046
+},
+"Pomander": {
+"decks": 5,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.063
+},
+"Pear": {
+"decks": 11,
+"won": 6,
+"offered": 0,
+"taken": 0,
+"lift": 0.071
 },
 "BoomingConch": {
 "decks": 3,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.097
+"lift": -0.095
 },
-"VenerableTeaSet": {
-"decks": 13,
-"won": 7,
+"Gorget": {
+"decks": 11,
+"won": 5,
 "offered": 0,
 "taken": 0,
-"lift": 0.068
-},
-"NutritiousSoup": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.097
+"lift": 0.023
 },
 "SwordOfStone": {
 "decks": 5,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.139
+"lift": -0.137
 },
-"WarPaint": {
-"decks": 12,
+"NutritiousSoup": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.095
+},
+"VenerableTeaSet": {
+"decks": 13,
 "won": 7,
 "offered": 0,
 "taken": 0,
-"lift": 0.09
-},
-"Gorget": {
-"decks": 10,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.041
+"lift": 0.072
 },
 "RegalPillow": {
 "decks": 9,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.012
-},
-"MrStruggles": {
-"decks": 5,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.061
+"lift": 0.016
 },
 "StrikeDummy": {
 "decks": 8,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.036
+"lift": 0.04
+},
+"MrStruggles": {
+"decks": 5,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.063
+},
+"WarPaint": {
+"decks": 12,
+"won": 7,
+"offered": 0,
+"taken": 0,
+"lift": 0.094
 },
 "BrilliantScarf": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
-},
-"ReptileTrinket": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.057
-},
-"YummyCookie": {
-"decks": 4,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.048
-},
-"PotionBelt": {
-"decks": 12,
-"won": 8,
-"offered": 0,
-"taken": 0,
-"lift": 0.136
-},
-"Candelabra": {
-"decks": 9,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.065
-},
-"Pendulum": {
-"decks": 9,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": -0.04
-},
-"Lantern": {
-"decks": 10,
-"won": 7,
-"offered": 0,
-"taken": 0,
-"lift": 0.141
-},
-"LeadPaperweight": {
-"decks": 3,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.097
+"lift": 0.015
 },
 "GamblingChip": {
 "decks": 5,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": 0.063
+},
+"Candelabra": {
+"decks": 9,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.069
+},
+"LeadPaperweight": {
+"decks": 3,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.095
 },
 "Girya": {
 "decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.02
+"lift": -0.018
+},
+"Lantern": {
+"decks": 10,
+"won": 7,
+"offered": 0,
+"taken": 0,
+"lift": 0.145
+},
+"ReptileTrinket": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.059
 },
 "ParryingShield": {
 "decks": 5,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.127
+"lift": 0.13
 },
-"MusicBox": {
-"decks": 1,
-"won": 0,
+"YummyCookie": {
+"decks": 4,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.046
 },
-"Permafrost": {
-"decks": 5,
+"Pendulum": {
+"decks": 9,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": -0.037
 },
-"NewLeaf": {
-"decks": 5,
-"won": 0,
+"PotionBelt": {
+"decks": 12,
+"won": 8,
 "offered": 0,
 "taken": 0,
-"lift": -0.139
-},
-"OrnamentalFan": {
-"decks": 6,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.093
-},
-"MealTicket": {
-"decks": 7,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.063
-},
-"Vambrace": {
-"decks": 9,
-"won": 7,
-"offered": 0,
-"taken": 0,
-"lift": 0.17
+"lift": 0.14
 },
 "RedMask": {
 "decks": 7,
 "won": 5,
 "offered": 0,
 "taken": 0,
-"lift": 0.122
+"lift": 0.125
+},
+"Permafrost": {
+"decks": 5,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.063
+},
+"MealTicket": {
+"decks": 7,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.066
+},
+"Vambrace": {
+"decks": 9,
+"won": 7,
+"offered": 0,
+"taken": 0,
+"lift": 0.174
+},
+"MusicBox": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"OrnamentalFan": {
+"decks": 6,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.096
 },
 "PumpkinCandle": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
+"lift": -0.068
 },
-"CentennialPuzzle": {
-"decks": 10,
-"won": 5,
+"NewLeaf": {
+"decks": 5,
+"won": 0,
 "offered": 0,
 "taken": 0,
-"lift": 0.041
+"lift": -0.137
 },
 "StoneHumidifier": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"AmethystAubergine": {
-"decks": 5,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.073
+"lift": -0.037
 },
 "PrayerWheel": {
 "decks": 5,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": 0.063
+},
+"CentennialPuzzle": {
+"decks": 10,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.045
 },
 "TheCourier": {
 "decks": 4,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.048
+"lift": -0.046
 },
-"BagOfPreparation": {
-"decks": 10,
-"won": 7,
+"AmethystAubergine": {
+"decks": 5,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.141
-},
-"JuzuBracelet": {
-"decks": 11,
-"won": 6,
-"offered": 0,
-"taken": 0,
-"lift": 0.067
+"lift": -0.07
 },
 "MummifiedHand": {
 "decks": 4,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.023
+"lift": 0.026
 },
 "PaelsFlesh": {
 "decks": 5,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.127
+"lift": 0.13
 },
-"TuningFork": {
-"decks": 3,
-"won": 2,
+"JuzuBracelet": {
+"decks": 11,
+"won": 6,
 "offered": 0,
 "taken": 0,
-"lift": 0.057
+"lift": 0.071
+},
+"BagOfPreparation": {
+"decks": 11,
+"won": 7,
+"offered": 0,
+"taken": 0,
+"lift": 0.118
 },
 "BloodVial": {
 "decks": 7,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.063
+"lift": 0.066
 },
 "PaelsTears": {
 "decks": 3,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.097
+"lift": -0.095
 },
-"BookOfFiveRings": {
-"decks": 9,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.012
-},
-"VeryHotCocoa": {
+"TuningFork": {
 "decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.057
-},
-"NutritiousOyster": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.014
-},
-"Planisphere": {
-"decks": 7,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.063
-},
-"FuneraryMask": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
+"lift": 0.059
 },
 "PetrifiedToad": {
 "decks": 5,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": 0.063
+},
+"NutritiousOyster": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
+},
+"VeryHotCocoa": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.059
+},
+"FuneraryMask": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.026
+},
+"BookOfFiveRings": {
+"decks": 9,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.016
 },
 "BagOfMarbles": {
 "decks": 9,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": -0.04
+"lift": -0.037
 },
-"LargeCapsule": {
-"decks": 5,
-"won": 2,
+"Planisphere": {
+"decks": 7,
+"won": 4,
 "offered": 0,
 "taken": 0,
-"lift": -0.006
-},
-"BronzeScales": {
-"decks": 11,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.019
-},
-"IntimidatingHelmet": {
-"decks": 4,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.095
+"lift": 0.066
 },
 "Whetstone": {
 "decks": 13,
 "won": 6,
 "offered": 0,
 "taken": 0,
-"lift": 0.025
+"lift": 0.029
 },
 "Bellows": {
 "decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.02
+"lift": -0.018
 },
 "Anchor": {
 "decks": 14,
 "won": 8,
 "offered": 0,
 "taken": 0,
-"lift": 0.089
+"lift": 0.094
 },
-"GnarledHammer": {
-"decks": 2,
+"LargeCapsule": {
+"decks": 5,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": -0.004
 },
-"LordsParasol": {
-"decks": 1,
-"won": 1,
+"BronzeScales": {
+"decks": 11,
+"won": 5,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.023
+},
+"IntimidatingHelmet": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
 },
 "Bread": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
-},
-"LostCoffer": {
-"decks": 7,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.122
+"lift": 0.054
 },
 "Mango": {
 "decks": 4,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.166
+"lift": 0.168
+},
+"LostCoffer": {
+"decks": 7,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.125
+},
+"GnarledHammer": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.098
+},
+"LordsParasol": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
 },
 "Strawberry": {
 "decks": 12,
 "won": 7,
 "offered": 0,
 "taken": 0,
-"lift": 0.09
-},
-"LizardTail": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"MassiveScroll": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.02
-},
-"BlessedAntler": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.057
+"lift": 0.094
 },
 "OddlySmoothStone": {
 "decks": 13,
 "won": 9,
 "offered": 0,
 "taken": 0,
-"lift": 0.155
+"lift": 0.159
 },
-"GamePiece": {
-"decks": 4,
-"won": 3,
+"LizardTail": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.095
+"lift": 0.098
 },
-"ArtOfWar": {
-"decks": 2,
+"MassiveScroll": {
+"decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": -0.018
 },
-"SmallCapsule": {
+"BlessedAntler": {
 "decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.057
-},
-"PaelsGrowth": {
-"decks": 3,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": -0.02
+"lift": 0.059
 },
 "MoltenEgg": {
 "decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.02
+"lift": -0.018
 },
 "BoneFlute": {
-"decks": 5,
+"decks": 6,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": 0.033
+},
+"GamePiece": {
+"decks": 4,
+"won": 3,
+"offered": 0,
+"taken": 0,
+"lift": 0.097
+},
+"SmallCapsule": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.059
 },
 "BigMushroom": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"FestivePopper": {
-"decks": 14,
-"won": 8,
-"offered": 0,
-"taken": 0,
-"lift": 0.089
+"lift": -0.037
 },
 "ThrowingAxe": {
 "decks": 3,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.02
+"lift": -0.018
 },
-"HistoryCourse": {
+"ArtOfWar": {
 "decks": 2,
-"won": 2,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.015
+},
+"PaelsGrowth": {
+"decks": 3,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.018
+},
+"FestivePopper": {
+"decks": 14,
+"won": 8,
+"offered": 0,
+"taken": 0,
+"lift": 0.094
 },
 "RazorTooth": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
+},
+"HistoryCourse": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.098
 },
 "WhisperingEarring": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
-},
-"Glitter": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"SwordOfJade": {
-"decks": 3,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.057
-},
-"MiniatureTent": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"EternalFeather": {
-"decks": 5,
-"won": 5,
-"offered": 0,
-"taken": 0,
-"lift": 0.194
+"lift": 0.054
 },
 "Vajra": {
 "decks": 10,
 "won": 6,
 "offered": 0,
 "taken": 0,
-"lift": 0.091
+"lift": 0.095
+},
+"Glitter": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.098
+},
+"SwordOfJade": {
+"decks": 3,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.059
 },
 "Pocketwatch": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
 "MiniatureCannon": {
 "decks": 4,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.023
+"lift": 0.026
+},
+"MiniatureTent": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.098
 },
 "IceCream": {
 "decks": 3,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.134
+"lift": 0.136
+},
+"EternalFeather": {
+"decks": 5,
+"won": 5,
+"offered": 0,
+"taken": 0,
+"lift": 0.196
 },
 "TheAbacus": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "OldCoin": {
 "decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.057
+"lift": 0.059
 },
 "ArcaneScroll": {
 "decks": 5,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": 0.063
 },
 "DelicateFrond": {
 "decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.057
+"lift": 0.059
 },
 "BowlerHat": {
 "decks": 3,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.057
-},
-"SparklingRouge": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"PaelsBlood": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"WhiteBeastStatue": {
-"decks": 3,
-"won": 3,
-"offered": 0,
-"taken": 0,
-"lift": 0.134
+"lift": 0.059
 },
 "DollysMirror": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
-"BingBong": {
-"decks": 1,
-"won": 0,
+"SparklingRouge": {
+"decks": 4,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": 0.026
 },
-"Orichalcum": {
-"decks": 7,
-"won": 1,
+"PaelsBlood": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": -0.113
+"lift": 0.098
 },
-"Toolbox": {
-"decks": 1,
-"won": 0,
+"WhiteBeastStatue": {
+"decks": 3,
+"won": 3,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": 0.136
 },
 "SignetRing": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
+},
+"BingBong": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"Orichalcum": {
+"decks": 7,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.11
+},
+"Toolbox": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 },
 "VexingPuzzlebox": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "Byrdpip": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"ToyBox": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
+"lift": -0.037
 },
 "MembershipCard": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
 "Akabeko": {
 "decks": 6,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.031
+"lift": 0.033
 },
-"HornCleat": {
-"decks": 7,
-"won": 6,
+"ToyBox": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.181
+"lift": 0.098
 },
 "FurCoat": {
 "decks": 4,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.166
+"lift": 0.168
 },
 "StoneCalendar": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
-"Kunai": {
-"decks": 3,
-"won": 1,
+"HornCleat": {
+"decks": 7,
+"won": 6,
 "offered": 0,
 "taken": 0,
-"lift": -0.02
-},
-"Shuriken": {
-"decks": 2,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.07
+"lift": 0.184
 },
 "TungstenRod": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
-"TriBoomerang": {
+"Shuriken": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
+"lift": -0.068
+},
+"Kunai": {
+"decks": 3,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": -0.018
 },
 "DreamCatcher": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
+"lift": -0.068
+},
+"TriBoomerang": {
+"decks": 2,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.068
 },
 "ChemicalX": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"IronClub": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "Orrery": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
-"TheBoot": {
+"IronClub": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "LuckyFysh": {
 "decks": 4,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": -0.048
+"lift": -0.046
+},
+"TheBoot": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 },
 "BookRepairKnife": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "RippleBasin": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.015
 },
 "IvoryTile": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
-},
-"LastingCandy": {
-"decks": 4,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.023
-},
-"Astrolabe": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"FragrantMushroom": {
-"decks": 4,
-"won": 4,
-"offered": 0,
-"taken": 0,
-"lift": 0.166
+"lift": -0.068
 },
 "JossPaper": {
 "decks": 3,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.134
+"lift": 0.136
+},
+"LastingCandy": {
+"decks": 4,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.026
+},
+"FragrantMushroom": {
+"decks": 4,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.168
+},
+"Astrolabe": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
 },
 "EmptyCage": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
-},
-"LoomingFruit": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
-},
-"PaelsHorn": {
-"decks": 2,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.014
+"lift": -0.068
 },
 "RainbowRing": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
-"GoldenPearl": {
-"decks": 4,
-"won": 4,
+"LoomingFruit": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.166
+"lift": 0.098
+},
+"PaelsHorn": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
 },
 "LetterOpener": {
 "decks": 7,
 "won": 4,
 "offered": 0,
 "taken": 0,
-"lift": 0.063
+"lift": 0.066
+},
+"GoldenPearl": {
+"decks": 4,
+"won": 4,
+"offered": 0,
+"taken": 0,
+"lift": 0.168
 },
 "DragonFruit": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
-},
-"NeowsBones": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
-},
-"LeesWaffle": {
-"decks": 2,
-"won": 2,
-"offered": 0,
-"taken": 0,
-"lift": 0.097
+"lift": 0.054
 },
 "Kusarigama": {
 "decks": 5,
 "won": 3,
 "offered": 0,
 "taken": 0,
-"lift": 0.061
+"lift": 0.063
 },
-"RoyalPoison": {
-"decks": 2,
+"NeowsBones": {
+"decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
+"lift": 0.054
+},
+"LeesWaffle": {
+"decks": 2,
+"won": 2,
+"offered": 0,
+"taken": 0,
+"lift": 0.098
 },
 "ChoicesParadox": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
+},
+"RoyalPoison": {
+"decks": 2,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.015
 },
 "PaelsLegion": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "HeftyTablet": {
 "decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.014
-},
-"BlackStar": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
+"lift": 0.015
 },
 "LavaLamp": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
+},
+"BlackStar": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 },
 "DistinguishedCape": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
-},
-"PreciseScissors": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
+"lift": 0.054
 },
 "PaelsWing": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
+},
+"PreciseScissors": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 },
 "PandorasBox": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "PhialHolster": {
 "decks": 2,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.07
+"lift": -0.068
 },
 "BoneTea": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"ElectricShrymp": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
+"lift": -0.037
 },
 "NeowsTalisman": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "JeweledMask": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
+},
+"ElectricShrymp": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
 },
 "TinyMailbox": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
-},
-"Sai": {
-"decks": 1,
-"won": 1,
-"offered": 0,
-"taken": 0,
-"lift": 0.053
+"lift": 0.098
 },
 "NeowsTorment": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
-"BeatingRemnant": {
-"decks": 2,
-"won": 2,
+"Sai": {
+"decks": 1,
+"won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.054
 },
 "CallingBell": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
 },
 "ChosenCheese": {
-"decks": 1,
+"decks": 2,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.015
 },
-"PunchDagger": {
-"decks": 1,
-"won": 1,
+"BeatingRemnant": {
+"decks": 2,
+"won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.098
 },
 "MercuryHourglass": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
-"JewelryBox": {
+"PunchDagger": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "PollinousCore": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "CloakClasp": {
 "decks": 2,
 "won": 2,
 "offered": 0,
 "taken": 0,
-"lift": 0.097
+"lift": 0.098
+},
+"JewelryBox": {
+"decks": 1,
+"won": 1,
+"offered": 0,
+"taken": 0,
+"lift": 0.054
 },
 "Storybook": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "WhiteStar": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "Kaleidoscope": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "NeowsSacrifice": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "ScrollBoxes": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
-},
-"Bookmark": {
-"decks": 1,
-"won": 0,
-"offered": 0,
-"taken": 0,
-"lift": -0.038
+"lift": -0.037
 },
 "AlchemicalCoffer": {
 "decks": 1,
 "won": 0,
 "offered": 0,
 "taken": 0,
-"lift": -0.038
+"lift": -0.037
+},
+"Bookmark": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 },
 "Chandelier": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
 },
 "SpikedGauntlets": {
 "decks": 1,
 "won": 1,
 "offered": 0,
 "taken": 0,
-"lift": 0.053
+"lift": 0.054
+},
+"TeaOfDiscourtesy": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
+},
+"DowsingRod": {
+"decks": 1,
+"won": 0,
+"offered": 0,
+"taken": 0,
+"lift": -0.037
 }
 },
-"base": 0.418
+"base": 0.411
 }
 }
 }

@@ -30,6 +30,13 @@ with open(_per if GAME_VERSION and os.path.exists(_per) else os.path.join(_here,
     GAMEDATA = json.load(_f)  # card upgrades, potions, relics, monsters, text
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "knowledge.json"), encoding="utf-8") as _f:
     KNOWLEDGE = json.load(_f)  # web tiers + your run-history fight costs (tools/calibrate.py)
+# Community stats (tools/community.py -> community.json, Spire Codex): per encounter death rate / HP lost / turns,
+# per character card and relic lift. Optional; STS2_NO_LEARN=1 turns it off (tests).
+try:
+    COMMUNITY = {} if os.environ.get("STS2_NO_LEARN") else json.load(open(os.path.join(_here, "community.json"),
+                                                                           encoding="utf-8"))
+except (OSError, ValueError):
+    COMMUNITY = {}
 
 # Cards played so far in the simulated turn (block = cards that gave block; exhausted = cards exhausted). A card's
 # pick (Acrobatics' discard, True Grit's exhaust) takes cards from hand: tossed = unplayable junk taken, gone = cards
